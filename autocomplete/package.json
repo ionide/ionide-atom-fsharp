@@ -1,0 +1,17 @@
+{
+  "name": "FSharp.Atom.Autocomplete",
+  "main": "./lib/autocomplete",
+  "version": "0.0.0",
+  "description": "A short description of your package",
+  "activationCommands": {
+    "atom-workspace": "FSharp.Atom.Autocomplete:toggle"
+  },
+  "repository": "https://github.com/kcieslak/FSharp.Atom",
+  "license": "Appache 2.0",
+  "engines": {
+    "atom": ">=0.174.0 <2.0.0"
+  },
+  "dependencies": {
+    "q": "1.2.0"
+  }
+}
