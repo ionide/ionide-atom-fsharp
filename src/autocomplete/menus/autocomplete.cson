@@ -10,11 +10,15 @@
   {
     'label': 'Packages'
     'submenu': [
-      'label': 'FSharp.Atom.Autocomplete'
+      'label': 'FSharp.Atom'
       'submenu': [
         {
-          'label': 'Toggle'
-          'command': 'FSharp.Atom.Autocomplete:toggle'
+          'label': 'Autocomplete'
+          'submenu': [
+            {
+              'label': 'Toggle'
+              'command': 'FSharp.Atom.Autocomplete:toggle'
+            }]
         }
       ]
     ]

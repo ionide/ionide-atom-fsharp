@@ -48,38 +48,18 @@ class AutocompleteService
     action = (data) =>
                 s = s + data.toString()
                 len = s.split(/\r\n|\r|\n/).length - 1
-                if len == number
-                  console.log "RECIVED: " + s
+                if len == number or s.contains "\"Kind\":\"ERROR\""
+                  #console.log "RECIVED: " + s
                   @child.stdout.removeListener "data", action
                   callback s
+
     @child.stdout.on "data", action
 
   start: () =>
       options = {cwd: atom.project.getPath()}
-
       @child = spawn location, [], options
       @changeState "on"
       @child.stdin.setEncoding = 'utf-8';
-      #@child.stdout.on 'data', @out
-      @child.stderr.on 'data', @err
-      @child.on 'close', @close
-      @child.on 'error', @err
-
-
-  out: (data) =>
-    s = data.toString()
-    console.log "RECIVED: " + s
-    atom.emit "FSharp.Atom.AutocompleteService:out", s
-
-  err: (data) =>
-    s = data.toString()
-    console.log "ERROR: " + s
-    @changeState "error"
-    atom.emit "FSharp.Atom.AutocompleteService:err", s
-
-  close: (data) =>
-    atom.emit "FSharp.Atom.AutocompleteService:close", data
-    @changeState "off"
 
   stop: () =>
     @changeState "off"

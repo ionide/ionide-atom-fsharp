@@ -1,4 +1,5 @@
 AutocompleteHandler = require './autocomplete-handler'
+AutocompleteProvider = require './autocomplete-provider'
 {CompositeDisposable} = require 'atom'
 
 module.exports = Autocomplete =
@@ -12,10 +13,11 @@ module.exports = Autocomplete =
 
   deactivate: ->
     @subscriptions.dispose()
+  provide: ->
+    AutocompleteProvider
 
   serialize: ->
 
   toggle: ->
     console.log 'Autocomplete was toggled!'
-
     @autocompleteHandler.toggle()

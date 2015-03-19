@@ -12,7 +12,7 @@ class AutocompleteHandler
       return instance
     else
       service = new AutocompleteService()
-
+      @parsed = []
       instance = this
 
   project: (s, callback) ->
@@ -23,13 +23,21 @@ class AutocompleteHandler
     return (callback) => @project s, callback
 
   parse: (path, callback) ->
-    p = atom.project.getPath() + "\\" + path
-    text = fs.readFileSync(p, "utf8")
-    str = "parse \"" + path + "\" sync\n" + text + "\n<<EOF>>\n"
+    @parsed.push path
+    text = fs.readFileSync(atom.project.getPath() + "\\" + path, "utf8")
+    str = "parse \"" + path + "\"\n" + text + "\n<<EOF>>\n"
     service.ask str, 2, callback
 
   parseP: (path) =>
     return (callback) => @parse path, callback
+
+  parseCurrent: (callback) ->
+    editor = atom.workspace.getActiveTextEditor()
+    path = editor.buffer.file.path
+    text = editor.getText()
+    str = "parse \"" + path + "\"\n" + text + "\n<<EOF>>\n"
+    service.ask str, 2, callback
+
 
   completion: (fn, line, col, callback) ->
     str = "completion \"" + fn + "\" " + line + " " + col + "\n"
@@ -68,4 +76,5 @@ class AutocompleteHandler
   toggle: () ->
     service.toggle()
     if service.state == "on"
-      @test()
+      service.send("outputmode json\n")
+      #@test()

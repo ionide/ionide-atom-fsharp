@@ -6,12 +6,19 @@
   "activationCommands": {
     "atom-workspace": "FSharp.Atom.Autocomplete:toggle"
   },
-  "repository": "https://github.com/kcieslak/FSharp.Atom",
+  "repository": "https://github.com/Krzysztof-Cieslak/FSharp.Atom",
   "license": "Appache 2.0",
   "engines": {
     "atom": ">=0.174.0 <2.0.0"
   },
   "dependencies": {
     "q": "1.2.0"
+  },
+  "providedServices": {
+  "autocomplete.provider": {
+    "versions": {
+      "2.0.0": "provide"
+    }
   }
+}
 }
