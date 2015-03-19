@@ -13,6 +13,10 @@ class AutocompleteHandler
     else
       service = new AutocompleteService()
       @parsed = []
+
+      atom.workspace.onDidChangeActivePaneItem((pane) => @parseEditor(pane, (=> return)))
+
+
       instance = this
 
   project: (s, callback) ->
@@ -31,13 +35,19 @@ class AutocompleteHandler
   parseP: (path) =>
     return (callback) => @parse path, callback
 
+  parseEditor: (editor, callback) ->
+    if (editor and editor.getGrammar().name == "F#")
+      path = editor.buffer.file.path
+      text = editor.getText()
+      str = "parse \"" + path + "\"\n" + text + "\n<<EOF>>\n"
+      service.ask str, 2, callback
+    else
+      t = "1"
+      callback "ERROR"
+
   parseCurrent: (callback) ->
     editor = atom.workspace.getActiveTextEditor()
-    path = editor.buffer.file.path
-    text = editor.getText()
-    str = "parse \"" + path + "\"\n" + text + "\n<<EOF>>\n"
-    service.ask str, 2, callback
-
+    @parseEditor(editor, callback)
 
   completion: (fn, line, col, callback) ->
     str = "completion \"" + fn + "\" " + line + " " + col + "\n"
@@ -77,4 +87,4 @@ class AutocompleteHandler
     service.toggle()
     if service.state == "on"
       service.send("outputmode json\n")
-      #@test()
+      @parseCurrent(=> return)

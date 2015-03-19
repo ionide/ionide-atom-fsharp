@@ -42,14 +42,14 @@ class AutocompleteService
     @child.stdin.write msg
 
   ask: (msg, number, callback) =>
-    #console.log "ASK: " + msg
+    console.log "ASK: " + msg
     @child.stdin.write msg
     s = ""
     action = (data) =>
                 s = s + data.toString()
                 len = s.split(/\r\n|\r|\n/).length - 1
                 if len == number or s.contains "\"Kind\":\"ERROR\""
-                  #console.log "RECIVED: " + s
+                  console.log "RECIVED: " + s
                   @child.stdout.removeListener "data", action
                   callback s
 

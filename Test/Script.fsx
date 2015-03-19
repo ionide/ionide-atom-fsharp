@@ -1,12 +1,11 @@
 module XA =
 
   let funky x = x + 1
-
+  let foo = 1
 
 module YA =
-  let abc = 3
-  let aaa = XA.funky
+  let bar = XA.funky
 
+let foobar = YA.bar XA.foo
 
-
-let val99 = 
+let direct = System.IO.Directory
