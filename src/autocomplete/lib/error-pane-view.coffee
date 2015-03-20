@@ -42,7 +42,7 @@ class ErrorPaneView extends View
 class ErrorRowView extends View
   @content: (r) ->
     @tr =>
-      @td "#{r.StartLine} : #{r.StartColumn}"
+      @td "#{r.StartLineAlternate} : #{r.StartColumn}"
       @td "#{r.Message}"
       @td "#{r.Severity}"
       @td "#{r.Subcategory}"
