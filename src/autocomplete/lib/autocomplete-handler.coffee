@@ -39,9 +39,12 @@ class AutocompleteHandler
       action = (s) =>
         split = s.split /\r\n|\r|\n/
         if(split.length > 1)
-          obj = JSON.parse split[1]
-          if(obj.Kind == "errors")
-            atom.emit "FSharp.Atom:Highlight", obj.Data
+          try
+            obj = JSON.parse split[1]
+            if(obj.Kind == "errors")
+              atom.emit "FSharp.Atom:Highlight", obj.Data
+          catch error
+            console.log(error)
         callback s
 
       @parse(path,text, action)

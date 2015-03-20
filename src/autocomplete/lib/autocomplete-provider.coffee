@@ -14,14 +14,18 @@ module.exports =
           msplit = s.split("\n")
           if msplit.length > 1
             msg = msplit[1]
-            obj = JSON.parse(msg)
-            prefix = options.prefix
-            if(prefix == '.' or prefix == '=')
-              prefix = ''
-            if obj.Kind == "completion"
-              result = ({text: item, replacementPrefix: prefix } for item in obj.Data when item.contains(prefix))
-              resolve(result)
-            else
+            try
+              obj = JSON.parse(msg)
+              prefix = options.prefix
+              if(prefix == '.' or prefix == '=')
+                prefix = ''
+              if obj.Kind == "completion"
+                result = ({text: item, replacementPrefix: prefix } for item in obj.Data when item.contains(prefix))
+                resolve(result)
+              else
+                resolve([])
+            catch error
+              console.log(error)
               resolve([])
           else
             resolve([])
