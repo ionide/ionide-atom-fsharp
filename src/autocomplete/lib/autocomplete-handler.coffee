@@ -1,6 +1,5 @@
 AutocompleteService = require './autocomplete-service'
 fs = require('fs')
-Q = require('q')
 
 module.exports =
 class AutocompleteHandler
@@ -14,7 +13,7 @@ class AutocompleteHandler
       service = new AutocompleteService()
       @parsed = []
 
-      atom.workspace.onDidChangeActivePaneItem((pane) => @parseEditor(pane, (=> return)))
+      atom.workspace.onDidChangeActivePaneItem (pane) => @parseEditor(pane, (=> return))
 
 
       instance = this
@@ -23,26 +22,30 @@ class AutocompleteHandler
     str = "project \"" + s + "\"\n"
     service.ask str, 1, callback
 
-  projectP: (s) =>
-    return (callback) => @project s, callback
-
-  parse: (path, callback) ->
-    @parsed.push path
-    text = fs.readFileSync(atom.project.getPath() + "\\" + path, "utf8")
+  parse: (path, text, callback) ->
     str = "parse \"" + path + "\"\n" + text + "\n<<EOF>>\n"
     service.ask str, 2, callback
 
-  parseP: (path) =>
-    return (callback) => @parse path, callback
+
+  parseFile: (path, callback) ->
+    @parsed.push path
+    text = fs.readFileSync(atom.project.getPath() + "\\" + path, "utf8")
+    @parse path, text, callback
 
   parseEditor: (editor, callback) ->
     if (editor and editor.getGrammar().name == "F#")
       path = editor.buffer.file.path
       text = editor.getText()
-      str = "parse \"" + path + "\"\n" + text + "\n<<EOF>>\n"
-      service.ask str, 2, callback
+      action = (s) =>
+        split = s.split /\r\n|\r|\n/
+        if(split.length > 1)
+          obj = JSON.parse split[1]
+          if(obj.Kind == "errors")
+            atom.emit "FSharp.Atom:Highlight", obj.Data
+        callback s
+
+      @parse(path,text, action)
     else
-      t = "1"
       callback "ERROR"
 
   parseCurrent: (callback) ->

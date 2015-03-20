@@ -1,5 +1,4 @@
 spawn = require('child_process').spawn
-Q = require('q')
 EventEmitter  = require('events').EventEmitter
 
 module.exports =

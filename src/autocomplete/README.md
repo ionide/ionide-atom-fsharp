@@ -1,5 +1,5 @@
-# autocomplete package
+# FSharp.Atom.Autocomplete package
 
-A short description of your package.
+Proof of concept implementation
 
-![A screenshot of your package](https://f.cloud.github.com/assets/69169/2290250/c35d867a-a017-11e3-86be-cd7c5bf3ff9b.gif)
+(https://cloud.githubusercontent.com/assets/5427083/6740089/aa0fd6e2-ce7d-11e4-9b51-40bcdd7a7ef7.gif)
