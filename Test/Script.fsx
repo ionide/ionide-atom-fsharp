@@ -6,6 +6,7 @@ module XA =
 module YA =
   let bar = XA.funky
 
-let foobar = YA.bar XA.foo
+let foobar = YA.bar XA.fo
 
-let direct = System.IO.Directory
+let t = match foobar with
+        | 1 -> 0

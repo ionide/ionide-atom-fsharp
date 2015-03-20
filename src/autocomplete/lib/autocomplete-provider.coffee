@@ -19,7 +19,7 @@ module.exports =
             if(prefix == '.' or prefix == '=')
               prefix = ''
             if obj.Kind == "completion"
-              result = ({text: item, replacementPrefix: prefix } for item in obj.Data when item.toLower().contains prefix.toLower())
+              result = ({text: item, replacementPrefix: prefix } for item in obj.Data when item.contains(prefix))
               resolve(result)
             else
               resolve([])
