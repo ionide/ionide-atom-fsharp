@@ -17,6 +17,7 @@ class ErrorPaneView extends View
 
   initialize: =>
     atom.on "FSharp.Atom:Highlight", @handle
+    atom.workspace.onDidChangeActivePaneItem (pane) => if (pane.getGrammar().name == "F#") then @show() else @hide()
 
 
   handle: (lst) =>
@@ -32,12 +33,6 @@ class ErrorPaneView extends View
         atom.workspaceView.prependToBottom(this)
 
   hide: -> @detach()
-  toggle: ->
-    t = 1
-    if (@hasParent())
-      @hide()
-    else
-      @show()
 
 class ErrorRowView extends View
   @content: (r) ->

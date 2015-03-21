@@ -16,7 +16,6 @@ module.exports = Autocomplete =
     @highlighterHandler = new HighlighterHandler
     @errorPaneView = new ErrorPaneView
     @subscriptions.add atom.commands.add 'atom-workspace', 'FSharp.Atom.Autocomplete:toggle': => @toggle()
-    @subscriptions.add atom.commands.add 'atom-workspace', 'FSharp.Atom.ErrorPanel:toggle': => @errorPaneView.toggle()
 
   deactivate: ->
     @subscriptions.dispose()
@@ -28,3 +27,4 @@ module.exports = Autocomplete =
   toggle: ->
     console.log 'Autocomplete was toggled!'
     @autocompleteHandler.toggle()
+    @errorPaneView.show()

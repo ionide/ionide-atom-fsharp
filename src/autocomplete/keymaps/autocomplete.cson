@@ -9,4 +9,3 @@
 # https://atom.io/docs/latest/advanced/keymaps
 'atom-workspace':
   'ctrl-alt-o': 'FSharp.Atom.Autocomplete:toggle'
-  'ctrl-alt-l': 'FSharp.Atom.ErrorPanel:toggle'
