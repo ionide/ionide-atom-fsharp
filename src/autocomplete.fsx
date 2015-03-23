@@ -1,79 +1,16 @@
 [<ReflectedDefinition>]
 module Autocomplete 
 
-#load "funscript-atom.fsx"
-
-
 open FunScript
 open FunScript.TypeScript
 open FunScript.TypeScript.child_process
-    
 
-module CompositeDisposable = 
-    type CompositeDisposable = class end
-        
-    [<JSEmit("return new CompositeDisposable;")>]
-    let create() : CompositeDisposable = failwith "JS"
-        
-    [<JSEmit("return {0}.add({1});")>]
-    let subscribe (cd : CompositeDisposable, cmd : obj) : unit = failwith "JS"
-        
-    [<JSEmit("return {0}.dispose();")>]
-    let dispose (cd : CompositeDisposable) : unit = failwith "JS"
-        
-module Atom = 
-    [<JSEmit("var cmd = {}; cmd[{1}]=function() { return {2}(); }; return atom.commands.add({0}, cmd);")>]
-    let addCommand (name : string, cmdName : string, func : unit -> unit) = failwith "JS"
-            
-    type Editor = class end
-            
-    [<JSEmit("return atom.workspace.getActiveTextEditor();")>]
-    let getActiveTextEditor() : Editor = failwith "JS"
-            
-    [<JSEmit("return {0}.getText();")>]
-    let getEditorText (ed : Editor) : string = failwith "JS"
+#load "funscript-atom.fsx"
+#load "atom-bindings.fsx"
 
-    [<JSEmit("return {0}.getGrammar().name;")>]
-    let getEditorGrammarName(ed : Editor) : string = failwith "JS"
-
-    [<JSEmit("return {0}.buffer.file.path;")>]
-    let getEditorPath (ed : Editor) : string = failwith "JS"
-            
-    [<JSEmit("return atom.packages.packageDirPaths[0];")>]
-    let getCurrentPackagePath() : string = failwith "JS"
-            
-    [<JSEmit("return atom.project.getPath();")>]
-    let getCurrentProjectPath() : string = failwith "JS"
-
-    [<JSEmitInline("atom.workspace.onDidChangeActivePaneItem({0})")>]
-    let onDidChangeActivePaneItem(cb : Editor -> unit ) : unit = failwith "JS"
-
-    module Promise = 
-        type Promise = class end
-
-        [<JSEmitInline("new Promise(function(resolve){{0}()})")>]
-        let create( cb : unit -> unit) : Promise = failwith "JS"
-
-        [<JSEmitInline("resolve({0})")>]
-        let resolve (o : obj) : unit = failwith "JS"
-
-        [<JSEmitInline("{text: {0}, replacementPrefix: {1}}")>]
-        let result (t : string) (prefix : string) : obj = failwith "JS"
-
-        module Options = 
-            type Options = class end
-            
-            [<JSEmitInline("{0}.editor.buffer.file.path")>]
-            let getPath(o : Options) : string = failwith "JS"
-
-            [<JSEmitInline("{0}.bufferPosition.column")>]
-            let getColumn( o : Options) : int = failwith "JS"
-
-            [<JSEmitInline("{0}.bufferPosition.row")>]
-            let getRow (o: Options) : int = failwith "JS"
-            
-            [<JSEmitInline("{0}.prefix")>]
-            let getPrefix (o : Options) : string = failwith "JS"
+open Atom
+open Atom.Editor
+open Atom.Promise
 
 module AutocompleteResults = 
     type CompletionResult = {Kind : string; Data : string []}
@@ -86,7 +23,7 @@ module AutocompleteService =
                 
     type T = { State : State; PreviousState : State; Child : ChildProcess option }
                 
-    let location () = (Atom.getCurrentPackagePath()) + "\\autocomplete\\bin\\fsautocomplete.exe"
+    let location () = (getCurrentPackagePath()) + "\\autocomplete\\bin\\fsautocomplete.exe"
     let isOn t = t.State = State.On
     let isOff t = t.State = State.Off
     let isNotOff t = t.State <> State.Off
@@ -134,20 +71,22 @@ module AutocompleteHandler =
         service |> AutocompleteService.ask str 1 cb
 
     let parse path text cb service = 
-        let str = sprintf "parse \"%s\"\n%s\n<<EOF>>\n" path text 
+        //Wierd behaviour
+        //let str = sprintf "parse \"%s\"\n%s\n<<EOF>>\n" path text 
+        let str = "parse \"" + path + "\"\n" + text + "\n<<EOF>>\n"
         service |> AutocompleteService.ask str 2 cb
 
-    let parseEditor (editor : Atom.Editor) cb service = 
-        if Atom.getEditorGrammarName editor = "F#" then
-            let path = editor |> Atom.getEditorPath
-            let text = editor |> Atom.getEditorText
+    let parseEditor (editor : Editor) cb service = 
+        if getEditorGrammarName editor = "F#" then
+            let path = editor |> getEditorPath
+            let text = editor |> getEditorText
             service |> parse path text cb
         else
             cb "Error"
             service
 
     let parseCurrent cb service = 
-        let editor = Atom.getActiveTextEditor ()
+        let editor = getActiveTextEditor ()
         parseEditor editor cb service
 
     let completion fn line col cb service = 
@@ -181,7 +120,7 @@ type Autocomplete() =
                         let pref = if prefix = "." || prefix = "=" then "" else prefix
                         if result.Kind = "completion" then
                             result.Data 
-                            |> Seq.where(fun t -> t.ToLower().StartsWith(pref.ToLower()))
+                            |> Seq.where(fun t -> t.StartsWith(pref))
                             |> Seq.map(fun t -> Atom.Promise.result t pref)
                             |> Seq.toArray 
                             |> Atom.Promise.resolve        
@@ -195,7 +134,7 @@ type Autocomplete() =
 
     member x.activate(state:obj) =       
 
-        do Atom.onDidChangeActivePaneItem (fun ed -> AutocompleteHandler.parseEditor ed (fun _ -> ()) service |> ignore)
+        do onDidChangeActivePaneItem (fun ed -> AutocompleteHandler.parseEditor ed (fun _ -> ()) service |> ignore)
 
     member x.deactivate() = 
         CompositeDisposable.dispose(cd)

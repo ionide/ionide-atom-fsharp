@@ -12,4 +12,4 @@ let t = match foobar with
         | 1 -> 0
 
 let t = System.IO.Directory
-let a = System.IO.Dire
+let a = System.IO.Di

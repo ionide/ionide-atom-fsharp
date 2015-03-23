@@ -2,7 +2,7 @@ var CompositeDisposable = require('atom').CompositeDisposable;
 var child_process = require('child_process');
 
 function wrappedFunScript() { 
-var UnfoldEnumerator_2_Int32__String___ctor$Int32_String, UnfoldEnumerator_2_Int32__String_____ctor$Int32_String___, UnfoldEnumerator_2_IEnumerator_1_String__String___ctor$IEnumerator_1_String__String, UnfoldEnumerator_2_IEnumerator_1_String__Object___ctor$IEnumerator_1_String__Object_, TupleString____Int32, TupleString_Int32, TupleString_IEnumerator_1_String_, TupleObject__IEnumerator_1_String_, T___ctor$, String__StartsWith$, String__SplitWithoutOptions$, String__PrintFormatToString$, State__On, State__Off, Seq__Where$String_1String, Seq__Unfold$Int32__String___Int32_String___, Seq__Unfold$Int32__String_1Int32_String, Seq__Unfold$IEnumerator_1_String__String_1IEnumerator_1_String__String, Seq__Unfold$IEnumerator_1_String__Object_IEnumerator_1_String__Object_, Seq__ToArray$String___String___, Seq__ToArray$Object_Object_, Seq__OfArray$String___String___, Seq__OfArray$String_1String, Seq__Map$String_1_Object_String_Object_, Seq__IterateIndexed$String___String___, Seq__IterateIndexed$Object_Object_, Seq__FromFactory$String___String___, Seq__FromFactory$String_1String, Seq__FromFactory$Object_Object_, Seq__FoldIndexedAux$Unit__String___Unit__String___, Seq__FoldIndexedAux$Unit__Object_Unit__Object_, Seq__FoldIndexed$String____Unit_String____Unit_, Seq__FoldIndexed$Object__Unit_Object__Unit_, Seq__Filter$String_1String, Seq__Enumerator$String___String___, Seq__Enumerator$String_1String, Seq__Enumerator$Object_Object_, Seq__Delay$String_1String, Seq__Delay$Object_Object_, Option__Iterate$ChildProcess_ChildProcess_, Option__IsSome$Int32_Int32, Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_, Option__GetValue$Tuple_2_String____Int32_Tuple_2_String____Int32_, Option__GetValue$Tuple_2_String__Int32_Tuple_2_String__Int32_, Option__GetValue$Tuple_2_String__IEnumerator_1_String_Tuple_2_String__IEnumerator_1_String_, Option__GetValue$Tuple_2_Object__IEnumerator_1_String_Tuple_2_Object__IEnumerator_1_String_, Option__GetValue$Int32_Int32, Option__GetValue$IEnumerator_1_String_IEnumerator_1_String_, Option__GetValue$ChildProcess_ChildProcess_, CreateEnumerable_1_String___ctor$String, CreateEnumerable_1_String_____ctor$String___, CreateEnumerable_1_Object___ctor$Object_, CompositeDisposable__dispose$, CompositeDisposable__create$, Autocomplete__getSuggestion$, Autocomplete__deactivate$, Autocomplete__activate$, Autocomplete___ctor$, AutocompleteService__start$, AutocompleteService__send$, AutocompleteService__location$, AutocompleteService__get_create$, AutocompleteService__create, AutocompleteService__ask$, AutocompleteHandler__parseEditor$, AutocompleteHandler__parseCurrent$, AutocompleteHandler__parse$, AutocompleteHandler__completion$, Atom__getEditorText$, Atom__getEditorPath$, Atom__getEditorGrammarName$, Atom__getCurrentPackagePath$, Atom__getActiveTextEditor$, Array__ZeroCreate$String___String___, Array__ZeroCreate$Object_Object_, Array__MapIndexed$String_1_String___String_String___, Array__Map$String_1_String___String_String___, Array__Length$String_1String, Array__FoldIndexed$String____String_1String____String, Array__Fold$String_1_String___String_String___, Array__ConcatImpl$String_1String, Array__Concat$String_1String, Array__BoxedLength$;
+var UnfoldEnumerator_2_Int32__String___ctor$Int32_String, UnfoldEnumerator_2_Int32__String_____ctor$Int32_String___, UnfoldEnumerator_2_IEnumerator_1_String__String___ctor$IEnumerator_1_String__String, UnfoldEnumerator_2_IEnumerator_1_String__Object___ctor$IEnumerator_1_String__Object_, TupleString____Int32, TupleString_Int32, TupleString_IEnumerator_1_String_, TupleObject__IEnumerator_1_String_, T___ctor$, String__StartsWith$, String__SplitWithoutOptions$, String__PrintFormatToString$, State__On, State__Off, Seq__Where$String_1String, Seq__Unfold$Int32__String___Int32_String___, Seq__Unfold$Int32__String_1Int32_String, Seq__Unfold$IEnumerator_1_String__String_1IEnumerator_1_String__String, Seq__Unfold$IEnumerator_1_String__Object_IEnumerator_1_String__Object_, Seq__ToArray$String___String___, Seq__ToArray$Object_Object_, Seq__OfArray$String___String___, Seq__OfArray$String_1String, Seq__Map$String_1_Object_String_Object_, Seq__IterateIndexed$String___String___, Seq__IterateIndexed$Object_Object_, Seq__FromFactory$String___String___, Seq__FromFactory$String_1String, Seq__FromFactory$Object_Object_, Seq__FoldIndexedAux$Unit__String___Unit__String___, Seq__FoldIndexedAux$Unit__Object_Unit__Object_, Seq__FoldIndexed$String____Unit_String____Unit_, Seq__FoldIndexed$Object__Unit_Object__Unit_, Seq__Filter$String_1String, Seq__Enumerator$String___String___, Seq__Enumerator$String_1String, Seq__Enumerator$Object_Object_, Seq__Delay$String_1String, Seq__Delay$Object_Object_, Option__Iterate$ChildProcess_ChildProcess_, Option__IsSome$Int32_Int32, Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_, Option__GetValue$Tuple_2_String____Int32_Tuple_2_String____Int32_, Option__GetValue$Tuple_2_String__Int32_Tuple_2_String__Int32_, Option__GetValue$Tuple_2_String__IEnumerator_1_String_Tuple_2_String__IEnumerator_1_String_, Option__GetValue$Tuple_2_Object__IEnumerator_1_String_Tuple_2_Object__IEnumerator_1_String_, Option__GetValue$Int32_Int32, Option__GetValue$IEnumerator_1_String_IEnumerator_1_String_, Option__GetValue$ChildProcess_ChildProcess_, Editor__getEditorText$, Editor__getEditorPath$, Editor__getEditorGrammarName$, Editor__getCurrentPackagePath$, Editor__getActiveTextEditor$, CreateEnumerable_1_String___ctor$String, CreateEnumerable_1_String_____ctor$String___, CreateEnumerable_1_Object___ctor$Object_, CompositeDisposable__dispose$, CompositeDisposable__create$, Autocomplete__getSuggestion$, Autocomplete__deactivate$, Autocomplete__activate$, Autocomplete___ctor$, AutocompleteService__start$, AutocompleteService__send$, AutocompleteService__location$, AutocompleteService__get_create$, AutocompleteService__create, AutocompleteService__ask$, AutocompleteHandler__parseEditor$, AutocompleteHandler__parseCurrent$, AutocompleteHandler__parse$, AutocompleteHandler__completion$, Array__ZeroCreate$String___String___, Array__ZeroCreate$Object_Object_, Array__MapIndexed$String_1_String___String_String___, Array__Map$String_1_String___String_String___, Array__Length$String_1String, Array__FoldIndexed$String____String_1String____String, Array__Fold$String_1_String___String_String___, Array__ConcatImpl$String_1String, Array__Concat$String_1String, Array__BoxedLength$;
 Array__BoxedLength$ = (function(xs)
 {
     return xs.length;;
@@ -70,26 +70,6 @@ Array__ZeroCreate$String___String___ = (function(size)
 {
     return new Array(size);;
 });
-Atom__getActiveTextEditor$ = (function(unitVar0)
-{
-    return atom.workspace.getActiveTextEditor();;
-});
-Atom__getCurrentPackagePath$ = (function(unitVar0)
-{
-    return atom.packages.packageDirPaths[0];;
-});
-Atom__getEditorGrammarName$ = (function(ed)
-{
-    return ed.getGrammar().name;;
-});
-Atom__getEditorPath$ = (function(ed)
-{
-    return ed.buffer.file.path;;
-});
-Atom__getEditorText$ = (function(ed)
-{
-    return ed.getText();;
-});
 AutocompleteHandler__completion$ = (function(fn,line,col,cb,service)
 {
     var clo1 = String__PrintFormatToString$("completion \"%s\" %d %d\n");
@@ -109,28 +89,20 @@ AutocompleteHandler__completion$ = (function(fn,line,col,cb,service)
 });
 AutocompleteHandler__parse$ = (function(path,text,cb,service)
 {
-    var clo1 = String__PrintFormatToString$("parse \"%s\"\n%s\n\u003c\u003cEOF\u003e\u003e\n");
-    var str = (function(arg10)
-    {
-      var clo2 = clo1(arg10);
-      return (function(arg20)
-      {
-        return clo2(arg20);
-      });
-    })(path)(text);
+    var str = (((("parse \"" + path) + "\"\n") + text) + "\n\u003c\u003cEOF\u003e\u003e\n");
     return AutocompleteService__ask$(str, 2, cb, service);
 });
 AutocompleteHandler__parseCurrent$ = (function(cb,service)
 {
-    var editor = Atom__getActiveTextEditor$();
+    var editor = Editor__getActiveTextEditor$();
     return AutocompleteHandler__parseEditor$(editor, cb, service);
 });
 AutocompleteHandler__parseEditor$ = (function(editor,cb,service)
 {
-    if ((Atom__getEditorGrammarName$(editor) == "F#")) 
+    if ((Editor__getEditorGrammarName$(editor) == "F#")) 
     {
-      var path = Atom__getEditorPath$(editor);
-      var text = Atom__getEditorText$(editor);
+      var path = Editor__getEditorPath$(editor);
+      var text = Editor__getEditorText$(editor);
       return AutocompleteHandler__parse$(path, text, cb, service);
     }
     else
@@ -174,7 +146,7 @@ AutocompleteService__get_create$ = (function()
 });
 AutocompleteService__location$ = (function(unitVar0)
 {
-    return (Atom__getCurrentPackagePath$() + "\\autocomplete\\bin\\fsautocomplete.exe");
+    return (Editor__getCurrentPackagePath$() + "\\autocomplete\\bin\\fsautocomplete.exe");
 });
 AutocompleteService__send$ = (function(msg,t)
 {
@@ -245,7 +217,7 @@ Autocomplete__getSuggestion$ = (function(x,options)
                 return {text: t, replacementPrefix: pref};
               }), Seq__Where$String_1String((function(t)
               {
-                return String__StartsWith$(t.toLowerCase(), pref.toLowerCase());
+                return String__StartsWith$(t, pref);
               }), Seq__OfArray$String_1String(result.Data)))));
             }
             else
@@ -293,6 +265,26 @@ CreateEnumerable_1_String___ctor$String = (function(factory)
     var __this = this;
     {};
     __this.factory = factory;
+});
+Editor__getActiveTextEditor$ = (function(unitVar0)
+{
+    return atom.workspace.getActiveTextEditor();;
+});
+Editor__getCurrentPackagePath$ = (function(unitVar0)
+{
+    return atom.packages.packageDirPaths[0];;
+});
+Editor__getEditorGrammarName$ = (function(ed)
+{
+    return ed.getGrammar().name;;
+});
+Editor__getEditorPath$ = (function(ed)
+{
+    return ed.buffer.file.path;;
+});
+Editor__getEditorText$ = (function(ed)
+{
+    return ed.getText();;
 });
 Option__GetValue$ChildProcess_ChildProcess_ = (function(option)
 {
@@ -346,16 +338,16 @@ Seq__Delay$Object_Object_ = (function(f)
 {
     return Seq__FromFactory$Object_Object_((function(unitVar0)
     {
-      var _559;
-      return Seq__Enumerator$Object_Object_(f(_559));
+      var _555;
+      return Seq__Enumerator$Object_Object_(f(_555));
     }));
 });
 Seq__Delay$String_1String = (function(f)
 {
     return Seq__FromFactory$String_1String((function(unitVar0)
     {
-      var _468;
-      return Seq__Enumerator$String_1String(f(_468));
+      var _464;
+      return Seq__Enumerator$String_1String(f(_464));
     }));
 });
 Seq__Enumerator$Object_Object_ = (function(xs)
@@ -438,8 +430,8 @@ Seq__FromFactory$Object_Object_ = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _551;
-        return __.factory(_551);
+        var _547;
+        return __.factory(_547);
       })(impl, unitVar1);
     })};
 });
@@ -451,8 +443,8 @@ Seq__FromFactory$String_1String = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _396;
-        return __.factory(_396);
+        var _392;
+        return __.factory(_392);
       })(impl, unitVar1);
     })};
 });
@@ -471,7 +463,7 @@ Seq__FromFactory$String___String___ = (function(f)
 });
 Seq__IterateIndexed$Object_Object_ = (function(f,xs)
 {
-    var _573;
+    var _569;
     return Seq__FoldIndexed$Object__Unit_Object__Unit_((function(i)
     {
       return (function(unitVar1)
@@ -481,7 +473,7 @@ Seq__IterateIndexed$Object_Object_ = (function(f,xs)
           return f(i)(x);
         });
       });
-    }), _573, xs);
+    }), _569, xs);
 });
 Seq__IterateIndexed$String___String___ = (function(f,xs)
 {
@@ -611,8 +603,8 @@ Seq__Unfold$IEnumerator_1_String__Object_IEnumerator_1_String__Object_ = (functi
           });
           return (Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_(__.acc) && (function()
           {
-            var _529;
-            return next(_529);
+            var _525;
+            return next(_525);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -668,8 +660,8 @@ Seq__Unfold$IEnumerator_1_String__String_1IEnumerator_1_String__String = (functi
           });
           return (Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_(__.acc) && (function()
           {
-            var _445;
-            return next(_445);
+            var _441;
+            return next(_441);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -725,8 +717,8 @@ Seq__Unfold$Int32__String_1Int32_String = (function(f,seed)
           });
           return (Option__IsSome$Int32_Int32(__.acc) && (function()
           {
-            var _374;
-            return next(_374);
+            var _370;
+            return next(_370);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
