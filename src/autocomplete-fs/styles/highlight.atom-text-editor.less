@@ -1,0 +1,13 @@
+@import "syntax-variables";
+
+@red-color: @syntax-color-removed;
+@green-color: @syntax-color-added;
+@blue-color: @syntax-color-renamed;
+
+.highlight-warning .region {
+  border-bottom: 1px solid @blue-color;
+}
+
+.highlight-error .region {
+  border-bottom: 1px solid @red-color;
+}

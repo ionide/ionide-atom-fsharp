@@ -1,0 +1,22 @@
+# See https://atom.io/docs/latest/creating-a-package#menus for more details
+'context-menu':
+  'atom-text-editor': [
+    {
+      'label': 'Toggle autocomplete-fs'
+      'command': 'FSharp.Atom.Autocomplete-fs:toggle'
+    }
+  ]
+'menu': [
+  {
+    'label': 'Packages'
+    'submenu': [
+      'label': 'autocomplete-fs'
+      'submenu': [
+        {
+          'label': 'Toggle'
+          'command': 'FSharp.Atom.Autocomplete-fs:toggle'
+        }
+      ]
+    ]
+  }
+]

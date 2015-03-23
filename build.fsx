@@ -1,0 +1,111 @@
+// --------------------------------------------------------------------------------------
+// FAKE build script 
+// --------------------------------------------------------------------------------------
+
+#I "packages/FAKE/tools"
+#r "packages/FAKE/tools/FakeLib.dll"
+open System
+open Fake 
+open Fake.Git
+open Fake.ReleaseNotesHelper
+open Fake.AssemblyInfoFile
+
+// --------------------------------------------------------------------------------------
+// Load the F# implementation and specify parameters for the translator
+// --------------------------------------------------------------------------------------
+
+#load "src/autocomplete.fsx"
+
+// Translate the type given as #1 using module name #2 
+// and save the result to a file specified in #3
+let atomModules = 
+  [ typeof<Autocomplete.Autocomplete>, "AutocompleteFS", "src/autocomplete-fs/lib/autocomplete-fs.js" ]
+
+// --------------------------------------------------------------------------------------
+// Compile F# type to an atom module
+// --------------------------------------------------------------------------------------
+
+// TODO: This only "requires" CompositeDisposable!
+// (So if you're using other things from atom, they need to be added)
+
+open System.Reflection
+open Microsoft.FSharp.Quotations
+open FunScript.Compiler
+
+let translateModules() = 
+  for typ, moduleName, fileName in atomModules do
+
+    // We generate F# quotation that returns all the methods that we want to expose 
+    // from the class. This way, we can then wrap it into simple JS code that 
+    // creates the module. The generated quotation looks something like this:
+    //
+    //   [| box (fun () -> new WordCount());
+    //      box (fun (self:WordCount) a1 .. an -> self.activate(a1, .., an))
+    //      ... and so on for all other methods .. |]
+    //
+    let ctor = typ.GetConstructor([||])
+    let meths = typ.GetMethods(BindingFlags.DeclaredOnly ||| BindingFlags.Public ||| BindingFlags.Instance)
+
+    /// Creates "(fun p1 .. pn -> <body>)" and "[p1; ..; pn]"
+    /// (which is used when generating boxed lambdas that pass parameters to the actual function)
+    let createParameterPassing (m:MethodBase) =
+      let paramVars = m.GetParameters() |> Array.mapi (fun i p -> Var(sprintf "p%d" i, p.ParameterType)) 
+      let paramArgs = [ for v in paramVars -> Expr.Var(v) ]
+      let lambdaConstr = paramVars |> Seq.fold (fun fn var -> fun body -> Expr.Lambda(var, fn body)) id
+      lambdaConstr, paramArgs
+        
+    let exportFunctions =
+      [ for m in meths ->
+          let tv = new Var("this", typ)
+          let lambdaConstr, paramArgs = createParameterPassing m
+          Expr.Lambda(tv, lambdaConstr (Expr.Call(Expr.Var(tv), m, paramArgs))) ]
+
+    let exportCtor =
+      Expr.Coerce
+        ( Expr.Lambda(Var("ign", typeof<unit>), Expr.NewObject(typ.GetConstructor [||], [])),
+          typeof<obj> )
+
+    let functionArray = 
+      Expr.NewArray(typeof<obj>, exportCtor::[ for f in exportFunctions -> Expr.Coerce(f, typeof<obj>)]) 
+
+    let coreJS = Compiler.Compile(functionArray)
+
+    // Now we just wrap the generated JavaScript into 'wrappedFunScript' function
+    // Then we call the function and create a module export with all the public methods
+    // from the provided type (just by calling one of the functions from the array) 
+    let moduleJS = 
+      [ yield "var CompositeDisposable = require('atom').CompositeDisposable;"
+        yield "var child_process = require('child_process');"
+        yield ""
+        yield "function wrappedFunScript() { \n" + coreJS + "\n }"
+        yield "var _funcs = wrappedFunScript();"
+        yield "var _self = _funcs[0]();"
+        yield ""
+        yield "var provider = {" 
+        yield "selector: '.source.fsharp',"
+        yield "inclusionPriority: 1,"
+        yield "excludeLowerPriority: true,"
+        yield "getSuggestions: function(p1) {"
+        yield "return _funcs[1](_self)(p1); }"
+        yield "};"
+        yield "module.exports = " + moduleName + " = {"
+        yield "provide: function() {"
+        yield "return provider; },"
+        for i, m in Seq.zip [1 .. meths.Length] meths.[1 ..] do
+          let parNames = String.concat "" [ for j in 1 .. m.GetParameters().Length -> sprintf "p%i" j ]
+          let parArgs = String.concat "" [ for j in 1 .. m.GetParameters().Length -> sprintf "(p%i)" j ]
+          yield m.Name + ": function(" + parNames + ") {"
+          yield "  return _funcs[" + string (i+1) + "](_self)" + parArgs + "; }" +
+                 ( if i = meths.Length then "" else "," )
+        yield "};" ]
+      |> String.concat "\n"
+    System.IO.File.WriteAllText(__SOURCE_DIRECTORY__ @@ fileName, moduleJS)
+
+// --------------------------------------------------------------------------------------
+// Run all targets by default. Invoke 'build <Target>' to override
+
+Target "GenerateModules" (fun () ->
+    translateModules()
+)
+
+RunTargetOrDefault "GenerateModules"

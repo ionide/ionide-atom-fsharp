@@ -1,0 +1,23 @@
+{
+  "name": "FSharp.Atom.Autocomplete-fs",
+  "main": "./lib/autocomplete-fs",
+  "version": "0.0.0",
+  "description": "A short description of your package",
+  "activationCommands": {
+    "atom-workspace": "FSharp.Atom.Autocomplete-fs:toggle"
+  },
+  "repository": "https://github.com/Krzysztof-Cieslak/FSharp.Atom",
+  "license": "Appache 2.0",
+  "engines": {
+    "atom": ">=0.174.0 <2.0.0"
+  },
+  "dependencies": {
+  },
+  "providedServices": {
+  "autocomplete.provider": {
+    "versions": {
+      "2.0.0": "provide"
+    }
+  }
+}
+}
