@@ -4,6 +4,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "project", "project", "{CA9943A4-FBEB-4A0B-BB4C-382501D03AD6}"
+	ProjectSection(SolutionItems) = preProject
+		build.fsx = build.fsx
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{176D5273-0AF5-44A6-894C-F057F13F3391}"
+	ProjectSection(SolutionItems) = preProject
+		src\atom-bindings.fsx = src\atom-bindings.fsx
+		src\autocomplete.fsx = src\autocomplete.fsx
+		src\funscript-atom.fsx = src\funscript-atom.fsx
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionProperties) = preSolution

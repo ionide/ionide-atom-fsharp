@@ -52,9 +52,6 @@ module Editor =
     [<JSEmit("return {0}.buffer.file.path;")>]
     let getEditorPath (ed : Editor) : string = failwith "JS"
             
-    [<JSEmit("return atom.packages.packageDirPaths[0];")>]
-    let getCurrentPackagePath() : string = failwith "JS"
-            
     [<JSEmit("return atom.project.getPath();")>]
     let getCurrentProjectPath() : string = failwith "JS"
 
