@@ -14,6 +14,7 @@ open Atom.Promise
 
 module AutocompleteResults = 
     type CompletionResult = {Kind : string; Data : string []}
+    type ParseResult = {Kind : string; Data : string []}
 
 module AutocompleteService = 
     type State = 
@@ -80,7 +81,17 @@ module AutocompleteHandler =
         if getEditorGrammarName editor = "F#" then
             let path = editor |> getEditorPath
             let text = editor |> getEditorText
-            service |> parse path text cb
+            let action (s : string) = 
+                let split = s.Split('\n')
+                if split.Length > 1 then
+                    try
+                        let o = unbox<AutocompleteResults.ParseResult>(Globals.JSON.parse split.[1])
+                        if o.Kind = "errors" then emit("FSharp.Atom:Highlight", o.Data)
+                    with
+                    | ex -> ()
+                cb s
+
+            service |> parse path text action
         else
             cb "Error"
             service
@@ -97,15 +108,8 @@ module AutocompleteHandler =
         let str = sprintf "tooltip \"%s\" %d %d\n" fn line col
         service |> AutocompleteService.ask str 1 cb
 
-
-                       
-type Autocomplete() = 
-    let cd = CompositeDisposable.create()        
-    let service = AutocompleteService.create
-                  |> AutocompleteService.start
-                  |> AutocompleteService.send "outputmode json\n"   
-    
-    member x.getSuggestion(options : Atom.Promise.Options.Options) = 
+module AutocompleteProvider = 
+    let getSuggestion service options =
         let path = options |> Atom.Promise.Options.getPath
         let row = (options |> Atom.Promise.Options.getRow) + 1
         let col = options |> Atom.Promise.Options.getColumn
@@ -120,7 +124,7 @@ type Autocomplete() =
                         let pref = if prefix = "." || prefix = "=" then "" else prefix
                         if result.Kind = "completion" then
                             result.Data 
-                            |> Seq.where(fun t -> t.StartsWith(pref))
+                            |> Seq.where(fun t -> t.Contains(pref))
                             |> Seq.map(fun t -> Atom.Promise.result t pref)
                             |> Seq.toArray 
                             |> Atom.Promise.resolve        
@@ -130,11 +134,39 @@ type Autocomplete() =
                     | ex -> Atom.Promise.resolve [||]
             service |> AutocompleteHandler.parseCurrent (fun _ -> service |> AutocompleteHandler.completion path row col action |> ignore) |> ignore)
 
+module HighlighterHandler = 
+    let mutable marked = Array.empty<Marker>
+    
+    let handle lst = 
+        //iter(marked, destroyMarker)
+        //NOT WORKING
+        marked |> Array.iter(fun i -> i|> destroyMarker)
+        marked <- Array.empty<Marker>
+        let editor = getActiveTextEditor()
+        let action item = 
+            let range = item |> createRange 
+            let marker = createMarker(editor, range)
+            let cls = if getItemSeverity(item) = "Warning" then "highlight-warning" else "highlight-error"
+            marked <- Array.append [|marker|] marked
+            decorateMarker(editor, marker, cls)
+        iter(lst, action)
+        ()
+        //NOT WORKING
+        //lst |> List.iter(action)
 
+                       
+type Autocomplete() = 
+    let cd = CompositeDisposable.create()        
+    let service = AutocompleteService.create
+                  |> AutocompleteService.start
+                  |> AutocompleteService.send "outputmode json\n"   
+    
+    member x.getSuggestion(options : Atom.Promise.Options.Options) = 
+        AutocompleteProvider.getSuggestion service options
 
-    member x.activate(state:obj) =       
-
-        do onDidChangeActivePaneItem (fun ed -> AutocompleteHandler.parseEditor ed (fun _ -> ()) service |> ignore)
+    member x.activate(state:obj) =     
+        onDidChangeActivePaneItem (fun ed -> AutocompleteHandler.parseEditor ed (fun _ -> ()) service |> ignore)
+        on("FSharp.Atom:Highlight", HighlighterHandler.handle)
 
     member x.deactivate() = 
         CompositeDisposable.dispose(cd)

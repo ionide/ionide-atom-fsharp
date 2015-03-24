@@ -2,7 +2,11 @@ var CompositeDisposable = require('atom').CompositeDisposable;
 var child_process = require('child_process');
 
 function wrappedFunScript() { 
-var UnfoldEnumerator_2_Int32__String___ctor$Int32_String, UnfoldEnumerator_2_Int32__String_____ctor$Int32_String___, UnfoldEnumerator_2_IEnumerator_1_String__String___ctor$IEnumerator_1_String__String, UnfoldEnumerator_2_IEnumerator_1_String__Object___ctor$IEnumerator_1_String__Object_, TupleString____Int32, TupleString_Int32, TupleString_IEnumerator_1_String_, TupleObject__IEnumerator_1_String_, T___ctor$, String__StartsWith$, String__SplitWithoutOptions$, String__PrintFormatToString$, State__On, State__Off, Seq__Where$String_1String, Seq__Unfold$Int32__String___Int32_String___, Seq__Unfold$Int32__String_1Int32_String, Seq__Unfold$IEnumerator_1_String__String_1IEnumerator_1_String__String, Seq__Unfold$IEnumerator_1_String__Object_IEnumerator_1_String__Object_, Seq__ToArray$String___String___, Seq__ToArray$Object_Object_, Seq__OfArray$String___String___, Seq__OfArray$String_1String, Seq__Map$String_1_Object_String_Object_, Seq__IterateIndexed$String___String___, Seq__IterateIndexed$Object_Object_, Seq__FromFactory$String___String___, Seq__FromFactory$String_1String, Seq__FromFactory$Object_Object_, Seq__FoldIndexedAux$Unit__String___Unit__String___, Seq__FoldIndexedAux$Unit__Object_Unit__Object_, Seq__FoldIndexed$String____Unit_String____Unit_, Seq__FoldIndexed$Object__Unit_Object__Unit_, Seq__Filter$String_1String, Seq__Enumerator$String___String___, Seq__Enumerator$String_1String, Seq__Enumerator$Object_Object_, Seq__Delay$String_1String, Seq__Delay$Object_Object_, Option__Iterate$ChildProcess_ChildProcess_, Option__IsSome$Int32_Int32, Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_, Option__GetValue$Tuple_2_String____Int32_Tuple_2_String____Int32_, Option__GetValue$Tuple_2_String__Int32_Tuple_2_String__Int32_, Option__GetValue$Tuple_2_String__IEnumerator_1_String_Tuple_2_String__IEnumerator_1_String_, Option__GetValue$Tuple_2_Object__IEnumerator_1_String_Tuple_2_Object__IEnumerator_1_String_, Option__GetValue$Int32_Int32, Option__GetValue$IEnumerator_1_String_IEnumerator_1_String_, Option__GetValue$ChildProcess_ChildProcess_, Editor__getEditorText$, Editor__getEditorPath$, Editor__getEditorGrammarName$, Editor__getCurrentPackagePath$, Editor__getActiveTextEditor$, CreateEnumerable_1_String___ctor$String, CreateEnumerable_1_String_____ctor$String___, CreateEnumerable_1_Object___ctor$Object_, CompositeDisposable__dispose$, CompositeDisposable__create$, Autocomplete__getSuggestion$, Autocomplete__deactivate$, Autocomplete__activate$, Autocomplete___ctor$, AutocompleteService__start$, AutocompleteService__send$, AutocompleteService__location$, AutocompleteService__get_create$, AutocompleteService__create, AutocompleteService__ask$, AutocompleteHandler__parseEditor$, AutocompleteHandler__parseCurrent$, AutocompleteHandler__parse$, AutocompleteHandler__completion$, Array__ZeroCreate$String___String___, Array__ZeroCreate$Object_Object_, Array__MapIndexed$String_1_String___String_String___, Array__Map$String_1_String___String_String___, Array__Length$String_1String, Array__FoldIndexed$String____String_1String____String, Array__Fold$String_1_String___String_String___, Array__ConcatImpl$String_1String, Array__Concat$String_1String, Array__BoxedLength$;
+var UnfoldEnumerator_2_Int32__String___ctor$Int32_String, UnfoldEnumerator_2_Int32__String_____ctor$Int32_String___, UnfoldEnumerator_2_IEnumerator_1_String__String___ctor$IEnumerator_1_String__String, UnfoldEnumerator_2_IEnumerator_1_String__Object___ctor$IEnumerator_1_String__Object_, TupleString____Int32, TupleString_Int32, TupleString_IEnumerator_1_String_, TupleObject__IEnumerator_1_String_, T___ctor$, String__SplitWithoutOptions$, String__PrintFormatToString$, State__On, State__Off, Seq__Where$String_1String, Seq__Unfold$Int32__String___Int32_String___, Seq__Unfold$Int32__String_1Int32_String, Seq__Unfold$IEnumerator_1_String__String_1IEnumerator_1_String__String, Seq__Unfold$IEnumerator_1_String__Object_IEnumerator_1_String__Object_, Seq__ToArray$String___String___, Seq__ToArray$Object_Object_, Seq__OfArray$String___String___, Seq__OfArray$String_1String, Seq__Map$String_1_Object_String_Object_, Seq__IterateIndexed$String___String___, Seq__IterateIndexed$Object_Object_, Seq__FromFactory$String___String___, Seq__FromFactory$String_1String, Seq__FromFactory$Object_Object_, Seq__FoldIndexedAux$Unit__String___Unit__String___, Seq__FoldIndexedAux$Unit__Object_Unit__Object_, Seq__FoldIndexed$String____Unit_String____Unit_, Seq__FoldIndexed$Object__Unit_Object__Unit_, Seq__Filter$String_1String, Seq__Enumerator$String___String___, Seq__Enumerator$String_1String, Seq__Enumerator$Object_Object_, Seq__Delay$String_1String, Seq__Delay$Object_Object_, Option__Iterate$ChildProcess_ChildProcess_, Option__IsSome$Int32_Int32, Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_, Option__GetValue$Tuple_2_String____Int32_Tuple_2_String____Int32_, Option__GetValue$Tuple_2_String__Int32_Tuple_2_String__Int32_, Option__GetValue$Tuple_2_String__IEnumerator_1_String_Tuple_2_String__IEnumerator_1_String_, Option__GetValue$Tuple_2_Object__IEnumerator_1_String_Tuple_2_Object__IEnumerator_1_String_, Option__GetValue$Int32_Int32, Option__GetValue$IEnumerator_1_String_IEnumerator_1_String_, Option__GetValue$ChildProcess_ChildProcess_, HighlighterHandler__marked, HighlighterHandler__handle$Item_Item_, HighlighterHandler__get_marked$, Editor__getEditorText$, Editor__getEditorPath$, Editor__getEditorGrammarName$, Editor__getCurrentPackagePath$, Editor__getActiveTextEditor$, CreateEnumerable_1_String___ctor$String, CreateEnumerable_1_String_____ctor$String___, CreateEnumerable_1_Object___ctor$Object_, CompositeDisposable__dispose$, CompositeDisposable__create$, Autocomplete__getSuggestion$, Autocomplete__deactivate$, Autocomplete__activate$, Autocomplete___ctor$, AutocompleteService__start$, AutocompleteService__send$, AutocompleteService__location$, AutocompleteService__get_create$, AutocompleteService__create, AutocompleteService__ask$, AutocompleteProvider__getSuggestion$, AutocompleteHandler__parseEditor$, AutocompleteHandler__parseCurrent$, AutocompleteHandler__parse$, AutocompleteHandler__completion$, Array__ZeroCreate$String___String___, Array__ZeroCreate$Object_Object_, Array__MapIndexed$String_1_String___String_String___, Array__Map$String_1_String___String_String___, Array__Length$String_1String, Array__Length$Marker_Marker_, Array__Iterate$Marker_Marker_, Array__FoldIndexed$Unit__Marker_Unit__Marker_, Array__FoldIndexed$String____String_1String____String, Array__Fold$String_1_String___String_String___, Array__Fold$Marker__Unit_Marker__Unit_, Array__Empty$Marker_Marker_, Array__ConcatImpl$String_1String, Array__Concat$String_1String, Array__BoxedLength$, Array__Append$Marker_Marker_;
+Array__Append$Marker_Marker_ = (function(xs,ys)
+{
+    return xs.concat(ys);;
+});
 Array__BoxedLength$ = (function(xs)
 {
     return xs.length;;
@@ -14,6 +18,23 @@ Array__Concat$String_1String = (function(xs)
 Array__ConcatImpl$String_1String = (function(xss)
 {
     return [].concat.apply([], xss);;
+});
+Array__Empty$Marker_Marker_ = (function()
+{
+    return [];
+});
+Array__Fold$Marker__Unit_Marker__Unit_ = (function(f,seed,xs)
+{
+    return Array__FoldIndexed$Unit__Marker_Unit__Marker_((function(_arg1)
+    {
+      return (function(acc)
+      {
+        return (function(x)
+        {
+          return f(acc)(x);
+        });
+      });
+    }), seed, xs);
 });
 Array__Fold$String_1_String___String_String___ = (function(f,seed,xs)
 {
@@ -37,6 +58,31 @@ Array__FoldIndexed$String____String_1String____String = (function(f,seed,xs)
       null;
     };
     return acc;
+});
+Array__FoldIndexed$Unit__Marker_Unit__Marker_ = (function(f,seed,xs)
+{
+    var acc = seed;
+    for (var i = 0; i <= (Array__Length$Marker_Marker_(xs) - 1); i++)
+    {
+      acc = f(i)(acc)(xs[i]);
+      null;
+    };
+    return acc;
+});
+Array__Iterate$Marker_Marker_ = (function(f,xs)
+{
+    var _799;
+    return Array__Fold$Marker__Unit_Marker__Unit_((function(unitVar0)
+    {
+      return (function(x)
+      {
+        return f(x);
+      });
+    }), _799, xs);
+});
+Array__Length$Marker_Marker_ = (function(xs)
+{
+    return xs.length;;
 });
 Array__Length$String_1String = (function(xs)
 {
@@ -103,13 +149,97 @@ AutocompleteHandler__parseEditor$ = (function(editor,cb,service)
     {
       var path = Editor__getEditorPath$(editor);
       var text = Editor__getEditorText$(editor);
-      return AutocompleteHandler__parse$(path, text, cb, service);
+      var action = (function(s)
+      {
+        var split = String__SplitWithoutOptions$(s, ["\n"]);
+        if ((Array__BoxedLength$(split) > 1)) 
+        {
+          try
+          {
+            var o = ((window.JSON).parse(split[1]));
+            if ((o.Kind == "errors")) 
+            {
+              atom.emit("FSharp.Atom:Highlight",o.Data);
+            }
+            else
+            {
+              ;
+            };
+          }
+          catch(ex){
+            ;
+          };
+        }
+        else
+        {
+          ;
+        };
+        return cb(s);
+      });
+      return AutocompleteHandler__parse$(path, text, action, service);
     }
     else
     {
       cb("Error");
       return service;
     };
+});
+AutocompleteProvider__getSuggestion$ = (function(service,options)
+{
+    var path = options.editor.buffer.file.path;
+    var row = (options.bufferPosition.row + 1);
+    var col = options.bufferPosition.column;
+    var prefix = options.prefix;
+    return new Promise(function(resolve){(function(unitVar0)
+    {
+      var action = (function(s)
+      {
+        var msplit = String__SplitWithoutOptions$(s, ["\n"]);
+        if ((Array__BoxedLength$(msplit) > 1)) 
+        {
+          var msg = msplit[1];
+          try
+          {
+            var result = ((window.JSON).parse(msg));
+            var _288;
+            if (((prefix == ".") || (prefix == "="))) 
+            {
+              _288 = "";
+            }
+            else
+            {
+              _288 = prefix;
+            };
+            var pref = _288;
+            if ((result.Kind == "completion")) 
+            {
+              return resolve(Seq__ToArray$Object_Object_(Seq__Map$String_1_Object_String_Object_((function(t)
+              {
+                return {text: t, replacementPrefix: pref};
+              }), Seq__Where$String_1String((function(t)
+              {
+                return (t.indexOf(pref) >= 0);
+              }), Seq__OfArray$String_1String(result.Data)))));
+            }
+            else
+            {
+              return resolve([]);
+            };
+          }
+          catch(ex){
+            return resolve([]);
+          };
+        }
+        else
+        {
+          ;
+        };
+      });
+      var ignored0 = AutocompleteHandler__parseCurrent$((function(_arg1)
+      {
+        var _ignored0 = AutocompleteHandler__completion$(path, row, col, action, service);
+      }), service);
+    })()});
 });
 AutocompleteService__ask$ = (function(msg,no,cb,state)
 {
@@ -171,12 +301,16 @@ Autocomplete___ctor$ = (function(unitVar0)
 });
 Autocomplete__activate$ = (function(x,state)
 {
-    return atom.workspace.onDidChangeActivePaneItem((function(ed)
+    atom.workspace.onDidChangeActivePaneItem((function(ed)
     {
-      var ignored0 = AutocompleteHandler__parseEditor$(ed, (function(_arg2)
+      var ignored0 = AutocompleteHandler__parseEditor$(ed, (function(_arg1)
       {
         ;
       }), x.service);
+    }));
+    return atom.on("FSharp.Atom:Highlight",(function(lst)
+    {
+      return HighlighterHandler__handle$Item_Item_(lst);
     }));
 });
 Autocomplete__deactivate$ = (function(x,unitVar1)
@@ -185,60 +319,7 @@ Autocomplete__deactivate$ = (function(x,unitVar1)
 });
 Autocomplete__getSuggestion$ = (function(x,options)
 {
-    var path = options.editor.buffer.file.path;
-    var row = (options.bufferPosition.row + 1);
-    var col = options.bufferPosition.column;
-    var prefix = options.prefix;
-    return new Promise(function(resolve){(function(unitVar0)
-    {
-      var action = (function(s)
-      {
-        var msplit = String__SplitWithoutOptions$(s, ["\n"]);
-        if ((Array__BoxedLength$(msplit) > 1)) 
-        {
-          var msg = msplit[1];
-          try
-          {
-            var result = ((window.JSON).parse(msg));
-            var _285;
-            if (((prefix == ".") || (prefix == "="))) 
-            {
-              _285 = "";
-            }
-            else
-            {
-              _285 = prefix;
-            };
-            var pref = _285;
-            if ((result.Kind == "completion")) 
-            {
-              return resolve(Seq__ToArray$Object_Object_(Seq__Map$String_1_Object_String_Object_((function(t)
-              {
-                return {text: t, replacementPrefix: pref};
-              }), Seq__Where$String_1String((function(t)
-              {
-                return String__StartsWith$(t, pref);
-              }), Seq__OfArray$String_1String(result.Data)))));
-            }
-            else
-            {
-              return resolve([]);
-            };
-          }
-          catch(ex){
-            return resolve([]);
-          };
-        }
-        else
-        {
-          ;
-        };
-      });
-      var ignored0 = AutocompleteHandler__parseCurrent$((function(_arg1)
-      {
-        var _ignored0 = AutocompleteHandler__completion$(path, row, col, action, x.service);
-      }), x.service);
-    })()});
+    return AutocompleteProvider__getSuggestion$(x.service, options);
 });
 CompositeDisposable__create$ = (function(unitVar0)
 {
@@ -285,6 +366,40 @@ Editor__getEditorPath$ = (function(ed)
 Editor__getEditorText$ = (function(ed)
 {
     return ed.getText();;
+});
+HighlighterHandler__get_marked$ = (function()
+{
+    return Array__Empty$Marker_Marker_();
+});
+HighlighterHandler__handle$Item_Item_ = (function(lst)
+{
+    Array__Iterate$Marker_Marker_((function(i)
+    {
+      return i.destroy();;
+    }), HighlighterHandler__marked);
+    HighlighterHandler__marked = Array__Empty$Marker_Marker_();
+    var editor = Editor__getActiveTextEditor$();
+    var action = (function(item)
+    {
+      var range = [[item.StartLine, item.StartColumn], [item.EndLine, item.EndColumn]];;
+      var marker = editor.markBufferRange(range, {invalidate: 'never' });;
+      var _831;
+      if ((item.Severity == "Warning")) 
+      {
+        _831 = "highlight-warning";
+      }
+      else
+      {
+        _831 = "highlight-error";
+      };
+      var cls = _831;
+      HighlighterHandler__marked = Array__Append$Marker_Marker_([marker], HighlighterHandler__marked);
+      return editor.decorateMarker(marker, { type: 'highlight', "class": cls });;
+    });
+    for (i = 0, len = lst.length; i < len; i++) {var item = lst[i]; (function(arg00)
+    {
+      return action(arg00);
+    })(item); };
 });
 Option__GetValue$ChildProcess_ChildProcess_ = (function(option)
 {
@@ -338,16 +453,16 @@ Seq__Delay$Object_Object_ = (function(f)
 {
     return Seq__FromFactory$Object_Object_((function(unitVar0)
     {
-      var _555;
-      return Seq__Enumerator$Object_Object_(f(_555));
+      var _554;
+      return Seq__Enumerator$Object_Object_(f(_554));
     }));
 });
 Seq__Delay$String_1String = (function(f)
 {
     return Seq__FromFactory$String_1String((function(unitVar0)
     {
-      var _464;
-      return Seq__Enumerator$String_1String(f(_464));
+      var _463;
+      return Seq__Enumerator$String_1String(f(_463));
     }));
 });
 Seq__Enumerator$Object_Object_ = (function(xs)
@@ -430,8 +545,8 @@ Seq__FromFactory$Object_Object_ = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _547;
-        return __.factory(_547);
+        var _546;
+        return __.factory(_546);
       })(impl, unitVar1);
     })};
 });
@@ -443,8 +558,8 @@ Seq__FromFactory$String_1String = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _392;
-        return __.factory(_392);
+        var _391;
+        return __.factory(_391);
       })(impl, unitVar1);
     })};
 });
@@ -456,14 +571,14 @@ Seq__FromFactory$String___String___ = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _170;
-        return __.factory(_170);
+        var _173;
+        return __.factory(_173);
       })(impl, unitVar1);
     })};
 });
 Seq__IterateIndexed$Object_Object_ = (function(f,xs)
 {
-    var _569;
+    var _568;
     return Seq__FoldIndexed$Object__Unit_Object__Unit_((function(i)
     {
       return (function(unitVar1)
@@ -473,11 +588,11 @@ Seq__IterateIndexed$Object_Object_ = (function(f,xs)
           return f(i)(x);
         });
       });
-    }), _569, xs);
+    }), _568, xs);
 });
 Seq__IterateIndexed$String___String___ = (function(f,xs)
 {
-    var _190;
+    var _193;
     return Seq__FoldIndexed$String____Unit_String____Unit_((function(i)
     {
       return (function(unitVar1)
@@ -487,7 +602,7 @@ Seq__IterateIndexed$String___String___ = (function(f,xs)
           return f(i)(x);
         });
       });
-    }), _190, xs);
+    }), _193, xs);
 });
 Seq__Map$String_1_Object_String_Object_ = (function(f,xs)
 {
@@ -603,8 +718,8 @@ Seq__Unfold$IEnumerator_1_String__Object_IEnumerator_1_String__Object_ = (functi
           });
           return (Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_(__.acc) && (function()
           {
-            var _525;
-            return next(_525);
+            var _524;
+            return next(_524);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -660,8 +775,8 @@ Seq__Unfold$IEnumerator_1_String__String_1IEnumerator_1_String__String = (functi
           });
           return (Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_(__.acc) && (function()
           {
-            var _441;
-            return next(_441);
+            var _440;
+            return next(_440);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -717,8 +832,8 @@ Seq__Unfold$Int32__String_1Int32_String = (function(f,seed)
           });
           return (Option__IsSome$Int32_Int32(__.acc) && (function()
           {
-            var _370;
-            return next(_370);
+            var _369;
+            return next(_369);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -774,8 +889,8 @@ Seq__Unfold$Int32__String___Int32_String___ = (function(f,seed)
           });
           return (Option__IsSome$Int32_Int32(__.acc) && (function()
           {
-            var _148;
-            return next(_148);
+            var _151;
+            return next(_151);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -838,10 +953,6 @@ String__SplitWithoutOptions$ = (function(s,delimiters)
     {
       return Array__Fold$String_1_String___String_String___(folder, state, array);
     })(delimiters);
-});
-String__StartsWith$ = (function(s,search)
-{
-    return (s.indexOf(search) == 0);
 });
 T___ctor$ = (function(State,PreviousState,Child)
 {
@@ -907,6 +1018,7 @@ UnfoldEnumerator_2_Int32__String___ctor$Int32_String = (function(seed,unfold)
     __this.current = null;
 });
 AutocompleteService__create = AutocompleteService__get_create$();
+HighlighterHandler__marked = HighlighterHandler__get_marked$();
 return [(function(ign)
 {
     return (new Autocomplete___ctor$());
