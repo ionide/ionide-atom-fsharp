@@ -86,5 +86,5 @@ module Promise =
     let result (t : string) (prefix : string) : obj = failwith "JS"
 
 module JS =
-    [<JSEmitInline("({0}[{1}])")>]
+    [<JSEmitInline("({1}[{0}])")>]
     let getProperty<'T> (prop:string) (o:obj) : 'T = failwith "JS"
