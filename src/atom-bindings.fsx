@@ -102,3 +102,20 @@ module Promise =
             
         [<JSEmitInline("{0}.prefix")>]
         let getPrefix (o : Options) : string = failwith "JS"
+
+module Workspace = 
+    type Options = {item : obj; visible : bool; priority : int}
+
+    type Panel = class end
+
+    [<JSEmitInline("atom.workspace.addBottomPanel({0})")>]
+    let addBotomPanel(o : Options) : Panel = failwith "JS"
+
+    [<JSEmitInline("{0}.hide()")>]
+    let hidePanel(p : Panel) : unit = failwith "JS"
+
+    [<JSEmitInline("{0}.show()")>]
+    let showPanel(p : Panel) : unit = failwith "JS"
+
+
+

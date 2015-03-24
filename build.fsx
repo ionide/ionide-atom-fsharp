@@ -76,26 +76,18 @@ let translateModules() =
     let moduleJS = 
       [ yield "var CompositeDisposable = require('atom').CompositeDisposable;"
         yield "var child_process = require('child_process');"
+        yield "window.$ = require('jquery');"
         yield ""
         yield "function wrappedFunScript() { \n" + coreJS + "\n }"
         yield "var _funcs = wrappedFunScript();"
         yield "var _self = _funcs[0]();"
         yield ""
-        yield "var provider = {" 
-        yield "selector: '.source.fsharp',"
-        yield "inclusionPriority: 1,"
-        yield "excludeLowerPriority: true,"
-        yield "getSuggestions: function(p1) {"
-        yield "return _funcs[1](_self)(p1); }"
-        yield "};"
         yield "module.exports = " + moduleName + " = {"
-        yield "provide: function() {"
-        yield "return provider; },"
-        for i, m in Seq.zip [1 .. meths.Length] meths.[1 ..] do
+        for i, m in Seq.zip [1 .. meths.Length] meths do
           let parNames = String.concat "" [ for j in 1 .. m.GetParameters().Length -> sprintf "p%i" j ]
           let parArgs = String.concat "" [ for j in 1 .. m.GetParameters().Length -> sprintf "(p%i)" j ]
           yield m.Name + ": function(" + parNames + ") {"
-          yield "  return _funcs[" + string (i+1) + "](_self)" + parArgs + "; }" +
+          yield "  return _funcs[" + string i + "](_self)" + parArgs + "; }" +
                  ( if i = meths.Length then "" else "," )
         yield "};" ]
       |> String.concat "\n"
