@@ -124,7 +124,7 @@ AutocompleteService__ask$ = (function(msg,no,cb,state)
         null;
         var a = s.contents;
         var len = (Array__BoxedLength$(String__SplitWithoutOptions$(a, ["\n"])) - 1);
-        if (((len == no) || false)) 
+        if (((len == no) || (a.indexOf("\"Kind\":\"ERROR\"") >= 0))) 
         {
           ((window.console).log(("RECIVED: " + a)));
           var ignored0 = ((c.stdout).removeAllListeners("data"));
