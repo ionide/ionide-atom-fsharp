@@ -24,7 +24,7 @@ module AutocompleteService =
                 
     type T = { State : State; PreviousState : State; Child : ChildProcess option }
                 
-    let location () = (getCurrentPackagePath()) + "\\autocomplete\\bin\\fsautocomplete.exe"
+    let location () = Globals.atom.packages.packageDirPaths.[0] + "\\autocomplete\\bin\\fsautocomplete.exe"
     let isOn t = t.State = State.On
     let isOff t = t.State = State.Off
     let isNotOff t = t.State <> State.Off
@@ -108,12 +108,18 @@ module AutocompleteHandler =
         let str = sprintf "tooltip \"%s\" %d %d\n" fn line col
         service |> AutocompleteService.ask str 1 cb
 
+type GetSuggestionOptions =
+  { editor : AtomCore.IEditor
+    bufferPosition : TextBuffer.IPoint
+    prefix : string
+    scopeDescriptor : string[] }                       
+
 module AutocompleteProvider = 
-    let getSuggestion service options =
-        let path = options |> Atom.Promise.Options.getPath
-        let row = (options |> Atom.Promise.Options.getRow) + 1
-        let col = options |> Atom.Promise.Options.getColumn
-        let prefix = options |> Atom.Promise.Options.getPrefix
+    let getSuggestion service (options:GetSuggestionOptions) =
+        let path = options.editor.buffer.file |> Atom.JS.getProperty<string> "path"
+        let row = int options.bufferPosition.row + 1
+        let col = int options.bufferPosition.column
+        let prefix = options.prefix
         Atom.Promise.create(fun () ->
             let action = fun (s : string) ->
                 let msplit = s.Split('\n')
@@ -154,14 +160,14 @@ module HighlighterHandler =
         //NOT WORKING
         //lst |> List.iter(action)
 
-                       
+
 type Autocomplete() = 
     let cd = CompositeDisposable.create()        
     let service = AutocompleteService.create
                   |> AutocompleteService.start
                   |> AutocompleteService.send "outputmode json\n"   
     
-    member x.getSuggestion(options : Atom.Promise.Options.Options) = 
+    member x.getSuggestion(options : GetSuggestionOptions) = 
         AutocompleteProvider.getSuggestion service options
 
     member x.activate(state:obj) =     

@@ -88,17 +88,6 @@ module Promise =
     [<JSEmitInline("{text: {0}, replacementPrefix: {1}}")>]
     let result (t : string) (prefix : string) : obj = failwith "JS"
 
-    module Options = 
-        type Options = class end
-            
-        [<JSEmitInline("{0}.editor.buffer.file.path")>]
-        let getPath(o : Options) : string = failwith "JS"
-
-        [<JSEmitInline("{0}.bufferPosition.column")>]
-        let getColumn( o : Options) : int = failwith "JS"
-
-        [<JSEmitInline("{0}.bufferPosition.row")>]
-        let getRow (o: Options) : int = failwith "JS"
-            
-        [<JSEmitInline("{0}.prefix")>]
-        let getPrefix (o : Options) : string = failwith "JS"
+module JS =
+    [<JSEmitInline("({0}[{1}])")>]
+    let getProperty<'T> (prop:string) (o:obj) : 'T = failwith "JS"
