@@ -3,8 +3,8 @@ var child_process = require('child_process');
 window.$ = require('jquery');
 
 function wrappedFunScript() { 
-var Views__jq$, UnfoldEnumerator_2_Int32__String___ctor$Int32_String, UnfoldEnumerator_2_Int32__String_____ctor$Int32_String___, UnfoldEnumerator_2_IEnumerator_1_String__String___ctor$IEnumerator_1_String__String, UnfoldEnumerator_2_IEnumerator_1_String__Object___ctor$IEnumerator_1_String__Object_, TupleString____Int32, TupleString_Int32, TupleString_IEnumerator_1_String_, TupleObject__IEnumerator_1_String_, T___ctor$, String__SplitWithoutOptions$, String__PrintFormatToString$, State__On, State__Off, Seq__Where$String_1String, Seq__Unfold$Int32__String___Int32_String___, Seq__Unfold$Int32__String_1Int32_String, Seq__Unfold$IEnumerator_1_String__String_1IEnumerator_1_String__String, Seq__Unfold$IEnumerator_1_String__Object_IEnumerator_1_String__Object_, Seq__ToArray$String___String___, Seq__ToArray$Object_Object_, Seq__OfArray$String___String___, Seq__OfArray$String_1String, Seq__Map$String_1_Object_String_Object_, Seq__IterateIndexed$String___String___, Seq__IterateIndexed$Object_Object_, Seq__FromFactory$String___String___, Seq__FromFactory$String_1String, Seq__FromFactory$Object_Object_, Seq__FoldIndexedAux$Unit__String___Unit__String___, Seq__FoldIndexedAux$Unit__Object_Unit__Object_, Seq__FoldIndexed$String____Unit_String____Unit_, Seq__FoldIndexed$Object__Unit_Object__Unit_, Seq__Filter$String_1String, Seq__Enumerator$String___String___, Seq__Enumerator$String_1String, Seq__Enumerator$Object_Object_, Seq__Delay$String_1String, Seq__Delay$Object_Object_, Provider___ctor$, Options___ctor$, Option__Iterate$ChildProcess_ChildProcess_, Option__IsSome$Int32_Int32, Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_, Option__GetValue$Tuple_2_String____Int32_Tuple_2_String____Int32_, Option__GetValue$Tuple_2_String__Int32_Tuple_2_String__Int32_, Option__GetValue$Tuple_2_String__IEnumerator_1_String_Tuple_2_String__IEnumerator_1_String_, Option__GetValue$Tuple_2_Object__IEnumerator_1_String_Tuple_2_Object__IEnumerator_1_String_, Option__GetValue$Int32_Int32, Option__GetValue$IEnumerator_1_String_IEnumerator_1_String_, Option__GetValue$ChildProcess_ChildProcess_, HighlighterHandler__marked, HighlighterHandler__handle$Item_Item_, HighlighterHandler__get_marked$, ErrorRowView__create$, ErrorPanelView__handle$, ErrorPanelView__hadnleEditorChange$, ErrorPanelView__create$, Editor__getEditorText$, Editor__getEditorPath$, Editor__getEditorGrammarName$, Editor__getCurrentPackagePath$, Editor__getActiveTextEditor$, CreateEnumerable_1_String___ctor$String, CreateEnumerable_1_String_____ctor$String___, CreateEnumerable_1_Object___ctor$Object_, CompositeDisposable__dispose$, CompositeDisposable__create$, Autocomplete__provide$, Autocomplete__deactivate$, Autocomplete__activate$, Autocomplete___ctor$, AutocompleteService__start$, AutocompleteService__send$, AutocompleteService__location$, AutocompleteService__get_create$, AutocompleteService__create, AutocompleteService__ask$, AutocompleteProvider__getSuggestion$, AutocompleteProvider__create$, AutocompleteHandler__parseEditor$, AutocompleteHandler__parseCurrent$, AutocompleteHandler__parse$, AutocompleteHandler__completion$, Array__ZeroCreate$String___String___, Array__ZeroCreate$Object_Object_, Array__MapIndexed$String_1_String___String_String___, Array__Map$String_1_String___String_String___, Array__Length$String_1String, Array__Length$Marker_Marker_, Array__Length$Item_Item_, Array__Length$Error_Error_, Array__Iterate$Marker_Marker_, Array__Iterate$Item_Item_, Array__Iterate$Error_Error_, Array__FoldIndexed$Unit__Marker_Unit__Marker_, Array__FoldIndexed$Unit__Item_Unit__Item_, Array__FoldIndexed$Unit__Error_Unit__Error_, Array__FoldIndexed$String____String_1String____String, Array__Fold$String_1_String___String_String___, Array__Fold$Marker__Unit_Marker__Unit_, Array__Fold$Item__Unit_Item__Unit_, Array__Fold$Error__Unit_Error__Unit_, Array__Empty$Marker_Marker_, Array__ConcatImpl$String_1String, Array__Concat$String_1String, Array__BoxedLength$, Array__Append$Marker_Marker_;
-Array__Append$Marker_Marker_ = (function(xs,ys)
+var Views__jq$, UnfoldEnumerator_2_Int32__String___ctor$Int32_String, UnfoldEnumerator_2_Int32__String_____ctor$Int32_String___, UnfoldEnumerator_2_IEnumerator_1_String__String___ctor$IEnumerator_1_String__String, UnfoldEnumerator_2_IEnumerator_1_String__Object___ctor$IEnumerator_1_String__Object_, TupleString____Int32, TupleString_Int32, TupleString_IEnumerator_1_String_, TupleObject__IEnumerator_1_String_, T___ctor$, String__SplitWithoutOptions$, String__PrintFormatToString$, State__On, State__Off, Seq__Where$String_1String, Seq__Unfold$Int32__String___Int32_String___, Seq__Unfold$Int32__String_1Int32_String, Seq__Unfold$IEnumerator_1_String__String_1IEnumerator_1_String__String, Seq__Unfold$IEnumerator_1_String__Object_IEnumerator_1_String__Object_, Seq__ToArray$String___String___, Seq__ToArray$Object_Object_, Seq__OfArray$String___String___, Seq__OfArray$String_1String, Seq__Map$String_1_Object_String_Object_, Seq__IterateIndexed$String___String___, Seq__IterateIndexed$Object_Object_, Seq__FromFactory$String___String___, Seq__FromFactory$String_1String, Seq__FromFactory$Object_Object_, Seq__FoldIndexedAux$Unit__String___Unit__String___, Seq__FoldIndexedAux$Unit__Object_Unit__Object_, Seq__FoldIndexed$String____Unit_String____Unit_, Seq__FoldIndexed$Object__Unit_Object__Unit_, Seq__Filter$String_1String, Seq__Enumerator$String___String___, Seq__Enumerator$String_1String, Seq__Enumerator$Object_Object_, Seq__Delay$String_1String, Seq__Delay$Object_Object_, Provider___ctor$, PanelOptions___ctor$, Option__Iterate$ChildProcess_ChildProcess_, Option__IsSome$Int32_Int32, Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_, Option__GetValue$Tuple_2_String____Int32_Tuple_2_String____Int32_, Option__GetValue$Tuple_2_String__Int32_Tuple_2_String__Int32_, Option__GetValue$Tuple_2_String__IEnumerator_1_String_Tuple_2_String__IEnumerator_1_String_, Option__GetValue$Tuple_2_Object__IEnumerator_1_String_Tuple_2_Object__IEnumerator_1_String_, Option__GetValue$Int32_Int32, Option__GetValue$IEnumerator_1_String_IEnumerator_1_String_, Option__GetValue$ChildProcess_ChildProcess_, HighlighterHandler__marked, HighlighterHandler__handle$, HighlighterHandler__get_marked$, ErrorRowView__create$, ErrorPanelView__handle$, ErrorPanelView__hadnleEditorChange$, ErrorPanelView__create$, CreateEnumerable_1_String___ctor$String, CreateEnumerable_1_String_____ctor$String___, CreateEnumerable_1_Object___ctor$Object_, Autocomplete__provide$, Autocomplete__getSuggestion$, Autocomplete__deactivate$, Autocomplete__activate$, Autocomplete___ctor$, AutocompleteService__start$, AutocompleteService__send$, AutocompleteService__location$, AutocompleteService__get_create$, AutocompleteService__create, AutocompleteService__ask$, AutocompleteProvider__getSuggestion$, AutocompleteProvider__create$, AutocompleteHandler__parseEditor$, AutocompleteHandler__parseCurrent$, AutocompleteHandler__parse$, AutocompleteHandler__completion$, Array__ZeroCreate$String___String___, Array__ZeroCreate$Object_Object_, Array__MapIndexed$String_1_String___String_String___, Array__Map$String_1_String___String_String___, Array__Length$String_1String, Array__Length$IDisplayBufferMarker_IDisplayBufferMarker_, Array__Length$Error_Error_, Array__Iterate$IDisplayBufferMarker_IDisplayBufferMarker_, Array__Iterate$Error_Error_, Array__FoldIndexed$Unit__IDisplayBufferMarker_Unit__IDisplayBufferMarker_, Array__FoldIndexed$Unit__Error_Unit__Error_, Array__FoldIndexed$String____String_1String____String, Array__Fold$String_1_String___String_String___, Array__Fold$IDisplayBufferMarker__Unit_IDisplayBufferMarker__Unit_, Array__Fold$Error__Unit_Error__Unit_, Array__Empty$IDisplayBufferMarker_IDisplayBufferMarker_, Array__ConcatImpl$String_1String, Array__Concat$String_1String, Array__BoxedLength$, Array__Append$IDisplayBufferMarker_IDisplayBufferMarker_;
+Array__Append$IDisplayBufferMarker_IDisplayBufferMarker_ = (function(xs,ys)
 {
     return xs.concat(ys);;
 });
@@ -20,7 +20,7 @@ Array__ConcatImpl$String_1String = (function(xss)
 {
     return [].concat.apply([], xss);;
 });
-Array__Empty$Marker_Marker_ = (function()
+Array__Empty$IDisplayBufferMarker_IDisplayBufferMarker_ = (function()
 {
     return [];
 });
@@ -37,22 +37,9 @@ Array__Fold$Error__Unit_Error__Unit_ = (function(f,seed,xs)
       });
     }), seed, xs);
 });
-Array__Fold$Item__Unit_Item__Unit_ = (function(f,seed,xs)
+Array__Fold$IDisplayBufferMarker__Unit_IDisplayBufferMarker__Unit_ = (function(f,seed,xs)
 {
-    return Array__FoldIndexed$Unit__Item_Unit__Item_((function(_arg1)
-    {
-      return (function(acc)
-      {
-        return (function(x)
-        {
-          return f(acc)(x);
-        });
-      });
-    }), seed, xs);
-});
-Array__Fold$Marker__Unit_Marker__Unit_ = (function(f,seed,xs)
-{
-    return Array__FoldIndexed$Unit__Marker_Unit__Marker_((function(_arg1)
+    return Array__FoldIndexed$Unit__IDisplayBufferMarker_Unit__IDisplayBufferMarker_((function(_arg1)
     {
       return (function(acc)
       {
@@ -96,20 +83,10 @@ Array__FoldIndexed$Unit__Error_Unit__Error_ = (function(f,seed,xs)
     };
     return acc;
 });
-Array__FoldIndexed$Unit__Item_Unit__Item_ = (function(f,seed,xs)
+Array__FoldIndexed$Unit__IDisplayBufferMarker_Unit__IDisplayBufferMarker_ = (function(f,seed,xs)
 {
     var acc = seed;
-    for (var i = 0; i <= (Array__Length$Item_Item_(xs) - 1); i++)
-    {
-      acc = f(i)(acc)(xs[i]);
-      null;
-    };
-    return acc;
-});
-Array__FoldIndexed$Unit__Marker_Unit__Marker_ = (function(f,seed,xs)
-{
-    var acc = seed;
-    for (var i = 0; i <= (Array__Length$Marker_Marker_(xs) - 1); i++)
+    for (var i = 0; i <= (Array__Length$IDisplayBufferMarker_IDisplayBufferMarker_(xs) - 1); i++)
     {
       acc = f(i)(acc)(xs[i]);
       null;
@@ -118,46 +95,31 @@ Array__FoldIndexed$Unit__Marker_Unit__Marker_ = (function(f,seed,xs)
 });
 Array__Iterate$Error_Error_ = (function(f,xs)
 {
-    var _962;
+    var _935;
     return Array__Fold$Error__Unit_Error__Unit_((function(unitVar0)
     {
       return (function(x)
       {
         return f(x);
       });
-    }), _962, xs);
+    }), _935, xs);
 });
-Array__Iterate$Item_Item_ = (function(f,xs)
+Array__Iterate$IDisplayBufferMarker_IDisplayBufferMarker_ = (function(f,xs)
 {
-    var _880;
-    return Array__Fold$Item__Unit_Item__Unit_((function(unitVar0)
+    var _862;
+    return Array__Fold$IDisplayBufferMarker__Unit_IDisplayBufferMarker__Unit_((function(unitVar0)
     {
       return (function(x)
       {
         return f(x);
       });
-    }), _880, xs);
-});
-Array__Iterate$Marker_Marker_ = (function(f,xs)
-{
-    var _825;
-    return Array__Fold$Marker__Unit_Marker__Unit_((function(unitVar0)
-    {
-      return (function(x)
-      {
-        return f(x);
-      });
-    }), _825, xs);
+    }), _862, xs);
 });
 Array__Length$Error_Error_ = (function(xs)
 {
     return xs.length;;
 });
-Array__Length$Item_Item_ = (function(xs)
-{
-    return xs.length;;
-});
-Array__Length$Marker_Marker_ = (function(xs)
+Array__Length$IDisplayBufferMarker_IDisplayBufferMarker_ = (function(xs)
 {
     return xs.length;;
 });
@@ -217,15 +179,15 @@ AutocompleteHandler__parse$ = (function(path,text,cb,service)
 });
 AutocompleteHandler__parseCurrent$ = (function(cb,service)
 {
-    var editor = Editor__getActiveTextEditor$();
+    var editor = (((window.atom).workspace).getActiveTextEditor());
     return AutocompleteHandler__parseEditor$(editor, cb, service);
 });
 AutocompleteHandler__parseEditor$ = (function(editor,cb,service)
 {
-    if ((Editor__getEditorGrammarName$(editor) == "F#")) 
+    if ((((editor.getGrammar()).name) == "F#")) 
     {
-      var path = Editor__getEditorPath$(editor);
-      var text = Editor__getEditorText$(editor);
+      var path = (((editor.buffer).file).path);
+      var text = (editor.getText());
       var action = (function(s)
       {
         var split = String__SplitWithoutOptions$(s, ["\n"]);
@@ -236,7 +198,7 @@ AutocompleteHandler__parseEditor$ = (function(editor,cb,service)
             var o = ((window.JSON).parse(split[1]));
             if ((o.Kind == "errors")) 
             {
-              atom.emit("FSharp.Atom:Highlight",o.Data);
+              ((window.atom).emit("FSharp.Atom:Highlight", o.Data));
             }
             else
             {
@@ -270,9 +232,9 @@ AutocompleteProvider__create$ = (function(service)
 });
 AutocompleteProvider__getSuggestion$ = (function(service,options)
 {
-    var path = options.editor.buffer.file.path;
-    var row = (options.bufferPosition.row + 1);
-    var col = options.bufferPosition.column;
+    var path = (((options.editor.buffer).file).path);
+    var row = ((options.bufferPosition.row) + 1);
+    var col = (options.bufferPosition.column);
     var prefix = options.prefix;
     return new Promise(function(resolve){(function(unitVar0)
     {
@@ -285,16 +247,16 @@ AutocompleteProvider__getSuggestion$ = (function(service,options)
           try
           {
             var result = ((window.JSON).parse(msg));
-            var _303;
+            var _319;
             if (((prefix == ".") || (prefix == "="))) 
             {
-              _303 = "";
+              _319 = "";
             }
             else
             {
-              _303 = prefix;
+              _319 = prefix;
             };
-            var pref = _303;
+            var pref = _319;
             if ((result.Kind == "completion")) 
             {
               return resolve(Seq__ToArray$Object_Object_(Seq__Map$String_1_Object_String_Object_((function(t)
@@ -360,7 +322,7 @@ AutocompleteService__get_create$ = (function()
 });
 AutocompleteService__location$ = (function(unitVar0)
 {
-    return (Editor__getCurrentPackagePath$() + "\\autocomplete\\bin\\fsautocomplete.exe");
+    return ((((window.atom).packages).packageDirPaths)[0] + "\\autocomplete\\bin\\fsautocomplete.exe");
 });
 AutocompleteService__send$ = (function(msg,t)
 {
@@ -380,50 +342,44 @@ Autocomplete___ctor$ = (function(unitVar0)
 {
     var __this = this;
     {};
-    __this.cd = CompositeDisposable__create$();
     __this.service = AutocompleteService__send$("outputmode json\n", AutocompleteService__start$(AutocompleteService__create));
     var t = ErrorPanelView__create$();
     var priority = 100;
-    __this.panel = atom.workspace.addBottomPanel((new Options___ctor$(t, false, priority)));
+    __this.panel = (((window.atom).workspace).addBottomPanel((new PanelOptions___ctor$(t, false, priority))));
 });
 Autocomplete__activate$ = (function(x,state)
 {
-    atom.workspace.onDidChangeActivePaneItem((function(ed)
+    (((window.atom).workspace).onDidChangeActivePaneItem((function(ed)
     {
       var ignored0 = AutocompleteHandler__parseEditor$(ed, (function(_arg1)
       {
         ;
       }), x.service);
-    }));
-    var panel = x.panel;
-    atom.workspace.onDidChangeActivePaneItem((function(editor)
+    })));
+    (((window.atom).workspace).onDidChangeActivePaneItem((function(ed)
     {
-      return ErrorPanelView__hadnleEditorChange$(panel, editor);
-    }));
-    atom.on("FSharp.Atom:Highlight",(function(lst)
+      return ErrorPanelView__hadnleEditorChange$(x.panel, ed);
+    })));
+    ((window.atom).on("FSharp.Atom:Highlight", (function(lst)
     {
-      return HighlighterHandler__handle$Item_Item_(lst);
-    }));
-    atom.on("FSharp.Atom:Highlight",(function(lst)
+      return HighlighterHandler__handle$(lst);
+    })));
+    ((window.atom).on("FSharp.Atom:Highlight", (function(lst)
     {
       return ErrorPanelView__handle$(lst);
-    }));
+    })));
 });
 Autocomplete__deactivate$ = (function(x,unitVar1)
 {
-    return CompositeDisposable__dispose$(x.cd);
+    ;
+});
+Autocomplete__getSuggestion$ = (function(x,options)
+{
+    return AutocompleteProvider__getSuggestion$(x.service, options);
 });
 Autocomplete__provide$ = (function(x,unitVar1)
 {
     return AutocompleteProvider__create$(x.service);
-});
-CompositeDisposable__create$ = (function(unitVar0)
-{
-    return new CompositeDisposable;;
-});
-CompositeDisposable__dispose$ = (function(cd)
-{
-    return cd.dispose();;
 });
 CreateEnumerable_1_Object___ctor$Object_ = (function(factory)
 {
@@ -443,39 +399,19 @@ CreateEnumerable_1_String___ctor$String = (function(factory)
     {};
     __this.factory = factory;
 });
-Editor__getActiveTextEditor$ = (function(unitVar0)
-{
-    return atom.workspace.getActiveTextEditor();;
-});
-Editor__getCurrentPackagePath$ = (function(unitVar0)
-{
-    return atom.packages.packageDirPaths[0];;
-});
-Editor__getEditorGrammarName$ = (function(ed)
-{
-    return ed.getGrammar().name;;
-});
-Editor__getEditorPath$ = (function(ed)
-{
-    return ed.buffer.file.path;;
-});
-Editor__getEditorText$ = (function(ed)
-{
-    return ed.getText();;
-});
 ErrorPanelView__create$ = (function(unitVar0)
 {
     return Views__jq$("\u003cdiv class=\u0027tool-panel panel-bottom error-pane\u0027 id=\u0027pane\u0027\u003e\u003cdiv class=\u0027inset-panel\u0027\u003e\u003cdiv class=\u0027panel-heading clearfix\u0027\u003eErrors\u003c/div\u003e\u003ctable class=\u0027error-table\u0027\u003e\u003cthead\u003e\u003cth\u003ePosition\u003c/th\u003e\u003cth\u003eMessage\u003c/th\u003e\u003cth\u003eType\u003c/th\u003e\u003cth\u003eCategory\u003c/th\u003e\u003c/thead\u003e\u003ctbody id=\u0027errorList\u0027\u003e\u003c/table\u003e\u003c/div\u003e\u003c/div\u003e");
 });
 ErrorPanelView__hadnleEditorChange$ = (function(panel,editor)
 {
-    if ((Editor__getEditorGrammarName$(editor) == "F#")) 
+    if ((((editor.getGrammar()).name) == "F#")) 
     {
-      return panel.show();
+      return (panel.show());
     }
     else
     {
-      return panel.hide();
+      return (panel.hide());
     };
 });
 ErrorPanelView__handle$ = (function(lst)
@@ -514,37 +450,33 @@ ErrorRowView__create$ = (function(e)
 });
 HighlighterHandler__get_marked$ = (function()
 {
-    return Array__Empty$Marker_Marker_();
+    return Array__Empty$IDisplayBufferMarker_IDisplayBufferMarker_();
 });
-HighlighterHandler__handle$Item_Item_ = (function(lst)
+HighlighterHandler__handle$ = (function(lst)
 {
-    Array__Iterate$Marker_Marker_((function(mrk)
+    Array__Iterate$IDisplayBufferMarker_IDisplayBufferMarker_((function(m)
     {
-      return mrk.destroy();;
+      var ignored0 = (m.destroy());
     }), HighlighterHandler__marked);
-    HighlighterHandler__marked = Array__Empty$Marker_Marker_();
-    var editor = Editor__getActiveTextEditor$();
+    HighlighterHandler__marked = Array__Empty$IDisplayBufferMarker_IDisplayBufferMarker_();
+    var editor = (((window.atom).workspace).getActiveTextEditor());
     var action = (function(item)
     {
-      var range = [[item.StartLine, item.StartColumn], [item.EndLine, item.EndColumn]];;
-      var marker = editor.markBufferRange(range, {invalidate: 'never' });;
-      var _857;
+      var marker = (editor.markBufferRange([[item.StartLine, item.StartColumn], [item.EndLine, item.EndColumn]]));
+      var _913;
       if ((item.Severity == "Warning")) 
       {
-        _857 = "highlight-warning";
+        _913 = "highlight-warning";
       }
       else
       {
-        _857 = "highlight-error";
+        _913 = "highlight-error";
       };
-      var cls = _857;
-      HighlighterHandler__marked = Array__Append$Marker_Marker_([marker], HighlighterHandler__marked);
-      return editor.decorateMarker(marker, { type: 'highlight', "class": cls });;
+      var cls = _913;
+      HighlighterHandler__marked = Array__Append$IDisplayBufferMarker_IDisplayBufferMarker_([marker], HighlighterHandler__marked);
+      editor.decorateMarker(marker, {type: 'highlight', class: cls});
     });
-    Array__Iterate$Item_Item_((function(arg00)
-    {
-      return action(arg00);
-    }), lst);
+    Array__Iterate$Error_Error_(action, lst);
 });
 Option__GetValue$ChildProcess_ChildProcess_ = (function(option)
 {
@@ -594,7 +526,7 @@ Option__Iterate$ChildProcess_ChildProcess_ = (function(f,inp)
       ;
     };
 });
-Options___ctor$ = (function(item,visible,priority)
+PanelOptions___ctor$ = (function(item,visible,priority)
 {
     var __this = this;
     __this.item = item;
@@ -613,16 +545,16 @@ Seq__Delay$Object_Object_ = (function(f)
 {
     return Seq__FromFactory$Object_Object_((function(unitVar0)
     {
-      var _569;
-      return Seq__Enumerator$Object_Object_(f(_569));
+      var _585;
+      return Seq__Enumerator$Object_Object_(f(_585));
     }));
 });
 Seq__Delay$String_1String = (function(f)
 {
     return Seq__FromFactory$String_1String((function(unitVar0)
     {
-      var _478;
-      return Seq__Enumerator$String_1String(f(_478));
+      var _494;
+      return Seq__Enumerator$String_1String(f(_494));
     }));
 });
 Seq__Enumerator$Object_Object_ = (function(xs)
@@ -705,8 +637,8 @@ Seq__FromFactory$Object_Object_ = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _561;
-        return __.factory(_561);
+        var _577;
+        return __.factory(_577);
       })(impl, unitVar1);
     })};
 });
@@ -718,8 +650,8 @@ Seq__FromFactory$String_1String = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _406;
-        return __.factory(_406);
+        var _422;
+        return __.factory(_422);
       })(impl, unitVar1);
     })};
 });
@@ -731,14 +663,14 @@ Seq__FromFactory$String___String___ = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _188;
-        return __.factory(_188);
+        var _204;
+        return __.factory(_204);
       })(impl, unitVar1);
     })};
 });
 Seq__IterateIndexed$Object_Object_ = (function(f,xs)
 {
-    var _583;
+    var _599;
     return Seq__FoldIndexed$Object__Unit_Object__Unit_((function(i)
     {
       return (function(unitVar1)
@@ -748,11 +680,11 @@ Seq__IterateIndexed$Object_Object_ = (function(f,xs)
           return f(i)(x);
         });
       });
-    }), _583, xs);
+    }), _599, xs);
 });
 Seq__IterateIndexed$String___String___ = (function(f,xs)
 {
-    var _208;
+    var _224;
     return Seq__FoldIndexed$String____Unit_String____Unit_((function(i)
     {
       return (function(unitVar1)
@@ -762,7 +694,7 @@ Seq__IterateIndexed$String___String___ = (function(f,xs)
           return f(i)(x);
         });
       });
-    }), _208, xs);
+    }), _224, xs);
 });
 Seq__Map$String_1_Object_String_Object_ = (function(f,xs)
 {
@@ -878,8 +810,8 @@ Seq__Unfold$IEnumerator_1_String__Object_IEnumerator_1_String__Object_ = (functi
           });
           return (Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_(__.acc) && (function()
           {
-            var _539;
-            return next(_539);
+            var _555;
+            return next(_555);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -935,8 +867,8 @@ Seq__Unfold$IEnumerator_1_String__String_1IEnumerator_1_String__String = (functi
           });
           return (Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_(__.acc) && (function()
           {
-            var _455;
-            return next(_455);
+            var _471;
+            return next(_471);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -992,8 +924,8 @@ Seq__Unfold$Int32__String_1Int32_String = (function(f,seed)
           });
           return (Option__IsSome$Int32_Int32(__.acc) && (function()
           {
-            var _384;
-            return next(_384);
+            var _400;
+            return next(_400);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1049,8 +981,8 @@ Seq__Unfold$Int32__String___Int32_String___ = (function(f,seed)
           });
           return (Option__IsSome$Int32_Int32(__.acc) && (function()
           {
-            var _166;
-            return next(_166);
+            var _182;
+            return next(_182);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1193,6 +1125,12 @@ return [(function(ign)
 {
     return (function(p0)
     {
+      return Autocomplete__getSuggestion$(_this, p0);
+    });
+}), (function(_this)
+{
+    return (function(p0)
+    {
       return Autocomplete__activate$(_this, p0);
     });
 }), (function(_this)
@@ -1206,8 +1144,10 @@ var _self = _funcs[0]();
 module.exports = AutocompleteFS = {
 provide: function() {
   return _funcs[1](_self); },
-activate: function(p1) {
+getSuggestion: function(p1) {
   return _funcs[2](_self)(p1); },
+activate: function(p1) {
+  return _funcs[3](_self)(p1); },
 deactivate: function() {
-  return _funcs[3](_self); }
+  return _funcs[4](_self); }
 };
