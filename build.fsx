@@ -14,12 +14,12 @@ open Fake.AssemblyInfoFile
 // Load the F# implementation and specify parameters for the translator
 // --------------------------------------------------------------------------------------
 
-#load "src/autocomplete.fsx"
+#load "src/core.fsx"
 
 // Translate the type given as #1 using module name #2 
 // and save the result to a file specified in #3
 let atomModules = 
-  [ typeof<Autocomplete.Autocomplete>, "AutocompleteFS", "src/autocomplete-fs/lib/autocomplete-fs.js" ]
+  [ typeof<Core.Autocomplete>, "AutocompleteFS", "src/core/lib/core.js" ]
 
 // --------------------------------------------------------------------------------------
 // Compile F# type to an atom module

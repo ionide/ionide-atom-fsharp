@@ -35,3 +35,4 @@ packages
 paket.lock
 Test/Script.fsx
 Test/Script.fsx
+*.js
