@@ -10,7 +10,7 @@ open FunScript.TypeScript.text_buffer
 #load "funscript-atom.fsx"
 #load "atom-bindings.fsx"
 
-//open Atom
+open Atom
 //open Atom.Editor
 //open Atom.Promise
 
@@ -95,7 +95,7 @@ module AutocompleteHandler =
         service |> AutocompleteService.ask str 2 cb
 
     let parseEditor (editor : IEditor) cb service = 
-        if editor.getGrammar().name = "F#" then
+        if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
             let path = editor.buffer.file.path
             let text = editor.getText()
             let action (s : string) = 
@@ -214,7 +214,7 @@ module Views =
             |> jq
 
         let hadnleEditorChange (panel : IPanel) (editor : AtomCore.IEditor) = 
-            if editor.getGrammar().name = "F#" then panel.show() else panel.hide()
+            if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then panel.show() else panel.hide()
 
     type PanelOptions = 
         { item: JQuery;

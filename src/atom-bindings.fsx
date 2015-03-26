@@ -23,3 +23,12 @@ module Promise =
 module JS =
     [<JSEmitInline("({1}[{0}])")>]
     let getProperty<'T> (prop:string) (o:obj) : 'T = failwith "JS"
+
+    [<JSEmitInline("({0}[{1}] != undefined)")>]
+    let isPropertyDefined (o: obj) (key: string) : bool = failwith "JS"
+
+    [<JSEmitInline("(global[{0}] != undefined)")>]
+    let isGloballyDefined (key: string) : bool = failwith "never"
+
+    [<JSEmitInline("({0} != undefined)")>]
+    let isDefined (o: obj) : bool = failwith "never"

@@ -11,7 +11,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{176D5273-0AF5-44A6-894C-F057F13F3391}"
 	ProjectSection(SolutionItems) = preProject
 		src\atom-bindings.fsx = src\atom-bindings.fsx
-		src\autocomplete.fsx = src\autocomplete.fsx
+		src\core.fsx = src\core.fsx
 		src\funscript-atom.fsx = src\funscript-atom.fsx
 	EndProjectSection
 EndProject
