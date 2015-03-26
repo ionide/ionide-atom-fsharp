@@ -3,9 +3,6 @@
   "main": "./lib/core",
   "version": "0.0.1",
   "description": "A short description of your package",
-  "activationCommands": {
-    "atom-workspace": "FSharp.Atom.Core:toggle"
-  },
   "repository": "https://github.com/Krzysztof-Cieslak/FSharp.Atom",
   "license": "Appache 2.0",
   "engines": {

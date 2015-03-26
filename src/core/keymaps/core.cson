@@ -7,5 +7,3 @@
 
 # For more detailed documentation see
 # https://atom.io/docs/latest/advanced/keymaps
-'atom-workspace':
-  'ctrl-alt-l': 'FSharp.Atom.Core:toggle'
