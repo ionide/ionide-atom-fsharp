@@ -226,22 +226,23 @@ type Autocomplete() =
                   |> AutocompleteService.start
                   |> AutocompleteService.send "outputmode json\n"   
 
-    let panel = 
-        let t = Views.ErrorPanelView.create () 
-        Globals.atom.workspace.addBottomPanel (unbox<AnonymousType573>{Views.PanelOptions.item = t; Views.PanelOptions.priority = 100; Views.PanelOptions.visible = false})
-
     member x.provide ()= 
         AutocompleteProvider.create service
     
     member x.getSuggestion(options : GetSuggestionOptions) = 
         AutocompleteProvider.getSuggestion service options
 
-
     member x.activate(state:obj) =     
+        let panel = 
+            let t = Views.ErrorPanelView.create () 
+            Globals.atom.workspace.addBottomPanel (unbox<AnonymousType573>{Views.PanelOptions.item = t; Views.PanelOptions.priority = 100; Views.PanelOptions.visible = false})
+
         Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>( fun ed -> AutocompleteHandler.parseEditor ed (fun _ -> ()) service |> ignore))
         Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(fun ed -> ed |> Views.ErrorPanelView.hadnleEditorChange panel))
         Globals.atom.on("FSharp.Atom.Core:Highlight", unbox<Function>(HighlighterHandler.handle))
         Globals.atom.on("FSharp.Atom.Core:Highlight", unbox<Function>(Views.ErrorPanelView.handle))
+        service |> AutocompleteHandler.parseCurrent (fun _ -> ()) |> ignore
+        Globals.atom.workspace.getActiveTextEditor() |> Views.ErrorPanelView.hadnleEditorChange panel
         ()
 
     member x.deactivate() = 
