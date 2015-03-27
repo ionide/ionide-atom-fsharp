@@ -1,14 +1,16 @@
 [<ReflectedDefinition>]
 module Core 
 
+#load "funscript-atom.fsx"
+#load "atom-bindings.fsx"
+
 open FunScript
 open FunScript.TypeScript
 open FunScript.TypeScript.child_process
 open FunScript.TypeScript.AtomCore
 open FunScript.TypeScript.text_buffer
 
-#load "funscript-atom.fsx"
-#load "atom-bindings.fsx"
+
 
 open Atom
 //open Atom.Editor
@@ -221,7 +223,7 @@ module Views =
           visible : bool;
           priority : int}
 
-type Autocomplete() = 
+type Core() = 
     let service = AutocompleteService.create
                   |> AutocompleteService.start
                   |> AutocompleteService.send "outputmode json\n"   

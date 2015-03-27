@@ -8,6 +8,9 @@ open FunScript
 open FunScript.TypeScript
     
 
+[<JSEmit("var cmd = {}; cmd[{1}]=function() { return {2}(); }; return atom.commands.add({0}, cmd);")>]
+let addCommand(name:string, cmdName:string, func:unit -> unit) = failwith "JS"
+
 module Promise = 
     type Promise = class end
 

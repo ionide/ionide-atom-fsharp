@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{176D5273-0AF
 		src\atom-bindings.fsx = src\atom-bindings.fsx
 		src\core.fsx = src\core.fsx
 		src\funscript-atom.fsx = src\funscript-atom.fsx
+		src\Paket.fsx = src\Paket.fsx
 	EndProjectSection
 EndProject
 Global

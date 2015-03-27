@@ -1,0 +1,14 @@
+{
+  "name": "FSharp.Atom.paket",
+  "main": "./lib/paket",
+  "version": "0.0.1",
+  "description": "A short description of your package",
+  "repository": "https://github.com/Krzysztof-Cieslak/FSharp.Atom",
+  "license": "Appache 2.0",
+  "engines": {
+    "atom": ">=0.174.0 <2.0.0"
+  },
+  "dependencies": {
+    "jquery": "2.1.3"
+  }
+}

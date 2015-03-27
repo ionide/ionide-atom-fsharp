@@ -15,11 +15,13 @@ open Fake.AssemblyInfoFile
 // --------------------------------------------------------------------------------------
 
 #load "src/core.fsx"
+#load "src/paket.fsx"
 
 // Translate the type given as #1 using module name #2 
 // and save the result to a file specified in #3
 let atomModules = 
-  [ typeof<Core.Autocomplete>, "AutocompleteFS", "src/core/lib/core.js" ]
+  [ typeof<Core.Core>, "AtomFSharpCore", "src/core/lib/core.js"; 
+    typeof<Paket.Paket>, "AtomFSharpPaket", "src/paket/lib/paket.js" ]
 
 // --------------------------------------------------------------------------------------
 // Compile F# type to an atom module
