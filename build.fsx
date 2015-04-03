@@ -37,10 +37,12 @@ Target "RunGenerator" (fun () ->
             p.FileName <- __SOURCE_DIRECTORY__ @@ "src" @@ "bin" @@ "Debug" @@ "FSharp.Atom.Generator.exe" )
         |> ignore    
 )
-
+#if MONO
+#else
 Target "RunScript" (fun () -> 
     FSharp.Atom.Generator.translateModules()  
 )
+#endif
 
 
 // --------------------------------------------------------------------------------------
