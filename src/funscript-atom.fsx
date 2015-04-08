@@ -4,7 +4,7 @@
 
 #I "../lib"
 
-#r "FunScript.dll"
+#r "FunScript.dll" 
 #r "FunScript.Interop.dll"
 #r "FunScript.TypeScript.Binding.emissary.dll"
 #r "FunScript.TypeScript.Binding.atom.dll"

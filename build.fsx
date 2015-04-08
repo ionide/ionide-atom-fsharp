@@ -14,8 +14,8 @@ open Fake.AssemblyInfoFile
 // Load the F# implementation and specify parameters for the translator
 // --------------------------------------------------------------------------------------
 
-#load "src/core.fsx"
 #load "src/paket.fsx"
+#load "src/core.fsx"
 
 // Translate the type given as #1 using module name #2 
 // and save the result to a file specified in #3

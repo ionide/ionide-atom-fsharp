@@ -11,5 +11,5 @@ let foobar = YA.bar XA.foo
 let t = match foobar with
         | 1 -> 0
 
-let t = System.IO.Directory
+let t = System.IO
 let a = System.IO.DriveInfo.GetDrives()
