@@ -1,8 +1,9 @@
+
 [<ReflectedDefinition>]
 module Core
 
-#load "funscript-atom.fsx"
 #load "atom-bindings.fsx"
+#load "atom-extra.fsx"
 
 open FunScript
 open FunScript.TypeScript

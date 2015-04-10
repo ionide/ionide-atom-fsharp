@@ -14,6 +14,8 @@ open Fake.AssemblyInfoFile
 // Load the F# implementation and specify parameters for the translator
 // --------------------------------------------------------------------------------------
 
+#load "src/atom-bindings.fsx"
+#load "src/atom-extra.fsx"
 #load "src/paket.fsx"
 #load "src/core.fsx"
 
