@@ -1,6 +1,6 @@
 var CompositeDisposable = require('atom').CompositeDisposable;
 var child_process = require('child_process');
-window.$ = require('jquery');
+window.$ = require('atom').$;
 
 function wrappedFunScript() { 
 var Paket__deactivate$, Paket__activate$, Paket___ctor$, PaketService__location$, PaketService__handle$, PaketService__exec$, PaketService__bootstraperLocation$, PaketService__UpdatePaket$, PaketService__Update$, PaketService__Outdated$, PaketService__Install$, PaketService__Init$, Options___ctor$, Atom__addCommand$Unit_Unit_;

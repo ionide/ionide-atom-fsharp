@@ -1,9 +1,6 @@
 [<ReflectedDefinition>]
 module Core
 
-#load "funscript-atom.fsx"
-#load "atom-bindings.fsx"
-
 open FunScript
 open FunScript.TypeScript
 open FunScript.TypeScript.child_process
@@ -44,7 +41,6 @@ module AutocompleteService =
 
     type T = { State : State; PreviousState : State; Child : ChildProcess option }
 
-    let location () = Globals.atom.packages.packageDirPaths.[0] + "\\core\\bin\\fsautocomplete.exe"
     let isOn t = t.State = State.On
     let isOff t = t.State = State.Off
     let isNotOff t = t.State <> State.Off
@@ -54,8 +50,19 @@ module AutocompleteService =
 
     let create = { State = State.Off; PreviousState = State.Off; Child = None }
 
+    /// Starts the 'fsautocomplete.exe' process. If we are 
+    /// running on Windows, just start it. On Mac, use mono!
     let start t =
-        let child =  location () |> Globals.spawn
+        let location = 
+            // TODO: We assume the folder with our pacakge is 'core'
+            // This is probably wrong...
+            Globals.atom.packages.packageDirPaths.[0] + "/core/bin/fsautocomplete.exe"
+        let child = 
+            if Globals._process.platform.StartsWith("win") then
+                Globals.spawn(location)
+            else 
+                Globals.spawn("mono", [| location |])
+
         { t with State = State.On; PreviousState = t.State; Child = Some child }
 
     let stop t =

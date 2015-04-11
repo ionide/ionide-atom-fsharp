@@ -34,3 +34,11 @@ Test/bin/
 packages
 Test/Script.fsx
 Test/Script.fsx
+typings/FunScript.TypeScript/Output
+typings/FunScript.TypeScript/Types.zip
+typings/FunScript.TypeScript/*.txt
+
+.DS_Store
+src/bin/
+src/obj/
+*.userprefs

@@ -1,9 +1,6 @@
 [<ReflectedDefinition>]
 module Paket 
 
-#load "funscript-atom.fsx"
-#load "atom-bindings.fsx"
-
 open FunScript
 open FunScript.TypeScript
 open FunScript.TypeScript.child_process
