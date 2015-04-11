@@ -2,6 +2,7 @@
 // Reference all the TypeScript mappings Atom pacakge might need
 // --------------------------------------------------------------------------------------
 
+#if INTERACTIVE
 #I "../lib"
 
 #r "FunScript.dll" 
@@ -15,3 +16,4 @@
 #r "FunScript.TypeScript.Binding.pathwatcher.dll"
 #r "FunScript.TypeScript.Binding.q.dll"
 #r "FunScript.TypeScript.Binding.space_pen.dll"
+#endif

@@ -1,9 +1,6 @@
 [<ReflectedDefinition>]
 module Atom
 
-#load "atom-bindings.fsx"
-
-
 open FunScript
 open FunScript.TypeScript
     
