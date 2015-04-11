@@ -95,25 +95,25 @@ Array__FoldIndexed$Unit__IDisplayBufferMarker_Unit__IDisplayBufferMarker_ = (fun
 });
 Array__Iterate$Error_Error_ = (function(f,xs)
 {
-    var _957;
+    var _532;
     return Array__Fold$Error__Unit_Error__Unit_((function(unitVar0)
     {
       return (function(x)
       {
         return f(x);
       });
-    }), _957, xs);
+    }), _532, xs);
 });
 Array__Iterate$IDisplayBufferMarker_IDisplayBufferMarker_ = (function(f,xs)
 {
-    var _884;
+    var _459;
     return Array__Fold$IDisplayBufferMarker__Unit_IDisplayBufferMarker__Unit_((function(unitVar0)
     {
       return (function(x)
       {
         return f(x);
       });
-    }), _884, xs);
+    }), _459, xs);
 });
 Array__Length$Error_Error_ = (function(xs)
 {
@@ -247,16 +247,16 @@ AutocompleteProvider__getSuggestion$ = (function(service,options)
           try
           {
             var result = ((window.JSON).parse(msg));
-            var _319;
+            var _734;
             if (((prefix == ".") || (prefix == "="))) 
             {
-              _319 = "";
+              _734 = "";
             }
             else
             {
-              _319 = prefix;
+              _734 = prefix;
             };
-            var pref = _319;
+            var pref = _734;
             if ((result.Kind == "completion")) 
             {
               return resolve(Seq__ToArray$Object_Object_(Seq__Map$String_1_Object_String_Object_((function(t)
@@ -516,16 +516,16 @@ HighlighterHandler__handle$ = (function(lst)
     var action = (function(item)
     {
       var marker = (editor.markBufferRange([[item.StartLine, item.StartColumn], [item.EndLine, item.EndColumn]]));
-      var _935;
+      var _510;
       if ((item.Severity == "Warning")) 
       {
-        _935 = "highlight-warning";
+        _510 = "highlight-warning";
       }
       else
       {
-        _935 = "highlight-error";
+        _510 = "highlight-error";
       };
-      var cls = _935;
+      var cls = _510;
       HighlighterHandler__marked = Array__Append$IDisplayBufferMarker_IDisplayBufferMarker_([marker], HighlighterHandler__marked);
       editor.decorateMarker(marker, {type: 'highlight', class: cls});
     });
@@ -598,16 +598,16 @@ Seq__Delay$Object_Object_ = (function(f)
 {
     return Seq__FromFactory$Object_Object_((function(unitVar0)
     {
-      var _585;
-      return Seq__Enumerator$Object_Object_(f(_585));
+      var _1000;
+      return Seq__Enumerator$Object_Object_(f(_1000));
     }));
 });
 Seq__Delay$String_1String = (function(f)
 {
     return Seq__FromFactory$String_1String((function(unitVar0)
     {
-      var _494;
-      return Seq__Enumerator$String_1String(f(_494));
+      var _909;
+      return Seq__Enumerator$String_1String(f(_909));
     }));
 });
 Seq__Enumerator$Object_Object_ = (function(xs)
@@ -690,8 +690,8 @@ Seq__FromFactory$Object_Object_ = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _577;
-        return __.factory(_577);
+        var _992;
+        return __.factory(_992);
       })(impl, unitVar1);
     })};
 });
@@ -703,8 +703,8 @@ Seq__FromFactory$String_1String = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _422;
-        return __.factory(_422);
+        var _837;
+        return __.factory(_837);
       })(impl, unitVar1);
     })};
 });
@@ -716,14 +716,14 @@ Seq__FromFactory$String___String___ = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _204;
-        return __.factory(_204);
+        var _215;
+        return __.factory(_215);
       })(impl, unitVar1);
     })};
 });
 Seq__IterateIndexed$Object_Object_ = (function(f,xs)
 {
-    var _599;
+    var _1014;
     return Seq__FoldIndexed$Object__Unit_Object__Unit_((function(i)
     {
       return (function(unitVar1)
@@ -733,11 +733,11 @@ Seq__IterateIndexed$Object_Object_ = (function(f,xs)
           return f(i)(x);
         });
       });
-    }), _599, xs);
+    }), _1014, xs);
 });
 Seq__IterateIndexed$String___String___ = (function(f,xs)
 {
-    var _224;
+    var _235;
     return Seq__FoldIndexed$String____Unit_String____Unit_((function(i)
     {
       return (function(unitVar1)
@@ -747,7 +747,7 @@ Seq__IterateIndexed$String___String___ = (function(f,xs)
           return f(i)(x);
         });
       });
-    }), _224, xs);
+    }), _235, xs);
 });
 Seq__Map$String_1_Object_String_Object_ = (function(f,xs)
 {
@@ -863,8 +863,8 @@ Seq__Unfold$IEnumerator_1_String__Object_IEnumerator_1_String__Object_ = (functi
           });
           return (Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_(__.acc) && (function()
           {
-            var _555;
-            return next(_555);
+            var _970;
+            return next(_970);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -920,8 +920,8 @@ Seq__Unfold$IEnumerator_1_String__String_1IEnumerator_1_String__String = (functi
           });
           return (Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_(__.acc) && (function()
           {
-            var _471;
-            return next(_471);
+            var _886;
+            return next(_886);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -977,8 +977,8 @@ Seq__Unfold$Int32__String_1Int32_String = (function(f,seed)
           });
           return (Option__IsSome$Int32_Int32(__.acc) && (function()
           {
-            var _400;
-            return next(_400);
+            var _815;
+            return next(_815);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1034,8 +1034,8 @@ Seq__Unfold$Int32__String___Int32_String___ = (function(f,seed)
           });
           return (Option__IsSome$Int32_Int32(__.acc) && (function()
           {
-            var _182;
-            return next(_182);
+            var _193;
+            return next(_193);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1186,13 +1186,7 @@ return [(function(ign)
     return (new Core___ctor$());
 }), (function(_this)
 {
-    return Core__provide$(_this);
-}), (function(_this)
-{
-    return (function(p0)
-    {
-      return Core__getSuggestion$(_this, p0);
-    });
+    return Core__deactivate$(_this);
 }), (function(_this)
 {
     return (function(p0)
@@ -1201,19 +1195,25 @@ return [(function(ign)
     });
 }), (function(_this)
 {
-    return Core__deactivate$(_this);
+    return (function(p0)
+    {
+      return Core__getSuggestion$(_this, p0);
+    });
+}), (function(_this)
+{
+    return Core__provide$(_this);
 })]
  }
 var _funcs = wrappedFunScript();
 var _self = _funcs[0]();
 
 module.exports = AtomFSharpCore = {
-provide: function() {
-  return _funcs[1](_self); },
-getSuggestion: function(p1) {
-  return _funcs[2](_self)(p1); },
-activate: function(p1) {
-  return _funcs[3](_self)(p1); },
 deactivate: function() {
+  return _funcs[1](_self); },
+activate: function(p1) {
+  return _funcs[2](_self)(p1); },
+getSuggestion: function(p1) {
+  return _funcs[3](_self)(p1); },
+provide: function() {
   return _funcs[4](_self); }
 };

@@ -11,6 +11,15 @@ open Fake.Git
 open Fake.ProcessHelper
 open Fake.ZipHelper
 
+#if MONO
+#else
+#load "src/atom-bindings.fsx"
+#load "src/atom-extra.fs"
+#load "src/core.fs"
+#load "src/paket.fs"
+#load "src/main.fs"
+#endif
+
 // --------------------------------------------------------------------------------------
 // Build the Generator project and run it
 // --------------------------------------------------------------------------------------
@@ -21,12 +30,18 @@ Target "BuildGenerator" (fun () ->
     |> Log "AppBuild-Output: "
 )
 
-Target "RunGenerator" (fun () ->
-    (TimeSpan.FromMinutes 5.0)
-    |> ProcessHelper.ExecProcess (fun p ->
-        p.FileName <- __SOURCE_DIRECTORY__ @@ "src" @@ "bin" @@ "Debug" @@ "FSharp.Atom.Generator.exe" )
-    |> ignore
+Target "RunGenerator" (fun () -> 
+    
+        (TimeSpan.FromMinutes 5.0)
+        |> ProcessHelper.ExecProcess (fun p ->
+            p.FileName <- __SOURCE_DIRECTORY__ @@ "src" @@ "bin" @@ "Debug" @@ "FSharp.Atom.Generator.exe" )
+        |> ignore    
 )
+
+Target "RunScript" (fun () -> 
+    FSharp.Atom.Generator.translateModules()  
+)
+
 
 // --------------------------------------------------------------------------------------
 // Generate FunScript bindings from the *.d.ts files in the 'typings' folder
@@ -91,5 +106,9 @@ Target "GenerateBindings" (fun () ->
 // Run generator by default. Invoke 'build <Target>' to override
 // --------------------------------------------------------------------------------------
 
+#if MONO
 "BuildGenerator" ==> "RunGenerator"
 RunTargetOrDefault "RunGenerator"
+#else
+RunTargetOrDefault "RunScript"
+#endif

@@ -4,15 +4,6 @@
 // Load the F# implementation and specify parameters for the translator
 // --------------------------------------------------------------------------------------
 
-#if INTERACTIVE
-// On .NET, this can also be used through F# Interactive. On mono, this
-// needs to be compiled though, because FSI emitted types do not implement
-// get_MetadataToken and so something inside FunScript goes wrong..
-#load "atom-bindings.fsx"
-#load "atom-extra.fs"
-#load "core.fs"
-#load "paket.fs"
-#endif
 
 // Root directory, relatively to which files are saved
 let root = __SOURCE_DIRECTORY__
