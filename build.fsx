@@ -80,7 +80,7 @@ Target "GenerateBindings" (fun () ->
     fsharpBin |> Option.iter (fun fsharpBin ->
       System.Environment.SetEnvironmentVariable("FSHARP_BIN", fsharpBin))
 
-    (TimeSpan.FromMinutes 5.0)
+    (TimeSpan.FromMinutes 15.0)
     |> ProcessHelper.ExecProcess (fun p ->
       p.FileName <- typings @@ "FunScript.TypeScript" @@ "FunScript.TypeScript.exe"
       p.WorkingDirectory <- typings @@ "FunScript.TypeScript")

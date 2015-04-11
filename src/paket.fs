@@ -21,7 +21,7 @@ module PaketService =
     let exec opt = 
         let cmd = location() + " " + opt 
         let options = {cwd = Globals.atom.project.getPath()}
-        Globals.exec(cmd,unbox<AnonymousType473>options, System.Func<_,_,_,_>(handle)) |> ignore
+        Globals.exec(cmd,unbox<AnonymousType600>options, System.Func<_,_,_,_>(handle)) |> ignore
 
     let UpdatePaket () = 
         let cmd = bootstraperLocation()

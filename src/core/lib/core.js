@@ -454,7 +454,7 @@ ErrorPanelView__addOutputHandle$ = (function(unitVar0)
 });
 ErrorPanelView__create$ = (function(unitVar0)
 {
-    return Views__jq$("\u003cdiv class=\u0027tool-panel panel-bottom error-pane\u0027 id=\u0027pane\u0027\u003e\n                 \u003cdiv class=\u0027inset-panel\u0027\u003e\n                    \u003cdiv class=\u0027panel-heading clearfix\u0027\u003e\n                        \u003cdiv class=\u0027btn-toolbar pull-left\u0027\u003e\n                            \u003cdiv class=\u0027btn-group btn-toggle\u0027\u003e\n                                \u003cbutton id=\u0027btnError\u0027 class=\u0027btn toggle\u0027\u003eErrors\u003c/button\u003e\n                                \u003cbutton id=\u0027btnOutput\u0027 class=\u0027btn\u0027 \u003eOutput\u003c/button\u003e\n                            \u003c/div\u003e\n                        \u003c/div\u003e\n                    \u003c/div\u003e\n                    \u003ctable id=\u0027panelError\u0027 class=\u0027error-table outputPanel\u0027 \u003e\n                        \u003cthead\u003e\u003cth\u003ePosition\u003c/th\u003e\u003cth\u003eMessage\u003c/th\u003e\u003cth\u003eType\u003c/th\u003e\u003cth\u003eCategory\u003c/th\u003e\u003c/thead\u003e\n                        \u003ctbody id=\u0027errorList\u0027\u003e\n                    \u003c/table\u003e\n                    \u003cdiv id=\u0027panelOutput\u0027 class=\u0027error-table outputPanel\u0027 style=\u0027display : none\u0027\u003e\u003c/span\u003e\n\n                \u003c/div\u003e\n             \u003c/div\u003e");
+    return Views__jq$("\u003cdiv class=\u0027tool-panel panel-bottom error-pane\u0027 id=\u0027pane\u0027\u003e\r\n                 \u003cdiv class=\u0027inset-panel\u0027\u003e\r\n                    \u003cdiv class=\u0027panel-heading clearfix\u0027\u003e\r\n                        \u003cdiv class=\u0027btn-toolbar pull-left\u0027\u003e\r\n                            \u003cdiv class=\u0027btn-group btn-toggle\u0027\u003e\r\n                                \u003cbutton id=\u0027btnError\u0027 class=\u0027btn toggle\u0027\u003eErrors\u003c/button\u003e\r\n                                \u003cbutton id=\u0027btnOutput\u0027 class=\u0027btn\u0027 \u003eOutput\u003c/button\u003e\r\n                            \u003c/div\u003e\r\n                        \u003c/div\u003e\r\n                    \u003c/div\u003e\r\n                    \u003ctable id=\u0027panelError\u0027 class=\u0027error-table outputPanel\u0027 \u003e\r\n                        \u003cthead\u003e\u003cth\u003ePosition\u003c/th\u003e\u003cth\u003eMessage\u003c/th\u003e\u003cth\u003eType\u003c/th\u003e\u003cth\u003eCategory\u003c/th\u003e\u003c/thead\u003e\r\n                        \u003ctbody id=\u0027errorList\u0027\u003e\r\n                    \u003c/table\u003e\r\n                    \u003cdiv id=\u0027panelOutput\u0027 class=\u0027error-table outputPanel\u0027 style=\u0027display : none\u0027\u003e\u003c/span\u003e\r\n\r\n                \u003c/div\u003e\r\n             \u003c/div\u003e");
 });
 ErrorPanelView__hadnleEditorChange$ = (function(panel,editor)
 {
@@ -832,6 +832,12 @@ Seq__Unfold$IEnumerator_1_String__Object_IEnumerator_1_String__Object_ = (functi
         {
           return __.current;
         })(impl, unitVar1);
+      }), Dispose: (function(unitVar1)
+      {
+        return (function(__,unitVar1)
+        {
+          ;
+        })(impl, unitVar1);
       }), MoveNext: (function(unitVar1)
       {
         return (function(__,unitVar1)
@@ -868,12 +874,6 @@ Seq__Unfold$IEnumerator_1_String__Object_IEnumerator_1_String__Object_ = (functi
           __.acc = {Tag: 1.000000, Value: __.seed};
           __.current = null;
         })(impl, unitVar1);
-      }), Dispose: (function(unitVar1)
-      {
-        return (function(__,unitVar1)
-        {
-          ;
-        })(impl, unitVar1);
       })};
     }));
 });
@@ -888,6 +888,12 @@ Seq__Unfold$IEnumerator_1_String__String_1IEnumerator_1_String__String = (functi
         return (function(__,unitVar1)
         {
           return __.current;
+        })(impl, unitVar1);
+      }), Dispose: (function(unitVar1)
+      {
+        return (function(__,unitVar1)
+        {
+          ;
         })(impl, unitVar1);
       }), MoveNext: (function(unitVar1)
       {
@@ -925,12 +931,6 @@ Seq__Unfold$IEnumerator_1_String__String_1IEnumerator_1_String__String = (functi
           __.acc = {Tag: 1.000000, Value: __.seed};
           __.current = null;
         })(impl, unitVar1);
-      }), Dispose: (function(unitVar1)
-      {
-        return (function(__,unitVar1)
-        {
-          ;
-        })(impl, unitVar1);
       })};
     }));
 });
@@ -945,6 +945,12 @@ Seq__Unfold$Int32__String_1Int32_String = (function(f,seed)
         return (function(__,unitVar1)
         {
           return __.current;
+        })(impl, unitVar1);
+      }), Dispose: (function(unitVar1)
+      {
+        return (function(__,unitVar1)
+        {
+          ;
         })(impl, unitVar1);
       }), MoveNext: (function(unitVar1)
       {
@@ -982,12 +988,6 @@ Seq__Unfold$Int32__String_1Int32_String = (function(f,seed)
           __.acc = {Tag: 1.000000, Value: __.seed};
           __.current = null;
         })(impl, unitVar1);
-      }), Dispose: (function(unitVar1)
-      {
-        return (function(__,unitVar1)
-        {
-          ;
-        })(impl, unitVar1);
       })};
     }));
 });
@@ -1002,6 +1002,12 @@ Seq__Unfold$Int32__String___Int32_String___ = (function(f,seed)
         return (function(__,unitVar1)
         {
           return __.current;
+        })(impl, unitVar1);
+      }), Dispose: (function(unitVar1)
+      {
+        return (function(__,unitVar1)
+        {
+          ;
         })(impl, unitVar1);
       }), MoveNext: (function(unitVar1)
       {
@@ -1038,12 +1044,6 @@ Seq__Unfold$Int32__String___Int32_String___ = (function(f,seed)
         {
           __.acc = {Tag: 1.000000, Value: __.seed};
           __.current = null;
-        })(impl, unitVar1);
-      }), Dispose: (function(unitVar1)
-      {
-        return (function(__,unitVar1)
-        {
-          ;
         })(impl, unitVar1);
       })};
     }));

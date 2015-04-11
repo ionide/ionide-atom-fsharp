@@ -283,7 +283,7 @@ type Core() =
     member x.activate(state:obj) =
         let panel =
             let t = Views.ErrorPanelView.create ()
-            Globals.atom.workspace.addBottomPanel (unbox<AnonymousType573>{Views.PanelOptions.item = t; Views.PanelOptions.priority = 100; Views.PanelOptions.visible = false})
+            Globals.atom.workspace.addBottomPanel (unbox<AnonymousType499>{Views.PanelOptions.item = t; Views.PanelOptions.priority = 100; Views.PanelOptions.visible = false})
 
         Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>( fun ed -> AutocompleteHandler.parseEditor ed (fun _ -> ()) service |> ignore))
         Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(fun ed -> ed |> Views.ErrorPanelView.hadnleEditorChange panel))

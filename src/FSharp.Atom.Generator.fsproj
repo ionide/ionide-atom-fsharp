@@ -7,6 +7,8 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>FSharp.Atom.Generator</RootNamespace>
     <AssemblyName>FSharp.Atom.Generator</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -29,6 +31,14 @@
     <Externalconsole>true</Externalconsole>
     <Tailcalls>true</Tailcalls>
   </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
+  <ItemGroup>
+    <Compile Include="atom-extra.fs" />
+    <Compile Include="core.fs" />
+    <Compile Include="paket.fs" />
+    <Compile Include="main.fs" />
+    <None Include="atom-bindings.fsx" />
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core" />
@@ -68,15 +78,5 @@
     <Reference Include="FunScript">
       <HintPath>..\lib\FunScript.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="atom-extra.fs" />
-    <Compile Include="core.fs" />
-    <Compile Include="paket.fs" />
-    <Compile Include="main.fs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
-  <ItemGroup>
-    <None Include="atom-bindings.fsx" />
   </ItemGroup>
 </Project>
