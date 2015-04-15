@@ -95,25 +95,25 @@ Array__FoldIndexed$Unit__IDisplayBufferMarker_Unit__IDisplayBufferMarker_ = (fun
 });
 Array__Iterate$Error_Error_ = (function(f,xs)
 {
-    var _783;
+    var _785;
     return Array__Fold$Error__Unit_Error__Unit_((function(unitVar0)
     {
       return (function(x)
       {
         return f(x);
       });
-    }), _783, xs);
+    }), _785, xs);
 });
 Array__Iterate$IDisplayBufferMarker_IDisplayBufferMarker_ = (function(f,xs)
 {
-    var _710;
+    var _712;
     return Array__Fold$IDisplayBufferMarker__Unit_IDisplayBufferMarker__Unit_((function(unitVar0)
     {
       return (function(x)
       {
         return f(x);
       });
-    }), _710, xs);
+    }), _712, xs);
 });
 Array__Length$Error_Error_ = (function(xs)
 {
@@ -264,16 +264,16 @@ AutocompleteProvider__getSuggestion$ = (function(service,options)
           try
           {
             var result = ((window.JSON).parse(msg));
-            var _985;
+            var _987;
             if (((prefix == ".") || (prefix == "="))) 
             {
-              _985 = "";
+              _987 = "";
             }
             else
             {
-              _985 = prefix;
+              _987 = prefix;
             };
-            var pref = _985;
+            var pref = _987;
             if ((result.Kind == "completion")) 
             {
               return resolve(Seq__ToArray$Object_Object_(Seq__Map$String_1_Object_String_Object_((function(t)
@@ -553,16 +553,16 @@ HighlighterHandler__handle$ = (function(lst)
     var action = (function(item)
     {
       var marker = (editor.markBufferRange([[item.StartLine, item.StartColumn], [item.EndLine, item.EndColumn]]));
-      var _761;
+      var _763;
       if ((item.Severity == "Warning")) 
       {
-        _761 = "highlight-warning";
+        _763 = "highlight-warning";
       }
       else
       {
-        _761 = "highlight-error";
+        _763 = "highlight-error";
       };
-      var cls = _761;
+      var cls = _763;
       HighlighterHandler__marked = Array__Append$IDisplayBufferMarker_IDisplayBufferMarker_([marker], HighlighterHandler__marked);
       editor.decorateMarker(marker, {type: 'highlight', class: cls});
     });
@@ -651,16 +651,16 @@ Seq__Delay$Object_Object_ = (function(f)
 {
     return Seq__FromFactory$Object_Object_((function(unitVar0)
     {
-      var _1251;
-      return Seq__Enumerator$Object_Object_(f(_1251));
+      var _1253;
+      return Seq__Enumerator$Object_Object_(f(_1253));
     }));
 });
 Seq__Delay$String_1String = (function(f)
 {
     return Seq__FromFactory$String_1String((function(unitVar0)
     {
-      var _1160;
-      return Seq__Enumerator$String_1String(f(_1160));
+      var _1162;
+      return Seq__Enumerator$String_1String(f(_1162));
     }));
 });
 Seq__Enumerator$Object_Object_ = (function(xs)
@@ -743,8 +743,8 @@ Seq__FromFactory$Object_Object_ = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _1243;
-        return __.factory(_1243);
+        var _1245;
+        return __.factory(_1245);
       })(impl, unitVar1);
     })};
 });
@@ -756,8 +756,8 @@ Seq__FromFactory$String_1String = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _1088;
-        return __.factory(_1088);
+        var _1090;
+        return __.factory(_1090);
       })(impl, unitVar1);
     })};
 });
@@ -776,7 +776,7 @@ Seq__FromFactory$String___String___ = (function(f)
 });
 Seq__IterateIndexed$Object_Object_ = (function(f,xs)
 {
-    var _1265;
+    var _1267;
     return Seq__FoldIndexed$Object__Unit_Object__Unit_((function(i)
     {
       return (function(unitVar1)
@@ -786,7 +786,7 @@ Seq__IterateIndexed$Object_Object_ = (function(f,xs)
           return f(i)(x);
         });
       });
-    }), _1265, xs);
+    }), _1267, xs);
 });
 Seq__IterateIndexed$String___String___ = (function(f,xs)
 {
@@ -916,8 +916,8 @@ Seq__Unfold$IEnumerator_1_String__Object_IEnumerator_1_String__Object_ = (functi
           });
           return (Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_(__.acc) && (function()
           {
-            var _1221;
-            return next(_1221);
+            var _1223;
+            return next(_1223);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -973,8 +973,8 @@ Seq__Unfold$IEnumerator_1_String__String_1IEnumerator_1_String__String = (functi
           });
           return (Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_(__.acc) && (function()
           {
-            var _1137;
-            return next(_1137);
+            var _1139;
+            return next(_1139);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1030,8 +1030,8 @@ Seq__Unfold$Int32__String_1Int32_String = (function(f,seed)
           });
           return (Option__IsSome$Int32_Int32(__.acc) && (function()
           {
-            var _1066;
-            return next(_1066);
+            var _1068;
+            return next(_1068);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1241,8 +1241,8 @@ TooltipHandler__register$ = (function(service,editor,time,element)
                   var n_ = ViewsHelpers__jq_$(_n);
                   var __ignored0 = (n_.empty());
                   var ___ignored0 = (n_.append(String__Replace$(String__Replace$(o.Data, "\\n", "\u003c/br\u003e"), "\n", "\u003c/br\u003e")));
-                  var ____ignored0 = (TooltipHandler__tooltip.css("left", (_pos.left + 50.000000)));
-                  var _____ignored0 = (TooltipHandler__tooltip.css("top", _pos.top));
+                  var ____ignored0 = (TooltipHandler__tooltip.css("left", (_pos.left + 40.000000)));
+                  var _____ignored0 = (TooltipHandler__tooltip.css("top", (_pos.top + 50.000000)));
                   var ______ignored0 = (TooltipHandler__tooltip.fadeTo(300.000000, 60.000000));
                 }
                 catch(ex){

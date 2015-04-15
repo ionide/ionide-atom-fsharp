@@ -274,8 +274,8 @@ module TooltipHandler =
                                                                                                                             o.Data.Replace("\\n", "</br>")
                                                                                                                             |> fun n ->  n.Replace("\n", "</br>") 
                                                                                                                             |>  n'.append |> ignore
-                                                                                                                            tooltip.css("left", pos.left + 50.) |> ignore
-                                                                                                                            tooltip.css("top", pos.top) |> ignore       
+                                                                                                                            tooltip.css("left", pos.left + 40.) |> ignore
+                                                                                                                            tooltip.css("top", pos.top + 50.) |> ignore       
                                                                                                                             tooltip.fadeTo(300., 60.) |> ignore                                                                                 
                                                                                                                        with
                                                                                                                        | ex -> ()
