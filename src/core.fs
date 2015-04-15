@@ -13,9 +13,46 @@ open Atom
 //open Atom.Editor
 //open Atom.Promise
 
+[<AutoOpen>]
+module ViewsHelpers = 
+
+    type Coordinates = {top : float; left : float}
+    
+    [<JSEmitInline("atom.views.getView({0})")>]
+    let getView(editor : IEditor) : Element = failwith "JS"
+
+    [<JSEmitInline("{0}.getBoundingClientRect()")>]
+    let getBoundingClientRect(o : obj) : Coordinates = failwith "JS"
+
+    let jq(selector : string) = Globals.Dollar.Invoke selector
+    let jq'(selector : Element) = Globals.Dollar.Invoke selector
+    let (?) jq name = jq("#" + name)
+    
+    let getElementsByClass cls =
+        Atom.JS.getProperty<HTMLElement>("rootElement") >> fun n -> n.querySelectorAll(cls) 
+
+    let pixelPositionFromMouseEvent (e : JQueryMouseEventObject) = 
+        getView 
+        >> getElementsByClass ".lines"
+        >> fun n -> n.[0] |> getBoundingClientRect
+        >> fun n -> { top = e.clientY - n.top; left =  e.clientX - n.left}
+
+    let screenPositionFromMouseEvent (e : JQueryMouseEventObject) (editor : IEditor) = 
+        editor.screenPositionForPixelPosition(pixelPositionFromMouseEvent e editor)
+
+    let bufferPositionFromMouseEvent (e : JQueryMouseEventObject) (editor : IEditor) = 
+        pixelPositionFromMouseEvent e editor
+        |> editor.screenPositionForPixelPosition
+        |> editor.bufferPositionForScreenPosition
+
+
+        
+
+
 module AutocompleteResults =
     type CompletionResult = {Kind : string; Data : string []}
 
+    type TooltipResult = {Kind : string; Data : string}
 
     type Error = {
         StartLine : int
@@ -195,22 +232,69 @@ module HighlighterHandler =
         lst |> Array.iter(action)
         ()
 
+module TooltipHandler = 
+    type position = {row : float; column : float}
+
+    let create () = 
+        "<div class='type-tooltip tooltip'><div class='tooltip-inner'></div></div>" |> jq
+
+    let getPosition e editor = 
+        let bufferPt = bufferPositionFromMouseEvent e editor
+        {row = bufferPt.row; column = bufferPt.column}
+
+    let mutable lastPosition = {row = 0.; column = 0.}
+    let mutable timer : NodeJS.Timer option = None
+    let tooltip = create ()
+
+    let clearTimer () = 
+        tooltip.fadeOut(300.) |> ignore
+        timer |> Option.iter (Globals.clearTimeout)
+        timer <- None
+
+    let register service editor time element =
+        
+        jq(".panes").append tooltip |> ignore
+
+        element |> jq'  
+        |> fun n -> n.mousemove(fun e -> let pos = getPosition e editor
+                                         if pos = lastPosition then 
+                                             () :> obj
+                                         else           
+                                             clearTimer()         
+                                             lastPosition <- pos
+                                             timer <- Some ( Globals.setTimeout((fun _ -> let path = editor.buffer.file.path
+                                                                                          service 
+                                                                                          |> AutocompleteHandler.tooltip path (int pos.row + 1) (int pos.column) 
+                                                                                                (fun s -> tooltip.[0].firstElementChild
+                                                                                                          |> fun n -> try
+                                                                                                                            let o = unbox<AutocompleteResults.TooltipResult>(Globals.JSON.parse s)
+                                                                                                                            let pos = pixelPositionFromMouseEvent e editor                                                                                                          
+                                                                                                                            let n' = jq'(n)
+                                                                                                                            n'.empty() |> ignore
+                                                                                                                            o.Data.Replace("\\n", "</br>")
+                                                                                                                            |> fun n ->  n.Replace("\n", "</br>") 
+                                                                                                                            |>  n'.append |> ignore
+                                                                                                                            tooltip.css("left", pos.left + 50.) |> ignore
+                                                                                                                            tooltip.css("top", pos.top) |> ignore       
+                                                                                                                            tooltip.fadeTo(300., 60.) |> ignore                                                                                 
+                                                                                                                       with
+                                                                                                                       | ex -> ()
+                                                                                                )                        
+                                                                                          |> ignore
+                                                                               ), time))
+                                             () :> obj
+                    ) |> ignore
+                    n.mouseleave(fun e -> clearTimer () :> obj)
+                    |> ignore
+
+    let initialize (service : AutocompleteService.T) (editor : IEditor) = 
+        if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
+            jq(".editor").[0] 
+            |> getElementsByClass ".scroll-view"
+            |> fun n -> n.[0] |> unbox<Element> 
+            |> fun n -> register service editor 500. n
+
 module Views =
-    let jq(selector : string) = Globals.Dollar.Invoke selector
-    let jq'(selector : Element) = Globals.Dollar.Invoke selector
-    let (?) jq name = jq("#" + name)
-
-    module ErrorRowView =
-        let create (e : AutocompleteResults.Error) =
-            sprintf "<tr><td>%d : %d</td><td>%s</td><td>%s</td><td>%s</td></tr>"
-                e.StartLineAlternate
-                e.StartColumn
-                e.Message
-                e.Severity
-                e.Subcategory
-            |> jq
-
-
     module ErrorPanelView =
         let create () =
             "<div class='tool-panel panel-bottom error-pane' id='pane'>
@@ -231,6 +315,15 @@ module Views =
 
                 </div>
              </div>"
+            |> jq
+
+        let createRow (e : AutocompleteResults.Error) =
+            sprintf "<tr><td>%d : %d</td><td>%s</td><td>%s</td><td>%s</td></tr>"
+                e.StartLineAlternate
+                e.StartColumn
+                e.Message
+                e.Severity
+                e.Subcategory
             |> jq
 
         let addButtonHandlers () =
@@ -259,7 +352,7 @@ module Views =
         let handle lst =
             let list = jq("#errorList")
             list.children().remove() |> ignore
-            lst |> Array.iter(fun e -> let t = e |> ErrorRowView.create
+            lst |> Array.iter(fun e -> let t = e |> createRow
                                        let r = t |> list.append
                                        ())
             
@@ -274,6 +367,21 @@ type Core() =
                   |> AutocompleteService.start
                   |> AutocompleteService.send "outputmode json\n"
 
+    let register panel = 
+        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>( fun ed -> AutocompleteHandler.parseEditor ed (fun _ -> ()) service |> ignore))
+        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(Views.ErrorPanelView.hadnleEditorChange panel))
+        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(TooltipHandler.initialize service))      
+        Globals.atom.on("FSharp:Highlight", unbox<Function>(HighlighterHandler.handle))
+        Globals.atom.on("FSharp:Highlight", unbox<Function>(Views.ErrorPanelView.handle))
+       
+    let initialize panel = 
+        service |> AutocompleteHandler.parseCurrent (fun _ -> ()) |> ignore
+        Globals.atom.workspace.getActiveTextEditor() |> Views.ErrorPanelView.hadnleEditorChange panel
+        Globals.atom.workspace.getActiveTextEditor() |> TooltipHandler.initialize service
+        Views.ErrorPanelView.addButtonHandlers ()
+        Views.ErrorPanelView.addOutputHandle ()
+        
+
     member x.provide ()=
         AutocompleteProvider.create service
 
@@ -285,14 +393,9 @@ type Core() =
             let t = Views.ErrorPanelView.create ()
             Globals.atom.workspace.addBottomPanel (unbox<AnonymousType499>{Views.PanelOptions.item = t; Views.PanelOptions.priority = 100; Views.PanelOptions.visible = false})
 
-        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>( fun ed -> AutocompleteHandler.parseEditor ed (fun _ -> ()) service |> ignore))
-        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(fun ed -> ed |> Views.ErrorPanelView.hadnleEditorChange panel))
-        Globals.atom.on("FSharp:Highlight", unbox<Function>(HighlighterHandler.handle))
-        Globals.atom.on("FSharp:Highlight", unbox<Function>(Views.ErrorPanelView.handle))
-        service |> AutocompleteHandler.parseCurrent (fun _ -> ()) |> ignore
-        Globals.atom.workspace.getActiveTextEditor() |> Views.ErrorPanelView.hadnleEditorChange panel
-        Views.ErrorPanelView.addButtonHandlers ()
-        Views.ErrorPanelView.addOutputHandle ()
+        panel |> register
+        panel |> initialize
+        
         ()
 
     member x.deactivate() =

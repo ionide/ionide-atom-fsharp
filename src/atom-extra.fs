@@ -32,3 +32,4 @@ module JS =
 
     [<JSEmitInline("({0} != undefined)")>]
     let isDefined (o: obj) : bool = failwith "never"
+
