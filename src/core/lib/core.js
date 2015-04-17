@@ -95,25 +95,25 @@ Array__FoldIndexed$Unit__IDisplayBufferMarker_Unit__IDisplayBufferMarker_ = (fun
 });
 Array__Iterate$Error_Error_ = (function(f,xs)
 {
-    var _785;
+    var _791;
     return Array__Fold$Error__Unit_Error__Unit_((function(unitVar0)
     {
       return (function(x)
       {
         return f(x);
       });
-    }), _785, xs);
+    }), _791, xs);
 });
 Array__Iterate$IDisplayBufferMarker_IDisplayBufferMarker_ = (function(f,xs)
 {
-    var _712;
+    var _718;
     return Array__Fold$IDisplayBufferMarker__Unit_IDisplayBufferMarker__Unit_((function(unitVar0)
     {
       return (function(x)
       {
         return f(x);
       });
-    }), _712, xs);
+    }), _718, xs);
 });
 Array__Length$Error_Error_ = (function(xs)
 {
@@ -264,16 +264,16 @@ AutocompleteProvider__getSuggestion$ = (function(service,options)
           try
           {
             var result = ((window.JSON).parse(msg));
-            var _987;
+            var _993;
             if (((prefix == ".") || (prefix == "="))) 
             {
-              _987 = "";
+              _993 = "";
             }
             else
             {
-              _987 = prefix;
+              _993 = prefix;
             };
-            var pref = _987;
+            var pref = _993;
             if ((result.Kind == "completion")) 
             {
               return resolve(Seq__ToArray$Object_Object_(Seq__Map$String_1_Object_String_Object_((function(t)
@@ -391,7 +391,7 @@ Core__getSuggestion$ = (function(x,options)
 });
 Core__initialize$ = (function(_this,panel)
 {
-    var ignored0 = AutocompleteHandler__parseCurrent$((function(_arg2)
+    var ignored0 = AutocompleteHandler__parseCurrent$((function(_arg3)
     {
       ;
     }), _this.service);
@@ -417,10 +417,12 @@ Core__register$ = (function(_this,panel)
     {
       return ErrorPanelView__hadnleEditorChange$(panel, editor);
     })));
-    var service = _this.service;
-    (((window.atom).workspace).onDidChangeActivePaneItem((function(editor)
+    (((window.atom).workspace).onDidChangeActivePaneItem((function(ed)
     {
-      return TooltipHandler__initialize$(service, editor);
+      return (window.setTimeout((function(_arg2)
+      {
+        return TooltipHandler__initialize$(_this.service, ed);
+      }), 300.000000));
     })));
     ((window.atom).on("FSharp:Highlight", (function(lst)
     {
@@ -553,16 +555,16 @@ HighlighterHandler__handle$ = (function(lst)
     var action = (function(item)
     {
       var marker = (editor.markBufferRange([[item.StartLine, item.StartColumn], [item.EndLine, item.EndColumn]]));
-      var _763;
+      var _769;
       if ((item.Severity == "Warning")) 
       {
-        _763 = "highlight-warning";
+        _769 = "highlight-warning";
       }
       else
       {
-        _763 = "highlight-error";
+        _769 = "highlight-error";
       };
-      var cls = _763;
+      var cls = _769;
       HighlighterHandler__marked = Array__Append$IDisplayBufferMarker_IDisplayBufferMarker_([marker], HighlighterHandler__marked);
       editor.decorateMarker(marker, {type: 'highlight', class: cls});
     });
@@ -651,16 +653,16 @@ Seq__Delay$Object_Object_ = (function(f)
 {
     return Seq__FromFactory$Object_Object_((function(unitVar0)
     {
-      var _1253;
-      return Seq__Enumerator$Object_Object_(f(_1253));
+      var _1259;
+      return Seq__Enumerator$Object_Object_(f(_1259));
     }));
 });
 Seq__Delay$String_1String = (function(f)
 {
     return Seq__FromFactory$String_1String((function(unitVar0)
     {
-      var _1162;
-      return Seq__Enumerator$String_1String(f(_1162));
+      var _1168;
+      return Seq__Enumerator$String_1String(f(_1168));
     }));
 });
 Seq__Enumerator$Object_Object_ = (function(xs)
@@ -743,8 +745,8 @@ Seq__FromFactory$Object_Object_ = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _1245;
-        return __.factory(_1245);
+        var _1251;
+        return __.factory(_1251);
       })(impl, unitVar1);
     })};
 });
@@ -756,8 +758,8 @@ Seq__FromFactory$String_1String = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _1090;
-        return __.factory(_1090);
+        var _1096;
+        return __.factory(_1096);
       })(impl, unitVar1);
     })};
 });
@@ -776,7 +778,7 @@ Seq__FromFactory$String___String___ = (function(f)
 });
 Seq__IterateIndexed$Object_Object_ = (function(f,xs)
 {
-    var _1267;
+    var _1273;
     return Seq__FoldIndexed$Object__Unit_Object__Unit_((function(i)
     {
       return (function(unitVar1)
@@ -786,7 +788,7 @@ Seq__IterateIndexed$Object_Object_ = (function(f,xs)
           return f(i)(x);
         });
       });
-    }), _1267, xs);
+    }), _1273, xs);
 });
 Seq__IterateIndexed$String___String___ = (function(f,xs)
 {
@@ -916,8 +918,8 @@ Seq__Unfold$IEnumerator_1_String__Object_IEnumerator_1_String__Object_ = (functi
           });
           return (Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_(__.acc) && (function()
           {
-            var _1223;
-            return next(_1223);
+            var _1229;
+            return next(_1229);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -973,8 +975,8 @@ Seq__Unfold$IEnumerator_1_String__String_1IEnumerator_1_String__String = (functi
           });
           return (Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_(__.acc) && (function()
           {
-            var _1139;
-            return next(_1139);
+            var _1145;
+            return next(_1145);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1030,8 +1032,8 @@ Seq__Unfold$Int32__String_1Int32_String = (function(f,seed)
           });
           return (Option__IsSome$Int32_Int32(__.acc) && (function()
           {
-            var _1068;
-            return next(_1068);
+            var _1074;
+            return next(_1074);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1202,7 +1204,7 @@ TooltipHandler__initialize$ = (function(service,editor)
 {
     if ((((editor != undefined) && (editor["getGrammar"] != undefined)) && (((editor.getGrammar()).name) == "F#"))) 
     {
-      return TooltipHandler__register$(service, editor, 500.000000, (ViewsHelpers__getElementsByClass$HTMLElement_HTMLElement_(".scroll-view")((ViewsHelpers__jq$(".editor")[0]))[0]));
+      return TooltipHandler__register$(service, editor, 500.000000, (ViewsHelpers__getElementsByClass$HTMLElement_HTMLElement_(".scroll-view")((ViewsHelpers__jq$(".editor.is-focused")[0]))[0]));
     }
     else
     {
@@ -1237,13 +1239,20 @@ TooltipHandler__register$ = (function(service,editor,time,element)
                 try
                 {
                   var o = ((window.JSON).parse(s));
-                  var _pos = ViewsHelpers__pixelPositionFromMouseEvent$(e)(editor);
-                  var n_ = ViewsHelpers__jq_$(_n);
-                  var __ignored0 = (n_.empty());
-                  var ___ignored0 = (n_.append(String__Replace$(String__Replace$(o.Data, "\\n", "\u003c/br\u003e"), "\n", "\u003c/br\u003e")));
-                  var ____ignored0 = (TooltipHandler__tooltip.css("left", (_pos.left + 40.000000)));
-                  var _____ignored0 = (TooltipHandler__tooltip.css("top", (_pos.top + 50.000000)));
-                  var ______ignored0 = (TooltipHandler__tooltip.fadeTo(300.000000, 60.000000));
+                  if ((o.Data != "No tooltip information")) 
+                  {
+                    var _pos = ViewsHelpers__pixelPositionFromMouseEvent$(e)(editor);
+                    var n_ = ViewsHelpers__jq_$(_n);
+                    var __ignored0 = (n_.empty());
+                    var ___ignored0 = (n_.append(String__Replace$(String__Replace$(o.Data, "\\n", "\u003c/br\u003e"), "\n", "\u003c/br\u003e")));
+                    var ____ignored0 = (TooltipHandler__tooltip.css("left", (_pos.left + 40.000000)));
+                    var _____ignored0 = (TooltipHandler__tooltip.css("top", (_pos.top + 50.000000)));
+                    var ______ignored0 = (TooltipHandler__tooltip.fadeTo(300.000000, 60.000000));
+                  }
+                  else
+                  {
+                    ;
+                  };
                 }
                 catch(ex){
                   ;

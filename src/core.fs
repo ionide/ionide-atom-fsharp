@@ -256,40 +256,40 @@ module TooltipHandler =
         jq(".panes").append tooltip |> ignore
 
         element |> jq'  
-        |> fun n -> n.mousemove(fun e -> let pos = getPosition e editor
-                                         if pos = lastPosition then 
-                                             () :> obj
-                                         else           
-                                             clearTimer()         
-                                             lastPosition <- pos
-                                             timer <- Some ( Globals.setTimeout((fun _ -> let path = editor.buffer.file.path
-                                                                                          service 
-                                                                                          |> AutocompleteHandler.tooltip path (int pos.row + 1) (int pos.column) 
-                                                                                                (fun s -> tooltip.[0].firstElementChild
-                                                                                                          |> fun n -> try
-                                                                                                                            let o = unbox<AutocompleteResults.TooltipResult>(Globals.JSON.parse s)
-                                                                                                                            let pos = pixelPositionFromMouseEvent e editor                                                                                                          
-                                                                                                                            let n' = jq'(n)
-                                                                                                                            n'.empty() |> ignore
-                                                                                                                            o.Data.Replace("\\n", "</br>")
-                                                                                                                            |> fun n ->  n.Replace("\n", "</br>") 
-                                                                                                                            |>  n'.append |> ignore
-                                                                                                                            tooltip.css("left", pos.left + 40.) |> ignore
-                                                                                                                            tooltip.css("top", pos.top + 50.) |> ignore       
-                                                                                                                            tooltip.fadeTo(300., 60.) |> ignore                                                                                 
-                                                                                                                       with
-                                                                                                                       | ex -> ()
-                                                                                                )                        
-                                                                                          |> ignore
-                                                                               ), time))
-                                             () :> obj
-                    ) |> ignore
-                    n.mouseleave(fun e -> clearTimer () :> obj)
-                    |> ignore
+        |> fun n -> n.mousemove(fun e -> 
+            let pos = getPosition e editor
+            if pos = lastPosition then 
+                () :> obj
+            else           
+                clearTimer()         
+                lastPosition <- pos
+                timer <- Some ( Globals.setTimeout((fun _ -> let path = editor.buffer.file.path
+                                                             service 
+                                                             |> AutocompleteHandler.tooltip path (int pos.row + 1) (int pos.column) 
+                                                                (fun s -> tooltip.[0].firstElementChild
+                                                                          |> fun n -> try
+                                                                                        let o = unbox<AutocompleteResults.TooltipResult>(Globals.JSON.parse s)
+                                                                                        if o.Data <> "No tooltip information" then
+                                                                                            let pos = pixelPositionFromMouseEvent e editor                                                                                                          
+                                                                                            let n' = jq'(n)
+                                                                                            n'.empty() |> ignore
+                                                                                            o.Data.Replace("\\n", "</br>")
+                                                                                            |> fun n ->  n.Replace("\n", "</br>") 
+                                                                                            |>  n'.append |> ignore
+                                                                                            tooltip.css("left", pos.left + 40.) |> ignore
+                                                                                            tooltip.css("top", pos.top + 50.) |> ignore       
+                                                                                            tooltip.fadeTo(300., 60.) |> ignore                                                                                 
+                                                                                      with
+                                                                                      | ex -> ()
+                                                                )                        
+                                                            |> ignore
+                                                ), time))
+                () :> obj) |> ignore
+                    n.mouseleave(fun e -> clearTimer () :> obj) |> ignore
 
     let initialize (service : AutocompleteService.T) (editor : IEditor) = 
         if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
-            jq(".editor").[0] 
+            jq(".editor.is-focused").[0] 
             |> getElementsByClass ".scroll-view"
             |> fun n -> n.[0] |> unbox<Element> 
             |> fun n -> register service editor 500. n
@@ -370,7 +370,7 @@ type Core() =
     let register panel = 
         Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>( fun ed -> AutocompleteHandler.parseEditor ed (fun _ -> ()) service |> ignore))
         Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(Views.ErrorPanelView.hadnleEditorChange panel))
-        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(TooltipHandler.initialize service))      
+        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(fun ed -> Globals.setTimeout((fun _ -> TooltipHandler.initialize service ed), 300.)))     
         Globals.atom.on("FSharp:Highlight", unbox<Function>(HighlighterHandler.handle))
         Globals.atom.on("FSharp:Highlight", unbox<Function>(Views.ErrorPanelView.handle))
        
