@@ -367,7 +367,7 @@ type Core() =
     let register panel = 
         Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>( fun ed -> AutocompleteHandler.parseEditor ed (fun _ -> ()) service |> ignore))
         Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(Views.ErrorPanelView.hadnleEditorChange panel))
-        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(fun ed -> Globals.setTimeout((fun _ -> TooltipHandler.initialize service ed), 300.)))     
+        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(fun ed -> Globals.setTimeout((fun _ -> TooltipHandler.initialize service ed), 1000.)))     
         Globals.atom.on("FSharp:Highlight", unbox<Function>(HighlighterHandler.handle))
         Globals.atom.on("FSharp:Highlight", unbox<Function>(Views.ErrorPanelView.handle))
        

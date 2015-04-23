@@ -507,7 +507,7 @@ Core__register$ = (function(_this,panel)
       return (window.setTimeout((function(_arg2)
       {
         return TooltipHandler__initialize$(_this.service, ed);
-      }), 300.000000));
+      }), 1000.000000));
     })));
     ((window.atom).on("FSharp:Highlight", (function(lst)
     {
