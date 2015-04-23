@@ -3,15 +3,12 @@ module Core
 
 open FunScript
 open FunScript.TypeScript
+open FunScript.TypeScript.fs
 open FunScript.TypeScript.child_process
 open FunScript.TypeScript.AtomCore
 open FunScript.TypeScript.text_buffer
 
-
-
 open Atom
-//open Atom.Editor
-//open Atom.Promise
 
 [<AutoOpen>]
 module ViewsHelpers = 
@@ -236,7 +233,7 @@ module TooltipHandler =
     type position = {row : float; column : float}
 
     let create () = 
-        "<div class='type-tooltip tooltip'><div class='tooltip-inner'></div></div>" |> jq
+       "<div class='type-tooltip tooltip'><div class='tooltip-inner'></div></div>" |> jq
 
     let getPosition e editor = 
         let bufferPt = bufferPositionFromMouseEvent e editor
@@ -374,12 +371,28 @@ type Core() =
         Globals.atom.on("FSharp:Highlight", unbox<Function>(HighlighterHandler.handle))
         Globals.atom.on("FSharp:Highlight", unbox<Function>(Views.ErrorPanelView.handle))
        
+    let projInit () =
+        let p = Globals.atom.project.getPath ()    
+        let proj (ex : NodeJS.ErrnoException) (arr : string array) =
+            let projExist = arr |> Array.tryFind(fun a -> a.Split('.').[1] = "fsproj")
+            match projExist with
+            | Some a -> 
+                let path = p + "\\" + a
+                service |> AutocompleteHandler.project path (fun _ -> service |> AutocompleteHandler.parseCurrent (fun _ -> ()) |> ignore)
+                |> ignore
+            | None -> service |> AutocompleteHandler.parseCurrent (fun _ -> ()) |> ignore
+
+        Globals.readdir(p, System.Func<NodeJS.ErrnoException, string array, unit>(proj))
+
     let initialize panel = 
-        service |> AutocompleteHandler.parseCurrent (fun _ -> ()) |> ignore
+        projInit()        
         Globals.atom.workspace.getActiveTextEditor() |> Views.ErrorPanelView.hadnleEditorChange panel
         Globals.atom.workspace.getActiveTextEditor() |> TooltipHandler.initialize service
         Views.ErrorPanelView.addButtonHandlers ()
         Views.ErrorPanelView.addOutputHandle ()
+        
+        
+        
         
 
     member x.provide ()=

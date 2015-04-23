@@ -18,3 +18,4 @@ Later:
 - Auto completions. 
 - Error highlighting and error list in bottom panel.
 - Tooltips.
+- Support for scrip files or F# projects

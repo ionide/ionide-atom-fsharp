@@ -13,11 +13,17 @@ open Fake.ZipHelper
 
 #if MONO
 #else
+#I "paket-files/Krzysztof-Cieslak/Taggen/Taggen"
+#load "Taggen.Core.fs"
+#load "Taggen.Utils.fs"
+#load "Taggen.Punctuation.fs"
+#load "Taggen.HtmlHelpers.fs"
 #load "src/atom-bindings.fsx"
 #load "src/atom-extra.fs"
 #load "src/core.fs"
 #load "src/paket.fs"
 #load "src/main.fs"
+
 #endif
 
 // --------------------------------------------------------------------------------------
