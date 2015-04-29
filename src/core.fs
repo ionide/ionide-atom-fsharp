@@ -25,14 +25,19 @@ module ViewsHelpers =
     let jq'(selector : Element) = Globals.Dollar.Invoke selector
     let (?) jq name = jq("#" + name)
     
-    let getElementsByClass cls =
-        Atom.JS.getProperty<HTMLElement>("rootElement") >> fun n -> n.querySelectorAll(cls) 
+    let getElementsByClass cls e =
+        e 
+        |> fun n -> if JS.isDefined n then Some n else None
+        |> Option.map( Atom.JS.getProperty<HTMLElement>("rootElement") )
+        |> Option.map (fun n -> n.querySelectorAll(cls) )
 
     let pixelPositionFromMouseEvent (e : JQueryMouseEventObject) = 
         getView 
         >> getElementsByClass ".lines"
-        >> fun n -> n.[0] |> getBoundingClientRect
-        >> fun n -> { top = e.clientY - n.top; left =  e.clientX - n.left}
+        >> Option.map( fun n -> n.[0] |> getBoundingClientRect)
+        >> fun n' -> match n' with 
+                     | Some n -> { top = e.clientY - n.top; left =  e.clientX - n.left}
+                     | None  -> {top = 0.; left = 0.}
 
     let screenPositionFromMouseEvent (e : JQueryMouseEventObject) (editor : IEditor) = 
         editor.screenPositionForPixelPosition(pixelPositionFromMouseEvent e editor)
@@ -288,8 +293,8 @@ module TooltipHandler =
         if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
             jq(".editor.is-focused").[0] 
             |> getElementsByClass ".scroll-view"
-            |> fun n -> n.[0] |> unbox<Element> 
-            |> fun n -> register service editor 500. n
+            |> Option.map (fun n -> n.[0] |> unbox<Element>)
+            |> Option.iter (fun n -> register service editor 500. n)
 
 module Views =
     module ErrorPanelView =
