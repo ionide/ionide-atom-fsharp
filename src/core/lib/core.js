@@ -313,16 +313,16 @@ AutocompleteProvider__getSuggestion$ = (function(service,options)
           try
           {
             var result = ((window.JSON).parse(msg));
-            var _1077;
+            var _1102;
             if (((prefix == ".") || (prefix == "="))) 
             {
-              _1077 = "";
+              _1102 = "";
             }
             else
             {
-              _1077 = prefix;
+              _1102 = prefix;
             };
-            var pref = _1077;
+            var pref = _1102;
             if ((result.Kind == "completion")) 
             {
               return resolve(Seq__ToArray$Object_Object_(Seq__Map$String_1_Object_String_Object_((function(t)
@@ -440,8 +440,8 @@ Core__getSuggestion$ = (function(x,options)
 });
 Core__initialize$ = (function(_this,panel)
 {
-    var _874;
-    var arg10_ = _874;
+    var _899;
+    var arg10_ = _899;
     Core__projInit$(_this);
     ErrorPanelView__hadnleEditorChange$(panel, (((window.atom).workspace).getActiveTextEditor()));
     TooltipHandler__initialize$(_this.service, (((window.atom).workspace).getActiveTextEditor()));
@@ -580,10 +580,10 @@ ErrorPanelView__create$ = (function(unitVar0)
 {
     return ViewsHelpers__jq$("\u003cdiv class=\u0027tool-panel panel-bottom error-pane\u0027 id=\u0027pane\u0027\u003e\r\n                 \u003cdiv class=\u0027inset-panel\u0027\u003e\r\n                    \u003cdiv class=\u0027panel-heading clearfix\u0027\u003e\r\n                        \u003cdiv class=\u0027btn-toolbar pull-left\u0027\u003e\r\n                            \u003cdiv class=\u0027btn-group btn-toggle\u0027\u003e\r\n                                \u003cbutton id=\u0027btnError\u0027 class=\u0027btn toggle\u0027\u003eErrors\u003c/button\u003e\r\n                                \u003cbutton id=\u0027btnOutput\u0027 class=\u0027btn\u0027 \u003eOutput\u003c/button\u003e\r\n                            \u003c/div\u003e\r\n                        \u003c/div\u003e\r\n                    \u003c/div\u003e\r\n                    \u003ctable id=\u0027panelError\u0027 class=\u0027error-table outputPanel\u0027 \u003e\r\n                        \u003cthead\u003e\u003cth\u003ePosition\u003c/th\u003e\u003cth\u003eMessage\u003c/th\u003e\u003cth\u003eType\u003c/th\u003e\u003cth\u003eCategory\u003c/th\u003e\u003c/thead\u003e\r\n                        \u003ctbody id=\u0027errorList\u0027\u003e\r\n                    \u003c/table\u003e\r\n                    \u003cdiv id=\u0027panelOutput\u0027 class=\u0027error-table outputPanel\u0027 style=\u0027display : none\u0027\u003e\u003c/span\u003e\r\n\r\n                \u003c/div\u003e\r\n             \u003c/div\u003e");
 });
-ErrorPanelView__createRow$ = (function(e)
+ErrorPanelView__createRow$ = (function(editor,e)
 {
     var clo1 = String__PrintFormatToString$("\u003ctr\u003e\u003ctd\u003e%d : %d\u003c/td\u003e\u003ctd\u003e%s\u003c/td\u003e\u003ctd\u003e%s\u003c/td\u003e\u003ctd\u003e%s\u003c/td\u003e\u003c/tr\u003e");
-    return ViewsHelpers__jq$((function(arg10)
+    var t = ViewsHelpers__jq$((function(arg10)
     {
       var clo2 = clo1(arg10);
       return (function(arg20)
@@ -603,6 +603,10 @@ ErrorPanelView__createRow$ = (function(e)
         });
       });
     })(e.StartLineAlternate)(e.StartColumn)(e.Message)(e.Severity)(e.Subcategory));
+    return (t.click((function(x)
+    {
+      return (editor.setCursorBufferPosition([e.StartLine, e.StartColumn]));
+    })));
 });
 ErrorPanelView__hadnleEditorChange$ = (function(panel,editor)
 {
@@ -617,13 +621,21 @@ ErrorPanelView__hadnleEditorChange$ = (function(panel,editor)
 });
 ErrorPanelView__handle$ = (function(lst)
 {
-    var list = ViewsHelpers__jq$("#errorList");
-    var ignored0 = ((list.children()).remove());
-    return Array__Iterate$Error_Error_((function(e)
+    var editor = (((window.atom).workspace).getActiveTextEditor());
+    if ((((editor != undefined) && (editor["getGrammar"] != undefined)) && (((editor.getGrammar()).name) == "F#"))) 
     {
-      var t = ErrorPanelView__createRow$(e);
-      var r = (list.append(t));
-    }), lst);
+      var list = ViewsHelpers__jq$("#errorList");
+      var ignored0 = ((list.children()).remove());
+      return Array__Iterate$Error_Error_((function(e)
+      {
+        var t = ErrorPanelView__createRow$(editor, e);
+        var r = (list.append(t));
+      }), lst);
+    }
+    else
+    {
+      ;
+    };
 });
 HighlighterHandler__get_marked$ = (function()
 {
@@ -742,16 +754,16 @@ Seq__Delay$Object_Object_ = (function(f)
 {
     return Seq__FromFactory$Object_Object_((function(unitVar0)
     {
-      var _1343;
-      return Seq__Enumerator$Object_Object_(f(_1343));
+      var _1368;
+      return Seq__Enumerator$Object_Object_(f(_1368));
     }));
 });
 Seq__Delay$String_1String = (function(f)
 {
     return Seq__FromFactory$String_1String((function(unitVar0)
     {
-      var _1252;
-      return Seq__Enumerator$String_1String(f(_1252));
+      var _1277;
+      return Seq__Enumerator$String_1String(f(_1277));
     }));
 });
 Seq__Enumerator$Object_Object_ = (function(xs)
@@ -834,8 +846,8 @@ Seq__FromFactory$Object_Object_ = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _1335;
-        return __.factory(_1335);
+        var _1360;
+        return __.factory(_1360);
       })(impl, unitVar1);
     })};
 });
@@ -847,8 +859,8 @@ Seq__FromFactory$String_1String = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _1180;
-        return __.factory(_1180);
+        var _1205;
+        return __.factory(_1205);
       })(impl, unitVar1);
     })};
 });
@@ -867,7 +879,7 @@ Seq__FromFactory$String___String___ = (function(f)
 });
 Seq__IterateIndexed$Object_Object_ = (function(f,xs)
 {
-    var _1357;
+    var _1382;
     return Seq__FoldIndexed$Object__Unit_Object__Unit_((function(i)
     {
       return (function(unitVar1)
@@ -877,7 +889,7 @@ Seq__IterateIndexed$Object_Object_ = (function(f,xs)
           return f(i)(x);
         });
       });
-    }), _1357, xs);
+    }), _1382, xs);
 });
 Seq__IterateIndexed$String___String___ = (function(f,xs)
 {
@@ -1007,8 +1019,8 @@ Seq__Unfold$IEnumerator_1_String__Object_IEnumerator_1_String__Object_ = (functi
           });
           return (Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_(__.acc) && (function()
           {
-            var _1313;
-            return next(_1313);
+            var _1338;
+            return next(_1338);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1064,8 +1076,8 @@ Seq__Unfold$IEnumerator_1_String__String_1IEnumerator_1_String__String = (functi
           });
           return (Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_(__.acc) && (function()
           {
-            var _1229;
-            return next(_1229);
+            var _1254;
+            return next(_1254);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1121,8 +1133,8 @@ Seq__Unfold$Int32__String_1Int32_String = (function(f,seed)
           });
           return (Option__IsSome$Int32_Int32(__.acc) && (function()
           {
-            var _1158;
-            return next(_1158);
+            var _1183;
+            return next(_1183);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)

@@ -314,14 +314,16 @@ module Views =
              </div>"
             |> jq
 
-        let createRow (e : AutocompleteResults.Error) =
-            sprintf "<tr><td>%d : %d</td><td>%s</td><td>%s</td><td>%s</td></tr>"
-                e.StartLineAlternate
-                e.StartColumn
-                e.Message
-                e.Severity
-                e.Subcategory
-            |> jq
+        let createRow (editor : IEditor) (e : AutocompleteResults.Error)  =
+            let t = sprintf "<tr><td>%d : %d</td><td>%s</td><td>%s</td><td>%s</td></tr>"
+                        e.StartLineAlternate
+                        e.StartColumn
+                        e.Message
+                        e.Severity
+                        e.Subcategory
+                    |> jq
+            t.click(fun x -> editor.setCursorBufferPosition [|e.StartLine; e.StartColumn |])
+
 
         let addButtonHandlers () =
             let btns = jq(".btn-toggle button")
@@ -347,11 +349,13 @@ module Views =
             if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then panel.show() else panel.hide()
 
         let handle lst =
-            let list = jq("#errorList")
-            list.children().remove() |> ignore
-            lst |> Array.iter(fun e -> let t = e |> createRow
-                                       let r = t |> list.append
-                                       ())
+            let editor = Globals.atom.workspace.getActiveTextEditor()
+            if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
+                let list = jq("#errorList")
+                list.children().remove() |> ignore
+                lst |> Array.iter(fun e -> let t = e |> createRow editor
+                                           let r = t |> list.append
+                                           ())
             
 
     type PanelOptions =
