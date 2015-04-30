@@ -47,10 +47,6 @@ module ViewsHelpers =
         |> editor.screenPositionForPixelPosition
         |> editor.bufferPositionForScreenPosition
 
-
-        
-
-
 module AutocompleteResults =
     type CompletionResult = {Kind : string; Data : string []}
 
@@ -270,18 +266,20 @@ module TooltipHandler =
                                                              |> AutocompleteHandler.tooltip path (int pos.row + 1) (int pos.column) 
                                                                 (fun s -> tooltip.[0].firstElementChild
                                                                           |> fun n -> try
-                                                                                        let o = unbox<AutocompleteResults.TooltipResult>(Globals.JSON.parse s)
-                                                                                        if o.Data <> "No tooltip information" then
-                                                                                            let pos = pixelPositionFromMouseEvent e editor 
-                                                                                            let p =  getPosition e editor 
-                                                                                            let n' = jq'(n)
-                                                                                            n'.empty() |> ignore
-                                                                                            o.Data.Replace("\\n", "</br>")
-                                                                                            |> fun n ->  n.Replace("\n", "</br>") 
-                                                                                            |>  n'.append |> ignore
-                                                                                            tooltip.css("left", pos.left + 40.) |> ignore
-                                                                                            tooltip.css("top", e.clientY + 20.) |> ignore       
-                                                                                            tooltip.fadeTo(300., 60.) |> ignore                                                                                 
+                                                                                        if (jq "body /deep/ span.fsharp:hover").length > 0. then                                                                                      
+                                                                                            let o = unbox<AutocompleteResults.TooltipResult>(Globals.JSON.parse s)
+                                                                                            if o.Data <> "No tooltip information" then
+                                                                                                Globals.document.elementFromPoint(e.clientX, e.clientY) 
+                                                                                                |> Globals.console.log
+                                                                                                let position = pixelPositionFromMouseEvent e editor 
+                                                                                                let n' = jq'(n)
+                                                                                                n'.empty() |> ignore
+                                                                                                o.Data.Replace("\\n", "</br>")
+                                                                                                |> fun n ->  n.Replace("\n", "</br>") 
+                                                                                                |>  n'.append |> ignore
+                                                                                                tooltip.css("left", position.left + 40.) |> ignore
+                                                                                                tooltip.css("top", e.clientY + 20.) |> ignore       
+                                                                                                tooltip.fadeTo(300., 60.) |> ignore                                                                                 
                                                                                       with
                                                                                       | ex -> ()
                                                                 )                        

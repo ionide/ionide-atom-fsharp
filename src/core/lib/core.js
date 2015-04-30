@@ -95,25 +95,25 @@ Array__FoldIndexed$Unit__IDisplayBufferMarker_Unit__IDisplayBufferMarker_ = (fun
 });
 Array__Iterate$Error_Error_ = (function(f,xs)
 {
-    var _887;
+    var _896;
     return Array__Fold$Error__Unit_Error__Unit_((function(unitVar0)
     {
       return (function(x)
       {
         return f(x);
       });
-    }), _887, xs);
+    }), _896, xs);
 });
 Array__Iterate$IDisplayBufferMarker_IDisplayBufferMarker_ = (function(f,xs)
 {
-    var _814;
+    var _823;
     return Array__Fold$IDisplayBufferMarker__Unit_IDisplayBufferMarker__Unit_((function(unitVar0)
     {
       return (function(x)
       {
         return f(x);
       });
-    }), _814, xs);
+    }), _823, xs);
 });
 Array__Length$Error_Error_ = (function(xs)
 {
@@ -313,16 +313,16 @@ AutocompleteProvider__getSuggestion$ = (function(service,options)
           try
           {
             var result = ((window.JSON).parse(msg));
-            var _1198;
+            var _1207;
             if (((prefix == ".") || (prefix == "="))) 
             {
-              _1198 = "";
+              _1207 = "";
             }
             else
             {
-              _1198 = prefix;
+              _1207 = prefix;
             };
-            var pref = _1198;
+            var pref = _1207;
             if ((result.Kind == "completion")) 
             {
               return resolve(Seq__ToArray$Object_Object_(Seq__Map$String_1_Object_String_Object_((function(t)
@@ -440,8 +440,8 @@ Core__getSuggestion$ = (function(x,options)
 });
 Core__initialize$ = (function(_this,panel)
 {
-    var _995;
-    var arg10_ = _995;
+    var _1004;
+    var arg10_ = _1004;
     Core__projInit$(_this);
     ErrorPanelView__hadnleEditorChange$(panel, (((window.atom).workspace).getActiveTextEditor()));
     TooltipHandler__initialize$(_this.service, (((window.atom).workspace).getActiveTextEditor()));
@@ -652,16 +652,16 @@ HighlighterHandler__handle$ = (function(lst)
     var action = (function(item)
     {
       var marker = (editor.markBufferRange([[item.StartLine, item.StartColumn], [item.EndLine, item.EndColumn]]));
-      var _865;
+      var _874;
       if ((item.Severity == "Warning")) 
       {
-        _865 = "highlight-warning";
+        _874 = "highlight-warning";
       }
       else
       {
-        _865 = "highlight-error";
+        _874 = "highlight-error";
       };
-      var cls = _865;
+      var cls = _874;
       HighlighterHandler__marked = Array__Append$IDisplayBufferMarker_IDisplayBufferMarker_([marker], HighlighterHandler__marked);
       editor.decorateMarker(marker, {type: 'highlight', class: cls});
     });
@@ -842,16 +842,16 @@ Seq__Delay$Object_Object_ = (function(f)
 {
     return Seq__FromFactory$Object_Object_((function(unitVar0)
     {
-      var _1464;
-      return Seq__Enumerator$Object_Object_(f(_1464));
+      var _1473;
+      return Seq__Enumerator$Object_Object_(f(_1473));
     }));
 });
 Seq__Delay$String_1String = (function(f)
 {
     return Seq__FromFactory$String_1String((function(unitVar0)
     {
-      var _1373;
-      return Seq__Enumerator$String_1String(f(_1373));
+      var _1382;
+      return Seq__Enumerator$String_1String(f(_1382));
     }));
 });
 Seq__Enumerator$Object_Object_ = (function(xs)
@@ -934,8 +934,8 @@ Seq__FromFactory$Object_Object_ = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _1456;
-        return __.factory(_1456);
+        var _1465;
+        return __.factory(_1465);
       })(impl, unitVar1);
     })};
 });
@@ -947,8 +947,8 @@ Seq__FromFactory$String_1String = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _1301;
-        return __.factory(_1301);
+        var _1310;
+        return __.factory(_1310);
       })(impl, unitVar1);
     })};
 });
@@ -967,7 +967,7 @@ Seq__FromFactory$String___String___ = (function(f)
 });
 Seq__IterateIndexed$Object_Object_ = (function(f,xs)
 {
-    var _1478;
+    var _1487;
     return Seq__FoldIndexed$Object__Unit_Object__Unit_((function(i)
     {
       return (function(unitVar1)
@@ -977,7 +977,7 @@ Seq__IterateIndexed$Object_Object_ = (function(f,xs)
           return f(i)(x);
         });
       });
-    }), _1478, xs);
+    }), _1487, xs);
 });
 Seq__IterateIndexed$String___String___ = (function(f,xs)
 {
@@ -1107,8 +1107,8 @@ Seq__Unfold$IEnumerator_1_String__Object_IEnumerator_1_String__Object_ = (functi
           });
           return (Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_(__.acc) && (function()
           {
-            var _1434;
-            return next(_1434);
+            var _1443;
+            return next(_1443);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1164,8 +1164,8 @@ Seq__Unfold$IEnumerator_1_String__String_1IEnumerator_1_String__String = (functi
           });
           return (Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_(__.acc) && (function()
           {
-            var _1350;
-            return next(_1350);
+            var _1359;
+            return next(_1359);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1221,8 +1221,8 @@ Seq__Unfold$Int32__String_1Int32_String = (function(f,seed)
           });
           return (Option__IsSome$Int32_Int32(__.acc) && (function()
           {
-            var _1279;
-            return next(_1279);
+            var _1288;
+            return next(_1288);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1433,17 +1433,24 @@ TooltipHandler__register$ = (function(service,editor,time,element)
               {
                 try
                 {
-                  var o = ((window.JSON).parse(s));
-                  if ((o.Data != "No tooltip information")) 
+                  if (((ViewsHelpers__jq$("body /deep/ span.fsharp:hover").length) > 0.000000)) 
                   {
-                    var _pos = ViewsHelpers__pixelPositionFromMouseEvent$(e)(editor);
-                    var p = TooltipHandler__getPosition$(e, editor);
-                    var n_ = ViewsHelpers__jq_$(_n);
-                    var __ignored0 = (n_.empty());
-                    var ___ignored0 = (n_.append(String__Replace$(String__Replace$(o.Data, "\\n", "\u003c/br\u003e"), "\n", "\u003c/br\u003e")));
-                    var ____ignored0 = (TooltipHandler__tooltip.css("left", (_pos.left + 40.000000)));
-                    var _____ignored0 = (TooltipHandler__tooltip.css("top", ((e.clientY) + 20.000000)));
-                    var ______ignored0 = (TooltipHandler__tooltip.fadeTo(300.000000, 60.000000));
+                    var o = ((window.JSON).parse(s));
+                    if ((o.Data != "No tooltip information")) 
+                    {
+                      ((window.console).log(((window.document).elementFromPoint((e.clientX), (e.clientY)))));
+                      var position = ViewsHelpers__pixelPositionFromMouseEvent$(e)(editor);
+                      var n_ = ViewsHelpers__jq_$(_n);
+                      var __ignored0 = (n_.empty());
+                      var ___ignored0 = (n_.append(String__Replace$(String__Replace$(o.Data, "\\n", "\u003c/br\u003e"), "\n", "\u003c/br\u003e")));
+                      var ____ignored0 = (TooltipHandler__tooltip.css("left", (position.left + 40.000000)));
+                      var _____ignored0 = (TooltipHandler__tooltip.css("top", ((e.clientY) + 20.000000)));
+                      var ______ignored0 = (TooltipHandler__tooltip.fadeTo(300.000000, 60.000000));
+                    }
+                    else
+                    {
+                      ;
+                    };
                   }
                   else
                   {
