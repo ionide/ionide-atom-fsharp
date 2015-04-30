@@ -104,7 +104,8 @@ module AutocompleteService =
         t.Child |> Option.iter (fun n -> n.kill "SIGKILL")
         { t with State = State.Off; PreviousState = t.State; Child = None }
 
-    let ask msg no cb state =
+    let ask (msg' : string) no cb state =
+        let msg = msg'.Replace("\uFEFF", "")
         Globals.console.log ("ASKED: " + msg)
         state.Child |> Option.iter (fun c ->
                         let s = ref ""
@@ -122,7 +123,8 @@ module AutocompleteService =
                         c.stdout.on ("data", unbox<Function> (action)) |> ignore)
         state
 
-    let send msg t =
+    let send (msg' : string) t =
+        let msg = msg'.Replace("\uFEFF", "")
         Globals.console.log ("SEND: " + msg)
         t.Child |> Option.iter (fun c -> c.stdin.write msg |> ignore)
         t
@@ -296,71 +298,71 @@ module TooltipHandler =
             |> Option.map (fun n -> n.[0] |> unbox<Element>)
             |> Option.iter (fun n -> register service editor 500. n)
 
-module Views =
-    module ErrorPanelView =
-        let create () =
-            "<div class='tool-panel panel-bottom error-pane' id='pane'>
-                 <div class='inset-panel'>
-                    <div class='panel-heading clearfix'>
-                        <div class='btn-toolbar pull-left'>
-                            <div class='btn-group btn-toggle'>
-                                <button id='btnError' class='btn toggle'>Errors</button>
-                                <button id='btnOutput' class='btn' >Output</button>
-                            </div>
+
+module ErrorPanelView =
+    let create () =
+        "<div class='tool-panel panel-bottom error-pane' id='pane'>
+                <div class='inset-panel'>
+                <div class='panel-heading clearfix'>
+                    <div class='btn-toolbar pull-left'>
+                        <div class='btn-group btn-toggle'>
+                            <button id='btnError' class='btn toggle'>Errors</button>
+                            <button id='btnOutput' class='btn' >Output</button>
                         </div>
                     </div>
-                    <table id='panelError' class='error-table outputPanel' >
-                        <thead><th>Position</th><th>Message</th><th>Type</th><th>Category</th></thead>
-                        <tbody id='errorList'>
-                    </table>
-                    <div id='panelOutput' class='error-table outputPanel' style='display : none'></span>
-
                 </div>
-             </div>"
-            |> jq
+                <table id='panelError' class='error-table outputPanel' >
+                    <thead><th>Position</th><th>Message</th><th>Type</th><th>Category</th></thead>
+                    <tbody id='errorList'>
+                </table>
+                <div id='panelOutput' class='error-table outputPanel' style='display : none'></span>
 
-        let createRow (editor : IEditor) (e : AutocompleteResults.Error)  =
-            let t = sprintf "<tr><td>%d : %d</td><td>%s</td><td>%s</td><td>%s</td></tr>"
-                        e.StartLineAlternate
-                        e.StartColumn
-                        e.Message
-                        e.Severity
-                        e.Subcategory
-                    |> jq
-            t.click(fun x -> editor.setCursorBufferPosition [|e.StartLine; e.StartColumn |])
+            </div>
+            </div>"
+        |> jq
+
+    let createRow (editor : IEditor) (e : AutocompleteResults.Error)  =
+        let t = sprintf "<tr><td>%d : %d</td><td>%s</td><td>%s</td><td>%s</td></tr>"
+                    e.StartLineAlternate
+                    e.StartColumn
+                    e.Message
+                    e.Severity
+                    e.Subcategory
+                |> jq
+        t.click(fun x -> editor.setCursorBufferPosition [|e.StartLine; e.StartColumn |])
 
 
-        let addButtonHandlers () =
-            let btns = jq(".btn-toggle button")
-            let panels = jq(".outputPanel")
-            btns.click(fun e -> let j = jq'( e.target)   
-                                btns.removeClass("toggle") |> ignore
-                                panels.hide() |> ignore
-                                match j.attr("id") with
-                                | "btnError" -> jq("#panelError").show() |> ignore
-                                | "btnOutput" -> jq("#panelOutput").show() |> ignore
-                                | _ -> ()
+    let addButtonHandlers () =
+        let btns = jq(".btn-toggle button")
+        let panels = jq(".outputPanel")
+        btns.click(fun e -> let j = jq'( e.target)   
+                            btns.removeClass("toggle") |> ignore
+                            panels.hide() |> ignore
+                            match j.attr("id") with
+                            | "btnError" -> jq("#panelError").show() |> ignore
+                            | "btnOutput" -> jq("#panelOutput").show() |> ignore
+                            | _ -> ()
                                 
 
-                                j.addClass("toggle") :> obj ) |> ignore
+                            j.addClass("toggle") :> obj ) |> ignore
 
-        let addOutputHandle () = 
+    let addOutputHandle () = 
             
-            Globals.atom.on("FSharp:Output", unbox<Function>(fun (msg : string) -> 
-                let msg' = msg.Replace("\n", "</br>")
-                jq("#panelOutput").append ( sprintf "<span>%s</span>" msg' )))
+        Globals.atom.on("FSharp:Output", unbox<Function>(fun (msg : string) -> 
+            let msg' = msg.Replace("\n", "</br>")
+            jq("#panelOutput").append ( sprintf "<span>%s</span>" msg' )))
 
-        let hadnleEditorChange (panel : IPanel) (editor : AtomCore.IEditor) =
-            if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then panel.show() else panel.hide()
+    let hadnleEditorChange (panel : IPanel) (editor : AtomCore.IEditor) =
+        if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then panel.show() else panel.hide()
 
-        let handle lst =
-            let editor = Globals.atom.workspace.getActiveTextEditor()
-            if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
-                let list = jq("#errorList")
-                list.children().remove() |> ignore
-                lst |> Array.iter(fun e -> let t = e |> createRow editor
-                                           let r = t |> list.append
-                                           ())
+    let handle lst =
+        let editor = Globals.atom.workspace.getActiveTextEditor()
+        if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
+            let list = jq("#errorList")
+            list.children().remove() |> ignore
+            lst |> Array.iter(fun e -> let t = e |> createRow editor
+                                       let r = t |> list.append
+                                       ())
             
 
     type PanelOptions =
@@ -375,10 +377,10 @@ type Core() =
 
     let register panel = 
         Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>( fun ed -> AutocompleteHandler.parseEditor ed (fun _ -> ()) service |> ignore))
-        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(Views.ErrorPanelView.hadnleEditorChange panel))
+        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(ErrorPanelView.hadnleEditorChange panel))
         Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(fun ed -> Globals.setTimeout((fun _ -> TooltipHandler.initialize service ed), 1000.)))     
         Globals.atom.on("FSharp:Highlight", unbox<Function>(HighlighterHandler.handle))
-        Globals.atom.on("FSharp:Highlight", unbox<Function>(Views.ErrorPanelView.handle))
+        Globals.atom.on("FSharp:Highlight", unbox<Function>(ErrorPanelView.handle))
        
     let projInit () =
         let p = Globals.atom.project.getPath ()    
@@ -395,10 +397,10 @@ type Core() =
 
     let initialize panel = 
         projInit()        
-        Globals.atom.workspace.getActiveTextEditor() |> Views.ErrorPanelView.hadnleEditorChange panel
+        Globals.atom.workspace.getActiveTextEditor() |> ErrorPanelView.hadnleEditorChange panel
         Globals.atom.workspace.getActiveTextEditor() |> TooltipHandler.initialize service
-        Views.ErrorPanelView.addButtonHandlers ()
-        Views.ErrorPanelView.addOutputHandle ()
+        ErrorPanelView.addButtonHandlers ()
+        ErrorPanelView.addOutputHandle ()
         
         
         
@@ -412,8 +414,8 @@ type Core() =
 
     member x.activate(state:obj) =
         let panel =
-            let t = Views.ErrorPanelView.create ()
-            Globals.atom.workspace.addBottomPanel (unbox<AnonymousType499>{Views.PanelOptions.item = t; Views.PanelOptions.priority = 100; Views.PanelOptions.visible = false})
+            let t = ErrorPanelView.create ()
+            Globals.atom.workspace.addBottomPanel (unbox<AnonymousType499>{ErrorPanelView.PanelOptions.item = t; ErrorPanelView.PanelOptions.priority = 100; ErrorPanelView.PanelOptions.visible = false})
 
         panel |> register
         panel |> initialize

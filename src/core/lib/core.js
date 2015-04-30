@@ -95,25 +95,25 @@ Array__FoldIndexed$Unit__IDisplayBufferMarker_Unit__IDisplayBufferMarker_ = (fun
 });
 Array__Iterate$Error_Error_ = (function(f,xs)
 {
-    var _896;
+    var _910;
     return Array__Fold$Error__Unit_Error__Unit_((function(unitVar0)
     {
       return (function(x)
       {
         return f(x);
       });
-    }), _896, xs);
+    }), _910, xs);
 });
 Array__Iterate$IDisplayBufferMarker_IDisplayBufferMarker_ = (function(f,xs)
 {
-    var _823;
+    var _837;
     return Array__Fold$IDisplayBufferMarker__Unit_IDisplayBufferMarker__Unit_((function(unitVar0)
     {
       return (function(x)
       {
         return f(x);
       });
-    }), _823, xs);
+    }), _837, xs);
 });
 Array__Length$Error_Error_ = (function(xs)
 {
@@ -313,16 +313,16 @@ AutocompleteProvider__getSuggestion$ = (function(service,options)
           try
           {
             var result = ((window.JSON).parse(msg));
-            var _1207;
+            var _1221;
             if (((prefix == ".") || (prefix == "="))) 
             {
-              _1207 = "";
+              _1221 = "";
             }
             else
             {
-              _1207 = prefix;
+              _1221 = prefix;
             };
-            var pref = _1207;
+            var pref = _1221;
             if ((result.Kind == "completion")) 
             {
               return resolve(Seq__ToArray$Object_Object_(Seq__Map$String_1_Object_String_Object_((function(t)
@@ -353,8 +353,9 @@ AutocompleteProvider__getSuggestion$ = (function(service,options)
       }), service);
     })()});
 });
-AutocompleteService__ask$ = (function(msg,no,cb,state)
+AutocompleteService__ask$ = (function(msg_,no,cb,state)
 {
+    var msg = String__Replace$(msg_, "﻿", "");
     ((window.console).log(("ASKED: " + msg)));
     Option__Iterate$ChildProcess_ChildProcess_((function(c)
     {
@@ -386,8 +387,9 @@ AutocompleteService__get_create$ = (function()
 {
     return (new T___ctor$((new State__Off()), (new State__Off()), {Tag: 0.000000}));
 });
-AutocompleteService__send$ = (function(msg,t)
+AutocompleteService__send$ = (function(msg_,t)
 {
+    var msg = String__Replace$(msg_, "﻿", "");
     ((window.console).log(("SEND: " + msg)));
     Option__Iterate$ChildProcess_ChildProcess_((function(c)
     {
@@ -440,8 +442,8 @@ Core__getSuggestion$ = (function(x,options)
 });
 Core__initialize$ = (function(_this,panel)
 {
-    var _1004;
-    var arg10_ = _1004;
+    var _1018;
+    var arg10_ = _1018;
     Core__projInit$(_this);
     ErrorPanelView__hadnleEditorChange$(panel, (((window.atom).workspace).getActiveTextEditor()));
     TooltipHandler__initialize$(_this.service, (((window.atom).workspace).getActiveTextEditor()));
@@ -578,7 +580,7 @@ ErrorPanelView__addOutputHandle$ = (function(unitVar0)
 });
 ErrorPanelView__create$ = (function(unitVar0)
 {
-    return ViewsHelpers__jq$("\u003cdiv class=\u0027tool-panel panel-bottom error-pane\u0027 id=\u0027pane\u0027\u003e\r\n                 \u003cdiv class=\u0027inset-panel\u0027\u003e\r\n                    \u003cdiv class=\u0027panel-heading clearfix\u0027\u003e\r\n                        \u003cdiv class=\u0027btn-toolbar pull-left\u0027\u003e\r\n                            \u003cdiv class=\u0027btn-group btn-toggle\u0027\u003e\r\n                                \u003cbutton id=\u0027btnError\u0027 class=\u0027btn toggle\u0027\u003eErrors\u003c/button\u003e\r\n                                \u003cbutton id=\u0027btnOutput\u0027 class=\u0027btn\u0027 \u003eOutput\u003c/button\u003e\r\n                            \u003c/div\u003e\r\n                        \u003c/div\u003e\r\n                    \u003c/div\u003e\r\n                    \u003ctable id=\u0027panelError\u0027 class=\u0027error-table outputPanel\u0027 \u003e\r\n                        \u003cthead\u003e\u003cth\u003ePosition\u003c/th\u003e\u003cth\u003eMessage\u003c/th\u003e\u003cth\u003eType\u003c/th\u003e\u003cth\u003eCategory\u003c/th\u003e\u003c/thead\u003e\r\n                        \u003ctbody id=\u0027errorList\u0027\u003e\r\n                    \u003c/table\u003e\r\n                    \u003cdiv id=\u0027panelOutput\u0027 class=\u0027error-table outputPanel\u0027 style=\u0027display : none\u0027\u003e\u003c/span\u003e\r\n\r\n                \u003c/div\u003e\r\n             \u003c/div\u003e");
+    return ViewsHelpers__jq$("\u003cdiv class=\u0027tool-panel panel-bottom error-pane\u0027 id=\u0027pane\u0027\u003e\r\n                \u003cdiv class=\u0027inset-panel\u0027\u003e\r\n                \u003cdiv class=\u0027panel-heading clearfix\u0027\u003e\r\n                    \u003cdiv class=\u0027btn-toolbar pull-left\u0027\u003e\r\n                        \u003cdiv class=\u0027btn-group btn-toggle\u0027\u003e\r\n                            \u003cbutton id=\u0027btnError\u0027 class=\u0027btn toggle\u0027\u003eErrors\u003c/button\u003e\r\n                            \u003cbutton id=\u0027btnOutput\u0027 class=\u0027btn\u0027 \u003eOutput\u003c/button\u003e\r\n                        \u003c/div\u003e\r\n                    \u003c/div\u003e\r\n                \u003c/div\u003e\r\n                \u003ctable id=\u0027panelError\u0027 class=\u0027error-table outputPanel\u0027 \u003e\r\n                    \u003cthead\u003e\u003cth\u003ePosition\u003c/th\u003e\u003cth\u003eMessage\u003c/th\u003e\u003cth\u003eType\u003c/th\u003e\u003cth\u003eCategory\u003c/th\u003e\u003c/thead\u003e\r\n                    \u003ctbody id=\u0027errorList\u0027\u003e\r\n                \u003c/table\u003e\r\n                \u003cdiv id=\u0027panelOutput\u0027 class=\u0027error-table outputPanel\u0027 style=\u0027display : none\u0027\u003e\u003c/span\u003e\r\n\r\n            \u003c/div\u003e\r\n            \u003c/div\u003e");
 });
 ErrorPanelView__createRow$ = (function(editor,e)
 {
@@ -652,16 +654,16 @@ HighlighterHandler__handle$ = (function(lst)
     var action = (function(item)
     {
       var marker = (editor.markBufferRange([[item.StartLine, item.StartColumn], [item.EndLine, item.EndColumn]]));
-      var _874;
+      var _888;
       if ((item.Severity == "Warning")) 
       {
-        _874 = "highlight-warning";
+        _888 = "highlight-warning";
       }
       else
       {
-        _874 = "highlight-error";
+        _888 = "highlight-error";
       };
-      var cls = _874;
+      var cls = _888;
       HighlighterHandler__marked = Array__Append$IDisplayBufferMarker_IDisplayBufferMarker_([marker], HighlighterHandler__marked);
       editor.decorateMarker(marker, {type: 'highlight', class: cls});
     });
@@ -842,16 +844,16 @@ Seq__Delay$Object_Object_ = (function(f)
 {
     return Seq__FromFactory$Object_Object_((function(unitVar0)
     {
-      var _1473;
-      return Seq__Enumerator$Object_Object_(f(_1473));
+      var _1487;
+      return Seq__Enumerator$Object_Object_(f(_1487));
     }));
 });
 Seq__Delay$String_1String = (function(f)
 {
     return Seq__FromFactory$String_1String((function(unitVar0)
     {
-      var _1382;
-      return Seq__Enumerator$String_1String(f(_1382));
+      var _1396;
+      return Seq__Enumerator$String_1String(f(_1396));
     }));
 });
 Seq__Enumerator$Object_Object_ = (function(xs)
@@ -934,8 +936,8 @@ Seq__FromFactory$Object_Object_ = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _1465;
-        return __.factory(_1465);
+        var _1479;
+        return __.factory(_1479);
       })(impl, unitVar1);
     })};
 });
@@ -947,8 +949,8 @@ Seq__FromFactory$String_1String = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _1310;
-        return __.factory(_1310);
+        var _1324;
+        return __.factory(_1324);
       })(impl, unitVar1);
     })};
 });
@@ -960,14 +962,14 @@ Seq__FromFactory$String___String___ = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _217;
-        return __.factory(_217);
+        var _229;
+        return __.factory(_229);
       })(impl, unitVar1);
     })};
 });
 Seq__IterateIndexed$Object_Object_ = (function(f,xs)
 {
-    var _1487;
+    var _1501;
     return Seq__FoldIndexed$Object__Unit_Object__Unit_((function(i)
     {
       return (function(unitVar1)
@@ -977,11 +979,11 @@ Seq__IterateIndexed$Object_Object_ = (function(f,xs)
           return f(i)(x);
         });
       });
-    }), _1487, xs);
+    }), _1501, xs);
 });
 Seq__IterateIndexed$String___String___ = (function(f,xs)
 {
-    var _237;
+    var _249;
     return Seq__FoldIndexed$String____Unit_String____Unit_((function(i)
     {
       return (function(unitVar1)
@@ -991,7 +993,7 @@ Seq__IterateIndexed$String___String___ = (function(f,xs)
           return f(i)(x);
         });
       });
-    }), _237, xs);
+    }), _249, xs);
 });
 Seq__Map$String_1_Object_String_Object_ = (function(f,xs)
 {
@@ -1107,8 +1109,8 @@ Seq__Unfold$IEnumerator_1_String__Object_IEnumerator_1_String__Object_ = (functi
           });
           return (Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_(__.acc) && (function()
           {
-            var _1443;
-            return next(_1443);
+            var _1457;
+            return next(_1457);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1164,8 +1166,8 @@ Seq__Unfold$IEnumerator_1_String__String_1IEnumerator_1_String__String = (functi
           });
           return (Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_(__.acc) && (function()
           {
-            var _1359;
-            return next(_1359);
+            var _1373;
+            return next(_1373);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1221,8 +1223,8 @@ Seq__Unfold$Int32__String_1Int32_String = (function(f,seed)
           });
           return (Option__IsSome$Int32_Int32(__.acc) && (function()
           {
-            var _1288;
-            return next(_1288);
+            var _1302;
+            return next(_1302);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1278,8 +1280,8 @@ Seq__Unfold$Int32__String___Int32_String___ = (function(f,seed)
           });
           return (Option__IsSome$Int32_Int32(__.acc) && (function()
           {
-            var _195;
-            return next(_195);
+            var _207;
+            return next(_207);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
