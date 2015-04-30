@@ -95,25 +95,25 @@ Array__FoldIndexed$Unit__IDisplayBufferMarker_Unit__IDisplayBufferMarker_ = (fun
 });
 Array__Iterate$Error_Error_ = (function(f,xs)
 {
-    var _883;
+    var _887;
     return Array__Fold$Error__Unit_Error__Unit_((function(unitVar0)
     {
       return (function(x)
       {
         return f(x);
       });
-    }), _883, xs);
+    }), _887, xs);
 });
 Array__Iterate$IDisplayBufferMarker_IDisplayBufferMarker_ = (function(f,xs)
 {
-    var _810;
+    var _814;
     return Array__Fold$IDisplayBufferMarker__Unit_IDisplayBufferMarker__Unit_((function(unitVar0)
     {
       return (function(x)
       {
         return f(x);
       });
-    }), _810, xs);
+    }), _814, xs);
 });
 Array__Length$Error_Error_ = (function(xs)
 {
@@ -313,16 +313,16 @@ AutocompleteProvider__getSuggestion$ = (function(service,options)
           try
           {
             var result = ((window.JSON).parse(msg));
-            var _1194;
+            var _1198;
             if (((prefix == ".") || (prefix == "="))) 
             {
-              _1194 = "";
+              _1198 = "";
             }
             else
             {
-              _1194 = prefix;
+              _1198 = prefix;
             };
-            var pref = _1194;
+            var pref = _1198;
             if ((result.Kind == "completion")) 
             {
               return resolve(Seq__ToArray$Object_Object_(Seq__Map$String_1_Object_String_Object_((function(t)
@@ -440,8 +440,8 @@ Core__getSuggestion$ = (function(x,options)
 });
 Core__initialize$ = (function(_this,panel)
 {
-    var _991;
-    var arg10_ = _991;
+    var _995;
+    var arg10_ = _995;
     Core__projInit$(_this);
     ErrorPanelView__hadnleEditorChange$(panel, (((window.atom).workspace).getActiveTextEditor()));
     TooltipHandler__initialize$(_this.service, (((window.atom).workspace).getActiveTextEditor()));
@@ -652,16 +652,16 @@ HighlighterHandler__handle$ = (function(lst)
     var action = (function(item)
     {
       var marker = (editor.markBufferRange([[item.StartLine, item.StartColumn], [item.EndLine, item.EndColumn]]));
-      var _861;
+      var _865;
       if ((item.Severity == "Warning")) 
       {
-        _861 = "highlight-warning";
+        _865 = "highlight-warning";
       }
       else
       {
-        _861 = "highlight-error";
+        _865 = "highlight-error";
       };
-      var cls = _861;
+      var cls = _865;
       HighlighterHandler__marked = Array__Append$IDisplayBufferMarker_IDisplayBufferMarker_([marker], HighlighterHandler__marked);
       editor.decorateMarker(marker, {type: 'highlight', class: cls});
     });
@@ -842,16 +842,16 @@ Seq__Delay$Object_Object_ = (function(f)
 {
     return Seq__FromFactory$Object_Object_((function(unitVar0)
     {
-      var _1460;
-      return Seq__Enumerator$Object_Object_(f(_1460));
+      var _1464;
+      return Seq__Enumerator$Object_Object_(f(_1464));
     }));
 });
 Seq__Delay$String_1String = (function(f)
 {
     return Seq__FromFactory$String_1String((function(unitVar0)
     {
-      var _1369;
-      return Seq__Enumerator$String_1String(f(_1369));
+      var _1373;
+      return Seq__Enumerator$String_1String(f(_1373));
     }));
 });
 Seq__Enumerator$Object_Object_ = (function(xs)
@@ -934,8 +934,8 @@ Seq__FromFactory$Object_Object_ = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _1452;
-        return __.factory(_1452);
+        var _1456;
+        return __.factory(_1456);
       })(impl, unitVar1);
     })};
 });
@@ -947,8 +947,8 @@ Seq__FromFactory$String_1String = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _1297;
-        return __.factory(_1297);
+        var _1301;
+        return __.factory(_1301);
       })(impl, unitVar1);
     })};
 });
@@ -967,7 +967,7 @@ Seq__FromFactory$String___String___ = (function(f)
 });
 Seq__IterateIndexed$Object_Object_ = (function(f,xs)
 {
-    var _1474;
+    var _1478;
     return Seq__FoldIndexed$Object__Unit_Object__Unit_((function(i)
     {
       return (function(unitVar1)
@@ -977,7 +977,7 @@ Seq__IterateIndexed$Object_Object_ = (function(f,xs)
           return f(i)(x);
         });
       });
-    }), _1474, xs);
+    }), _1478, xs);
 });
 Seq__IterateIndexed$String___String___ = (function(f,xs)
 {
@@ -1107,8 +1107,8 @@ Seq__Unfold$IEnumerator_1_String__Object_IEnumerator_1_String__Object_ = (functi
           });
           return (Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_(__.acc) && (function()
           {
-            var _1430;
-            return next(_1430);
+            var _1434;
+            return next(_1434);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1164,8 +1164,8 @@ Seq__Unfold$IEnumerator_1_String__String_1IEnumerator_1_String__String = (functi
           });
           return (Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_(__.acc) && (function()
           {
-            var _1346;
-            return next(_1346);
+            var _1350;
+            return next(_1350);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1221,8 +1221,8 @@ Seq__Unfold$Int32__String_1Int32_String = (function(f,seed)
           });
           return (Option__IsSome$Int32_Int32(__.acc) && (function()
           {
-            var _1275;
-            return next(_1275);
+            var _1279;
+            return next(_1279);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1361,7 +1361,7 @@ T___ctor$ = (function(State,PreviousState,Child)
 });
 TooltipHandler__clearTimer$ = (function(unitVar0)
 {
-    var ignored0 = (TooltipHandler__tooltip.fadeOut(300.000000));
+    var ignored0 = (TooltipHandler__tooltip.fadeOut());
     Option__Iterate$Timer_Timer_((function(arg00)
     {
       return (window.clearTimeout(arg00));
@@ -1437,11 +1437,12 @@ TooltipHandler__register$ = (function(service,editor,time,element)
                   if ((o.Data != "No tooltip information")) 
                   {
                     var _pos = ViewsHelpers__pixelPositionFromMouseEvent$(e)(editor);
+                    var p = TooltipHandler__getPosition$(e, editor);
                     var n_ = ViewsHelpers__jq_$(_n);
                     var __ignored0 = (n_.empty());
                     var ___ignored0 = (n_.append(String__Replace$(String__Replace$(o.Data, "\\n", "\u003c/br\u003e"), "\n", "\u003c/br\u003e")));
                     var ____ignored0 = (TooltipHandler__tooltip.css("left", (_pos.left + 40.000000)));
-                    var _____ignored0 = (TooltipHandler__tooltip.css("top", (_pos.top + 50.000000)));
+                    var _____ignored0 = (TooltipHandler__tooltip.css("top", ((e.clientY) + 20.000000)));
                     var ______ignored0 = (TooltipHandler__tooltip.fadeTo(300.000000, 60.000000));
                   }
                   else
@@ -1462,6 +1463,10 @@ TooltipHandler__register$ = (function(service,editor,time,element)
         };
       })));
       var __ignored0 = (n.mouseleave((function(e)
+      {
+        return TooltipHandler__clearTimer$();
+      })));
+      var ___ignored0 = (n.scroll((function(e)
       {
         return TooltipHandler__clearTimer$();
       })));
