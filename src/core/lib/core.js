@@ -3,7 +3,7 @@ var child_process = require('child_process');
 window.$ = require('atom').$;
 
 function wrappedFunScript() { 
-var position___ctor$, position__GeneratedCompareTo, ViewsHelpers__pixelPositionFromMouseEvent$, ViewsHelpers__jq_$, ViewsHelpers__jq$, ViewsHelpers__getElementsByClass$HTMLElement_HTMLElement_, ViewsHelpers__getElementsByClass$Element_Element_, ViewsHelpers__bufferPositionFromMouseEvent$, UnfoldEnumerator_2_Int32__String___ctor$Int32_String, UnfoldEnumerator_2_Int32__String_____ctor$Int32_String___, UnfoldEnumerator_2_IEnumerator_1_String__String___ctor$IEnumerator_1_String__String, UnfoldEnumerator_2_IEnumerator_1_String__Object___ctor$IEnumerator_1_String__Object_, TupleString____Int32, TupleString_Int32, TupleString_IEnumerator_1_String_, TupleObject__IEnumerator_1_String_, TooltipHandler__tooltip, TooltipHandler__timer, TooltipHandler__register$, TooltipHandler__lastPosition, TooltipHandler__initialize$, TooltipHandler__get_tooltip$, TooltipHandler__get_timer$, TooltipHandler__get_lastPosition$, TooltipHandler__getPosition$, TooltipHandler__create$, TooltipHandler__clearTimer$, T___ctor$, String__StartsWith$, String__SplitWithoutOptions$, String__Replace$, String__PrintFormatToString$, State__On, State__Off, Seq__Where$String_1String, Seq__Unfold$Int32__String___Int32_String___, Seq__Unfold$Int32__String_1Int32_String, Seq__Unfold$IEnumerator_1_String__String_1IEnumerator_1_String__String, Seq__Unfold$IEnumerator_1_String__Object_IEnumerator_1_String__Object_, Seq__ToArray$String___String___, Seq__ToArray$Object_Object_, Seq__OfArray$String___String___, Seq__OfArray$String_1String, Seq__Map$String_1_Object_String_Object_, Seq__IterateIndexed$String___String___, Seq__IterateIndexed$Object_Object_, Seq__FromFactory$String___String___, Seq__FromFactory$String_1String, Seq__FromFactory$Object_Object_, Seq__FoldIndexedAux$Unit__String___Unit__String___, Seq__FoldIndexedAux$Unit__Object_Unit__Object_, Seq__FoldIndexed$String____Unit_String____Unit_, Seq__FoldIndexed$Object__Unit_Object__Unit_, Seq__Filter$String_1String, Seq__Enumerator$String___String___, Seq__Enumerator$String_1String, Seq__Enumerator$Object_Object_, Seq__Delay$String_1String, Seq__Delay$Object_Object_, Provider___ctor$, PanelOptions___ctor$, Option__Map$NodeList__Element_NodeList__Element_, Option__Map$NodeList__Coordinates_NodeList__Coordinates_, Option__Map$HTMLElement__NodeList_HTMLElement__NodeList_, Option__Map$HTMLElement__HTMLElement_HTMLElement__HTMLElement_, Option__Map$Element__HTMLElement_Element__HTMLElement_, Option__Iterate$Timer_Timer_, Option__Iterate$Element_Element_, Option__Iterate$ChildProcess_ChildProcess_, Option__IsSome$Int32_Int32, Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_, Option__GetValue$Tuple_2_String____Int32_Tuple_2_String____Int32_, Option__GetValue$Tuple_2_String__Int32_Tuple_2_String__Int32_, Option__GetValue$Tuple_2_String__IEnumerator_1_String_Tuple_2_String__IEnumerator_1_String_, Option__GetValue$Tuple_2_Object__IEnumerator_1_String_Tuple_2_Object__IEnumerator_1_String_, Option__GetValue$Timer_Timer_, Option__GetValue$String_1String, Option__GetValue$NodeList_NodeList_, Option__GetValue$Int32_Int32, Option__GetValue$IEnumerator_1_String_IEnumerator_1_String_, Option__GetValue$HTMLElement_HTMLElement_, Option__GetValue$Element_Element_, Option__GetValue$Coordinates_Coordinates_, Option__GetValue$ChildProcess_ChildProcess_, HighlighterHandler__marked, HighlighterHandler__handle$, HighlighterHandler__get_marked$, ErrorPanelView__handle$, ErrorPanelView__hadnleEditorChange$, ErrorPanelView__createRow$, ErrorPanelView__create$, ErrorPanelView__addOutputHandle$, ErrorPanelView__addButtonHandlers$, CreateEnumerable_1_String___ctor$String, CreateEnumerable_1_String_____ctor$String___, CreateEnumerable_1_Object___ctor$Object_, Core__register$, Core__provide$, Core__projInit$, Core__initialize$, Core__getSuggestion$, Core__deactivate$, Core__activate$, Core___ctor$, Coordinates___ctor$, AutocompleteService__start$, AutocompleteService__send$, AutocompleteService__get_create$, AutocompleteService__create, AutocompleteService__ask$, AutocompleteProvider__getSuggestion$, AutocompleteProvider__create$, AutocompleteHandler__tooltip$, AutocompleteHandler__project$, AutocompleteHandler__parseEditor$, AutocompleteHandler__parseCurrent$, AutocompleteHandler__parse$, AutocompleteHandler__completion$, Array__ZeroCreate$String___String___, Array__ZeroCreate$Object_Object_, Array__TryPickIndexedAux$String_1_String_1String_String, Array__TryPickIndexed$String_1_String_1String_String, Array__TryFind$String_1String, Array__MapIndexed$String_1_String___String_String___, Array__Map$String_1_String___String_String___, Array__Length$String_1String, Array__Length$IDisplayBufferMarker_IDisplayBufferMarker_, Array__Length$Error_Error_, Array__Iterate$IDisplayBufferMarker_IDisplayBufferMarker_, Array__Iterate$Error_Error_, Array__FoldIndexed$Unit__IDisplayBufferMarker_Unit__IDisplayBufferMarker_, Array__FoldIndexed$Unit__Error_Unit__Error_, Array__FoldIndexed$String____String_1String____String, Array__Fold$String_1_String___String_String___, Array__Fold$IDisplayBufferMarker__Unit_IDisplayBufferMarker__Unit_, Array__Fold$Error__Unit_Error__Unit_, Array__Empty$IDisplayBufferMarker_IDisplayBufferMarker_, Array__ConcatImpl$String_1String, Array__Concat$String_1String, Array__BoxedLength$, Array__Append$IDisplayBufferMarker_IDisplayBufferMarker_;
+var position___ctor$, position__GeneratedCompareTo, ViewsHelpers__pixelPositionFromMouseEvent$, ViewsHelpers__jq_$, ViewsHelpers__jq$, ViewsHelpers__getElementsByClass$Element_Element_, ViewsHelpers__bufferPositionFromMouseEvent$, UnfoldEnumerator_2_Int32__String___ctor$Int32_String, UnfoldEnumerator_2_Int32__String_____ctor$Int32_String___, UnfoldEnumerator_2_IEnumerator_1_String__String___ctor$IEnumerator_1_String__String, UnfoldEnumerator_2_IEnumerator_1_String__Object___ctor$IEnumerator_1_String__Object_, TupleString____Int32, TupleString_Int32, TupleString_IEnumerator_1_String_, TupleObject__IEnumerator_1_String_, TooltipHandler__tooltip, TooltipHandler__timer, TooltipHandler__register$, TooltipHandler__lastPosition, TooltipHandler__initialize$, TooltipHandler__get_tooltip$, TooltipHandler__get_timer$, TooltipHandler__get_lastPosition$, TooltipHandler__getPosition$, TooltipHandler__create$, TooltipHandler__clearTimer$, T___ctor$, String__StartsWith$, String__SplitWithoutOptions$, String__Replace$, String__PrintFormatToString$, State__On, State__Off, Seq__Where$String_1String, Seq__Unfold$Int32__String___Int32_String___, Seq__Unfold$Int32__String_1Int32_String, Seq__Unfold$IEnumerator_1_String__String_1IEnumerator_1_String__String, Seq__Unfold$IEnumerator_1_String__Object_IEnumerator_1_String__Object_, Seq__ToArray$String___String___, Seq__ToArray$Object_Object_, Seq__OfArray$String___String___, Seq__OfArray$String_1String, Seq__Map$String_1_Object_String_Object_, Seq__IterateIndexed$String___String___, Seq__IterateIndexed$Object_Object_, Seq__FromFactory$String___String___, Seq__FromFactory$String_1String, Seq__FromFactory$Object_Object_, Seq__FoldIndexedAux$Unit__String___Unit__String___, Seq__FoldIndexedAux$Unit__Object_Unit__Object_, Seq__FoldIndexed$String____Unit_String____Unit_, Seq__FoldIndexed$Object__Unit_Object__Unit_, Seq__Filter$String_1String, Seq__Enumerator$String___String___, Seq__Enumerator$String_1String, Seq__Enumerator$Object_Object_, Seq__Delay$String_1String, Seq__Delay$Object_Object_, Provider___ctor$, PanelOptions___ctor$, Option__Map$NodeList__Element_NodeList__Element_, Option__Map$NodeList__Coordinates_NodeList__Coordinates_, Option__Map$HTMLElement__NodeList_HTMLElement__NodeList_, Option__Map$Element__HTMLElement_Element__HTMLElement_, Option__Iterate$Timer_Timer_, Option__Iterate$Element_Element_, Option__Iterate$ChildProcess_ChildProcess_, Option__IsSome$Int32_Int32, Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_, Option__GetValue$Tuple_2_String____Int32_Tuple_2_String____Int32_, Option__GetValue$Tuple_2_String__Int32_Tuple_2_String__Int32_, Option__GetValue$Tuple_2_String__IEnumerator_1_String_Tuple_2_String__IEnumerator_1_String_, Option__GetValue$Tuple_2_Object__IEnumerator_1_String_Tuple_2_Object__IEnumerator_1_String_, Option__GetValue$Timer_Timer_, Option__GetValue$String_1String, Option__GetValue$NodeList_NodeList_, Option__GetValue$Int32_Int32, Option__GetValue$IEnumerator_1_String_IEnumerator_1_String_, Option__GetValue$HTMLElement_HTMLElement_, Option__GetValue$Element_Element_, Option__GetValue$Coordinates_Coordinates_, Option__GetValue$ChildProcess_ChildProcess_, HighlighterHandler__marked, HighlighterHandler__handle$, HighlighterHandler__get_marked$, ErrorPanelView__handle$, ErrorPanelView__hadnleEditorChange$, ErrorPanelView__createRow$, ErrorPanelView__create$, ErrorPanelView__addOutputHandle$, ErrorPanelView__addButtonHandlers$, CreateEnumerable_1_String___ctor$String, CreateEnumerable_1_String_____ctor$String___, CreateEnumerable_1_Object___ctor$Object_, Core__register$, Core__provide$, Core__projInit$, Core__initialize$, Core__getSuggestion$, Core__deactivate$, Core__activate$, Core___ctor$, Coordinates___ctor$, AutocompleteService__start$, AutocompleteService__send$, AutocompleteService__get_create$, AutocompleteService__create, AutocompleteService__ask$, AutocompleteProvider__getSuggestion$, AutocompleteProvider__create$, AutocompleteHandler__tooltip$, AutocompleteHandler__project$, AutocompleteHandler__parseEditor$, AutocompleteHandler__parseCurrent$, AutocompleteHandler__parse$, AutocompleteHandler__completion$, Array__ZeroCreate$String___String___, Array__ZeroCreate$Object_Object_, Array__TryPickIndexedAux$String_1_String_1String_String, Array__TryPickIndexed$String_1_String_1String_String, Array__TryFind$String_1String, Array__MapIndexed$String_1_String___String_String___, Array__Map$String_1_String___String_String___, Array__Length$String_1String, Array__Length$IDisplayBufferMarker_IDisplayBufferMarker_, Array__Length$Error_Error_, Array__Iterate$IDisplayBufferMarker_IDisplayBufferMarker_, Array__Iterate$Error_Error_, Array__FoldIndexed$Unit__IDisplayBufferMarker_Unit__IDisplayBufferMarker_, Array__FoldIndexed$Unit__Error_Unit__Error_, Array__FoldIndexed$String____String_1String____String, Array__Fold$String_1_String___String_String___, Array__Fold$IDisplayBufferMarker__Unit_IDisplayBufferMarker__Unit_, Array__Fold$Error__Unit_Error__Unit_, Array__Empty$IDisplayBufferMarker_IDisplayBufferMarker_, Array__ConcatImpl$String_1String, Array__Concat$String_1String, Array__BoxedLength$, Array__Append$IDisplayBufferMarker_IDisplayBufferMarker_;
 Array__Append$IDisplayBufferMarker_IDisplayBufferMarker_ = (function(xs,ys)
 {
     return xs.concat(ys);;
@@ -95,25 +95,25 @@ Array__FoldIndexed$Unit__IDisplayBufferMarker_Unit__IDisplayBufferMarker_ = (fun
 });
 Array__Iterate$Error_Error_ = (function(f,xs)
 {
-    var _910;
+    var _884;
     return Array__Fold$Error__Unit_Error__Unit_((function(unitVar0)
     {
       return (function(x)
       {
         return f(x);
       });
-    }), _910, xs);
+    }), _884, xs);
 });
 Array__Iterate$IDisplayBufferMarker_IDisplayBufferMarker_ = (function(f,xs)
 {
-    var _837;
+    var _811;
     return Array__Fold$IDisplayBufferMarker__Unit_IDisplayBufferMarker__Unit_((function(unitVar0)
     {
       return (function(x)
       {
         return f(x);
       });
-    }), _837, xs);
+    }), _811, xs);
 });
 Array__Length$Error_Error_ = (function(xs)
 {
@@ -313,16 +313,16 @@ AutocompleteProvider__getSuggestion$ = (function(service,options)
           try
           {
             var result = ((window.JSON).parse(msg));
-            var _1221;
+            var _1195;
             if (((prefix == ".") || (prefix == "="))) 
             {
-              _1221 = "";
+              _1195 = "";
             }
             else
             {
-              _1221 = prefix;
+              _1195 = prefix;
             };
-            var pref = _1221;
+            var pref = _1195;
             if ((result.Kind == "completion")) 
             {
               return resolve(Seq__ToArray$Object_Object_(Seq__Map$String_1_Object_String_Object_((function(t)
@@ -442,8 +442,8 @@ Core__getSuggestion$ = (function(x,options)
 });
 Core__initialize$ = (function(_this,panel)
 {
-    var _1018;
-    var arg10_ = _1018;
+    var _992;
+    var arg10_ = _992;
     Core__projInit$(_this);
     ErrorPanelView__hadnleEditorChange$(panel, (((window.atom).workspace).getActiveTextEditor()));
     TooltipHandler__initialize$(_this.service, (((window.atom).workspace).getActiveTextEditor()));
@@ -654,16 +654,16 @@ HighlighterHandler__handle$ = (function(lst)
     var action = (function(item)
     {
       var marker = (editor.markBufferRange([[item.StartLine, item.StartColumn], [item.EndLine, item.EndColumn]]));
-      var _888;
+      var _862;
       if ((item.Severity == "Warning")) 
       {
-        _888 = "highlight-warning";
+        _862 = "highlight-warning";
       }
       else
       {
-        _888 = "highlight-error";
+        _862 = "highlight-error";
       };
-      var cls = _888;
+      var cls = _862;
       HighlighterHandler__marked = Array__Append$IDisplayBufferMarker_IDisplayBufferMarker_([marker], HighlighterHandler__marked);
       editor.decorateMarker(marker, {type: 'highlight', class: cls});
     });
@@ -777,18 +777,6 @@ Option__Map$Element__HTMLElement_Element__HTMLElement_ = (function(f,inp)
       return {Tag: 0.000000};
     };
 });
-Option__Map$HTMLElement__HTMLElement_HTMLElement__HTMLElement_ = (function(f,inp)
-{
-    if ((inp.Tag == 1.000000)) 
-    {
-      var x = Option__GetValue$HTMLElement_HTMLElement_(inp);
-      return {Tag: 1.000000, Value: f(x)};
-    }
-    else
-    {
-      return {Tag: 0.000000};
-    };
-});
 Option__Map$HTMLElement__NodeList_HTMLElement__NodeList_ = (function(f,inp)
 {
     if ((inp.Tag == 1.000000)) 
@@ -844,16 +832,16 @@ Seq__Delay$Object_Object_ = (function(f)
 {
     return Seq__FromFactory$Object_Object_((function(unitVar0)
     {
-      var _1487;
-      return Seq__Enumerator$Object_Object_(f(_1487));
+      var _1461;
+      return Seq__Enumerator$Object_Object_(f(_1461));
     }));
 });
 Seq__Delay$String_1String = (function(f)
 {
     return Seq__FromFactory$String_1String((function(unitVar0)
     {
-      var _1396;
-      return Seq__Enumerator$String_1String(f(_1396));
+      var _1370;
+      return Seq__Enumerator$String_1String(f(_1370));
     }));
 });
 Seq__Enumerator$Object_Object_ = (function(xs)
@@ -936,8 +924,8 @@ Seq__FromFactory$Object_Object_ = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _1479;
-        return __.factory(_1479);
+        var _1453;
+        return __.factory(_1453);
       })(impl, unitVar1);
     })};
 });
@@ -949,8 +937,8 @@ Seq__FromFactory$String_1String = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _1324;
-        return __.factory(_1324);
+        var _1298;
+        return __.factory(_1298);
       })(impl, unitVar1);
     })};
 });
@@ -969,7 +957,7 @@ Seq__FromFactory$String___String___ = (function(f)
 });
 Seq__IterateIndexed$Object_Object_ = (function(f,xs)
 {
-    var _1501;
+    var _1475;
     return Seq__FoldIndexed$Object__Unit_Object__Unit_((function(i)
     {
       return (function(unitVar1)
@@ -979,7 +967,7 @@ Seq__IterateIndexed$Object_Object_ = (function(f,xs)
           return f(i)(x);
         });
       });
-    }), _1501, xs);
+    }), _1475, xs);
 });
 Seq__IterateIndexed$String___String___ = (function(f,xs)
 {
@@ -1109,8 +1097,8 @@ Seq__Unfold$IEnumerator_1_String__Object_IEnumerator_1_String__Object_ = (functi
           });
           return (Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_(__.acc) && (function()
           {
-            var _1457;
-            return next(_1457);
+            var _1431;
+            return next(_1431);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1166,8 +1154,8 @@ Seq__Unfold$IEnumerator_1_String__String_1IEnumerator_1_String__String = (functi
           });
           return (Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_(__.acc) && (function()
           {
-            var _1373;
-            return next(_1373);
+            var _1347;
+            return next(_1347);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1223,8 +1211,8 @@ Seq__Unfold$Int32__String_1Int32_String = (function(f,seed)
           });
           return (Option__IsSome$Int32_Int32(__.acc) && (function()
           {
-            var _1302;
-            return next(_1302);
+            var _1276;
+            return next(_1276);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1401,7 +1389,7 @@ TooltipHandler__initialize$ = (function(service,editor)
       }), Option__Map$NodeList__Element_NodeList__Element_((function(n)
       {
         return (n[0]);
-      }), ViewsHelpers__getElementsByClass$HTMLElement_HTMLElement_(".scroll-view", (ViewsHelpers__jq$(".editor.is-focused")[0]))));
+      }), ViewsHelpers__getElementsByClass$Element_Element_(".scroll-view", (((window.atom).views).getView(editor)))));
     }
     else
     {
@@ -1548,27 +1536,6 @@ ViewsHelpers__getElementsByClass$Element_Element_ = (function(cls,e)
     {
       return (n.querySelectorAll(cls));
     }), Option__Map$Element__HTMLElement_Element__HTMLElement_((function(o)
-    {
-      return (o[prop]);
-    }), (function(n)
-    {
-      if ((n != undefined)) 
-      {
-        return {Tag: 1.000000, Value: n};
-      }
-      else
-      {
-        return {Tag: 0.000000};
-      };
-    })(e)));
-});
-ViewsHelpers__getElementsByClass$HTMLElement_HTMLElement_ = (function(cls,e)
-{
-    var prop = "rootElement";
-    return Option__Map$HTMLElement__NodeList_HTMLElement__NodeList_((function(n)
-    {
-      return (n.querySelectorAll(cls));
-    }), Option__Map$HTMLElement__HTMLElement_HTMLElement__HTMLElement_((function(o)
     {
       return (o[prop]);
     }), (function(n)

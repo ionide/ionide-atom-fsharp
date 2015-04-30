@@ -3,6 +3,7 @@ module Atom
 
 open FunScript
 open FunScript.TypeScript
+open FunScript.TypeScript.AtomCore
     
     
 [<JSEmit("var cmd = {}; cmd[{1}]=function() { return {2}(); }; return atom.commands.add({0}, cmd);")>]
@@ -32,4 +33,19 @@ module JS =
 
     [<JSEmitInline("({0} != undefined)")>]
     let isDefined (o: obj) : bool = failwith "never"
+
+type ViewRegistry = interface end
+
+[<AutoOpen>]
+module Bindings = 
+    
+    type IAtom with
+        [<FunScript.JSEmitInline("({0}.views)")>]
+        member __.views with get () : ViewRegistry = failwith "never"
+
+    type ViewRegistry with 
+        [<FunScript.JSEmitInline("({0}.getView({1}))")>]
+        member __.getView(o : obj) : Element = failwith "never"
+        
+
 

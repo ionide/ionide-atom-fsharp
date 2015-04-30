@@ -10,6 +10,8 @@ open FunScript.TypeScript.text_buffer
 
 open Atom
 
+
+
 [<AutoOpen>]
 module ViewsHelpers = 
 
@@ -293,7 +295,8 @@ module TooltipHandler =
 
     let initialize (service : AutocompleteService.T) (editor : IEditor) = 
         if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
-            jq(".editor.is-focused").[0] 
+            editor 
+            |> Globals.atom.views.getView
             |> getElementsByClass ".scroll-view"
             |> Option.map (fun n -> n.[0] |> unbox<Element>)
             |> Option.iter (fun n -> register service editor 500. n)
