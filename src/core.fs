@@ -391,7 +391,7 @@ type Core() =
             let projExist = arr |> Array.tryFind(fun a -> a.Split('.').[1] = "fsproj")
             match projExist with
             | Some a -> 
-                let path = p + "\\" + a
+                let path = Globals.atom.project.resolve a
                 service |> AutocompleteHandler.project path (fun _ -> service |> AutocompleteHandler.parseCurrent (fun _ -> ()) |> ignore)
                 |> ignore
             | None -> service |> AutocompleteHandler.parseCurrent (fun _ -> ()) |> ignore
