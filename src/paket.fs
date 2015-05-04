@@ -10,7 +10,7 @@ open Atom
 
 module PaketService = 
     let location () = Globals.atom.packages.packageDirPaths.[0] + "\\paket\\bin\\paket.exe"
-    let bootstraperLocation () = Globals.atom.packages.packageDirPaths.[0] + "\\paket\\bin\\paket.bootstrapper.exe"
+    let bootstrapperLocation () = Globals.atom.packages.packageDirPaths.[0] + "\\paket\\bin\\paket.bootstrapper.exe"
     
     let handle (error : Error) (stdout : Buffer) (stderr : Buffer) =
         Globals.atom.emit("FSharp:Output", stdout.toString())
@@ -24,7 +24,7 @@ module PaketService =
         Globals.exec(cmd,unbox<AnonymousType600>options, System.Func<_,_,_,_>(handle)) |> ignore
 
     let UpdatePaket () = 
-        let cmd = bootstraperLocation()
+        let cmd = bootstrapperLocation()
         Globals.exec(cmd, System.Func<_,_,_,_>(handle)) |> ignore
 
     let Init () = "init" |> exec
