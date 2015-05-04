@@ -6,11 +6,11 @@
 From the packages settings inside Atom:
 
 * install "language-fsharp" package
-* install "autocomplete-plus" package (disable build-in atom autocomplete for best experinace)
+* install "autocomplete-plus" package (disable build-in atom autocomplete for best experience)
 
 Later:
 
-* clone / downlad this repository
+* clone / download this repository
 * copy folder `src/core` to Atom package folder
 
 ## Features
@@ -18,4 +18,4 @@ Later:
 - Auto completions. 
 - Error highlighting and error list in bottom panel.
 - Tooltips.
-- Support for scrip files or F# projects
+- Support for script files or F# projects
