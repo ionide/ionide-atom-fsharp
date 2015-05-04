@@ -2,7 +2,7 @@
   "name": "FSharp.Atom.paket",
   "main": "./lib/paket",
   "version": "0.0.1",
-  "description": "A short description of your package",
+  "description": "A package dependency manager for .NET with support for NuGet packages and GitHub repositories.",
   "repository": "https://github.com/Krzysztof-Cieslak/FSharp.Atom",
   "license": "Appache 2.0",
   "engines": {
