@@ -25,6 +25,8 @@ open Fake.ZipHelper
 // Build the Generator project and run it
 // --------------------------------------------------------------------------------------
 
+DeleteFile "src/paket/bin/paket.exe"
+
 Target "BuildGenerator" (fun () ->
     [ __SOURCE_DIRECTORY__ @@ "src" @@ "FSharp.Atom.Generator.fsproj" ]
     |> MSBuildDebug "" "Rebuild"

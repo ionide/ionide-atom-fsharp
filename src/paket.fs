@@ -28,12 +28,16 @@ module PaketService =
 
 
     let UpdatePaket () = exec bootstrapperLocation ""
-    let Init () = "init" |> exec location
-    let Install () = "install" |> exec location
-    let Update () = "update" |> exec location
-    let Outdated () = "outdated" |> exec location
 
+    let execPaket cmd =
+        if not (System.IO.File.Exists location) then
+            UpdatePaket()
+        exec location cmd
 
+    let Init () = "init" |> execPaket
+    let Install () = "install" |> execPaket
+    let Update () = "update" |> execPaket
+    let Outdated () = "outdated" |> execPaket
 
 
 type Paket() =
