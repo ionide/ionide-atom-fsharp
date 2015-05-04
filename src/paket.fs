@@ -30,10 +30,7 @@ module PaketService =
 
     let UpdatePaket () = exec bootstrapperLocation ""
 
-    let execPaket cmd =
-        if not (System.IO.File.Exists location) then
-            UpdatePaket()
-        exec location cmd
+    let execPaket cmd = exec location cmd
 
     let Init () = "init" |> execPaket
     let Install () = "install" |> execPaket
@@ -46,6 +43,7 @@ type Paket() =
 
 
     member x.activate(state:obj) =
+        PaketService.UpdatePaket()
         Atom.addCommand("atom-workspace", "Paket: Update Paket", PaketService.UpdatePaket)
         Atom.addCommand("atom-workspace", "Paket: Init", PaketService.Init)
         Atom.addCommand("atom-workspace", "Paket: Install", PaketService.Install)
