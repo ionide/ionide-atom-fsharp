@@ -17,6 +17,7 @@ module PaketService =
     let notice (kind : string, text : string) =
         let overlay = Globals.document.createElement("div")
         overlay.setAttribute("class","overlay paket from-top from-right")
+        overlay.setAttribute("style","text-align: left")
         overlay.innerText <- text
         Globals.atom.workspaceView.appendToBottom(overlay) |> ignore
         Globals.setTimeout(System.Func<_,_>(fun _ -> overlay.classList.add("fade-out")),4000.0) |> ignore
@@ -24,9 +25,12 @@ module PaketService =
 
     let handle (error : Error) (stdout : Buffer) (stderr : Buffer) =
         let output = stdout.toString()
+        let errorText = stderr.toString()
         notice("", output)
         Globals.atom.emit("FSharp:Output", output)
         Globals.console.log(output)
+        if errorText <> "" then
+            notice("error", "Error: " + errorText)
 
     let exec location cmd =
         let cmd' = location + " " + cmd
