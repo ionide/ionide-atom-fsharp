@@ -13,10 +13,10 @@ open Atom
 
 
 [<AutoOpen>]
-module ViewsHelpers = 
+module ViewsHelpers =
 
     type Coordinates = {top : float; left : float}
-    
+
     [<JSEmitInline("atom.views.getView({0})")>]
     let getView(editor : IEditor) : Element = failwith "JS"
 
@@ -90,8 +90,8 @@ module AutocompleteService =
     /// Starts the 'fsautocomplete.exe' process. If we are
     /// running on Windows, just start it. On Mac, use mono!
     let start t =
-        let location = 
-            // TODO: We assume the folder with our pacakge is 'core'
+        let location =
+            // TODO: We assume the folder with our package is 'core'
             // This is probably wrong...
             Globals.atom.packages.packageDirPaths.[0] + "/core/bin/fsautocomplete.exe"
         let child =
@@ -365,7 +365,7 @@ module ErrorPanelView =
             list.children().remove() |> ignore
             lst |> Array.iter(fun e -> let t = e |> createRow editor
                                        let r = t |> list.append
-                                       ()) 
+                                       ())
 
 
     type PanelOptions =
@@ -382,7 +382,7 @@ type Core() =
         Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>( fun ed -> AutocompleteHandler.parseEditor ed (fun _ -> ()) service |> ignore))
         Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(ErrorPanelView.hadnleEditorChange panel))
         Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(fun ed -> Globals.setTimeout((fun _ -> TooltipHandler.initialize service ed), 1000.)))
-        Globals.atom.on("FSharp:Highlight", unbox<Function>(HighlighterHandler.handle))
+        Globals.atohadnleEditorChangem.on("FSharp:Highlight", unbox<Function>(HighlighterHandler.handle))
         Globals.atom.on("FSharp:Highlight", unbox<Function>(ErrorPanelView.handle))
 
     let projInit () =
