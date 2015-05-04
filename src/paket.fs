@@ -39,6 +39,7 @@ module PaketService =
     let Install () = "install" |> execPaket
     let Update () = "update" |> execPaket
     let Outdated () = "outdated" |> execPaket
+    let Restore () = "restore" |> execPaket
 
 
 type Paket() =
@@ -49,6 +50,7 @@ type Paket() =
         Atom.addCommand("atom-workspace", "Paket: Init", PaketService.Init)
         Atom.addCommand("atom-workspace", "Paket: Install", PaketService.Install)
         Atom.addCommand("atom-workspace", "Paket: Update", PaketService.Update)
+        Atom.addCommand("atom-workspace", "Paket: Restore", PaketService.Restore)
         Atom.addCommand("atom-workspace", "Paket: Outdated", PaketService.Outdated)
         ()
 
