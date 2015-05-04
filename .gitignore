@@ -42,3 +42,5 @@ typings/FunScript.TypeScript/*.txt
 src/bin/
 src/obj/
 *.userprefs
+src/core/lib/core.js
+src/paket/lib/paket.js
