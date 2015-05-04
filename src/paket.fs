@@ -24,9 +24,12 @@ module PaketService =
 
     let handle (error : Error) (stdout : Buffer) (stderr : Buffer) =
         let output = stdout.toString()
+        let errorText = stderr.toString()
         notice("", output)
         Globals.atom.emit("FSharp:Output", output)
         Globals.console.log(output)
+        if errorText <> "" then
+            notice("error", "Error: " + errorText)
 
     let exec location cmd =
         let cmd' = location + " " + cmd
