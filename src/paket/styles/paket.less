@@ -5,4 +5,19 @@
 @import "ui-variables";
 
 .paket {
+  &.overlay {
+  transition: opacity 0.25s;
+  text-align: center;
+  opacity: 1;
+  &.fade-out { opacity: 0; }
+  &.warning { color: @text-color-error; }
+  &.success { color: @text-color-success; }
+  border-color: white;
+  border-width: 1px;
+  border-style: solid;
+  right: 0;
+  top: 10px;
+  left: initial;
+}
+
 }

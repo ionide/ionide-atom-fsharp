@@ -14,8 +14,17 @@ module PaketService =
     let location = Globals.atom.packages.packageDirPaths.[0] + "/paket/bin/paket.exe"
     let bootstrapperLocation = Globals.atom.packages.packageDirPaths.[0] + "/paket/bin/paket.bootstrapper.exe"
 
+    let notice (kind : string, text : string) =
+        let overlay = Globals.document.createElement("div")
+        overlay.setAttribute("class","overlay paket from-top from-right")
+        overlay.innerText <- text
+        Globals.atom.workspaceView.appendToBottom(overlay) |> ignore
+        Globals.setTimeout(System.Func<_,_>(fun _ -> overlay.classList.add("fade-out")),4000.0) |> ignore
+        Globals.setTimeout(System.Func<_,_>(fun _ -> overlay.parentElement.removeChild(overlay) |> ignore),4500.0) |> ignore
+
     let handle (error : Error) (stdout : Buffer) (stderr : Buffer) =
         let output = stdout.toString()
+        notice("", output)
         Globals.atom.emit("FSharp:Output", output)
         Globals.console.log(output)
 
@@ -26,6 +35,8 @@ module PaketService =
             Globals.exec(cmd', unbox<AnonymousType600>options,  System.Func<_,_,_,_>(handle)) |> ignore
         else
             Globals.exec("mono" + cmd', unbox<AnonymousType600>options,  System.Func<_,_,_,_>(handle)) |> ignore
+
+
 
 
     let UpdatePaket () = exec bootstrapperLocation ""
