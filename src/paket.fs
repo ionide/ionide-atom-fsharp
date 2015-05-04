@@ -27,7 +27,7 @@ module PaketService =
 
 
     let UpdatePaket () =
-        let cmd = bootstraperLocation()
+        let cmd = bootstrapperLocation()
         if Globals._process.platform.StartsWith("win") then
             Globals.exec(cmd, System.Func<_,_,_,_>(handle)) |> ignore
         else
