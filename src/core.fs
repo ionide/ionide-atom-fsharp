@@ -350,10 +350,16 @@ module ErrorPanelView =
                             j.addClass("toggle") :> obj ) |> ignore
 
     let addOutputHandle () =
-
         Globals.atom.on("FSharp:Output", unbox<Function>(fun (msg : string) ->
             let msg' = msg.Replace("\n", "</br>")
-            jq("#panelOutput").append ( sprintf "<span>%s</span>" msg' )))
+            do jq("#panelOutput").append ( sprintf "<span>%s</span>" msg' ) |> ignore
+            do jq("#panelOutput").append ( sprintf "<span>%s</span>" msg' ) |> ignore
+            if jq("#panelOutput").isVisible () then
+               let n = jq("#pane")
+               do n.scrollTop(n.height()) |> ignore
+
+
+            ))
 
     let handleEditorChange (panel : IPanel) (editor : AtomCore.IEditor) =
         if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then panel.show() else panel.hide()

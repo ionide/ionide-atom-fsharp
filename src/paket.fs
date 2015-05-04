@@ -16,7 +16,7 @@ module PaketService =
 
     let notice (kind : string, text : string) =
         let overlay = Globals.document.createElement("div")
-        overlay.setAttribute("class","overlay paket from-top from-right")
+        overlay.setAttribute("class","overlay paket from-top")
         overlay.setAttribute("style","text-align: left")
         overlay.innerText <- text
         Globals.atom.workspaceView.appendToBottom(overlay) |> ignore
