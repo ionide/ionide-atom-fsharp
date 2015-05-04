@@ -26,25 +26,25 @@ module ViewsHelpers =
     let jq(selector : string) = Globals.Dollar.Invoke selector
     let jq'(selector : Element) = Globals.Dollar.Invoke selector
     let (?) jq name = jq("#" + name)
-    
+
     let getElementsByClass cls e =
-        e 
+        e
         |> fun n -> if JS.isDefined n then Some n else None
         |> Option.map( Atom.JS.getProperty<HTMLElement>("rootElement") )
         |> Option.map (fun n -> n.querySelectorAll(cls) )
 
-    let pixelPositionFromMouseEvent (e : JQueryMouseEventObject) = 
-        getView 
+    let pixelPositionFromMouseEvent (e : JQueryMouseEventObject) =
+        getView
         >> getElementsByClass ".lines"
         >> Option.map( fun n -> n.[0] |> getBoundingClientRect)
-        >> fun n' -> match n' with 
+        >> fun n' -> match n' with
                      | Some n -> { top = e.clientY - n.top; left =  e.clientX - n.left}
                      | None  -> {top = 0.; left = 0.}
 
-    let screenPositionFromMouseEvent (e : JQueryMouseEventObject) (editor : IEditor) = 
+    let screenPositionFromMouseEvent (e : JQueryMouseEventObject) (editor : IEditor) =
         editor.screenPositionForPixelPosition(pixelPositionFromMouseEvent e editor)
 
-    let bufferPositionFromMouseEvent (e : JQueryMouseEventObject) (editor : IEditor) = 
+    let bufferPositionFromMouseEvent (e : JQueryMouseEventObject) (editor : IEditor) =
         pixelPositionFromMouseEvent e editor
         |> editor.screenPositionForPixelPosition
         |> editor.bufferPositionForScreenPosition
@@ -87,17 +87,17 @@ module AutocompleteService =
 
     let create = { State = State.Off; PreviousState = State.Off; Child = None }
 
-    /// Starts the 'fsautocomplete.exe' process. If we are 
+    /// Starts the 'fsautocomplete.exe' process. If we are
     /// running on Windows, just start it. On Mac, use mono!
     let start t =
         let location = 
-            // TODO: We assume the folder with our package is 'core'
+            // TODO: We assume the folder with our pacakge is 'core'
             // This is probably wrong...
             Globals.atom.packages.packageDirPaths.[0] + "/core/bin/fsautocomplete.exe"
-        let child = 
+        let child =
             if Globals._process.platform.StartsWith("win") then
                 Globals.spawn(location)
-            else 
+            else
                 Globals.spawn("mono", [| location |])
 
         { t with State = State.On; PreviousState = t.State; Child = Some child }
@@ -234,13 +234,13 @@ module HighlighterHandler =
         lst |> Array.iter(action)
         ()
 
-module TooltipHandler = 
+module TooltipHandler =
     type position = {row : float; column : float}
 
-    let create () = 
+    let create () =
        "<div class='type-tooltip tooltip'><div class='tooltip-inner'></div></div>" |> jq
 
-    let getPosition e editor = 
+    let getPosition e editor =
         let bufferPt = bufferPositionFromMouseEvent e editor
         {row = bufferPt.row; column = bufferPt.column}
 
@@ -248,54 +248,54 @@ module TooltipHandler =
     let mutable timer : NodeJS.Timer option = None
     let tooltip = create ()
 
-    let clearTimer () = 
+    let clearTimer () =
         tooltip.fadeOut() |> ignore
         timer |> Option.iter (Globals.clearTimeout)
         timer <- None
 
     let register service editor time element =
-        
+
         jq(".panes").append tooltip |> ignore
 
-        element |> jq'  
-        |> fun n -> n.mousemove(fun e -> 
+        element |> jq'
+        |> fun n -> n.mousemove(fun e ->
             let pos = getPosition e editor
-            if pos = lastPosition then 
+            if pos = lastPosition then
                 () :> obj
-            else           
-                clearTimer()         
+            else
+                clearTimer()
                 lastPosition <- pos
                 timer <- Some ( Globals.setTimeout((fun _ -> let path = editor.buffer.file.path
                                                              service
-                                                             |> AutocompleteHandler.tooltip path (int pos.row + 1) (int pos.column) 
+                                                             |> AutocompleteHandler.tooltip path (int pos.row + 1) (int pos.column)
                                                                 (fun s -> tooltip.[0].firstElementChild
                                                                           |> fun n -> try
-                                                                                        if (jq "body /deep/ span.fsharp:hover").length > 0. then                                                                                      
+                                                                                        if (jq "body /deep/ span.fsharp:hover").length > 0. then
                                                                                             let o = unbox<AutocompleteResults.TooltipResult>(Globals.JSON.parse s)
                                                                                             if o.Data <> "No tooltip information" then
-                                                                                                Globals.document.elementFromPoint(e.clientX, e.clientY) 
+                                                                                                Globals.document.elementFromPoint(e.clientX, e.clientY)
                                                                                                 |> Globals.console.log
-                                                                                                let position = pixelPositionFromMouseEvent e editor 
+                                                                                                let position = pixelPositionFromMouseEvent e editor
                                                                                                 let n' = jq'(n)
                                                                                                 n'.empty() |> ignore
                                                                                                 o.Data.Replace("\\n", "</br>")
-                                                                                                |> fun n ->  n.Replace("\n", "</br>") 
+                                                                                                |> fun n ->  n.Replace("\n", "</br>")
                                                                                                 |>  n'.append |> ignore
                                                                                                 tooltip.css("left", position.left + 40.) |> ignore
-                                                                                                tooltip.css("top", e.clientY + 20.) |> ignore       
-                                                                                                tooltip.fadeTo(300., 60.) |> ignore                                                                                 
+                                                                                                tooltip.css("top", e.clientY + 20.) |> ignore
+                                                                                                tooltip.fadeTo(300., 60.) |> ignore
                                                                                       with
                                                                                       | ex -> ()
-                                                                )                        
+                                                                )
                                                             |> ignore
                                                 ), time))
                 () :> obj) |> ignore
                     n.mouseleave(fun e -> clearTimer () :> obj) |> ignore
                     n.scroll(fun e -> clearTimer() :> obj) |> ignore
 
-    let initialize (service : AutocompleteService.T) (editor : IEditor) = 
+    let initialize (service : AutocompleteService.T) (editor : IEditor) =
         if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
-            editor 
+            editor
             |> Globals.atom.views.getView
             |> getElementsByClass ".scroll-view"
             |> Option.map (fun n -> n.[0] |> unbox<Element>)
@@ -338,20 +338,20 @@ module ErrorPanelView =
     let addButtonHandlers () =
         let btns = jq(".btn-toggle button")
         let panels = jq(".outputPanel")
-        btns.click(fun e -> let j = jq'( e.target)   
+        btns.click(fun e -> let j = jq'( e.target)
                             btns.removeClass("toggle") |> ignore
                             panels.hide() |> ignore
                             match j.attr("id") with
                             | "btnError" -> jq("#panelError").show() |> ignore
                             | "btnOutput" -> jq("#panelOutput").show() |> ignore
                             | _ -> ()
-                                
+
 
                             j.addClass("toggle") :> obj ) |> ignore
 
-    let addOutputHandle () = 
-            
-        Globals.atom.on("FSharp:Output", unbox<Function>(fun (msg : string) -> 
+    let addOutputHandle () =
+
+        Globals.atom.on("FSharp:Output", unbox<Function>(fun (msg : string) ->
             let msg' = msg.Replace("\n", "</br>")
             jq("#panelOutput").append ( sprintf "<span>%s</span>" msg' )))
 
@@ -365,8 +365,8 @@ module ErrorPanelView =
             list.children().remove() |> ignore
             lst |> Array.iter(fun e -> let t = e |> createRow editor
                                        let r = t |> list.append
-                                       ())
-            
+                                       ()) 
+
 
     type PanelOptions =
         { item: JQuery;
@@ -378,19 +378,19 @@ type Core() =
                   |> AutocompleteService.start
                   |> AutocompleteService.send "outputmode json\n"
 
-    let register panel = 
+    let register panel =
         Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>( fun ed -> AutocompleteHandler.parseEditor ed (fun _ -> ()) service |> ignore))
-        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(ErrorPanelView.handleEditorChange panel))
-        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(fun ed -> Globals.setTimeout((fun _ -> TooltipHandler.initialize service ed), 1000.)))     
+        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(ErrorPanelView.hadnleEditorChange panel))
+        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(fun ed -> Globals.setTimeout((fun _ -> TooltipHandler.initialize service ed), 1000.)))
         Globals.atom.on("FSharp:Highlight", unbox<Function>(HighlighterHandler.handle))
         Globals.atom.on("FSharp:Highlight", unbox<Function>(ErrorPanelView.handle))
-       
+
     let projInit () =
-        let p = Globals.atom.project.getPath ()    
+        let p = Globals.atom.project.getPath ()
         let proj (ex : NodeJS.ErrnoException) (arr : string array) =
-            let projExist = arr |> Array.tryFind(fun a -> a.Split('.').[1] = "fsproj")
+            let projExist = arr |> Array.tryFind(fun a -> a.Split('.') |> fun n -> n.[n.Length - 1]  = "fsproj")
             match projExist with
-            | Some a -> 
+            | Some a ->
                 let path = Globals.atom.project.resolve a
                 service |> AutocompleteHandler.project path (fun _ -> service |> AutocompleteHandler.parseCurrent (fun _ -> ()) |> ignore)
                 |> ignore
@@ -398,16 +398,16 @@ type Core() =
 
         Globals.readdir(p, System.Func<NodeJS.ErrnoException, string array, unit>(proj))
 
-    let initialize panel = 
-        projInit()        
-        Globals.atom.workspace.getActiveTextEditor() |> ErrorPanelView.handleEditorChange panel
+    let initialize panel =
+        projInit()
+        Globals.atom.workspace.getActiveTextEditor() |> ErrorPanelView.hadnleEditorChange panel
         Globals.atom.workspace.getActiveTextEditor() |> TooltipHandler.initialize service
         ErrorPanelView.addButtonHandlers ()
         ErrorPanelView.addOutputHandle ()
-        
-        
-        
-        
+
+
+
+
 
     member x.provide ()=
         AutocompleteProvider.create service
@@ -422,7 +422,7 @@ type Core() =
 
         panel |> register
         panel |> initialize
-        
+
         ()
 
     member x.deactivate() =

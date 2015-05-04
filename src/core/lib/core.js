@@ -95,25 +95,25 @@ Array__FoldIndexed$Unit__IDisplayBufferMarker_Unit__IDisplayBufferMarker_ = (fun
 });
 Array__Iterate$Error_Error_ = (function(f,xs)
 {
-    var _884;
+    var _1309;
     return Array__Fold$Error__Unit_Error__Unit_((function(unitVar0)
     {
       return (function(x)
       {
         return f(x);
       });
-    }), _884, xs);
+    }), _1309, xs);
 });
 Array__Iterate$IDisplayBufferMarker_IDisplayBufferMarker_ = (function(f,xs)
 {
-    var _811;
+    var _1236;
     return Array__Fold$IDisplayBufferMarker__Unit_IDisplayBufferMarker__Unit_((function(unitVar0)
     {
       return (function(x)
       {
         return f(x);
       });
-    }), _811, xs);
+    }), _1236, xs);
 });
 Array__Length$Error_Error_ = (function(xs)
 {
@@ -313,16 +313,16 @@ AutocompleteProvider__getSuggestion$ = (function(service,options)
           try
           {
             var result = ((window.JSON).parse(msg));
-            var _1195;
+            var _331;
             if (((prefix == ".") || (prefix == "="))) 
             {
-              _1195 = "";
+              _331 = "";
             }
             else
             {
-              _1195 = prefix;
+              _331 = prefix;
             };
-            var pref = _1195;
+            var pref = _331;
             if ((result.Kind == "completion")) 
             {
               return resolve(Seq__ToArray$Object_Object_(Seq__Map$String_1_Object_String_Object_((function(t)
@@ -442,8 +442,8 @@ Core__getSuggestion$ = (function(x,options)
 });
 Core__initialize$ = (function(_this,panel)
 {
-    var _992;
-    var arg10_ = _992;
+    var _1417;
+    var arg10_ = _1417;
     Core__projInit$(_this);
     ErrorPanelView__hadnleEditorChange$(panel, (((window.atom).workspace).getActiveTextEditor()));
     TooltipHandler__initialize$(_this.service, (((window.atom).workspace).getActiveTextEditor()));
@@ -459,7 +459,7 @@ Core__projInit$ = (function(_this,unitVar0)
       {
         var projExist = Array__TryFind$String_1String((function(a)
         {
-          return (String__SplitWithoutOptions$(a, ["."])[1] == "fsproj");
+          return (String__SplitWithoutOptions$(a, ["."])[(Array__BoxedLength$(String__SplitWithoutOptions$(a, ["."])) - 1)] == "fsproj");
         }), arr);
         if ((projExist.Tag == 0.000000)) 
         {
@@ -471,7 +471,7 @@ Core__projInit$ = (function(_this,unitVar0)
         else
         {
           var a = Option__GetValue$String_1String(projExist);
-          var path = ((p + "\\") + a);
+          var path = (((window.atom).project).resolve(a));
           var _ignored0 = AutocompleteHandler__project$(path, (function(_arg4)
           {
             var __ignored0 = AutocompleteHandler__parseCurrent$((function(_arg3)
@@ -580,7 +580,7 @@ ErrorPanelView__addOutputHandle$ = (function(unitVar0)
 });
 ErrorPanelView__create$ = (function(unitVar0)
 {
-    return ViewsHelpers__jq$("\u003cdiv class=\u0027tool-panel panel-bottom error-pane\u0027 id=\u0027pane\u0027\u003e\r\n                \u003cdiv class=\u0027inset-panel\u0027\u003e\r\n                \u003cdiv class=\u0027panel-heading clearfix\u0027\u003e\r\n                    \u003cdiv class=\u0027btn-toolbar pull-left\u0027\u003e\r\n                        \u003cdiv class=\u0027btn-group btn-toggle\u0027\u003e\r\n                            \u003cbutton id=\u0027btnError\u0027 class=\u0027btn toggle\u0027\u003eErrors\u003c/button\u003e\r\n                            \u003cbutton id=\u0027btnOutput\u0027 class=\u0027btn\u0027 \u003eOutput\u003c/button\u003e\r\n                        \u003c/div\u003e\r\n                    \u003c/div\u003e\r\n                \u003c/div\u003e\r\n                \u003ctable id=\u0027panelError\u0027 class=\u0027error-table outputPanel\u0027 \u003e\r\n                    \u003cthead\u003e\u003cth\u003ePosition\u003c/th\u003e\u003cth\u003eMessage\u003c/th\u003e\u003cth\u003eType\u003c/th\u003e\u003cth\u003eCategory\u003c/th\u003e\u003c/thead\u003e\r\n                    \u003ctbody id=\u0027errorList\u0027\u003e\r\n                \u003c/table\u003e\r\n                \u003cdiv id=\u0027panelOutput\u0027 class=\u0027error-table outputPanel\u0027 style=\u0027display : none\u0027\u003e\u003c/span\u003e\r\n\r\n            \u003c/div\u003e\r\n            \u003c/div\u003e");
+    return ViewsHelpers__jq$("\u003cdiv class=\u0027tool-panel panel-bottom error-pane\u0027 id=\u0027pane\u0027\u003e\n                \u003cdiv class=\u0027inset-panel\u0027\u003e\n                \u003cdiv class=\u0027panel-heading clearfix\u0027\u003e\n                    \u003cdiv class=\u0027btn-toolbar pull-left\u0027\u003e\n                        \u003cdiv class=\u0027btn-group btn-toggle\u0027\u003e\n                            \u003cbutton id=\u0027btnError\u0027 class=\u0027btn toggle\u0027\u003eErrors\u003c/button\u003e\n                            \u003cbutton id=\u0027btnOutput\u0027 class=\u0027btn\u0027 \u003eOutput\u003c/button\u003e\n                        \u003c/div\u003e\n                    \u003c/div\u003e\n                \u003c/div\u003e\n                \u003ctable id=\u0027panelError\u0027 class=\u0027error-table outputPanel\u0027 \u003e\n                    \u003cthead\u003e\u003cth\u003ePosition\u003c/th\u003e\u003cth\u003eMessage\u003c/th\u003e\u003cth\u003eType\u003c/th\u003e\u003cth\u003eCategory\u003c/th\u003e\u003c/thead\u003e\n                    \u003ctbody id=\u0027errorList\u0027\u003e\n                \u003c/table\u003e\n                \u003cdiv id=\u0027panelOutput\u0027 class=\u0027error-table outputPanel\u0027 style=\u0027display : none\u0027\u003e\u003c/span\u003e\n\n            \u003c/div\u003e\n            \u003c/div\u003e");
 });
 ErrorPanelView__createRow$ = (function(editor,e)
 {
@@ -654,16 +654,16 @@ HighlighterHandler__handle$ = (function(lst)
     var action = (function(item)
     {
       var marker = (editor.markBufferRange([[item.StartLine, item.StartColumn], [item.EndLine, item.EndColumn]]));
-      var _862;
+      var _1287;
       if ((item.Severity == "Warning")) 
       {
-        _862 = "highlight-warning";
+        _1287 = "highlight-warning";
       }
       else
       {
-        _862 = "highlight-error";
+        _1287 = "highlight-error";
       };
-      var cls = _862;
+      var cls = _1287;
       HighlighterHandler__marked = Array__Append$IDisplayBufferMarker_IDisplayBufferMarker_([marker], HighlighterHandler__marked);
       editor.decorateMarker(marker, {type: 'highlight', class: cls});
     });
@@ -832,16 +832,16 @@ Seq__Delay$Object_Object_ = (function(f)
 {
     return Seq__FromFactory$Object_Object_((function(unitVar0)
     {
-      var _1461;
-      return Seq__Enumerator$Object_Object_(f(_1461));
+      var _597;
+      return Seq__Enumerator$Object_Object_(f(_597));
     }));
 });
 Seq__Delay$String_1String = (function(f)
 {
     return Seq__FromFactory$String_1String((function(unitVar0)
     {
-      var _1370;
-      return Seq__Enumerator$String_1String(f(_1370));
+      var _506;
+      return Seq__Enumerator$String_1String(f(_506));
     }));
 });
 Seq__Enumerator$Object_Object_ = (function(xs)
@@ -924,8 +924,8 @@ Seq__FromFactory$Object_Object_ = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _1453;
-        return __.factory(_1453);
+        var _589;
+        return __.factory(_589);
       })(impl, unitVar1);
     })};
 });
@@ -937,8 +937,8 @@ Seq__FromFactory$String_1String = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _1298;
-        return __.factory(_1298);
+        var _434;
+        return __.factory(_434);
       })(impl, unitVar1);
     })};
 });
@@ -950,14 +950,14 @@ Seq__FromFactory$String___String___ = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _229;
-        return __.factory(_229);
+        var _216;
+        return __.factory(_216);
       })(impl, unitVar1);
     })};
 });
 Seq__IterateIndexed$Object_Object_ = (function(f,xs)
 {
-    var _1475;
+    var _611;
     return Seq__FoldIndexed$Object__Unit_Object__Unit_((function(i)
     {
       return (function(unitVar1)
@@ -967,11 +967,11 @@ Seq__IterateIndexed$Object_Object_ = (function(f,xs)
           return f(i)(x);
         });
       });
-    }), _1475, xs);
+    }), _611, xs);
 });
 Seq__IterateIndexed$String___String___ = (function(f,xs)
 {
-    var _249;
+    var _236;
     return Seq__FoldIndexed$String____Unit_String____Unit_((function(i)
     {
       return (function(unitVar1)
@@ -981,7 +981,7 @@ Seq__IterateIndexed$String___String___ = (function(f,xs)
           return f(i)(x);
         });
       });
-    }), _249, xs);
+    }), _236, xs);
 });
 Seq__Map$String_1_Object_String_Object_ = (function(f,xs)
 {
@@ -1097,8 +1097,8 @@ Seq__Unfold$IEnumerator_1_String__Object_IEnumerator_1_String__Object_ = (functi
           });
           return (Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_(__.acc) && (function()
           {
-            var _1431;
-            return next(_1431);
+            var _567;
+            return next(_567);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1154,8 +1154,8 @@ Seq__Unfold$IEnumerator_1_String__String_1IEnumerator_1_String__String = (functi
           });
           return (Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_(__.acc) && (function()
           {
-            var _1347;
-            return next(_1347);
+            var _483;
+            return next(_483);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1211,8 +1211,8 @@ Seq__Unfold$Int32__String_1Int32_String = (function(f,seed)
           });
           return (Option__IsSome$Int32_Int32(__.acc) && (function()
           {
-            var _1276;
-            return next(_1276);
+            var _412;
+            return next(_412);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1268,8 +1268,8 @@ Seq__Unfold$Int32__String___Int32_String___ = (function(f,seed)
           });
           return (Option__IsSome$Int32_Int32(__.acc) && (function()
           {
-            var _207;
-            return next(_207);
+            var _194;
+            return next(_194);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1624,13 +1624,7 @@ return [(function(ign)
     return (new Core___ctor$());
 }), (function(_this)
 {
-    return Core__deactivate$(_this);
-}), (function(_this)
-{
-    return (function(p0)
-    {
-      return Core__activate$(_this, p0);
-    });
+    return Core__provide$(_this);
 }), (function(_this)
 {
     return (function(p0)
@@ -1639,19 +1633,25 @@ return [(function(ign)
     });
 }), (function(_this)
 {
-    return Core__provide$(_this);
+    return (function(p0)
+    {
+      return Core__activate$(_this, p0);
+    });
+}), (function(_this)
+{
+    return Core__deactivate$(_this);
 })]
  }
 var _funcs = wrappedFunScript();
 var _self = _funcs[0]();
 
 module.exports = AtomFSharpCore = {
-deactivate: function() {
-  return _funcs[1](_self); },
-activate: function(p1) {
-  return _funcs[2](_self)(p1); },
-getSuggestion: function(p1) {
-  return _funcs[3](_self)(p1); },
 provide: function() {
+  return _funcs[1](_self); },
+getSuggestion: function(p1) {
+  return _funcs[2](_self)(p1); },
+activate: function(p1) {
+  return _funcs[3](_self)(p1); },
+deactivate: function() {
   return _funcs[4](_self); }
 };

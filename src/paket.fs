@@ -1,5 +1,5 @@
 [<ReflectedDefinition>]
-module Paket 
+module Paket
 
 open FunScript
 open FunScript.TypeScript
@@ -8,24 +8,30 @@ open FunScript.TypeScript.AtomCore
 
 open Atom
 
-module PaketService = 
-    let location () = Globals.atom.packages.packageDirPaths.[0] + "\\paket\\bin\\paket.exe"
-    let bootstrapperLocation () = Globals.atom.packages.packageDirPaths.[0] + "\\paket\\bin\\paket.bootstrapper.exe"
-    
-    let handle (error : Error) (stdout : Buffer) (stderr : Buffer) =
-        Globals.atom.emit("FSharp:Output", stdout.toString())
-        Globals.console.log(stdout.toString())  
-
+module PaketService =
     type Options = {cwd : string}
 
-    let exec opt = 
-        let cmd = location() + " " + opt 
-        let options = {cwd = Globals.atom.project.getPath()}
-        Globals.exec(cmd,unbox<AnonymousType600>options, System.Func<_,_,_,_>(handle)) |> ignore
+    let location () = Globals.atom.packages.packageDirPaths.[0] + "/paket/bin/paket.exe"
+    let bootstraperLocation () = Globals.atom.packages.packageDirPaths.[0] + "/paket/bin/paket.bootstrapper.exe"
 
-    let UpdatePaket () = 
-        let cmd = bootstrapperLocation()
-        Globals.exec(cmd, System.Func<_,_,_,_>(handle)) |> ignore
+    let handle (error : Error) (stdout : Buffer) (stderr : Buffer) =
+        Globals.atom.emit("FSharp:Output", stdout.toString())
+        Globals.console.log(stdout.toString())
+
+    let exec cmd =
+        let options = {cwd = Globals.atom.project.getPath()}
+        if Globals._process.platform.StartsWith("win") then
+            Globals.exec(cmd, unbox<AnonymousType600>options,  System.Func<_,_,_,_>(handle)) |> ignore
+        else
+            Globals.exec("mono" + cmd, unbox<AnonymousType600>options,  System.Func<_,_,_,_>(handle)) |> ignore
+
+
+    let UpdatePaket () =
+        let cmd = bootstraperLocation()
+        if Globals._process.platform.StartsWith("win") then
+            Globals.exec(cmd, System.Func<_,_,_,_>(handle)) |> ignore
+        else
+            Globals.exec("mono" + cmd,  System.Func<_,_,_,_>(handle)) |> ignore
 
     let Init () = "init" |> exec
     let Install () = "install" |> exec
@@ -35,10 +41,10 @@ module PaketService =
 
 
 
-type Paket() = 
+type Paket() =
 
 
-    member x.activate(state:obj) =    
+    member x.activate(state:obj) =
         Atom.addCommand("atom-workspace", "Paket: Update Paket", PaketService.UpdatePaket)
         Atom.addCommand("atom-workspace", "Paket: Init", PaketService.Init)
         Atom.addCommand("atom-workspace", "Paket: Install", PaketService.Install)
@@ -46,5 +52,5 @@ type Paket() =
         Atom.addCommand("atom-workspace", "Paket: Outdated", PaketService.Outdated)
         ()
 
-    member x.deactivate() = 
+    member x.deactivate() =
         ()

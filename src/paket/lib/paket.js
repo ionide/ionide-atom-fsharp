@@ -3,7 +3,7 @@ var child_process = require('child_process');
 window.$ = require('atom').$;
 
 function wrappedFunScript() { 
-var Paket__deactivate$, Paket__activate$, Paket___ctor$, PaketService__location$, PaketService__handle$, PaketService__exec$, PaketService__bootstraperLocation$, PaketService__UpdatePaket$, PaketService__Update$, PaketService__Outdated$, PaketService__Install$, PaketService__Init$, Options___ctor$, Atom__addCommand$Unit_Unit_;
+var String__StartsWith$, Paket__deactivate$, Paket__activate$, Paket___ctor$, PaketService__handle$, PaketService__exec$, PaketService__bootstraperLocation$, PaketService__UpdatePaket$, PaketService__Update$, PaketService__Outdated$, PaketService__Install$, PaketService__Init$, Options___ctor$, Atom__addCommand$Unit_Unit_;
 Atom__addCommand$Unit_Unit_ = (function(name,cmdName,func)
 {
     var cmd = {}; cmd[cmdName]=function() { return func(); }; return atom.commands.add(name, cmd);;
@@ -32,32 +32,47 @@ PaketService__Update$ = (function(unitVar0)
 PaketService__UpdatePaket$ = (function(unitVar0)
 {
     var cmd = PaketService__bootstraperLocation$();
-    var ignored0 = (child_process.exec(cmd, (function(delegateArg,_delegateArg,__delegateArg)
+    if (String__StartsWith$(((window.process).platform), "win")) 
     {
-      return PaketService__handle$(delegateArg, _delegateArg, __delegateArg);
-    })));
+      var ignored0 = (child_process.exec(cmd, (function(delegateArg,_delegateArg,__delegateArg)
+      {
+        return PaketService__handle$(delegateArg, _delegateArg, __delegateArg);
+      })));
+    }
+    else
+    {
+      var _ignored0 = (child_process.exec(("mono" + cmd), (function(delegateArg,_delegateArg,__delegateArg)
+      {
+        return PaketService__handle$(delegateArg, _delegateArg, __delegateArg);
+      })));
+    };
 });
 PaketService__bootstraperLocation$ = (function(unitVar0)
 {
     return ((((window.atom).packages).packageDirPaths)[0] + "\\paket\\bin\\paket.bootstrapper.exe");
 });
-PaketService__exec$ = (function(opt)
+PaketService__exec$ = (function(cmd)
 {
-    var cmd = ((PaketService__location$() + " ") + opt);
     var options = (new Options___ctor$((((window.atom).project).getPath())));
-    var ignored0 = (child_process.exec(cmd, options, (function(delegateArg,_delegateArg,__delegateArg)
+    if (String__StartsWith$(((window.process).platform), "win")) 
     {
-      return PaketService__handle$(delegateArg, _delegateArg, __delegateArg);
-    })));
+      var ignored0 = (child_process.exec(cmd, options, (function(delegateArg,_delegateArg,__delegateArg)
+      {
+        return PaketService__handle$(delegateArg, _delegateArg, __delegateArg);
+      })));
+    }
+    else
+    {
+      var _ignored0 = (child_process.exec(("mono" + cmd), options, (function(delegateArg,_delegateArg,__delegateArg)
+      {
+        return PaketService__handle$(delegateArg, _delegateArg, __delegateArg);
+      })));
+    };
 });
 PaketService__handle$ = (function(error,stdout,stderr)
 {
     ((window.atom).emit("FSharp:Output", (stdout.toString())));
     return ((window.console).log((stdout.toString())));
-});
-PaketService__location$ = (function(unitVar0)
-{
-    return ((((window.atom).packages).packageDirPaths)[0] + "\\paket\\bin\\paket.exe");
 });
 Paket___ctor$ = (function(unitVar0)
 {
@@ -89,6 +104,10 @@ Paket__activate$ = (function(x,state)
 Paket__deactivate$ = (function(x,unitVar1)
 {
     ;
+});
+String__StartsWith$ = (function(s,search)
+{
+    return (s.indexOf(search) == 0);
 });
 return [(function(ign)
 {
