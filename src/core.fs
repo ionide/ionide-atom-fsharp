@@ -91,7 +91,7 @@ module AutocompleteService =
     /// running on Windows, just start it. On Mac, use mono!
     let start t =
         let location = 
-            // TODO: We assume the folder with our pacakge is 'core'
+            // TODO: We assume the folder with our package is 'core'
             // This is probably wrong...
             Globals.atom.packages.packageDirPaths.[0] + "/core/bin/fsautocomplete.exe"
         let child = 
@@ -355,7 +355,7 @@ module ErrorPanelView =
             let msg' = msg.Replace("\n", "</br>")
             jq("#panelOutput").append ( sprintf "<span>%s</span>" msg' )))
 
-    let hadnleEditorChange (panel : IPanel) (editor : AtomCore.IEditor) =
+    let handleEditorChange (panel : IPanel) (editor : AtomCore.IEditor) =
         if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then panel.show() else panel.hide()
 
     let handle lst =
@@ -380,7 +380,7 @@ type Core() =
 
     let register panel = 
         Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>( fun ed -> AutocompleteHandler.parseEditor ed (fun _ -> ()) service |> ignore))
-        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(ErrorPanelView.hadnleEditorChange panel))
+        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(ErrorPanelView.handleEditorChange panel))
         Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(fun ed -> Globals.setTimeout((fun _ -> TooltipHandler.initialize service ed), 1000.)))     
         Globals.atom.on("FSharp:Highlight", unbox<Function>(HighlighterHandler.handle))
         Globals.atom.on("FSharp:Highlight", unbox<Function>(ErrorPanelView.handle))
@@ -400,7 +400,7 @@ type Core() =
 
     let initialize panel = 
         projInit()        
-        Globals.atom.workspace.getActiveTextEditor() |> ErrorPanelView.hadnleEditorChange panel
+        Globals.atom.workspace.getActiveTextEditor() |> ErrorPanelView.handleEditorChange panel
         Globals.atom.workspace.getActiveTextEditor() |> TooltipHandler.initialize service
         ErrorPanelView.addButtonHandlers ()
         ErrorPanelView.addOutputHandle ()
