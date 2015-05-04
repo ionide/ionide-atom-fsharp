@@ -23,22 +23,27 @@ module PaketService =
         Globals.setTimeout(System.Func<_,_>(fun _ -> overlay.classList.add("fade-out")),4000.0) |> ignore
         Globals.setTimeout(System.Func<_,_>(fun _ -> overlay.parentElement.removeChild(overlay) |> ignore),4500.0) |> ignore
 
-    let handle (error : Error) (stdout : Buffer) (stderr : Buffer) =
-        let output = stdout.toString()
-        let errorText = stderr.toString()
-        notice("", output)
-        Globals.atom.emit("FSharp:Output", output)
+    let handle error input =
+        let output = input.ToString()
         Globals.console.log(output)
-        if errorText <> "" then
-            notice("error", "Error: " + errorText)
+        Globals.atom.emit("FSharp:Output", output)
+        if error then
+            notice("error", "Error: " + output)
+        else
+            notice("", output)
+        ()
+
+
 
     let exec location cmd =
-        let cmd' = location + " " + cmd
-        let options = {cwd = Globals.atom.project.getPath()}
-        if Globals._process.platform.StartsWith("win") then
-            Globals.exec(cmd', unbox<AnonymousType600>options,  System.Func<_,_,_,_>(handle)) |> ignore
-        else
-            Globals.exec("mono" + cmd', unbox<AnonymousType600>options,  System.Func<_,_,_,_>(handle)) |> ignore
+        let options = {cwd = Globals.atom.project.getPath()} |> unbox<AnonymousType599>
+        let procs = if Globals._process.platform.StartsWith("win") then
+                          Globals.spawn(location, [|cmd|], options)
+                    else
+                          Globals.spawn("mono",  [|location; cmd |], options)
+        procs.stdout.on("data", unbox<Function>(handle false )) |> ignore
+        procs.stderr.on("data", unbox<Function>(handle true )) |> ignore
+        ()
 
 
 

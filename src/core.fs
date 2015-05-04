@@ -353,7 +353,6 @@ module ErrorPanelView =
         Globals.atom.on("FSharp:Output", unbox<Function>(fun (msg : string) ->
             let msg' = msg.Replace("\n", "</br>")
             do jq("#panelOutput").append ( sprintf "<span>%s</span>" msg' ) |> ignore
-            do jq("#panelOutput").append ( sprintf "<span>%s</span>" msg' ) |> ignore
             if jq("#panelOutput").isVisible () then
                let n = jq("#pane")
                do n.scrollTop(n.height()) |> ignore
