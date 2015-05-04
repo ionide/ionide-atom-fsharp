@@ -15,8 +15,9 @@ module PaketService =
     let bootstrapperLocation = Globals.atom.packages.packageDirPaths.[0] + "/paket/bin/paket.bootstrapper.exe"
 
     let handle (error : Error) (stdout : Buffer) (stderr : Buffer) =
-        Globals.atom.emit("FSharp:Output", stdout.toString())
-        Globals.console.log(stdout.toString())
+        let output = stdout.toString()
+        Globals.atom.emit("FSharp:Output", output)
+        Globals.console.log(output)
 
     let exec location cmd =
         let cmd' = location + " " + cmd
@@ -28,12 +29,16 @@ module PaketService =
 
 
     let UpdatePaket () = exec bootstrapperLocation ""
-    let Init () = "init" |> exec location
-    let Install () = "install" |> exec location
-    let Update () = "update" |> exec location
-    let Outdated () = "outdated" |> exec location
 
+    let execPaket cmd =
+        if not (System.IO.File.Exists location) then
+            UpdatePaket()
+        exec location cmd
 
+    let Init () = "init" |> execPaket
+    let Install () = "install" |> execPaket
+    let Update () = "update" |> execPaket
+    let Outdated () = "outdated" |> execPaket
 
 
 type Paket() =
