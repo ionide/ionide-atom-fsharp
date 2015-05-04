@@ -17,6 +17,7 @@ module PaketService =
     let notice (kind : string, text : string) =
         let overlay = Globals.document.createElement("div")
         overlay.setAttribute("class","overlay paket from-top from-right")
+        overlay.setAttribute("style","text-align: left")
         overlay.innerText <- text
         Globals.atom.workspaceView.appendToBottom(overlay) |> ignore
         Globals.setTimeout(System.Func<_,_>(fun _ -> overlay.classList.add("fade-out")),4000.0) |> ignore
