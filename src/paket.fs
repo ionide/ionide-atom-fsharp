@@ -15,8 +15,9 @@ module PaketService =
     let bootstrapperLocation = Globals.atom.packages.packageDirPaths.[0] + "/paket/bin/paket.bootstrapper.exe"
 
     let handle (error : Error) (stdout : Buffer) (stderr : Buffer) =
-        Globals.atom.emit("FSharp:Output", stdout.toString())
-        Globals.console.log(stdout.toString())
+        let output = stdout.toString()
+        Globals.atom.emit("FSharp:Output", output)
+        Globals.console.log(output)
 
     let exec location cmd =
         let cmd' = location + " " + cmd
