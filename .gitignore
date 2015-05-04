@@ -43,3 +43,5 @@ src/bin/
 src/obj/
 *.userprefs
 src/paket/bin/paket.exe
+src/core/lib/core.js
+src/paket/lib/paket.js
