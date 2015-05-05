@@ -11,11 +11,12 @@ From the packages settings inside Atom:
 Later:
 
 * clone / download this repository
-* copy folder `src/core` to Atom package folder
+* copy `src/core` and `src/paket` folders to Atom package folder
 
 ## Features
 
-- Auto completions. 
-- Error highlighting and error list in bottom panel.
-- Tooltips.
+- Auto completions
+- Error highlighting and error list in bottom panel
+- Tooltips
 - Support for script files or F# projects
+- Basic support for [Paket](http://fsprojects.github.io/Paket/).
