@@ -111,7 +111,7 @@ module PaketService =
                                |> unbox<FunScript.TypeScript.atom.EditorView> 
                                |> fun n -> n.getModel()
 
-            editorView.getBuffer().stoppedChangingDelay <- 1000.
+            editorView.getBuffer().stoppedChangingDelay <- 200.
             editorView.getBuffer().onDidStopChanging(fun _-> 
                 let txt = editorView.getText()
                 if txt <> "" then
