@@ -45,3 +45,4 @@ src/obj/
 src/paket/bin/paket.exe
 src/core/lib/core.js
 src/paket/lib/paket.js
+*ncrunch*
