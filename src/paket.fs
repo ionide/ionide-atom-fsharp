@@ -153,7 +153,7 @@ type Paket() =
         Atom.addCommand("atom-workspace", "Paket: Update", PaketService.Update)
         Atom.addCommand("atom-workspace", "Paket: Restore", PaketService.Restore)
         Atom.addCommand("atom-workspace", "Paket: Outdated", PaketService.Outdated)
-        Atom.addCommand("atom-workspace", "Paket: Add", PaketService.Add)
+        Atom.addCommand("atom-workspace", "Paket: Add NuGet Package", PaketService.Add)
         ()
 
     member x.deactivate() =
