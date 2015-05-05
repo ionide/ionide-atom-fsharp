@@ -14,14 +14,21 @@ module PaketService =
     let location = Globals.atom.packages.packageDirPaths.[0] + "/paket/bin/paket.exe"
     let bootstrapperLocation = Globals.atom.packages.packageDirPaths.[0] + "/paket/bin/paket.bootstrapper.exe"
 
+    let jq(selector : string) = Globals.Dollar.Invoke selector
+
     let notice (kind : string, text : string) =
-        let overlay = Globals.document.createElement("div")
-        overlay.setAttribute("class","overlay paket from-top")
-        overlay.setAttribute("style","text-align: left")
-        overlay.innerText <- text
-        Globals.atom.workspaceView.appendToBottom(overlay) |> ignore
-        Globals.setTimeout(System.Func<_,_>(fun _ -> overlay.classList.add("fade-out")),4000.0) |> ignore
-        Globals.setTimeout(System.Func<_,_>(fun _ -> overlay.parentElement.removeChild(overlay) |> ignore),4500.0) |> ignore
+        let div = jq("#paketnotice")
+        if div.length = 0. then
+            let overlay = Globals.document.createElement("div")
+            overlay.setAttribute("class","overlay paket from-top")
+            overlay.setAttribute("id","paketnotice")
+            overlay.setAttribute("style","text-align: left")
+            overlay.innerText <- text
+
+            Globals.atom.workspaceView.appendToBottom(overlay) |> ignore
+        else
+            div.append("<br/>" + text) |> ignore
+
 
     let handle error input =
         let output = input.ToString()
@@ -33,6 +40,12 @@ module PaketService =
             notice("", output)
         ()
 
+    let handleExit code =
+        let div = jq("#paketnotice")
+        if div.length <> 0. then            
+            Globals.setTimeout(System.Func<_,_>(fun _ -> div.addClass("fade-out") |> ignore),4000.0) |> ignore
+            Globals.setTimeout(System.Func<_,_>(fun _ -> div.remove() |> ignore),4500.0) |> ignore
+        // TODO: Do something if the exit code indicates an error
 
 
     let exec location cmd =
@@ -41,8 +54,12 @@ module PaketService =
                           Globals.spawn(location, [|cmd|], options)
                     else
                           Globals.spawn("mono",  [|location; cmd |], options)
+
+        procs.on("exit",unbox<Function>(handleExit)) |> ignore
         procs.stdout.on("data", unbox<Function>(handle false )) |> ignore
         procs.stderr.on("data", unbox<Function>(handle true )) |> ignore
+
+        
         ()
 
 
