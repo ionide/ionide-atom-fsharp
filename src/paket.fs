@@ -40,12 +40,16 @@ module PaketService =
             notice("", output)
         ()
 
-    let handleExit code =
+    let handleExit (code:string) =
         let div = jq("#paketnotice")
-        if div.length <> 0. then            
+        
+        if code <> "0" then
+            div.addClass("highlight-error") |> ignore
+
+        if div.length <> 0. then
             Globals.setTimeout(System.Func<_,_>(fun _ -> div.addClass("fade-out") |> ignore),4000.0) |> ignore
             Globals.setTimeout(System.Func<_,_>(fun _ -> div.remove() |> ignore),4500.0) |> ignore
-        // TODO: Do something if the exit code indicates an error
+        
 
 
     let exec location cmd =
