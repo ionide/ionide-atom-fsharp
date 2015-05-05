@@ -43,7 +43,9 @@ module PaketService =
     let handleExit (code:string) =
         let div = jq("#paketnotice")
 
-        if code <> "0" then
+        if code = "0" then
+            div.addClass("highlight-success") |> ignore
+        else
             div.addClass("highlight-error") |> ignore
 
         if div.length <> 0. then
