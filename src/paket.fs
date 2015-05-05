@@ -43,7 +43,9 @@ module PaketService =
     let handleExit (code:string) =
         let div = jq("#paketnotice")
 
-        if code <> "0" then
+        if code = "0" then
+            div.addClass("highlight-success") |> ignore
+        else
             div.addClass("highlight-error") |> ignore
 
         if div.length <> 0. then
@@ -168,6 +170,7 @@ module PaketService =
 
 
     let UpdatePaket () = spawn bootstrapperLocation ""
+    let UpdatePaketSilent () = spawn bootstrapperLocation "-s"
     let Init () = "init" |> spawnPaket
     let Install () = "install" |> spawnPaket
     let Update () = "update" |> spawnPaket
@@ -193,7 +196,7 @@ type Paket() =
     member x.activate(state:obj) =
         PaketService.PackageView.packagesListView <- PaketService.PackageView.regiterPackagesListView ()
         PaketService.PackageView.versionsListView <- PaketService.PackageView.registerVersionListView ()
-        PaketService.UpdatePaket()
+        PaketService.UpdatePaketSilent()
         Atom.addCommand("atom-workspace", "Paket: Update Paket", PaketService.UpdatePaket)
         Atom.addCommand("atom-workspace", "Paket: Init", PaketService.Init)
         Atom.addCommand("atom-workspace", "Paket: Install", PaketService.Install)
