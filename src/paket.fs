@@ -83,25 +83,28 @@ module PaketService =
     
 
     module PackageView =
+        let mutable name = "";
+        let mutable isVersioned = false 
         let mutable packagesListView : (atom.SelectListView * IPanel) option = None
+        let mutable versionsListView : (atom.SelectListView * IPanel) option = None
       
-        type PackageDescription = {
-            name : string
+        type ItemDescription = {
+            data : string
         }
 
         let handlerAddItems (lv : atom.SelectListView) (error : Error) (stdout : Buffer) (stderr : Buffer) = 
             stdout.toString().Split('\n')
-            |> Array.map(fun n -> {name = n} :> obj)
+            |> Array.map(fun n -> {data = n} :> obj)
             |> lv.setItems
             |> ignore
 
         let viewForItem desc = 
             if JS.isDefined desc then
-                sprintf "<li>%s</li>" desc.name |> jq
+                sprintf "<li>%s</li>" desc.data |> jq
             else
                 "<li></li>" |> jq
-
-        let regiterPackagesListView () =
+                 
+        let regiterListView stopChangingCallback cancelledCallback confirmedCallback removeFiler=
             let listView = SelectListViewCtor ()
             let editorView = 
                 listView
@@ -111,29 +114,57 @@ module PaketService =
                 |> fun n -> n.getModel()
 
             editorView.getBuffer().stoppedChangingDelay <- 200.
-            editorView.getBuffer().onDidStopChanging(fun _-> 
-                let txt = editorView.getText()
-                if txt.Length > 2 then
-                    let cmd = "find-packages searchtext " + txt + " -s"
-                    execPaket cmd (Func<_,_,_,_>(handlerAddItems listView)))
-
+            editorView.getBuffer().onDidStopChanging(stopChangingCallback editorView listView )
 
             let panel = 
                 { PanelOptions.item = unbox<JQuery> (listView)
                   PanelOptions.priority = 100
                   PanelOptions.visible = false }
                 |> Globals.atom.workspace.addModalPanel 
-            
-            do listView.``getFilterQuery <-``(Func<_>(fun _ -> ""))
+
+            do listView.``getFilterKey <-``(Func<_>(fun _ -> "name" :> obj))
+            if removeFiler then listView.``getFilterQuery <-``(Func<_>(fun _ -> ""))
             do listView.``viewForItem <-``(unbox<Func<_,_>>(viewForItem) )
-            do listView.``cancelled <-``(Func<_>(fun _ -> packagesListView |> Option.iter(fun (model, view) ->  view.hide()) :> obj))
+            do listView.``cancelled <-``(cancelledCallback)
+            do listView.``confirmed <-`` (confirmedCallback)
 
-            do listView.``confirmed <-`` (unbox<Func<_, _>> (fun (packageDescription : PackageDescription) -> 
-                                       "add nuget " + packageDescription.name.Trim() |> spawnPaket
-                                       packagesListView |> Option.iter (fun (model, view) -> view.hide()) :> obj))
+            Some (listView,panel)
 
-            do packagesListView <- Some (listView,panel)
-            ()
+        let regiterPackagesListView () = 
+            let stopChangingCallback (ev : IEditor) lv = fun () -> 
+                let txt = ev.getText()
+                if txt.Length > 2 then
+                    let cmd = "find-packages searchtext " + txt + " -s"
+                    execPaket cmd (Func<_,_,_,_>(handlerAddItems lv))
+
+            let cancelledCallback = Func<_>(fun _ -> packagesListView |> Option.iter(fun (model, view) ->  view.hide()) :> obj)
+
+            let confirmedCallback = unbox<Func<_, _>> (fun (packageDescription : ItemDescription) -> 
+                                        name <- packageDescription.data.Trim()
+                                        packagesListView |> Option.iter (fun (model, view) -> view.hide())
+                                        if isVersioned then
+                                            versionsListView |> Option.iter ( fun (model, view) ->
+                                                view.show()
+                                                model.focusFilterEditor() |> ignore
+                                                let cmd = "find-package-versions name " + name + " -s"
+                                                execPaket cmd (Func<_,_,_,_>(handlerAddItems model))
+
+
+                                            ) :> obj
+                                        else
+                                            "add nuget " + name|> spawnPaket :> obj)
+
+            regiterListView stopChangingCallback cancelledCallback confirmedCallback true
+
+        let registerVersionListView () = 
+            let stopChangingCallback (ev : IEditor) (lv : atom.SelectListView) = fun () -> ()
+            let cancelledCallback = Func<_>(fun _ -> versionsListView |> Option.iter(fun (model, view) ->  view.hide()) :> obj)
+            let confirmedCallback = unbox<Func<_, _>> (fun (packageDescription : ItemDescription) -> 
+                                        versionsListView |> Option.iter (fun (model, view) -> view.hide())
+                                        "add nuget " + name + " version " + packageDescription.data |> spawnPaket :> obj
+                )
+            regiterListView stopChangingCallback cancelledCallback confirmedCallback false
+
 
 
     let UpdatePaket () = spawn bootstrapperLocation ""
@@ -144,6 +175,13 @@ module PaketService =
     let Restore () = "restore" |> spawnPaket
 
     let Add () = 
+        PackageView.isVersioned <- false
+        PackageView.packagesListView |> Option.iter(fun (model, view) ->
+        view.show()
+        model.focusFilterEditor() |> ignore)
+
+    let AddVersioned () = 
+        PackageView.isVersioned <- true
         PackageView.packagesListView |> Option.iter(fun (model, view) ->
         view.show()
         model.focusFilterEditor() |> ignore)
@@ -153,7 +191,8 @@ type Paket() =
 
 
     member x.activate(state:obj) =
-        PaketService.PackageView.regiterPackagesListView()
+        PaketService.PackageView.packagesListView <- PaketService.PackageView.regiterPackagesListView ()
+        PaketService.PackageView.versionsListView <- PaketService.PackageView.registerVersionListView ()
         PaketService.UpdatePaket()
         Atom.addCommand("atom-workspace", "Paket: Update Paket", PaketService.UpdatePaket)
         Atom.addCommand("atom-workspace", "Paket: Init", PaketService.Init)
@@ -162,6 +201,7 @@ type Paket() =
         Atom.addCommand("atom-workspace", "Paket: Restore", PaketService.Restore)
         Atom.addCommand("atom-workspace", "Paket: Outdated", PaketService.Outdated)
         Atom.addCommand("atom-workspace", "Paket: Add NuGet Package", PaketService.Add)
+        Atom.addCommand("atom-workspace", "Paket: Add NuGet Package Version", PaketService.AddVersioned)
         ()
 
     member x.deactivate() =
