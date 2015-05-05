@@ -132,7 +132,7 @@ module PaketService =
 
             Some (listView,panel)
 
-        let regiterPackagesListView () = 
+        let registerPackagesListView () = 
             let stopChangingCallback (ev : IEditor) lv = fun () -> 
                 let txt = ev.getText()
                 if txt.Length > 2 then
@@ -194,7 +194,7 @@ type Paket() =
 
 
     member x.activate(state:obj) =
-        PaketService.PackageView.packagesListView <- PaketService.PackageView.regiterPackagesListView ()
+        PaketService.PackageView.packagesListView <- PaketService.PackageView.registerPackagesListView ()
         PaketService.PackageView.versionsListView <- PaketService.PackageView.registerVersionListView ()
         PaketService.UpdatePaketSilent()
         Atom.addCommand("atom-workspace", "Paket: Update Paket", PaketService.UpdatePaket)
