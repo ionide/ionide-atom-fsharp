@@ -8,7 +8,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "project", "project", "{CA99
 		build.fsx = build.fsx
 	EndProjectSection
 EndProject
-Project("{f2a71f9b-5d33-465a-a702-920d77279786}") = "FSharp.Atom.Generator", "src\FSharp.Atom.Generator.fsproj", "{D1081029-2369-4DAA-9F33-2353C5C9ED02}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.Atom.Generator", "src\FSharp.Atom.Generator.fsproj", "{D1081029-2369-4DAA-9F33-2353C5C9ED02}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{67EDE4A4-AC6E-407A-987D-A4B6334C29F2}"
+	ProjectSection(SolutionItems) = preProject
+		build.fsx = build.fsx
+		paket.dependencies = paket.dependencies
+		paket.lock = paket.lock
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,12 +29,10 @@ Global
 		{D1081029-2369-4DAA-9F33-2353C5C9ED02}.Release|x86.ActiveCfg = Release|x86
 		{D1081029-2369-4DAA-9F33-2353C5C9ED02}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = src\FSharp.Atom.Generator.fsproj
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
