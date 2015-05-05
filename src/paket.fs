@@ -94,39 +94,45 @@ module PaketService =
             |> Array.map(fun n -> {name = n} :> obj)
             |> lv.setItems
             |> ignore
-            ()
-
-        
 
         let viewForItem desc = 
             if JS.isDefined desc then
                 sprintf "<li>%s</li>" desc.name |> jq
             else
-             "<li></li>" |> jq
+                "<li></li>" |> jq
 
         let regiterPackagesListView () =
-            let t = SelectListViewCtor ()
-            let editorView = t |> unbox<JQuery>
-                               |> fun t' -> t'.[0].firstChild 
-                               |> unbox<FunScript.TypeScript.atom.EditorView> 
-                               |> fun n -> n.getModel()
+            let listView = SelectListViewCtor ()
+            let editorView = 
+                listView
+                |> unbox<JQuery>
+                |> fun t' -> t'.[0].firstChild
+                |> unbox<FunScript.TypeScript.atom.EditorView>
+                |> fun n -> n.getModel()
 
             editorView.getBuffer().stoppedChangingDelay <- 200.
             editorView.getBuffer().onDidStopChanging(fun _-> 
                 let txt = editorView.getText()
-                if txt <> "" then
+                if txt.Length > 2 then
                     let cmd = "find-packages searchtext " + txt + " -s"
-                    execPaket cmd (Func<_,_,_,_>(handlerAddItems t)))
+                    execPaket cmd (Func<_,_,_,_>(handlerAddItems listView)))
 
 
-            let p =  Globals.atom.workspace.addModalPanel({PanelOptions.item = unbox<JQuery>(t); PanelOptions.priority = 100; PanelOptions.visible = false})
+            let panel = 
+                { PanelOptions.item = unbox<JQuery> (listView)
+                  PanelOptions.priority = 100
+                  PanelOptions.visible = false }
+                |> Globals.atom.workspace.addModalPanel 
             
-            do t.``getFilterQuery <-``(Func<_>(fun _ -> ""))
-            do t.``viewForItem <-``(unbox<Func<_,_>>(viewForItem) )
-            do t.``cancelled <-``(Func<_>(fun _ -> packagesListView |> Option.iter(fun (model, view) ->  view.hide()) :> obj))
-            do t.``confirmed <-``(unbox<Func<_,_>>(fun (a : PackageDescription) -> "add nuget " + a.name |> spawnPaket
-                                                                                   packagesListView |> Option.iter(fun (model, view) ->  view.hide()) :> obj) )
-            do packagesListView <- Some (t,p)
+            do listView.``getFilterQuery <-``(Func<_>(fun _ -> ""))
+            do listView.``viewForItem <-``(unbox<Func<_,_>>(viewForItem) )
+            do listView.``cancelled <-``(Func<_>(fun _ -> packagesListView |> Option.iter(fun (model, view) ->  view.hide()) :> obj))
+
+            do listView.``confirmed <-`` (unbox<Func<_, _>> (fun (packageDescription : PackageDescription) -> 
+                                       "add nuget " + packageDescription.name |> spawnPaket
+                                       packagesListView |> Option.iter (fun (model, view) -> view.hide()) :> obj))
+
+            do packagesListView <- Some (listView,panel)
             ()
 
 
@@ -136,7 +142,9 @@ module PaketService =
     let Update () = "update" |> spawnPaket
     let Outdated () = "outdated" |> spawnPaket
     let Restore () = "restore" |> spawnPaket
-    let Add () = PackageView.packagesListView |> Option.iter(fun (model, view) ->
+
+    let Add () = 
+        PackageView.packagesListView |> Option.iter(fun (model, view) ->
         view.show()
         model.focusFilterEditor() |> ignore)
 
