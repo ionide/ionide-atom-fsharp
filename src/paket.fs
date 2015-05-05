@@ -129,7 +129,7 @@ module PaketService =
             do listView.``cancelled <-``(Func<_>(fun _ -> packagesListView |> Option.iter(fun (model, view) ->  view.hide()) :> obj))
 
             do listView.``confirmed <-`` (unbox<Func<_, _>> (fun (packageDescription : PackageDescription) -> 
-                                       "add nuget " + packageDescription.name |> spawnPaket
+                                       "add nuget " + packageDescription.name.Trim() |> spawnPaket
                                        packagesListView |> Option.iter (fun (model, view) -> view.hide()) :> obj))
 
             do packagesListView <- Some (listView,panel)
