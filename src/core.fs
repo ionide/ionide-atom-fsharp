@@ -373,10 +373,7 @@ module ErrorPanelView =
                                        ())
 
 
-    type PanelOptions =
-        { item: JQuery;
-          visible : bool;
-          priority : int}
+    
 
 type Core() =
     let service = AutocompleteService.create
@@ -423,10 +420,11 @@ type Core() =
     member x.activate(state:obj) =
         let panel =
             let t = ErrorPanelView.create ()
-            Globals.atom.workspace.addBottomPanel (unbox<AnonymousType499>{ErrorPanelView.PanelOptions.item = t; ErrorPanelView.PanelOptions.priority = 100; ErrorPanelView.PanelOptions.visible = false})
+            Globals.atom.workspace.addBottomPanel (unbox<AnonymousType499>{PanelOptions.item = t; PanelOptions.priority = 100; PanelOptions.visible = false})
 
         panel |> register
         panel |> initialize
+        
 
         ()
 

@@ -39,6 +39,17 @@ type ViewRegistry = interface end
 [<AutoOpen>]
 module Bindings = 
     
+
+    type PanelOptions =
+        { item: JQuery;
+          visible : bool;
+          priority : int}
+
+    type IWorkspace with
+        
+        [<FunScript.JSEmitInline("{0}.addModalPanel({1})")>]
+        member __.addModalPanel(o: obj) : IPanel = failwith "JS"
+
     type IAtom with
         [<FunScript.JSEmitInline("({0}.views)")>]
         member __.views with get () : ViewRegistry = failwith "never"

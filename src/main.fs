@@ -70,6 +70,7 @@ let translateModules() =
       [ yield "var CompositeDisposable = require('atom').CompositeDisposable;"
         yield "var child_process = require('child_process');"
         yield "window.$ = require('atom').$;"
+        yield "var atomSpaceView = require('atom-space-pen-views')"
         yield ""
         yield "function wrappedFunScript() { \n" + coreJS + "\n }"
         yield "var _funcs = wrappedFunScript();"
