@@ -15,13 +15,7 @@ open Atom
 [<AutoOpen>]
 module ViewsHelpers =
 
-    type Coordinates = {top : float; left : float}
-
-    [<JSEmitInline("atom.views.getView({0})")>]
-    let getView(editor : IEditor) : Element = failwith "JS"
-
-    [<JSEmitInline("{0}.getBoundingClientRect()")>]
-    let getBoundingClientRect(o : obj) : Coordinates = failwith "JS"
+    
 
     let jq(selector : string) = Globals.Dollar.Invoke selector
     let jq'(selector : Element) = Globals.Dollar.Invoke selector

@@ -45,6 +45,11 @@ module Bindings =
           visible : bool;
           priority : int}
 
+    type Coordinates = {top : float; left : float}
+
+    type BufferChangeEvent = {newText : string }
+
+
     type IWorkspace with
         
         [<FunScript.JSEmitInline("{0}.addModalPanel({1})")>]
@@ -57,6 +62,21 @@ module Bindings =
     type ViewRegistry with 
         [<FunScript.JSEmitInline("({0}.getView({1}))")>]
         member __.getView(o : obj) : Element = failwith "never"
+
+    type TextBuffer.ITextBuffer with
+        [<FunScript.JSEmitInline("({0}.onDidStopChanging({1}))")>]
+        member __.onDidStopChanging(cb: unit -> unit) : unit = failwith "JS"
+
+
+    [<JSEmitInline("new atomSpaceView.SelectListView()")>]
+    let SelectListViewCtor () : FunScript.TypeScript.atom.SelectListView = failwith "JS"
+
+    [<JSEmitInline("atom.views.getView({0})")>]
+    let getView(editor : IEditor) : Element = failwith "JS"
+
+    [<JSEmitInline("{0}.getBoundingClientRect()")>]
+    let getBoundingClientRect(o : obj) : Coordinates = failwith "JS"
+    
         
 
 
