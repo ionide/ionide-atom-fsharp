@@ -3,15 +3,15 @@
 
 ## Installation
 
-From the packages settings inside Atom:
-
-* install "language-fsharp" package
-* install "autocomplete-plus" package (disable build-in atom autocomplete for best experience)
-
-Later:
-
+* install "language-fsharp" package using APM or Atom UI
+* install "autocomplete-plus" package using APM or Atom UI (disable build-in atom autocomplete for best experience)
 * clone / download this repository
-* copy `src/core` and `src/paket` folders to Atom package folder
+* Run `build.cmd` (for Windows) or `build.sh` (for Linux / Mac ) to build project
+* copy `src/core` and `src/paket` to Atom package folder
+
+OR (for easy development)
+
+* create symbolic directory link beween both `src/core` and `src/paket` and Atom package folder
 
 ## Features
 
