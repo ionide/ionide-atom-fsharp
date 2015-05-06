@@ -189,7 +189,7 @@ module PaketService =
     let Init () = "init" |> spawnPaket
     let Install () = "install" |> spawnPaket
     let Update () = "update" |> spawnPaket
-    let Outdated () = "outdated2" |> spawnPaket
+    let Outdated () = "outdated" |> spawnPaket
     let Restore () = "restore" |> spawnPaket
 
     let Add () = 
