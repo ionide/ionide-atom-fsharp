@@ -11,23 +11,29 @@ open Atom
 module PaketService =
     type Options = {cwd : string}
 
+    let mutable currentNotification : Notification option = None
+
     let location = Globals.atom.packages.packageDirPaths.[0] + "/paket/bin/paket.exe"
     let bootstrapperLocation = Globals.atom.packages.packageDirPaths.[0] + "/paket/bin/paket.bootstrapper.exe"
 
-    let jq(selector : string) = Globals.Dollar.Invoke selector
+    let jq (selector : string) = Globals.Dollar.Invoke selector
+    let jq'(selector : Element) = Globals.Dollar.Invoke selector
+    
+    let jq'' (context: Element) (selector : string) = Globals.Dollar.Invoke (selector,context)
+    
+
+    let noticeError text details =
+        Globals.atom.notifications.addError(text, { detail = details; dismissable = true }) |> ignore        
 
     let notice (kind : string, text : string) =
-        let div = jq("#paketnotice")
-        if div.length = 0. then
-            let overlay = Globals.document.createElement("div")
-            overlay.setAttribute("class","overlay paket from-top")
-            overlay.setAttribute("id","paketnotice")
-            overlay.setAttribute("style","text-align: left")
-            overlay.innerText <- text
-
-            Globals.atom.workspaceView.appendToBottom(overlay) |> ignore
-        else
-            div.append("<br/>" + text) |> ignore
+        match currentNotification with
+        | Some n -> let view = Globals.atom.views.getView (n)
+                    let t = ".content .detail .detail-content" |> jq'' view 
+                    let line = "<div class='line'>" + text + "</div>"
+                    t.append(line) |> ignore
+                    ()
+        | None -> let n = Globals.atom.notifications.addInfo("Paket", { detail = text; dismissable = true })
+                  currentNotification <- Some n
 
 
     let handle error input =
@@ -35,22 +41,24 @@ module PaketService =
         Globals.console.log(output)
         Globals.atom.emit("FSharp:Output", output)
         if error then
-            notice("error", "Error: " + output)
+           noticeError "Paket error" output |> ignore
         else
             notice("", output)
         ()
 
     let handleExit (code:string) =
-        let div = jq("#paketnotice")
+        currentNotification |> Option.iter (fun n ->
+            let view = Globals.atom.views.getView (n) |> jq'
+            view.removeClass("info") |> ignore
+            view.removeClass("icon-info") |> ignore
+            if code = "0" then
+                view.addClass("success") |> ignore
+                view.addClass("icon-check") |> ignore
+            else
+                view.addClass("error") |> ignore
+                view.addClass("icon-error") |> ignore
+        )
 
-        if code = "0" then
-            div.addClass("highlight-success") |> ignore
-        else
-            div.addClass("highlight-error") |> ignore
-
-        if div.length <> 0. then
-            Globals.setTimeout(Func<_,_>(fun _ -> div.addClass("fade-out") |> ignore),4000.0) |> ignore
-            Globals.setTimeout(Func<_,_>(fun _ -> div.remove() |> ignore),4500.0) |> ignore
 
     let spawn location (cmd : string) =
         let cmd' = cmd.Split(' ');
@@ -61,6 +69,7 @@ module PaketService =
                         let prms = Array.concat [ [|location|]; cmd']
                         Globals.spawn("mono", prms, options)
 
+        currentNotification <- None
         procs.on("exit",unbox<Function>(handleExit)) |> ignore
         procs.stdout.on("data", unbox<Function>(handle false )) |> ignore
         procs.stderr.on("data", unbox<Function>(handle true )) |> ignore
@@ -180,7 +189,7 @@ module PaketService =
     let Init () = "init" |> spawnPaket
     let Install () = "install" |> spawnPaket
     let Update () = "update" |> spawnPaket
-    let Outdated () = "outdated" |> spawnPaket
+    let Outdated () = "outdated2" |> spawnPaket
     let Restore () = "restore" |> spawnPaket
 
     let Add () = 

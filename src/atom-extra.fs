@@ -35,6 +35,8 @@ module JS =
     let isDefined (o: obj) : bool = failwith "never"
 
 type ViewRegistry = interface end
+type NotificationManager = interface end 
+type Notification = interface end
 
 [<AutoOpen>]
 module Bindings = 
@@ -47,8 +49,12 @@ module Bindings =
 
     type Coordinates = {top : float; left : float}
 
-    type BufferChangeEvent = {newText : string }
+    type BufferChangeEvent = {newText : string}
 
+    type NotificationsOptions = {
+        detail: string
+        dismissable : bool
+        }
 
     type IWorkspace with
         
@@ -58,6 +64,26 @@ module Bindings =
     type IAtom with
         [<FunScript.JSEmitInline("({0}.views)")>]
         member __.views with get () : ViewRegistry = failwith "never"
+
+        [<FunScript.JSEmitInline("({0}.notifications)")>]
+        member __.notifications with get () : NotificationManager = failwith "never"
+
+    type NotificationManager with 
+        [<FunScript.JSEmitInline("{0}.addSuccess({1}, {2})")>]
+        member __.addSuccess(message: string, options: NotificationsOptions) : Notification = failwith "JS"
+
+        [<FunScript.JSEmitInline("{0}.addInfo({1}, {2})")>]
+        member __.addInfo(message: string, options: NotificationsOptions) : Notification = failwith "JS"
+
+        [<FunScript.JSEmitInline("{0}.addWarning({1}, {2})")>]
+        member __.addWarning(message: string, options: NotificationsOptions) : Notification = failwith "JS"
+
+        [<FunScript.JSEmitInline("{0}.addError({1}, {2})")>]
+        member __.addError(message: string, options: NotificationsOptions) : Notification = failwith "JS"
+
+        [<FunScript.JSEmitInline("{0}.addFatalError({1}, {2})")>]
+        member __.addFatalError(message: string, options: NotificationsOptions) : Notification = failwith "JS"
+
 
     type ViewRegistry with 
         [<FunScript.JSEmitInline("({0}.getView({1}))")>]
