@@ -6,6 +6,7 @@
 * install "language-fsharp" package using APM or Atom UI
 * install "autocomplete-plus" package using APM or Atom UI (disable build-in atom autocomplete for best experience)
 * clone / download this repository
+* Open `src/core` with Atom and run Update Package Dependencies" from Atom command palette. Do the same for `src\paket`
 * Run `build.cmd` (for Windows) or `build.sh` (for Linux / Mac ) to build project
 * copy `src/core` and `src/paket` to Atom package folder
 
