@@ -52,7 +52,7 @@ module PaketService =
             let view = Globals.atom.views.getView (n) |> jq'
             view.removeClass("info") |> ignore
             view.removeClass("icon-info") |> ignore
-            if code = "0" then
+            if code = "0" && view.hasClass("error") |> not then
                 view.addClass("success") |> ignore
                 view.addClass("icon-check") |> ignore
             else
