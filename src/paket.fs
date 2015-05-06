@@ -93,11 +93,14 @@ module PaketService =
 
 
     
+    type PackageAddSettings = {
+        Versioned : bool
+        AddToCurrentProject : bool
+    }
 
     module PackageView =
         let mutable name = "";
-        let mutable isVersioned = false 
-        let mutable addToCurrentProject = false 
+        let mutable settings = { Versioned =  false; AddToCurrentProject = false }
         let mutable packagesListView : (atom.SelectListView * IPanel) option = None
         let mutable versionsListView : (atom.SelectListView * IPanel) option = None
       
@@ -155,7 +158,7 @@ module PaketService =
             let confirmedCallback = unbox<Func<_, _>> (fun (packageDescription : ItemDescription) -> 
                                         name <- packageDescription.data.Trim()
                                         packagesListView |> Option.iter (fun (model, view) -> view.hide())
-                                        if isVersioned then
+                                        if settings.Versioned then
                                             versionsListView |> Option.iter ( fun (model, view) ->
                                                 view.show()
                                                 model.focusFilterEditor() |> ignore
@@ -166,7 +169,7 @@ module PaketService =
                                             ) :> obj
                                         else
                                             let projectStr =  
-                                                if not addToCurrentProject then "" else
+                                                if not settings.AddToCurrentProject then "" else
                                                 let path = Globals.atom.workspace.getActiveTextEditor().buffer.file.path
                                                 " project \"" + path + "\""
                                                 
@@ -193,27 +196,11 @@ module PaketService =
     let Outdated () = "outdated" |> spawnPaket
     let Restore () = "restore" |> spawnPaket
 
-    let Add () = 
-        PackageView.isVersioned <- false
-        PackageView.addToCurrentProject <- false
+    let Add settings () =
+        PackageView.settings <- settings
         PackageView.packagesListView |> Option.iter(fun (model, view) ->
         view.show()
         model.focusFilterEditor() |> ignore)
-
-    let AddToCurrentProject () = 
-        PackageView.isVersioned <- false
-        PackageView.addToCurrentProject <- true
-        PackageView.packagesListView |> Option.iter(fun (model, view) ->
-        view.show()
-        model.focusFilterEditor() |> ignore)
-
-    let AddVersioned () = 
-        PackageView.isVersioned <- true
-        PackageView.addToCurrentProject <- false
-        PackageView.packagesListView |> Option.iter(fun (model, view) ->
-        view.show()
-        model.focusFilterEditor() |> ignore)
-
 
 type Paket() =
 
@@ -228,9 +215,9 @@ type Paket() =
         Atom.addCommand("atom-workspace", "Paket: Update", PaketService.Update)
         Atom.addCommand("atom-workspace", "Paket: Restore", PaketService.Restore)
         Atom.addCommand("atom-workspace", "Paket: Outdated", PaketService.Outdated)
-        Atom.addCommand("atom-workspace", "Paket: Add NuGet Package", PaketService.Add)
-        Atom.addCommand("atom-workspace", "Paket: Add NuGet Package (to current project)", PaketService.AddToCurrentProject)
-        Atom.addCommand("atom-workspace", "Paket: Add NuGet Package Version", PaketService.AddVersioned)
+        Atom.addCommand("atom-workspace", "Paket: Add NuGet Package", PaketService.Add { Versioned =  false; AddToCurrentProject = false })
+        Atom.addCommand("atom-workspace", "Paket: Add NuGet Package (to current project)", PaketService.Add { Versioned =  false; AddToCurrentProject = true })
+        Atom.addCommand("atom-workspace", "Paket: Add NuGet Package Version", PaketService.Add { Versioned =  true; AddToCurrentProject = false })
         ()
 
     member x.deactivate() =
