@@ -374,15 +374,9 @@ type Core() =
                   |> AutocompleteService.start
                   |> AutocompleteService.send "outputmode json\n"
 
-    let register panel =
-        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>( fun ed -> AutocompleteHandler.parseEditor ed (fun _ -> ()) service |> ignore))
-        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(ErrorPanelView.handleEditorChange  panel))
-        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(fun ed -> Globals.setTimeout((fun _ -> TooltipHandler.initialize service ed), 1000.)))
-        Globals.atom.on("FSharp:Highlight", unbox<Function>(HighlighterHandler.handle))
-        Globals.atom.on("FSharp:Highlight", unbox<Function>(ErrorPanelView.handle))
-
     let projInit () =
-        let p = Globals.atom.project.getPath ()
+        let p = Globals.atom.project.getPaths().[0]
+        Globals.console.log p
         let proj (ex : NodeJS.ErrnoException) (arr : string array) =
             let projExist = arr |> Array.tryFind(fun a -> a.Split('.') |> fun n -> n.[n.Length - 1]  = "fsproj")
             match projExist with
@@ -392,7 +386,17 @@ type Core() =
                 |> ignore
             | None -> service |> AutocompleteHandler.parseCurrent (fun _ -> ()) |> ignore
 
-        Globals.readdir(p, System.Func<NodeJS.ErrnoException, string array, unit>(proj))
+        if JS.isDefined p then Globals.readdir(p, System.Func<NodeJS.ErrnoException, string array, unit>(proj))
+
+    let register panel =
+        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>( fun ed -> AutocompleteHandler.parseEditor ed (fun _ -> ()) service |> ignore))
+        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(ErrorPanelView.handleEditorChange  panel))
+        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(fun ed -> Globals.setTimeout((fun _ -> TooltipHandler.initialize service ed), 1000.)))
+        Globals.atom.on("FSharp:Highlight", unbox<Function>(HighlighterHandler.handle))
+        Globals.atom.on("FSharp:Highlight", unbox<Function>(ErrorPanelView.handle))
+        Globals.atom.project.onDidChangePaths(fun _ -> projInit ())
+
+    
 
     let initialize panel =
         projInit()
@@ -400,10 +404,6 @@ type Core() =
         Globals.atom.workspace.getActiveTextEditor() |> TooltipHandler.initialize service
         ErrorPanelView.addButtonHandlers ()
         ErrorPanelView.addOutputHandle ()
-
-
-
-
 
     member x.provide ()=
         AutocompleteProvider.create service

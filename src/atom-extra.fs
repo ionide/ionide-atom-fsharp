@@ -56,6 +56,14 @@ module Bindings =
         dismissable : bool
         }
 
+    type IProject with
+        [<FunScript.JSEmitInline("({0}.getPaths())")>]
+        member __.getPaths() : string [] = failwith "never"
+
+        [<FunScript.JSEmitInline("({0}.onDidChangePaths({1}))")>]
+        member __.onDidChangePaths(cb: string[] -> unit) : unit = failwith "JS"
+
+
     type IWorkspace with
         
         [<FunScript.JSEmitInline("{0}.addModalPanel({1})")>]
