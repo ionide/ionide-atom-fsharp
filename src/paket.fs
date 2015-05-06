@@ -22,28 +22,29 @@ module PaketService =
     let jq'' (context: Element) (selector : string) = Globals.Dollar.Invoke (selector,context)
     
 
-    let noticeError text details =
-        Globals.atom.notifications.addError(text, { detail = details; dismissable = true }) |> ignore        
-
-    let notice (kind : string, text : string) =
+    let notice isError text details =
         match currentNotification with
         | Some n -> let view = Globals.atom.views.getView (n)
                     let t = ".content .detail .detail-content" |> jq'' view 
-                    let line = "<div class='line'>" + text + "</div>"
+                    let line = "<div class='line'>" + details + "</div>"
                     t.append(line) |> ignore
                     ()
-        | None -> let n = Globals.atom.notifications.addInfo("Paket", { detail = text; dismissable = true })
-                  currentNotification <- Some n
+        | None -> let n = if isError then
+                            Globals.atom.notifications.addError(text, { detail = details; dismissable = true })
+                          else
+                            Globals.atom.notifications.addInfo(text, { detail = details; dismissable = true })
+                  currentNotification <- Some n       
+   
 
-
+  
     let handle error input =
         let output = input.ToString()
         Globals.console.log(output)
         Globals.atom.emit("FSharp:Output", output)
         if error then
-           noticeError "Paket error" output |> ignore
+            notice true "Paket error" output
         else
-            notice("", output)
+            notice false "" output
         ()
 
     let handleExit (code:string) =
@@ -56,7 +57,7 @@ module PaketService =
                 view.addClass("icon-check") |> ignore
             else
                 view.addClass("error") |> ignore
-                view.addClass("icon-error") |> ignore
+                view.addClass("icon-flame") |> ignore
         )
 
 
