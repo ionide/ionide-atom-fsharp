@@ -172,7 +172,12 @@ type GetSuggestionOptions =
     scopeDescriptor : string[] }
 
 module AutocompleteProvider =
-    type Provider = {selector : string; inclusionPriority : int; excludeLowerPriority: bool; getSuggestions : GetSuggestionOptions -> Atom.Promise.Promise  }
+    type Provider = {
+        selector : string
+        disableForSelector: string
+        inclusionPriority : int 
+        excludeLowerPriority: bool 
+        getSuggestions : GetSuggestionOptions -> Atom.Promise.Promise  }
 
     let getSuggestion service (options:GetSuggestionOptions) =
         let path = options.editor.buffer.file.path
@@ -200,7 +205,7 @@ module AutocompleteProvider =
             service |> AutocompleteHandler.parseCurrent (fun _ -> service |> AutocompleteHandler.completion path row col action |> ignore) |> ignore)
 
 
-    let create service = { selector = ".source.fsharp"; inclusionPriority = 1; excludeLowerPriority = true; getSuggestions = getSuggestion service}
+    let create service = { selector = ".source.fsharp"; disableForSelector = ".source.fsharp .string"; inclusionPriority = 1; excludeLowerPriority = true; getSuggestions = getSuggestion service}
 
 module HighlighterHandler =
     type DecorationOption =

@@ -18,7 +18,7 @@ Using APM or Atom UI:
 
 ## Contributing and copyright
 
-The project is hosted on [GitHub](https://github.com/fsprojects/FSharp.Atomm) where you can [report issues](https://github.com/fsprojects/FSharp.Atom/issues), fork 
+The project is hosted on [GitHub](https://github.com/fsprojects/FSharp.Atom) where you can [report issues](https://github.com/fsprojects/FSharp.Atom/issues), fork 
 the project and submit pull requests on the [develop branch](https://github.com/fsprojects/FSharp.Atom/tree/develop).
 
 The library is available under [Apache 2 license](https://github.com/fsprojects/FSharp.Atom/blob/master/LICENSE.md), which allows modification and 
