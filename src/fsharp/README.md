@@ -3,15 +3,11 @@
 
 ## Installation
 
-* install "language-fsharp" package using APM or Atom UI
-* install "autocomplete-plus" package using APM or Atom UI (disable build-in atom autocomplete for best experience)
-* clone / download this repository
-* Run `build.cmd` (for Windows) or `build.sh` (for Linux / Mac ) to build project
-* copy `src/core` to Atom package folder
+Using APM or Atom UI:
 
-OR (for easy development)
-
-* create symbolic directory link beween `src/core` and Atom package folder
+* install ["language-fsharp"](https://atom.io/packages/language-fsharp) package
+* install ["autocomplete-plus"](https://atom.io/packages/autocomplete-plus) package (disable build-in atom autocomplete for best experience)
+* install ["fsharp"](https://atom.io/packages/fsharp) package
 
 ## Features
 
@@ -27,6 +23,18 @@ the project and submit pull requests on the [develop branch](https://github.com/
 
 The library is available under [Apache 2 license](https://github.com/fsprojects/FSharp.Atom/blob/master/LICENSE.md), which allows modification and 
 redistribution for both commercial and non-commercial purposes.
+
+### Build
+
+* install "language-fsharp" package using APM or Atom UI
+* install "autocomplete-plus" package using APM or Atom UI (disable build-in atom autocomplete for best experience)
+* clone / download this repository
+* Run `build.cmd` (for Windows) or `build.sh` (for Linux / Mac ) to build project
+* copy `src/core` to Atom package folder
+
+OR (for easy development)
+
+* create symbolic directory link beween `src/core` and Atom package folder
 
 ### Maintainer(s)
 
