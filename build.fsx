@@ -23,14 +23,14 @@ open Fake.ZipHelper
 
 // Git configuration (used for publishing documentation in gh-pages branch)
 // The profile where the project is posted
-let gitOwner = "Krzysztof-Cieslak"
+let gitOwner = "fsprojects"
 let gitHome = "https://github.com/" + gitOwner
 
 // The name of the project on GitHub
 let gitName = "FSharp.Atom"
 
 // The url for the raw files hosted
-let gitRaw = environVarOrDefault "gitRaw" "https://raw.github.com/Krzysztof-Cieslak"
+let gitRaw = environVarOrDefault "gitRaw" "https://raw.github.com/fsprojects"
 
 let tempReleaseDir = "temp/release"
 
