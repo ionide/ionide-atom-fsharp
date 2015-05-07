@@ -11,8 +11,7 @@ let root = __SOURCE_DIRECTORY__
 // Translate the type given as #1 using module name #2
 // and save the result to a file specified in #3
 let atomModules =
-  [ typeof<Core.Core>, "AtomFSharpCore", "core/lib/core.js";
-    typeof<Paket.Paket>, "AtomFSharpPaket", "paket/lib/paket.js" ]
+  [ typeof<Core.Core>, "AtomFSharpCore", "core/lib/core.js"; ]
 
 // --------------------------------------------------------------------------------------
 // Compile F# type to an atom module
