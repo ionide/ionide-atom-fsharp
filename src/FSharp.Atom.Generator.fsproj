@@ -35,7 +35,6 @@
   <ItemGroup>
     <Compile Include="atom-extra.fs" />
     <Compile Include="core.fs" />
-    <Compile Include="paket.fs" />
     <Compile Include="main.fs" />
     <None Include="atom-bindings.fsx" />
   </ItemGroup>
