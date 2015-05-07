@@ -1,6 +1,6 @@
 {
-  "name": "FSharp.Atom.Core",
-  "main": "./lib/core",
+  "name": "FSharp",
+  "main": "./lib/fsharp",
   "version": "0.0.0",
   "description": "Core plugin for F# development",
   "repository": "https://github.com/Krzysztof-Cieslak/FSharp.Atom",

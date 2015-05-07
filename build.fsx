@@ -16,7 +16,7 @@ open Fake.ZipHelper
 #else
 #load "src/atom-bindings.fsx"
 #load "src/atom-extra.fs"
-#load "src/core.fs"
+#load "src/fsharp.fs"
 #load "src/main.fs"
 
 #endif
@@ -48,7 +48,7 @@ let apmTool = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicati
 // --------------------------------------------------------------------------------------
 
 Target "Clean" (fun _ ->
-    CopyFile "src/core" "README.md"
+    CopyFile "src/fsharp" "README.md"
 )
 
 Target "BuildGenerator" (fun () ->
@@ -133,7 +133,7 @@ Target "GenerateBindings" (fun () ->
 Target "InstallDependencies" (fun _ ->
     let args = "install"
     
-    let srcDir = "src/core"
+    let srcDir = "src/fsharp"
     let result =
         ExecProcess (fun info ->
             info.FileName <- apmTool
@@ -158,7 +158,7 @@ Target "PushToMaster" (fun _ ->
     Repository.cloneSingleBranch "" (gitHome + "/" + gitName + ".git") "master" tempReleaseDir
 
     Git.CommandHelper.runSimpleGitCommand tempReleaseDir "rm . -f -r" |> ignore
-    CopyRecursive "src/core" tempReleaseDir true |> tracefn "%A"
+    CopyRecursive "src/fsharp" tempReleaseDir true |> tracefn "%A"
    
     StageAll tempReleaseDir
     Git.Commit.Commit tempReleaseDir (sprintf "Release %s" release.NugetVersion)

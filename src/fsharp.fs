@@ -1,5 +1,5 @@
 [<ReflectedDefinition>]
-module Core
+module FSharp
 
 open FunScript
 open FunScript.TypeScript
@@ -85,9 +85,7 @@ module AutocompleteService =
     /// running on Windows, just start it. On Mac, use mono!
     let start t =
         let location =
-            // TODO: We assume the folder with our package is 'core'
-            // This is probably wrong...
-            Globals.atom.packages.packageDirPaths.[0] + "/core/bin/fsautocomplete.exe"
+            Globals.atom.packages.packageDirPaths.[0] + "/fsharp/bin/fsautocomplete.exe"
         let child =
             if Globals._process.platform.StartsWith("win") then
                 Globals.spawn(location)
@@ -369,7 +367,7 @@ module ErrorPanelView =
 
     
 
-type Core() =
+type FSharpIDE() =
     let service = AutocompleteService.create
                   |> AutocompleteService.start
                   |> AutocompleteService.send "outputmode json\n"
