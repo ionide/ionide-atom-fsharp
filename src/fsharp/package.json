@@ -3,7 +3,7 @@
   "main": "./lib/fsharp",
   "version": "0.0.0",
   "description": "Core plugin for F# development",
-  "repository": "https://github.com/Krzysztof-Cieslak/FSharp.Atom",
+  "repository": "https://github.com/fsprojects/FSharp.Atom",
   "license": "Appache 2.0",
   "engines": {
     "atom": ">=0.174.0 <2.0.0"
