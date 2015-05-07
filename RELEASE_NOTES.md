@@ -1,3 +1,6 @@
+#### 0.1.3 - 07.05.2015
+* Readme updates
+
 #### 0.1.2 - 07.05.2015
 * Small bug-fixes
 
