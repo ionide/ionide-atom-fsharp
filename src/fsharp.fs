@@ -426,4 +426,5 @@ type FSharpIDE() =
         ()
 
     member x.deactivate() =
+        service |> AutocompleteService.stop |> ignore 
         ()
