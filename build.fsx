@@ -157,8 +157,15 @@ Target "PushToMaster" (fun _ ->
     CleanDir tempReleaseDir
     Repository.cloneSingleBranch "" (gitHome + "/" + gitName + ".git") "master" tempReleaseDir
 
-    Git.CommandHelper.runSimpleGitCommand tempReleaseDir "rm . -f -r" |> ignore
-    CopyRecursive "src/fsharp" tempReleaseDir true |> tracefn "%A"
+    let cleanEverythingFromLastCheckout() =
+        let tempGitDir = Path.GetTempPath() </> "gitrelease"
+        CleanDir tempGitDir
+        CopyRecursive (tempReleaseDir </> ".git") tempGitDir true |> ignore
+        CleanDir tempReleaseDir
+        CopyRecursive tempGitDir (tempReleaseDir  </> ".git") true |> ignore
+
+    cleanEverythingFromLastCheckout()    
+    CopyRecursive "src/paket" tempReleaseDir true |> tracefn "%A"    
    
     StageAll tempReleaseDir
     Git.Commit.Commit tempReleaseDir (sprintf "Release %s" release.NugetVersion)
