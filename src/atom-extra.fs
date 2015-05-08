@@ -110,6 +110,14 @@ module Bindings =
 
     [<JSEmitInline("{0}.getBoundingClientRect()")>]
     let getBoundingClientRect(o : obj) : Coordinates = failwith "JS"
+
+
+    type stream.Writable with
+        [<FunScript.JSEmitInline("({0}.setEncoding({1}))")>]
+        member __.setEncoding(v : string) : unit = failwith "JS"
+
+        [<FunScript.JSEmitInline("({0}.write({1}, {2}))")>]
+        member __.write (v : string, encoding : string)  : unit = failwith "JS"
     
         
 

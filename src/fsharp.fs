@@ -91,6 +91,7 @@ module AutocompleteService =
                 Globals.spawn(location)
             else
                 Globals.spawn("mono", [| location |])
+        child.stdin.setEncoding("utf-8");
 
         { t with State = State.On; PreviousState = t.State; Child = Some child }
 
@@ -113,14 +114,14 @@ module AutocompleteService =
                                 c.stdout.removeAllListeners "data" |> ignore
                                 cb a
 
-                        c.stdin.write msg |> ignore
+                        c.stdin.write( msg, "utf-8")
                         c.stdout.on ("data", unbox<Function> (action)) |> ignore)
         state
 
     let send (msg' : string) t =
         let msg = msg'.Replace("\uFEFF", "")
         Globals.console.log ("SEND: " + msg)
-        t.Child |> Option.iter (fun c -> c.stdin.write msg |> ignore)
+        t.Child |> Option.iter (fun c -> c.stdin.write( msg, "utf-8") |> ignore)
         t
 
 module AutocompleteHandler =

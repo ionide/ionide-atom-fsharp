@@ -96,25 +96,25 @@ Array__FoldIndexed$Unit__IDisplayBufferMarker_Unit__IDisplayBufferMarker_ = (fun
 });
 Array__Iterate$Error_Error_ = (function(f,xs)
 {
-    var _900;
+    var _904;
     return Array__Fold$Error__Unit_Error__Unit_((function(unitVar0)
     {
       return (function(x)
       {
         return f(x);
       });
-    }), _900, xs);
+    }), _904, xs);
 });
 Array__Iterate$IDisplayBufferMarker_IDisplayBufferMarker_ = (function(f,xs)
 {
-    var _827;
+    var _831;
     return Array__Fold$IDisplayBufferMarker__Unit_IDisplayBufferMarker__Unit_((function(unitVar0)
     {
       return (function(x)
       {
         return f(x);
       });
-    }), _827, xs);
+    }), _831, xs);
 });
 Array__Length$Error_Error_ = (function(xs)
 {
@@ -314,16 +314,16 @@ AutocompleteProvider__getSuggestion$ = (function(service,options)
           try
           {
             var result = ((window.JSON).parse(msg));
-            var _1240;
+            var _1244;
             if (((prefix == ".") || (prefix == "="))) 
             {
-              _1240 = "";
+              _1244 = "";
             }
             else
             {
-              _1240 = prefix;
+              _1244 = prefix;
             };
-            var pref = _1240;
+            var pref = _1244;
             if ((result.Kind == "completion")) 
             {
               return resolve(Seq__ToArray$Object_Object_(Seq__Map$String_1_Object_String_Object_((function(t)
@@ -379,8 +379,8 @@ AutocompleteService__ask$ = (function(msg_,no,cb,state)
           ;
         };
       });
-      var ignored0 = ((c.stdin).write(msg));
-      var _ignored0 = ((c.stdout).on("data", action));
+      ((c.stdin).write(msg, "utf-8"));
+      var ignored0 = ((c.stdout).on("data", action));
     }), state.Child);
     return state;
 });
@@ -394,7 +394,7 @@ AutocompleteService__send$ = (function(msg_,t)
     ((window.console).log(("SEND: " + msg)));
     Option__Iterate$ChildProcess_ChildProcess_((function(c)
     {
-      var ignored0 = ((c.stdin).write(msg));
+      var ignored0 = ((c.stdin).write(msg, "utf-8"));
     }), t.Child);
     return t;
 });
@@ -411,6 +411,7 @@ AutocompleteService__start$ = (function(t)
       _18 = (child_process.spawn("mono", [location]));
     };
     var child = _18;
+    ((child.stdin).setEncoding("utf-8"));
     return (new T___ctor$((new State__On()), t.State, {Tag: 1.000000, Value: child}));
 });
 AutocompleteService__stop$ = (function(t)
@@ -579,8 +580,8 @@ FSharpIDE__getSuggestion$ = (function(x,options)
 });
 FSharpIDE__initialize$ = (function(_this,panel)
 {
-    var _1119;
-    var arg10_ = _1119;
+    var _1123;
+    var arg10_ = _1123;
     FSharpIDE__projInit$(_this);
     ErrorPanelView__handleEditorChange$(panel, (((window.atom).workspace).getActiveTextEditor()));
     TooltipHandler__initialize$(_this.service, (((window.atom).workspace).getActiveTextEditor()));
@@ -666,8 +667,8 @@ FSharpIDE__register$ = (function(_this,panel)
     })));
     return (((window.atom).project).onDidChangePaths((function(_arg6)
     {
-      var _1009;
-      var arg10_ = _1009;
+      var _1013;
+      var arg10_ = _1013;
       return FSharpIDE__projInit$(_this);
     })));
 });
@@ -686,16 +687,16 @@ HighlighterHandler__handle$ = (function(lst)
     var action = (function(item)
     {
       var marker = (editor.markBufferRange([[item.StartLine, item.StartColumn], [item.EndLine, item.EndColumn]]));
-      var _878;
+      var _882;
       if ((item.Severity == "Warning")) 
       {
-        _878 = "highlight-warning";
+        _882 = "highlight-warning";
       }
       else
       {
-        _878 = "highlight-error";
+        _882 = "highlight-error";
       };
-      var cls = _878;
+      var cls = _882;
       HighlighterHandler__marked = Array__Append$IDisplayBufferMarker_IDisplayBufferMarker_([marker], HighlighterHandler__marked);
       editor.decorateMarker(marker, {type: 'highlight', class: cls});
     });
@@ -865,16 +866,16 @@ Seq__Delay$Object_Object_ = (function(f)
 {
     return Seq__FromFactory$Object_Object_((function(unitVar0)
     {
-      var _1506;
-      return Seq__Enumerator$Object_Object_(f(_1506));
+      var _1510;
+      return Seq__Enumerator$Object_Object_(f(_1510));
     }));
 });
 Seq__Delay$String_1String = (function(f)
 {
     return Seq__FromFactory$String_1String((function(unitVar0)
     {
-      var _1415;
-      return Seq__Enumerator$String_1String(f(_1415));
+      var _1419;
+      return Seq__Enumerator$String_1String(f(_1419));
     }));
 });
 Seq__Enumerator$Object_Object_ = (function(xs)
@@ -957,8 +958,8 @@ Seq__FromFactory$Object_Object_ = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _1498;
-        return __.factory(_1498);
+        var _1502;
+        return __.factory(_1502);
       })(impl, unitVar1);
     })};
 });
@@ -970,8 +971,8 @@ Seq__FromFactory$String_1String = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _1343;
-        return __.factory(_1343);
+        var _1347;
+        return __.factory(_1347);
       })(impl, unitVar1);
     })};
 });
@@ -983,14 +984,14 @@ Seq__FromFactory$String___String___ = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _245;
-        return __.factory(_245);
+        var _249;
+        return __.factory(_249);
       })(impl, unitVar1);
     })};
 });
 Seq__IterateIndexed$Object_Object_ = (function(f,xs)
 {
-    var _1520;
+    var _1524;
     return Seq__FoldIndexed$Object__Unit_Object__Unit_((function(i)
     {
       return (function(unitVar1)
@@ -1000,11 +1001,11 @@ Seq__IterateIndexed$Object_Object_ = (function(f,xs)
           return f(i)(x);
         });
       });
-    }), _1520, xs);
+    }), _1524, xs);
 });
 Seq__IterateIndexed$String___String___ = (function(f,xs)
 {
-    var _265;
+    var _269;
     return Seq__FoldIndexed$String____Unit_String____Unit_((function(i)
     {
       return (function(unitVar1)
@@ -1014,7 +1015,7 @@ Seq__IterateIndexed$String___String___ = (function(f,xs)
           return f(i)(x);
         });
       });
-    }), _265, xs);
+    }), _269, xs);
 });
 Seq__Map$String_1_Object_String_Object_ = (function(f,xs)
 {
@@ -1130,8 +1131,8 @@ Seq__Unfold$IEnumerator_1_String__Object_IEnumerator_1_String__Object_ = (functi
           });
           return (Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_(__.acc) && (function()
           {
-            var _1476;
-            return next(_1476);
+            var _1480;
+            return next(_1480);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1187,8 +1188,8 @@ Seq__Unfold$IEnumerator_1_String__String_1IEnumerator_1_String__String = (functi
           });
           return (Option__IsSome$IEnumerator_1_String_IEnumerator_1_String_(__.acc) && (function()
           {
-            var _1392;
-            return next(_1392);
+            var _1396;
+            return next(_1396);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1244,8 +1245,8 @@ Seq__Unfold$Int32__String_1Int32_String = (function(f,seed)
           });
           return (Option__IsSome$Int32_Int32(__.acc) && (function()
           {
-            var _1321;
-            return next(_1321);
+            var _1325;
+            return next(_1325);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -1301,8 +1302,8 @@ Seq__Unfold$Int32__String___Int32_String___ = (function(f,seed)
           });
           return (Option__IsSome$Int32_Int32(__.acc) && (function()
           {
-            var _223;
-            return next(_223);
+            var _227;
+            return next(_227);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
