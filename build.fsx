@@ -165,7 +165,7 @@ Target "PushToMaster" (fun _ ->
         CopyRecursive tempGitDir (tempReleaseDir  </> ".git") true |> ignore
 
     cleanEverythingFromLastCheckout()    
-    CopyRecursive "src/paket" tempReleaseDir true |> tracefn "%A"    
+    CopyRecursive "src/fsharp" tempReleaseDir true |> tracefn "%A"    
    
     StageAll tempReleaseDir
     Git.Commit.Commit tempReleaseDir (sprintf "Release %s" release.NugetVersion)
