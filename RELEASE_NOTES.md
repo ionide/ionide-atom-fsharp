@@ -1,3 +1,6 @@
+#### 0.1.7 - 07.05.2015
+* Fix [#32](https://github.com/fsprojects/FSharp.Atom/issues/32)
+
 #### 0.1.6 - 07.05.2015
 * Fix [#30](https://github.com/fsprojects/FSharp.Atom/issues/30)
 * Fix [#29](https://github.com/fsprojects/FSharp.Atom/issues/29)
