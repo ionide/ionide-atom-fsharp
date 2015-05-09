@@ -43,7 +43,7 @@ module TooltipHandler =
                 lastPosition <- pos
                 timer <- Some ( Globals.setTimeout((fun _ -> let path = editor.buffer.file.path
                                                              service
-                                                             |> AutocompleteHandler.tooltip path (int pos.row + 1) (int pos.column)
+                                                             |> LanguageService.tooltip path (int pos.row + 1) (int pos.column)
                                                                 (fun s -> tooltip.[0].firstElementChild
                                                                           |> fun n -> try
                                                                                         if (jq "body /deep/ span.fsharp:hover").length > 0. then
@@ -69,7 +69,7 @@ module TooltipHandler =
                     n.mouseleave(fun e -> clearTimer () :> obj) |> ignore
                     n.scroll(fun e -> clearTimer() :> obj) |> ignore
 
-    let initialize (service : AutocompleteService.T) (editor : IEditor) =
+    let initialize (service : LanguageService.T) (editor : IEditor) =
         if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
             editor
             |> Globals.atom.views.getView
