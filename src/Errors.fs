@@ -85,8 +85,12 @@ module ErrorPanelView =
 
             ))
 
-    let handleEditorChange (panel : IPanel) (editor : AtomCore.IEditor) =
-        if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then panel.show() else panel.hide()
+    let handleEditorChange (panel : IPanel) (service : LanguageService.T) (editor : AtomCore.IEditor)  =
+        if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then 
+            panel.show()
+            editor.buffer.onDidStopChanging(fun _ -> service |> LanguageService.parseCurrent (fun _ -> ()) |> ignore)
+        else
+            panel.hide()
 
     let handle lst =
         let editor = Globals.atom.workspace.getActiveTextEditor()

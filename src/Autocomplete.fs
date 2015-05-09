@@ -49,7 +49,7 @@ module AutocompleteProvider =
                             Atom.Promise.resolve [||]
                     with
                     | ex -> Atom.Promise.resolve [||]
-            service |> LanguageService.completion path row col action |> ignore)
+            service |> LanguageService.parseCurrent (fun _ -> service |> LanguageService.completion path row col action |> ignore) |> ignore)
 
 
     let create service = { selector = ".source.fsharp"; disableForSelector = ".source.fsharp .string"; inclusionPriority = 1; excludeLowerPriority = true; getSuggestions = getSuggestion service}

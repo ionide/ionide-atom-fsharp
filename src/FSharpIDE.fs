@@ -31,8 +31,9 @@ type FSharpIDE() =
         if JS.isDefined p then Globals.readdir(p, System.Func<NodeJS.ErrnoException, string array, unit>(proj))
 
     let register panel =
+
         Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>( fun ed -> LanguageService.parseEditor ed (fun _ -> ()) service |> ignore))
-        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(fun ed -> ErrorPanelView.handleEditorChange panel ed))
+        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(fun ed -> ErrorPanelView.handleEditorChange panel service ed))
         Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(fun ed -> Globals.setTimeout((fun _ -> TooltipHandler.initialize service ed), 500.)))
         Globals.atom.on("FSharp:Highlight", unbox<Function>(HighlighterHandler.handle))
         Globals.atom.on("FSharp:Highlight", unbox<Function>(ErrorPanelView.handle))
@@ -42,7 +43,7 @@ type FSharpIDE() =
 
     let initialize panel =
         projInit()
-        Globals.atom.workspace.getActiveTextEditor() |> ErrorPanelView.handleEditorChange panel
+        Globals.atom.workspace.getActiveTextEditor() |> ErrorPanelView.handleEditorChange panel service
         Globals.atom.workspace.getActiveTextEditor() |> TooltipHandler.initialize service
         ErrorPanelView.addButtonHandlers ()
         ErrorPanelView.addOutputHandle ()
