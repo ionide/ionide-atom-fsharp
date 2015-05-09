@@ -47,3 +47,4 @@ src/core/lib/core.js
 src/paket/lib/paket.js
 *ncrunch*
 src/core/README.md
+src/fsharp/lib/fsharp.js
