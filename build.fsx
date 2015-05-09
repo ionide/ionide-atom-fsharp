@@ -39,14 +39,14 @@ let gitRaw = environVarOrDefault "gitRaw" "https://raw.github.com/fsprojects"
 let tempReleaseDir = "temp/release"
 
 // Read additional information from the release notes document
-let releaseNotesData = 
+let releaseNotesData =
     File.ReadAllLines "RELEASE_NOTES.md"
     |> parseAllReleaseNotes
 
 let release = List.head releaseNotesData
 
 #if MONO
-let apmTool = "/usr/bin/apm"
+let apmTool = "apm"
 #else
 let apmTool = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) </> "atom" </> "bin" </> "apm.cmd"
 #endif
@@ -65,12 +65,12 @@ Target "BuildGenerator" (fun () ->
     |> Log "AppBuild-Output: "
 )
 
-Target "RunGenerator" (fun () -> 
-    
+Target "RunGenerator" (fun () ->
+
         (TimeSpan.FromMinutes 5.0)
         |> ProcessHelper.ExecProcess (fun p ->
             p.FileName <- __SOURCE_DIRECTORY__ @@ "src" @@ "bin" @@ "Debug" @@ "FSharp.Atom.Generator.exe" )
-        |> ignore    
+        |> ignore
 )
 #if MONO
 #else
@@ -140,7 +140,7 @@ Target "GenerateBindings" (fun () ->
 
 Target "InstallDependencies" (fun _ ->
     let args = "install"
-    
+
     let srcDir = "src/fsharp"
     let result =
         ExecProcess (fun info ->
@@ -172,9 +172,9 @@ Target "PushToMaster" (fun _ ->
         CleanDir tempReleaseDir
         CopyRecursive tempGitDir (tempReleaseDir  </> ".git") true |> ignore
 
-    cleanEverythingFromLastCheckout()    
-    CopyRecursive "src/fsharp" tempReleaseDir true |> tracefn "%A"    
-   
+    cleanEverythingFromLastCheckout()
+    CopyRecursive "src/fsharp" tempReleaseDir true |> tracefn "%A"
+
     StageAll tempReleaseDir
     Git.Commit.Commit tempReleaseDir (sprintf "Release %s" release.NugetVersion)
     Branches.push tempReleaseDir
@@ -198,7 +198,7 @@ Target "Default" DoNothing
 
 #if MONO
 "Clean"
-  ==> "BuildGenerator" 
+  ==> "BuildGenerator"
   ==> "RunGenerator"
   ==> "InstallDependencies"
 #else
