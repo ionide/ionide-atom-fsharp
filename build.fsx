@@ -45,7 +45,11 @@ let releaseNotesData =
 
 let release = List.head releaseNotesData
 
+#if MONO
+let apmTool = "/usr/bin/apm"
+#else
 let apmTool = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) </> "atom" </> "bin" </> "apm.cmd"
+#endif
 
 // --------------------------------------------------------------------------------------
 // Build the Generator project and run it
