@@ -15,8 +15,12 @@ open Fake.ZipHelper
 #if MONO
 #else
 #load "src/atom-bindings.fsx"
-#load "src/atom-extra.fs"
-#load "src/fsharp.fs"
+#load "src/Bindings.fs"
+#load "src/Helpers.fs"
+#load "src/Autocomplete.fs"
+#load "src/Tooltips.fs"
+#load "src/Errors.fs"
+#load "src/FSharpIDE.fs"
 #load "src/main.fs"
 
 #endif
