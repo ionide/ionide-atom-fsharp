@@ -33,8 +33,12 @@
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.1\Framework\v4.0\Microsoft.FSharp.Targets" />
   <ItemGroup>
-    <Compile Include="atom-extra.fs" />
-    <Compile Include="fsharp.fs" />
+    <Compile Include="Bindings.fs" />
+    <Compile Include="Helpers.fs" />
+    <Compile Include="Autocomplete.fs" />
+    <Compile Include="Tooltips.fs" />
+    <Compile Include="Errors.fs" />
+    <Compile Include="FSharpIDE.fs" />
     <Compile Include="main.fs" />
     <None Include="atom-bindings.fsx" />
   </ItemGroup>
