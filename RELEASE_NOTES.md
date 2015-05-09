@@ -1,3 +1,8 @@
+#### 0.1.9 - 07.05.2015
+* Change project organization
+* Fix [#36](https://github.com/fsprojects/FSharp.Atom/issues/36)
+
+
 #### 0.1.8 - 07.05.2015
 * Fix [#32](https://github.com/fsprojects/FSharp.Atom/issues/32)
 
