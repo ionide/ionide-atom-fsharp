@@ -17,6 +17,7 @@ open Fake.ZipHelper
 #load "src/atom-bindings.fsx"
 #load "src/Bindings.fs"
 #load "src/Helpers.fs"
+#load "src/LanguageService.fs"
 #load "src/Autocomplete.fs"
 #load "src/Tooltips.fs"
 #load "src/Errors.fs"

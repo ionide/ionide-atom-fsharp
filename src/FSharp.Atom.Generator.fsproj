@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Bindings.fs" />
     <Compile Include="Helpers.fs" />
+    <Compile Include="LanguageService.fs" />
     <Compile Include="Autocomplete.fs" />
     <Compile Include="Tooltips.fs" />
     <Compile Include="Errors.fs" />
