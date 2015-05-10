@@ -25,8 +25,6 @@ open Fake.ZipHelper
 
 #endif
 
-RestorePackages()
-
 // Git configuration (used for publishing documentation in gh-pages branch)
 // The profile where the project is posted
 let gitOwner = "fsprojects"

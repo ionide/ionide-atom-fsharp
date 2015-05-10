@@ -63,7 +63,7 @@ module ErrorPanelView =
     let addButtonHandlers () =
         let btns = jq(".btn-toggle button")
         let panels = jq(".outputPanel")
-        btns.click(fun e -> let j = jq'(e.target :?> Element)
+        btns.click(fun e -> let j = jq'( e.target)
                             btns.removeClass("toggle") |> ignore
                             panels.hide() |> ignore
                             match j.attr("id") with
