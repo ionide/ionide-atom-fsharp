@@ -61,9 +61,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
-    <Reference Include="FunScript.Interop">
-      <HintPath>..\lib\FunScript.Interop.dll</HintPath>
-    </Reference>
     <Reference Include="FunScript.TypeScript.Binding.atom">
       <HintPath>..\lib\FunScript.TypeScript.Binding.atom.dll</HintPath>
     </Reference>
@@ -91,8 +88,21 @@
     <Reference Include="FunScript.TypeScript.Binding.space_pen">
       <HintPath>..\lib\FunScript.TypeScript.Binding.space_pen.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <Choose>
+    <When Condition="($(TargetFrameworkIdentifier) == '.NETFramework' And ($(TargetFrameworkVersion) == 'v4.0' Or $(TargetFrameworkVersion) == 'v4.5' Or $(TargetFrameworkVersion) == 'v4.5.1' Or $(TargetFrameworkVersion) == 'v4.5.2' Or $(TargetFrameworkVersion) == 'v4.5.3' Or $(TargetFrameworkVersion) == 'v4.6')) Or ($(TargetFrameworkIdentifier) == 'MonoAndroid') Or ($(TargetFrameworkIdentifier) == 'MonoTouch')">
+      <ItemGroup>
+        <Reference Include="FunScript.Interop">
+          <HintPath>..\packages\FunScript\lib\net40\FunScript.Interop.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
+        </Reference>
     <Reference Include="FunScript">
-      <HintPath>..\lib\FunScript.dll</HintPath>
+          <HintPath>..\packages\FunScript\lib\net40\FunScript.dll</HintPath>
+          <Private>True</Private>
+          <Paket>True</Paket>
     </Reference>
   </ItemGroup>
+    </When>
+  </Choose>
 </Project>
