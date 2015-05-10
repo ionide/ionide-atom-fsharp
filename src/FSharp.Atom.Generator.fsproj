@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Bindings.fs" />
     <Compile Include="Helpers.fs" />
+    <Compile Include="LanguageService.fs" />
     <Compile Include="Autocomplete.fs" />
     <Compile Include="Tooltips.fs" />
     <Compile Include="Errors.fs" />
@@ -96,12 +97,12 @@
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
-        <Reference Include="FunScript">
+    <Reference Include="FunScript">
           <HintPath>..\packages\FunScript\lib\net40\FunScript.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
+    </Reference>
+  </ItemGroup>
     </When>
   </Choose>
 </Project>

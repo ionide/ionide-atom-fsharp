@@ -12,9 +12,9 @@ open Atom
 open FSharp.Atom  
 
 type FSharpIDE() =
-    let service = AutocompleteService.create
-                  |> AutocompleteService.start
-                  |> AutocompleteService.send "outputmode json\n"
+    let service = LanguageService.create
+                  |> LanguageService.start
+                  |> LanguageService.send "outputmode json\n"
 
     let projInit () =
         let p = Globals.atom.project.getPaths().[0]
@@ -24,15 +24,16 @@ type FSharpIDE() =
             match projExist with
             | Some a ->
                 let path = Globals.atom.project.resolve a
-                service |> AutocompleteHandler.project path (fun _ -> service |> AutocompleteHandler.parseCurrent (fun _ -> ()) |> ignore)
+                service |> LanguageService.project path (fun _ -> service |> LanguageService.parseCurrent (fun _ -> ()) |> ignore)
                 |> ignore
-            | None -> service |> AutocompleteHandler.parseCurrent (fun _ -> ()) |> ignore
+            | None -> service |> LanguageService.parseCurrent (fun _ -> ()) |> ignore
 
         if JS.isDefined p then Globals.readdir(p, System.Func<NodeJS.ErrnoException, string array, unit>(proj))
 
     let register panel =
-        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>( fun ed -> AutocompleteHandler.parseEditor ed (fun _ -> ()) service |> ignore))
-        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(fun ed -> ErrorPanelView.handleEditorChange panel ed))
+
+        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>( fun ed -> LanguageService.parseEditor ed (fun _ -> ()) service |> ignore))
+        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(fun ed -> ErrorPanelView.handleEditorChange panel service ed))
         Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(fun ed -> Globals.setTimeout((fun _ -> TooltipHandler.initialize service ed), 500.)))
         Globals.atom.on("FSharp:Highlight", unbox<Function>(HighlighterHandler.handle))
         Globals.atom.on("FSharp:Highlight", unbox<Function>(ErrorPanelView.handle))
@@ -42,7 +43,7 @@ type FSharpIDE() =
 
     let initialize panel =
         projInit()
-        Globals.atom.workspace.getActiveTextEditor() |> ErrorPanelView.handleEditorChange panel
+        Globals.atom.workspace.getActiveTextEditor() |> ErrorPanelView.handleEditorChange panel service
         Globals.atom.workspace.getActiveTextEditor() |> TooltipHandler.initialize service
         ErrorPanelView.addButtonHandlers ()
         ErrorPanelView.addOutputHandle ()
@@ -63,5 +64,5 @@ type FSharpIDE() =
         ()
 
     member x.deactivate() =
-        service |> AutocompleteService.stop |> ignore 
+        service |> LanguageService.stop |> ignore 
         ()

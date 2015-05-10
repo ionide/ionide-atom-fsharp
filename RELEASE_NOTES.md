@@ -1,4 +1,7 @@
-#### 0.1.9 - 07.05.2015
+#### 0.1.10 - 10.05.2015
+* Make error highlighting more responsive
+
+#### 0.1.9 - 09.05.2015
 * Change project organization
 * Fix [#36](https://github.com/fsprojects/FSharp.Atom/issues/36)
 
