@@ -4,6 +4,7 @@
 
 #if INTERACTIVE
 #I "../lib"
+#I "../packages/FunScript/lib/net40"
 
 #r "FunScript.dll" 
 #r "FunScript.Interop.dll"
