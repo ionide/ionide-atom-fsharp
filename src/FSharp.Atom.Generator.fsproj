@@ -12,7 +12,6 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
@@ -30,6 +29,8 @@
     <PlatformTarget>x86</PlatformTarget>
     <Externalconsole>true</Externalconsole>
     <Tailcalls>true</Tailcalls>
+    <DefineConstants>
+    </DefineConstants>
   </PropertyGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '11.0'">
@@ -53,6 +54,7 @@
     <Compile Include="FSharpIDE.fs" />
     <Compile Include="main.fs" />
     <None Include="atom-bindings.fsx" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
@@ -60,38 +62,38 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
-    <Reference Include="FunScript.Interop">
-      <HintPath>..\lib\FunScript.Interop.dll</HintPath>
-    </Reference>
     <Reference Include="FunScript.TypeScript.Binding.atom">
       <HintPath>..\lib\FunScript.TypeScript.Binding.atom.dll</HintPath>
     </Reference>
-    <Reference Include="FunScript.TypeScript.Binding.emissary">
-      <HintPath>..\lib\FunScript.TypeScript.Binding.emissary.dll</HintPath>
-    </Reference>
-    <Reference Include="FunScript.TypeScript.Binding.jquery">
-      <HintPath>..\lib\FunScript.TypeScript.Binding.jquery.dll</HintPath>
-    </Reference>
-    <Reference Include="FunScript.TypeScript.Binding.lib">
-      <HintPath>..\lib\FunScript.TypeScript.Binding.lib.dll</HintPath>
-    </Reference>
-    <Reference Include="FunScript.TypeScript.Binding.mixto">
-      <HintPath>..\lib\FunScript.TypeScript.Binding.mixto.dll</HintPath>
-    </Reference>
-    <Reference Include="FunScript.TypeScript.Binding.node">
-      <HintPath>..\lib\FunScript.TypeScript.Binding.node.dll</HintPath>
-    </Reference>
-    <Reference Include="FunScript.TypeScript.Binding.pathwatcher">
-      <HintPath>..\lib\FunScript.TypeScript.Binding.pathwatcher.dll</HintPath>
-    </Reference>
-    <Reference Include="FunScript.TypeScript.Binding.q">
-      <HintPath>..\lib\FunScript.TypeScript.Binding.q.dll</HintPath>
-    </Reference>
-    <Reference Include="FunScript.TypeScript.Binding.space_pen">
-      <HintPath>..\lib\FunScript.TypeScript.Binding.space_pen.dll</HintPath>
+    <Reference Include="FunScript.Interop">
+      <HintPath>..\packages\FunScript.1.1.93\lib\net40\FunScript.Interop.dll</HintPath>
     </Reference>
     <Reference Include="FunScript">
-      <HintPath>..\lib\FunScript.dll</HintPath>
+      <HintPath>..\packages\FunScript.1.1.93\lib\net40\FunScript.dll</HintPath>
+    </Reference>
+    <Reference Include="FunScript.TypeScript.Binding.lib">
+      <HintPath>..\packages\FunScript.TypeScript.Binding.lib.1.1.0.37\lib\net40\FunScript.TypeScript.Binding.lib.dll</HintPath>
+    </Reference>
+    <Reference Include="FunScript.TypeScript.Binding.jquery">
+      <HintPath>..\packages\FunScript.TypeScript.Binding.jquery.1.1.0.37\lib\net40\FunScript.TypeScript.Binding.jquery.dll</HintPath>
+    </Reference>
+    <Reference Include="FunScript.TypeScript.Binding.node">
+      <HintPath>..\packages\FunScript.TypeScript.Binding.node.1.1.0.37\lib\net40\FunScript.TypeScript.Binding.node.dll</HintPath>
+    </Reference>
+    <Reference Include="FunScript.TypeScript.Binding.q">
+      <HintPath>..\packages\FunScript.TypeScript.Binding.q.1.1.0.37\lib\net40\FunScript.TypeScript.Binding.q.dll</HintPath>
+    </Reference>
+    <Reference Include="FunScript.TypeScript.Binding.pathwatcher">
+      <HintPath>..\packages\FunScript.TypeScript.Binding.pathwatcher.1.1.0.37\lib\net40\FunScript.TypeScript.Binding.pathwatcher.dll</HintPath>
+    </Reference>
+    <Reference Include="FunScript.TypeScript.Binding.space_pen">
+      <HintPath>..\packages\FunScript.TypeScript.Binding.space_pen.1.1.0.37\lib\net40\FunScript.TypeScript.Binding.space_pen.dll</HintPath>
+    </Reference>
+    <Reference Include="FunScript.TypeScript.Binding.mixto">
+      <HintPath>..\packages\FunScript.TypeScript.Binding.mixto.1.1.0.37\lib\net40\FunScript.TypeScript.Binding.mixto.dll</HintPath>
+    </Reference>
+    <Reference Include="FunScript.TypeScript.Binding.emissary">
+      <HintPath>..\packages\FunScript.TypeScript.Binding.emissary.1.1.0.37\lib\net40\FunScript.TypeScript.Binding.emissary.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>
