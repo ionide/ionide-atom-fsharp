@@ -40,10 +40,7 @@ module ViewsHelpers =
 
 [<ReflectedDefinition>]
 module DTO =
-    type CompletionResult = {Kind : string; Data : string []}
-
-    type TooltipResult = {Kind : string; Data : string}
-
+    
     type Error = {
         StartLine : int
         StartLineAlternate : int
@@ -58,4 +55,13 @@ module DTO =
         Subcategory : string
         }
 
+    type Declaration = {
+        File : string
+        Line : int
+        Column : int
+    }
+
+    type CompletionResult = {Kind : string; Data : string []}
+    type TooltipResult = {Kind : string; Data : string}
     type ParseResult = {Kind : string; Data : Error []}
+    type FindDeclarationResult = {Kind : string; Data: Declaration}

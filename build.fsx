@@ -21,9 +21,9 @@ open Fake.ZipHelper
 #load "src/Autocomplete.fs"
 #load "src/Tooltips.fs"
 #load "src/Errors.fs"
+#load "src/FindDeclaration.fs"
 #load "src/FSharpIDE.fs"
 #load "src/main.fs"
-
 #endif
 
 // Git configuration (used for publishing documentation in gh-pages branch)

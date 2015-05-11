@@ -112,3 +112,7 @@ module LanguageService =
     let tooltip fn line col cb service =
         let str = sprintf "tooltip \"%s\" %d %d\n" fn line col
         service |> ask str 1 cb
+
+    let findDeclaration fn line col cb service =
+        let str = sprintf "finddecl \"%s\" %d %d\n" fn line col
+        service |> ask str 1 cb

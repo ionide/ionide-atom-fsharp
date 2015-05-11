@@ -9,6 +9,9 @@ open FunScript.TypeScript.AtomCore
 [<JSEmit("var cmd = {}; cmd[{1}]=function() { return {2}(); }; return atom.commands.add({0}, cmd);")>]
 let addCommand(name:string, cmdName:string, func:unit -> unit) = failwith "JS"
 
+[<JSEmitInline("atom.commands.add({0}, {1}, {2});")>]
+let addCommand'(name:string, context: string, func:unit -> unit) = failwith "JS"
+
 module Promise = 
     type Promise = class end
 
@@ -56,6 +59,11 @@ module Bindings =
         dismissable : bool
         }
 
+    type OpenOptions = {
+        initialLine : int
+        initialColumn : int
+    }
+
     type IProject with
         [<FunScript.JSEmitInline("({0}.getPaths())")>]
         member __.getPaths() : string [] = failwith "never"
@@ -68,6 +76,8 @@ module Bindings =
         
         [<FunScript.JSEmitInline("{0}.addModalPanel({1})")>]
         member __.addModalPanel(o: obj) : IPanel = failwith "JS"
+        [<FunScript.JSEmitInline("{0}.open({1}, {2})")>]
+        member __.open'(fn : string, op : OpenOptions) : unit = failwith "JS"
 
     type IAtom with
         [<FunScript.JSEmitInline("({0}.views)")>]

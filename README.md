@@ -14,6 +14,8 @@ Using APM or Atom UI:
 - Auto completions
 - Error highlighting and error list in bottom panel
 - Tooltips
+- Commenting
+- Go to Declaration
 - Support for script files or F# projects.
 
 ## Contributing and copyright
