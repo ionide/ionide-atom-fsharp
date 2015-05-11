@@ -1,3 +1,7 @@
+#### 0.1.12 - 11.05.2015
+* Implement `Go to declaration`
+
+
 #### 0.1.11 - 10.05.2015
 * Fix [#40](https://github.com/fsprojects/FSharp.Atom/issues/40)
 
