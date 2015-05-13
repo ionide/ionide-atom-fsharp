@@ -1,3 +1,6 @@
+#### 0.1.14 - 11.05.2015
+* Basic FAKE support
+
 #### 0.1.13 - 11.05.2015
 * Implement `Go to declaration`
 
