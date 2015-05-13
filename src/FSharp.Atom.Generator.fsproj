@@ -51,6 +51,8 @@
     <Compile Include="Autocomplete.fs" />
     <Compile Include="Tooltips.fs" />
     <Compile Include="Errors.fs" />
+    <Compile Include="FindDeclaration.fs" />
+    <Compile Include="FAKE.fs" />
     <Compile Include="FSharpIDE.fs" />
     <Compile Include="main.fs" />
     <None Include="atom-bindings.fsx" />
@@ -97,12 +99,12 @@
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
-    <Reference Include="FunScript">
+        <Reference Include="FunScript">
           <HintPath>..\packages\FunScript\lib\net40\FunScript.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
-    </Reference>
-  </ItemGroup>
+        </Reference>
+      </ItemGroup>
     </When>
   </Choose>
 </Project>

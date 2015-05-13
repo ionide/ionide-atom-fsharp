@@ -22,6 +22,7 @@ open Fake.ZipHelper
 #load "src/Tooltips.fs"
 #load "src/Errors.fs"
 #load "src/FindDeclaration.fs"
+#load "src/FAKE.fs"
 #load "src/FSharpIDE.fs"
 #load "src/main.fs"
 #endif

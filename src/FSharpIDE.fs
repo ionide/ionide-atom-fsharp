@@ -47,6 +47,7 @@ type FSharpIDE() =
         Globals.atom.workspace.getActiveTextEditor() |> TooltipHandler.initialize service
         ErrorPanelView.addButtonHandlers ()
         ErrorPanelView.addOutputHandle ()
+        FAKE.register ()
 
     member x.provide ()=
         AutocompleteProvider.create service
@@ -62,6 +63,8 @@ type FSharpIDE() =
         Globals.setTimeout((fun _ -> panel |> register), 500.) |> ignore
         Globals.setTimeout((fun _ -> panel |> initialize), 500.) |> ignore
         Globals.setTimeout((fun _ -> addCommand'("atom-text-editor", "symbols-view:go-to-declaration", FindDeclaration.handle service )), 500.) |> ignore
+        
+        
         ()
 
     member x.deactivate() =
