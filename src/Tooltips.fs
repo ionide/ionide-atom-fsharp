@@ -12,6 +12,7 @@ open Atom
 [<ReflectedDefinition>]
 module TooltipHandler =
     type position = {row : float; column : float}
+    let mutable ed = createEmpty<IEditor>()
 
     let create () =
        "<div class='type-tooltip tooltip'><div class='tooltip-inner'></div></div>" |> jq
@@ -30,6 +31,9 @@ module TooltipHandler =
         timer <- None
 
     let register service editor time element =
+        
+
+
 
         jq(".panes").append tooltip |> ignore
 
@@ -69,11 +73,23 @@ module TooltipHandler =
                     n.mouseleave(fun e -> clearTimer () :> obj) |> ignore
                     n.scroll(fun e -> clearTimer() :> obj) |> ignore
 
+    let remove () = 
+        if JS.isDefined ed && JS.isPropertyDefined ed "getGrammar" && ed.getGrammar().name = "F#" then
+            ed
+            |> Globals.atom.views.getView
+            |> getElementsByClass ".scroll-view"
+            |> Option.map (fun n -> n.[0] |> unbox<Element> |> jq')
+            |> Option.iter (fun n -> n.unbind() |> ignore)
+
     let initialize (service : LanguageService.T) (editor : IEditor) =
+        remove ()
         if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
+            ed <- editor            
             editor
             |> Globals.atom.views.getView
             |> getElementsByClass ".scroll-view"
             |> Option.map (fun n -> n.[0] |> unbox<Element>)
             |> Option.iter (fun n -> register service editor 500. n)
+
+
 

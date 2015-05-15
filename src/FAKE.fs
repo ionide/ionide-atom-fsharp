@@ -111,7 +111,7 @@ module FAKE =
             |> fun n -> n.getModel()
 
         editorView.getBuffer().stoppedChangingDelay <- 200.
-        editorView.getBuffer().onDidStopChanging(stopChangingCallback editorView listView )
+        editorView.getBuffer().onDidStopChanging(stopChangingCallback editorView listView ) |> ignore
 
         let panel = 
             { PanelOptions.item = unbox<JQuery> (listView)

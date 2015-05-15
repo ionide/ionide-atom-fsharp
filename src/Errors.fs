@@ -88,7 +88,7 @@ module ErrorPanelView =
     let handleEditorChange (panel : IPanel) (service : LanguageService.T) (editor : AtomCore.IEditor)  =
         if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then 
             panel.show()
-            editor.buffer.onDidStopChanging(fun _ -> service |> LanguageService.parseCurrent (fun _ -> ()) |> ignore)
+            editor.buffer.onDidStopChanging(fun _ -> service |> LanguageService.parseCurrent (fun _ -> ()) |> ignore) |> ignore
         else
             panel.hide()
 

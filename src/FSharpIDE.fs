@@ -12,9 +12,9 @@ open Atom
 open FSharp.Atom  
 
 type FSharpIDE() =
-    let service = LanguageService.create
-                  |> LanguageService.start
-                  |> LanguageService.send "outputmode json\n"
+    let mutable service = LanguageService.create
+    let mutable panel : IPanel option = None
+    let subscriptions = ResizeArray()
 
     let projInit () =
         let p = Globals.atom.project.getPaths().[0]
@@ -31,42 +31,48 @@ type FSharpIDE() =
         if JS.isDefined p then Globals.readdir(p, System.Func<NodeJS.ErrnoException, string array, unit>(proj))
 
     let register panel =
-
-        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>( fun ed -> LanguageService.parseEditor ed (fun _ -> ()) service |> ignore))
-        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(fun ed -> ErrorPanelView.handleEditorChange panel service ed))
-        Globals.atom.workspace.onDidChangeActivePaneItem (unbox<Function>(fun ed -> Globals.setTimeout((fun _ -> TooltipHandler.initialize service ed), 500.)))
-        Globals.atom.on("FSharp:Highlight", unbox<Function>(HighlighterHandler.handle))
-        Globals.atom.on("FSharp:Highlight", unbox<Function>(ErrorPanelView.handle))
-        Globals.atom.project.onDidChangePaths(fun _ -> projInit ())
+        Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> LanguageService.parseEditor ed (fun _ -> ()) service |> ignore) |> subscriptions.Add
+        Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> ErrorPanelView.handleEditorChange panel service ed |> ignore) |> subscriptions.Add
+        Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> Globals.setTimeout((fun _ -> TooltipHandler.initialize service ed), 500.) |> ignore) |> subscriptions.Add
+        Globals.atom.on'("FSharp:Highlight", unbox<Function>(HighlighterHandler.handle)) |> subscriptions.Add
+        Globals.atom.on'("FSharp:Highlight", unbox<Function>(ErrorPanelView.handle)) |> subscriptions.Add
+        Globals.atom.project.onDidChangePaths(fun _ -> projInit ()) |> subscriptions.Add
 
     
 
     let initialize panel =
         projInit()
-        Globals.atom.workspace.getActiveTextEditor() |> ErrorPanelView.handleEditorChange panel service
+        Globals.atom.workspace.getActiveTextEditor() |> ErrorPanelView.handleEditorChange panel service 
         Globals.atom.workspace.getActiveTextEditor() |> TooltipHandler.initialize service
         ErrorPanelView.addButtonHandlers ()
         ErrorPanelView.addOutputHandle ()
         FAKE.register ()
 
     member x.provide ()=
-        AutocompleteProvider.create service
+        AutocompleteProvider.create service 
 
     member x.getSuggestion(options : AutocompleteProvider.GetSuggestionOptions) =
         AutocompleteProvider.getSuggestion service options
 
     member x.activate(state:obj) =
-        let panel =
+        service <- LanguageService.create
+                   |> LanguageService.start
+                   |> LanguageService.send "outputmode json\n"
+
+        let p =
             let t = ErrorPanelView.create ()
             Globals.atom.workspace.addBottomPanel (unbox<AnonymousType499>{PanelOptions.item = t; PanelOptions.priority = 100; PanelOptions.visible = false})
+        panel <- Some p
 
-        Globals.setTimeout((fun _ -> panel |> register), 500.) |> ignore
-        Globals.setTimeout((fun _ -> panel |> initialize), 500.) |> ignore
+
+        Globals.setTimeout((fun _ -> p |> register), 500.) |> ignore
+        Globals.setTimeout((fun _ -> p |> initialize), 500.) |> ignore
         Globals.setTimeout((fun _ -> addCommand'("atom-text-editor", "symbols-view:go-to-declaration", FindDeclaration.handle service )), 500.) |> ignore
-        
-        
         ()
 
     member x.deactivate() =
+        subscriptions |> Seq.iter(fun n -> n.dispose())
+        subscriptions.Clear()
         service |> LanguageService.stop |> ignore 
+        panel |> Option.iter( fun p -> p.destroy())
         ()
