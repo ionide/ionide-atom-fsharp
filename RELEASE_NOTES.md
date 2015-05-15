@@ -1,3 +1,8 @@
+#### 0.1.15 - 15.05.2015
+* Fix [#42](https://github.com/fsprojects/FSharp.Atom/issues/42)
+* Fix [#43](https://github.com/fsprojects/FSharp.Atom/issues/43)
+
+
 #### 0.1.14 - 11.05.2015
 * Basic FAKE support
 
