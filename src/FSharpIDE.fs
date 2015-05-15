@@ -23,7 +23,7 @@ type FSharpIDE() =
             let projExist = arr |> Array.tryFind(fun a -> a.Split('.') |> fun n -> n.[n.Length - 1]  = "fsproj")
             match projExist with
             | Some a ->
-                let path = Globals.atom.project.resolve a
+                let path = Globals.atom.project.getDirectories().[0].resolve()
                 service |> LanguageService.project path (fun _ -> service |> LanguageService.parseCurrent (fun _ -> ()) |> ignore)
                 |> ignore
             | None -> service |> LanguageService.parseCurrent (fun _ -> ()) |> ignore

@@ -40,6 +40,7 @@ module JS =
 type ViewRegistry = interface end
 type NotificationManager = interface end 
 type Notification = interface end
+type IDirectory = interface end
 
 [<AutoOpen>]
 module Bindings = 
@@ -64,9 +65,16 @@ module Bindings =
         initialColumn : int
     }
 
+    type IDirectory with
+        [<FunScript.JSEmitInline("({0}.resolve())")>]
+        member __.resolve() : string = failwith "never"
+
     type IProject with
         [<FunScript.JSEmitInline("({0}.getPaths())")>]
         member __.getPaths() : string [] = failwith "never"
+
+        [<FunScript.JSEmitInline("({0}.getDirectories())")>]
+        member __.getDirectories() : IDirectory [] = failwith "never"
 
         [<FunScript.JSEmitInline("({0}.onDidChangePaths({1}))")>]
         member __.onDidChangePaths(cb: string[] -> unit) : unit = failwith "JS"
