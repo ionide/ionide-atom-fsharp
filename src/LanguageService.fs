@@ -29,7 +29,7 @@ module LanguageService =
     let isNotError () = service.State <> State.Error
     let isOffOrError () = isError () || isOff ()
 
-    let start () =
+    let start cb =
         let location = Globals.atom.packages.packageDirPaths.[0] + "/fsharp/bin/fsautocomplete.exe"
         let child = if Globals._process.platform.StartsWith("win") then
                         Globals.spawn(location)
@@ -37,11 +37,15 @@ module LanguageService =
                         Globals.spawn("mono", [| location |])
         child.stdin.setEncoding( encoding);
         service <- { service with State = State.On; PreviousState = service.State; Child = Some child }      
+        do cb ()
 
-    let stop () =
+
+    let stop cb =
         service.Child |> Option.iter (fun n -> n.kill "SIGKILL")
         service <- { service with State = State.Off; PreviousState = service.State; Child = None }
-        
+        do cb ()
+
+
 
     let ask (msg' : string) no cb =
         let msg = msg'.Replace("\uFEFF", "")

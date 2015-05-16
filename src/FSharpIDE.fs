@@ -51,7 +51,7 @@ type FSharpIDE() =
         AutocompleteProvider.getSuggestion options
 
     member x.activate(state:obj) =
-        do LanguageService.start ()
+        do LanguageService.start (fun _ -> ())
         do LanguageService.send "outputmode json\n"
 
         let p =
@@ -68,6 +68,6 @@ type FSharpIDE() =
     member x.deactivate() =
         subscriptions |> Seq.iter(fun n -> n.dispose())
         subscriptions.Clear()
-        LanguageService.stop ()
+        LanguageService.stop (fun _ -> ())
         panel |> Option.iter( fun p -> p.destroy())
         ()
