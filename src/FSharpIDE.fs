@@ -13,9 +13,21 @@ open FSharp.Atom
 
 type FSharpIDE() =
     let mutable panel : IPanel option = None
+    let mutable statusbar : IStatusBar option = None
+    let mutable notification : ITile option = None
     let subscriptions = ResizeArray()
 
+    let addStatusNotification status = 
+        notification |> Option.iter (fun n -> n.destroy())
+        statusbar |> Option.iter(fun s -> 
+            let el = sprintf "<span class='fsharp-status'>F# Status - %s</span>" status |> jq
+            notification <- s.addLeftTile({item =el ; priority = 100}) |> Some
+
+        )
+    
+
     let projInit () =
+        
         let p = Globals.atom.project.getPaths().[0]
         Globals.console.log p
         let proj (ex : NodeJS.ErrnoException) (arr : string array) =
@@ -23,8 +35,8 @@ type FSharpIDE() =
             match projExist with
             | Some a ->
                 let path = Globals.atom.project.getDirectories().[0].resolve()
-                LanguageService.project path (fun _ -> LanguageService.parseCurrent (fun _ -> ()))
-            | None -> LanguageService.parseCurrent (fun _ -> ())
+                LanguageService.project path (fun _ -> LanguageService.parseCurrent (fun _ -> addStatusNotification "Ready" ))
+            | None -> LanguageService.parseCurrent (fun _ -> addStatusNotification "Ready" )
 
         if JS.isDefined p then Globals.readdir(p, System.Func<NodeJS.ErrnoException, string array, unit>(proj))
 
@@ -47,6 +59,12 @@ type FSharpIDE() =
     member x.provide ()=
         AutocompleteProvider.create () 
 
+    member x.consumeStatusBar (sb : IStatusBar) = 
+        statusbar <- Some sb
+        addStatusNotification "Loading"
+
+        ()
+
     member x.getSuggestion(options : AutocompleteProvider.GetSuggestionOptions) =
         AutocompleteProvider.getSuggestion options
 
@@ -59,7 +77,6 @@ type FSharpIDE() =
             Globals.atom.workspace.addBottomPanel (unbox<AnonymousType499>{PanelOptions.item = t; PanelOptions.priority = 100; PanelOptions.visible = false})
         panel <- Some p
 
-
         Globals.setTimeout((fun _ -> p |> register), 500.) |> ignore
         Globals.setTimeout((fun _ -> p |> initialize), 500.) |> ignore
         Globals.setTimeout((fun _ -> addCommand'("atom-text-editor", "symbols-view:go-to-declaration", FindDeclaration.handle )), 500.) |> ignore
@@ -68,6 +85,6 @@ type FSharpIDE() =
     member x.deactivate() =
         subscriptions |> Seq.iter(fun n -> n.dispose())
         subscriptions.Clear()
-        LanguageService.stop (fun _ -> ())
+        LanguageService.stop (fun _ -> addStatusNotification "Off")
         panel |> Option.iter( fun p -> p.destroy())
         ()

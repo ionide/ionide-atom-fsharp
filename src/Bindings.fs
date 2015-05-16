@@ -45,25 +45,36 @@ type NotificationManager = interface end
 type Notification = interface end
 type IDirectory = interface end
 type IDisposable = interface end
-
+type IStatusBar = interface end
+type ITile = interface end
 
 [<AutoOpen>]
 module Bindings = 
     
+    type StatusBarOptions = { 
+        item: JQuery;
+        priority : int
+    }
 
-    type PanelOptions =
-        { item: JQuery;
-          visible : bool;
-          priority : int}
+    type PanelOptions = { 
+        item: JQuery
+        visible : bool
+        priority : int
+    }
 
-    type Coordinates = {top : float; left : float}
+    type Coordinates = {
+        top : float
+        left : float
+    }
 
-    type BufferChangeEvent = {newText : string}
+    type BufferChangeEvent = {
+        newText : string
+    }
 
     type NotificationsOptions = {
         detail: string
         dismissable : bool
-        }
+    }
 
     type OpenOptions = {
         initialLine : int
@@ -121,6 +132,28 @@ module Bindings =
         [<FunScript.JSEmitInline("{0}.addFatalError({1}, {2})")>]
         member __.addFatalError(message: string, options: NotificationsOptions) : Notification = failwith "JS"
 
+    type IStatusBar with
+        [<FunScript.JSEmitInline("{0}.addLeftTile({1})")>]
+        member __.addLeftTile(o: StatusBarOptions) : ITile = failwith "JS"
+
+        [<FunScript.JSEmitInline("{0}.addRightTile({1})")>]
+        member __.addRightTile(o: StatusBarOptions) : ITile = failwith "JS"
+
+        [<FunScript.JSEmitInline("{0}.getLeftTiles()")>]
+        member __.getLeftTiles() : ITile[] = failwith "JS"
+
+        [<FunScript.JSEmitInline("{0}.getRightTiles()")>]
+        member __.getRightTiles() : ITile[] = failwith "JS"
+
+    type ITile with
+        [<FunScript.JSEmitInline("{0}.getPriority()")>]
+        member __.getPriority() : int = failwith "JS"
+
+        [<FunScript.JSEmitInline("{0}.getItem()")>]
+        member __.getItem() : JQuery = failwith "JS"
+
+        [<FunScript.JSEmitInline("{0}.destroy()")>]
+        member __.destroy() : unit = failwith "JS"
 
     type ViewRegistry with 
         [<FunScript.JSEmitInline("({0}.getView({1}))")>]
@@ -133,7 +166,6 @@ module Bindings =
     [<JSEmitInline("{0}.decorateMarker({1}, {type: 'highlight', class: {2}})")>]
     let decorateMarker(ed : IEditor, marker : IDisplayBufferMarker, cls : string) : unit = failwith "JS"
 
-
     [<JSEmitInline("new atomSpaceView.SelectListView()")>]
     let SelectListViewCtor () : FunScript.TypeScript.atom.SelectListView = failwith "JS"
 
@@ -142,7 +174,6 @@ module Bindings =
 
     [<JSEmitInline("{0}.getBoundingClientRect()")>]
     let getBoundingClientRect(o : obj) : Coordinates = failwith "JS"
-
 
     type stream.Writable with
         [<FunScript.JSEmitInline("({0}.setEncoding({1}))")>]
