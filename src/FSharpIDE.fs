@@ -32,20 +32,18 @@ type FSharpIDE() =
 
     let register panel =
         Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> LanguageService.parseEditor ed (fun _ -> ()) service |> ignore) |> subscriptions.Add
-        Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> ErrorPanelView.handleEditorChange panel service ed |> ignore) |> subscriptions.Add
+        Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> ErrorPanel.handleEditorChange panel service ed |> ignore) |> subscriptions.Add
         Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> Globals.setTimeout((fun _ -> TooltipHandler.initialize service ed), 500.) |> ignore) |> subscriptions.Add
         Globals.atom.on'("FSharp:Highlight", unbox<Function>(HighlighterHandler.handle)) |> subscriptions.Add
-        Globals.atom.on'("FSharp:Highlight", unbox<Function>(ErrorPanelView.handle)) |> subscriptions.Add
+        Globals.atom.on'("FSharp:Highlight", unbox<Function>(ErrorPanel.handle)) |> subscriptions.Add
         Globals.atom.project.onDidChangePaths(fun _ -> projInit ()) |> subscriptions.Add
 
     
 
     let initialize panel =
         projInit()
-        Globals.atom.workspace.getActiveTextEditor() |> ErrorPanelView.handleEditorChange panel service 
+        Globals.atom.workspace.getActiveTextEditor() |> ErrorPanel.handleEditorChange panel service 
         Globals.atom.workspace.getActiveTextEditor() |> TooltipHandler.initialize service
-        ErrorPanelView.addButtonHandlers ()
-        ErrorPanelView.addOutputHandle ()
         FAKE.register ()
 
     member x.provide ()=
@@ -60,7 +58,7 @@ type FSharpIDE() =
                    |> LanguageService.send "outputmode json\n"
 
         let p =
-            let t = ErrorPanelView.create ()
+            let t = ErrorPanel.create ()
             Globals.atom.workspace.addBottomPanel (unbox<AnonymousType499>{PanelOptions.item = t; PanelOptions.priority = 100; PanelOptions.visible = false})
         panel <- Some p
 

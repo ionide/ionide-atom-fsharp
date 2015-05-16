@@ -27,25 +27,19 @@ module HighlighterHandler =
         ()
 
 [<ReflectedDefinition>]
-module ErrorPanelView =
+module ErrorPanel =
     let create () =
         "<div class='tool-panel panel-bottom error-pane' id='pane'>
                 <div class='inset-panel'>
-                <div class='panel-heading clearfix'>
-                    <div class='btn-toolbar pull-left'>
-                        <div class='btn-group btn-toggle'>
-                            <button id='btnError' class='btn toggle'>Errors</button>
-                            <button id='btnOutput' class='btn' >Output</button>
-                        </div>
-                    </div>
+                <div class='panel-heading clearfix' style='height: 30px'>
+                  <span>Errors</span>
                 </div>
-                <table id='panelError' class='error-table outputPanel' >
-                    <thead><th>Position</th><th>Message</th><th>Type</th><th>Category</th></thead>
-                    <tbody id='errorList'>
-                </table>
-                <div id='panelOutput' class='error-table outputPanel' style='display : none'></span>
-
-            </div>
+                <div class='scrollable' style='height: 120px'>
+                    <table id='panelError' class='error-table outputPanel' >
+                        <thead><th>Position</th><th>Message</th><th>Type</th><th>Category</th></thead>
+                        <tbody id='errorList'>
+                    </table>
+                </div>
             </div>"
         |> jq
 
@@ -59,34 +53,8 @@ module ErrorPanelView =
                 |> jq
         t.click(fun x -> editor.setCursorBufferPosition [|e.StartLine; e.StartColumn |])
 
-
-    let addButtonHandlers () =
-        let btns = jq(".btn-toggle button")
-        let panels = jq(".outputPanel")
-        btns.click(fun e -> let j = jq'( e.target)
-                            btns.removeClass("toggle") |> ignore
-                            panels.hide() |> ignore
-                            match j.attr("id") with
-                            | "btnError" -> jq("#panelError").show() |> ignore
-                            | "btnOutput" -> jq("#panelOutput").show() |> ignore
-                            | _ -> ()
-
-
-                            j.addClass("toggle") :> obj ) |> ignore
-
-    let addOutputHandle () =
-        Globals.atom.on("FSharp:Output", unbox<Function>(fun (msg : string) ->
-            let msg' = msg.Replace("\n", "</br>")
-            do jq("#panelOutput").append ( sprintf "<span>%s</span>" msg' ) |> ignore
-            if jq("#panelOutput").isVisible () then
-               let n = jq("#pane")
-               do n.scrollTop(n.height()) |> ignore
-
-
-            ))
-
     let handleEditorChange (panel : IPanel) (service : LanguageService.T) (editor : AtomCore.IEditor)  =
-        if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then 
+        if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
             panel.show()
             editor.buffer.onDidStopChanging(fun _ -> service |> LanguageService.parseCurrent (fun _ -> ()) |> ignore) |> ignore
         else

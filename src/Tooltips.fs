@@ -31,10 +31,6 @@ module TooltipHandler =
         timer <- None
 
     let register service editor time element =
-        
-
-
-
         jq(".panes").append tooltip |> ignore
 
         element |> jq'
@@ -90,6 +86,3 @@ module TooltipHandler =
             |> getElementsByClass ".scroll-view"
             |> Option.map (fun n -> n.[0] |> unbox<Element>)
             |> Option.iter (fun n -> register service editor 500. n)
-
-
-
