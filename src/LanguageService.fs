@@ -13,44 +13,40 @@ open Atom
 module LanguageService =
     let private encoding = "utf-8"
 
-    type State =
+    type private State =
         | On
         | Off
         | Error
 
-    type T = { State : State; PreviousState : State; Child : ChildProcess option }
+    type private T = { State : State; PreviousState : State; Child : ChildProcess option }
 
-    let isOn t = t.State = State.On
-    let isOff t = t.State = State.Off
-    let isNotOff t = t.State <> State.Off
-    let isError t = t.State = State.Error
-    let isNotError t = t.State <> State.Error
-    let isOffOrError t = isError t || isOff t
+    let mutable private service = { State = State.Off; PreviousState = State.Off; Child = None }
 
-    let create = { State = State.Off; PreviousState = State.Off; Child = None }
+    let isOn () = service.State = State.On
+    let isOff () = service.State = State.Off
+    let isNotOff () = service.State <> State.Off
+    let isError () = service.State = State.Error
+    let isNotError () = service.State <> State.Error
+    let isOffOrError () = isError () || isOff ()
 
-    /// Starts the 'fsautocomplete.exe' process. If we are
-    /// running on Windows, just start it. On Mac, use mono!
-    let start t =
-        let location =
-            Globals.atom.packages.packageDirPaths.[0] + "/fsharp/bin/fsautocomplete.exe"
-        let child =
-            if Globals._process.platform.StartsWith("win") then
-                Globals.spawn(location)
-            else
-                Globals.spawn("mono", [| location |])
+    let start () =
+        let location = Globals.atom.packages.packageDirPaths.[0] + "/fsharp/bin/fsautocomplete.exe"
+        let child = if Globals._process.platform.StartsWith("win") then
+                        Globals.spawn(location)
+                    else
+                        Globals.spawn("mono", [| location |])
         child.stdin.setEncoding( encoding);
+        service <- { service with State = State.On; PreviousState = service.State; Child = Some child }      
 
-        { t with State = State.On; PreviousState = t.State; Child = Some child }
+    let stop () =
+        service.Child |> Option.iter (fun n -> n.kill "SIGKILL")
+        service <- { service with State = State.Off; PreviousState = service.State; Child = None }
+        
 
-    let stop t =
-        t.Child |> Option.iter (fun n -> n.kill "SIGKILL")
-        { t with State = State.Off; PreviousState = t.State; Child = None }
-
-    let ask (msg' : string) no cb state =
+    let ask (msg' : string) no cb =
         let msg = msg'.Replace("\uFEFF", "")
-        Globals.console.log ("ASKED: " + msg)
-        state.Child |> Option.iter (fun c ->
+        //Globals.console.log ("ASKED: " + msg)
+        service.Child |> Option.iter (fun c ->
                         let s = ref ""
                         let action (data : obj) =
                             let t = !s
@@ -58,31 +54,29 @@ module LanguageService =
                             let a = !s
                             let len = a.Split('\n').Length - 1
                             if len = no || a.Contains "\"Kind\":\"ERROR\"" then
-                                Globals.console.log ("RECIVED: " + a)
+                                //Globals.console.log ("RECIVED: " + a)
                                 c.stdout.removeAllListeners "data" |> ignore
                                 cb a
 
                         c.stdin.write( msg, encoding)
                         c.stdout.on ("data", unbox<Function> (action)) |> ignore)
-        state
 
-    let send (msg' : string) t =
+    let send (msg' : string) =
         let msg = msg'.Replace("\uFEFF", "")
-        Globals.console.log ("SEND: " + msg)
-        t.Child |> Option.iter (fun c -> c.stdin.write( msg, encoding) |> ignore)
-        t
+        //Globals.console.log ("SEND: " + msg)
+        do service.Child |> Option.iter (fun c -> c.stdin.write( msg, encoding) |> ignore)
 
-    let project s cb service =
+    let project s cb =
         let str = sprintf "project \"%s\"\n" s
-        service |> ask str 1 cb
+        ask str 1 cb
+        
 
-    let parse path text cb service =
-        //Wierd behaviour
-        //let str = sprintf "parse \"%s\"\n%s\n<<EOF>>\n" path text
+    let parse path text cb =
         let str = "parse \"" + path + "\"\n" + text + "\n<<EOF>>\n"
-        service |> ask str 2 cb
+        ask str 2 cb
+        
 
-    let parseEditor (editor : IEditor) cb service =
+    let parseEditor (editor : IEditor) cb =
         if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
             let path = editor.buffer.file.path
             let text = editor.getText()
@@ -96,23 +90,22 @@ module LanguageService =
                     | ex -> ()
                 cb s
 
-            service |> parse path text action
+            parse path text action
         else
             cb "Error"
-            service
 
-    let parseCurrent cb service =
+    let parseCurrent cb =
         let editor = Globals.atom.workspace.getActiveTextEditor()
-        parseEditor editor cb service
+        parseEditor editor cb
 
-    let completion fn line col cb service =
+    let completion fn line col cb =
         let str = sprintf "completion \"%s\" %d %d\n" fn line col
-        service |> ask str 2 cb
+        ask str 2 cb
 
-    let tooltip fn line col cb service =
+    let tooltip fn line col cb =
         let str = sprintf "tooltip \"%s\" %d %d\n" fn line col
-        service |> ask str 1 cb
+        ask str 1 cb
 
-    let findDeclaration fn line col cb service =
+    let findDeclaration fn line col cb =
         let str = sprintf "finddecl \"%s\" %d %d\n" fn line col
-        service |> ask str 1 cb
+        ask str 1 cb

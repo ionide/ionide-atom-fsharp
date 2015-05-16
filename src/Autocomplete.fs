@@ -26,7 +26,7 @@ module AutocompleteProvider =
         excludeLowerPriority: bool 
         getSuggestions : GetSuggestionOptions -> Atom.Promise.Promise  }
 
-    let getSuggestion service (options:GetSuggestionOptions) =
+    let getSuggestion (options:GetSuggestionOptions) =
         let path = options.editor.buffer.file.path
         let row = int options.bufferPosition.row + 1
         let col = int options.bufferPosition.column
@@ -49,9 +49,9 @@ module AutocompleteProvider =
                             Atom.Promise.resolve [||]
                     with
                     | ex -> Atom.Promise.resolve [||]
-            service |> LanguageService.parseCurrent (fun _ -> service |> LanguageService.completion path row col action |> ignore) |> ignore)
+            LanguageService.parseCurrent (fun _ -> LanguageService.completion path row col action))
 
 
-    let create service = { selector = ".source.fsharp"; disableForSelector = ".source.fsharp .string"; inclusionPriority = 1; excludeLowerPriority = true; getSuggestions = getSuggestion service}
+    let create () = { selector = ".source.fsharp"; disableForSelector = ".source.fsharp .string"; inclusionPriority = 1; excludeLowerPriority = true; getSuggestions = getSuggestion}
 
 

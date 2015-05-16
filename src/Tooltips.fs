@@ -30,7 +30,7 @@ module TooltipHandler =
         timer |> Option.iter (Globals.clearTimeout)
         timer <- None
 
-    let register service editor time element =
+    let register editor time element =
         jq(".panes").append tooltip |> ignore
 
         element |> jq'
@@ -42,8 +42,7 @@ module TooltipHandler =
                 clearTimer()
                 lastPosition <- pos
                 timer <- Some ( Globals.setTimeout((fun _ -> let path = editor.buffer.file.path
-                                                             service
-                                                             |> LanguageService.tooltip path (int pos.row + 1) (int pos.column)
+                                                             LanguageService.tooltip path (int pos.row + 1) (int pos.column)
                                                                 (fun s -> tooltip.[0].firstElementChild
                                                                           |> fun n -> try
                                                                                         if (jq "body /deep/ span.fsharp:hover").length > 0. then
@@ -77,7 +76,7 @@ module TooltipHandler =
             |> Option.map (fun n -> n.[0] |> unbox<Element> |> jq')
             |> Option.iter (fun n -> n.unbind() |> ignore)
 
-    let initialize (service : LanguageService.T) (editor : IEditor) =
+    let initialize (editor : IEditor) =
         remove ()
         if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
             ed <- editor            
@@ -85,4 +84,4 @@ module TooltipHandler =
             |> Globals.atom.views.getView
             |> getElementsByClass ".scroll-view"
             |> Option.map (fun n -> n.[0] |> unbox<Element>)
-            |> Option.iter (fun n -> register service editor 500. n)
+            |> Option.iter (fun n -> register editor 500. n)
