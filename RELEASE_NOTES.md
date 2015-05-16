@@ -1,3 +1,8 @@
+#### 0.2.0 - 16.05.2015
+* Add support for multiproject solutions
+* Update bottom error panel
+* Some internal implementation changes
+
 #### 0.1.15 - 15.05.2015
 * Fix [#42](https://github.com/fsprojects/FSharp.Atom/issues/42)
 * Fix [#43](https://github.com/fsprojects/FSharp.Atom/issues/43)
