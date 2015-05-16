@@ -7,6 +7,7 @@ open FunScript.TypeScript.child_process
 open FunScript.TypeScript.AtomCore
 open FunScript.TypeScript.text_buffer
 
+
 open Atom
 
 [<ReflectedDefinition>]
@@ -97,6 +98,8 @@ module LanguageService =
             parse path text action
         else
             cb "Error"
+
+    
 
     let parseCurrent cb =
         let editor = Globals.atom.workspace.getActiveTextEditor()

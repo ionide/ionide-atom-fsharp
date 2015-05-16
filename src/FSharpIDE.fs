@@ -7,6 +7,7 @@ open FunScript.TypeScript.fs
 open FunScript.TypeScript.child_process
 open FunScript.TypeScript.AtomCore
 open FunScript.TypeScript.text_buffer
+open FunScript.TypeScript.path
 
 open Atom
 open FSharp.Atom  
@@ -24,36 +25,40 @@ type FSharpIDE() =
             notification <- s.addLeftTile({item =el ; priority = 100}) |> Some
 
         )
-    
 
-    let projInit () =
-        
-        let p = Globals.atom.project.getPaths().[0]
-        Globals.console.log p
-        let proj (ex : NodeJS.ErrnoException) (arr : string array) =
-            let projExist = arr |> Array.tryFind(fun a -> a.Split('.') |> fun n -> n.[n.Length - 1]  = "fsproj")
-            match projExist with
-            | Some a ->
-                let path = Globals.atom.project.getDirectories().[0].resolve()
-                LanguageService.project path (fun _ -> LanguageService.parseCurrent (fun _ -> addStatusNotification "Ready" ))
-            | None -> LanguageService.parseCurrent (fun _ -> addStatusNotification "Ready" )
+    let parseProjectForEditor (editor: IEditor) = 
+        let parseProj p = 
+            let proj (ex : NodeJS.ErrnoException) (arr : string array) =
+                let projExist = arr |> Array.tryFind(fun a -> a.Split('.') |> fun n -> n.[n.Length - 1]  = "fsproj")
+                match projExist with
+                | Some a -> let path = p + "/" + a
+                            LanguageService.project path (fun _ -> addStatusNotification "Ready")
+                | None -> addStatusNotification "Ready (.fsproj not found)"
+            if JS.isDefined p then Globals.readdir(p, System.Func<NodeJS.ErrnoException, string array, unit>(proj))
 
-        if JS.isDefined p then Globals.readdir(p, System.Func<NodeJS.ErrnoException, string array, unit>(proj))
+        if JS.isDefined editor then
+            addStatusNotification "Loading"
+            let p = editor.buffer.file.path
+            if (p.Split('.') |> fun n -> n.[n.Length - 1]  = "fsproj") || ( JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#") then
+                if JS.isDefined p then
+                    p |> Globals.dirname
+                      |> parseProj 
 
     let register panel =
         Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> LanguageService.parseEditor ed (fun _ -> ())) |> subscriptions.Add
         Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> ErrorPanel.handleEditorChange panel ed) |> subscriptions.Add
         Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> Globals.setTimeout((fun _ -> TooltipHandler.initialize ed), 500.) |> ignore) |> subscriptions.Add
+        Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> ed |> parseProjectForEditor) |> subscriptions.Add        
         Globals.atom.on'("FSharp:Highlight", unbox<Function>(HighlighterHandler.handle)) |> subscriptions.Add
         Globals.atom.on'("FSharp:Highlight", unbox<Function>(ErrorPanel.handle)) |> subscriptions.Add
-        Globals.atom.project.onDidChangePaths(fun _ -> projInit ()) |> subscriptions.Add
-
     
 
     let initialize panel =
-        projInit()
-        Globals.atom.workspace.getActiveTextEditor() |> ErrorPanel.handleEditorChange panel 
-        Globals.atom.workspace.getActiveTextEditor() |> TooltipHandler.initialize
+        let editor = Globals.atom.workspace.getActiveTextEditor()
+        editor |> parseProjectForEditor
+        LanguageService.parseEditor editor (fun _ -> ())
+        editor |> ErrorPanel.handleEditorChange panel 
+        editor |> TooltipHandler.initialize
         FAKE.register ()
 
     member x.provide ()=

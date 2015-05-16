@@ -71,6 +71,12 @@ module Bindings =
         newText : string
     }
 
+    type AddTextEditorEvent = {
+        textEditor : IEditor
+        pane : IPane
+        index : int
+    }
+
     type NotificationsOptions = {
         detail: string
         dismissable : bool
@@ -99,20 +105,26 @@ module Bindings =
         [<FunScript.JSEmitInline("({0}.onDidChangePaths({1}))")>]
         member __.onDidChangePaths(cb: string[] -> unit) : IDisposable = failwith "JS"
 
-
     type IWorkspace with        
         [<FunScript.JSEmitInline("{0}.addModalPanel({1})")>]
         member __.addModalPanel(o: obj) : IPanel = failwith "JS"
+        
         [<FunScript.JSEmitInline("{0}.open({1}, {2})")>]
         member __.open'(fn : string, op : OpenOptions) : unit = failwith "JS"
+        
         [<FunScript.JSEmitInline("{0}.onDidChangeActivePaneItem({1})")>]
         member __.onDidChangeActivePaneItem(cb: IEditor -> unit) : IDisposable = failwith "JS"
+
+        [<FunScript.JSEmitInline("{0}.onDidAddTextEditor({1})")>]
+        member __.onDidAddTextEditor(cb: AddTextEditorEvent -> unit) : IDisposable = failwith "JS"
 
     type IAtom with
         [<FunScript.JSEmitInline("({0}.views)")>]
         member __.views with get () : ViewRegistry = failwith "never"
+        
         [<FunScript.JSEmitInline("({0}.notifications)")>]
         member __.notifications with get () : NotificationManager = failwith "never"
+        
         [<FunScript.JSEmitInline("{0}.on({1}, {2})")>]
         member __.on'(name : string, cb : Function) : IDisposable = failwith "JS"
 

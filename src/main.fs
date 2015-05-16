@@ -71,6 +71,7 @@ let translateModules() =
         yield "window.$ = require('jquery');"
         yield "var atomSpaceView = require('atom-space-pen-views');"
         yield "var fs = require('fs');"
+        yield "var path = require('path');"
         yield ""
         yield "function wrappedFunScript() { \n" + coreJS + "\n }"
         yield "var _funcs = wrappedFunScript();"
