@@ -16,7 +16,7 @@ Using APM or Atom UI:
 - Tooltips
 - Commenting
 - Go to Declaration
-- Support for script files or F# projects.
+- Support for script files or F# projects (if plugin does not detect `.fsrpoj` file, just open it ).
 
 ## Contributing and copyright
 
