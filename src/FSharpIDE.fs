@@ -36,7 +36,7 @@ type FSharpIDE() =
                 | None -> addStatusNotification "Ready (.fsproj not found)"
             if JS.isDefined p then Globals.readdir(p, System.Func<NodeJS.ErrnoException, string array, unit>(proj))
 
-        if JS.isDefined editor then
+        if JS.isDefined editor && JS.isPropertyDefined editor "buffer" then
             addStatusNotification "Loading"
             let p = editor.buffer.file.path
             if (p.Split('.') |> fun n -> n.[n.Length - 1]  = "fsproj") || ( JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#") then
