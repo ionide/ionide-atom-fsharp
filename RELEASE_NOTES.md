@@ -1,5 +1,6 @@
-#### 0.2.3 - 17.05.2015
+#### 0.2.5 - 17.05.2015
 * Fix [#44](https://github.com/fsprojects/FSharp.Atom/issues/44)
+* Add completion type in auto complete
 
 
 #### 0.2.0 - 16.05.2015
