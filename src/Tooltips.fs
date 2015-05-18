@@ -41,34 +41,35 @@ module TooltipHandler =
             else
                 clearTimer()
                 lastPosition <- pos
-                timer <- Some ( Globals.setTimeout((fun _ -> let path = editor.buffer.file.path
-                                                             LanguageService.tooltip path (int pos.row + 1) (int pos.column)
-                                                                (fun s -> tooltip.[0].firstElementChild
-                                                                          |> fun n -> try
-                                                                                        if (jq "body /deep/ span.fsharp:hover").length > 0. then
-                                                                                            let o = unbox<DTO.TooltipResult>(Globals.JSON.parse s)
-                                                                                            if o.Data <> "No tooltip information" then
-                                                                                                Globals.document.elementFromPoint(e.clientX, e.clientY)
-                                                                                                |> Globals.console.log
-                                                                                                let position = pixelPositionFromMouseEvent e editor
-                                                                                                let n' = jq'(n)
-                                                                                                n'.empty() |> ignore
-                                                                                                o.Data.Replace("\\n", "</br>")
-                                                                                                |> fun n ->  n.Replace("\n", "</br>")
-                                                                                                |>  n'.append |> ignore
-                                                                                                tooltip.css("left", position.left + 40.) |> ignore
-                                                                                                tooltip.css("top", e.clientY + 20.) |> ignore
-                                                                                                tooltip.fadeTo(300., 60.) |> ignore
-                                                                                      with
-                                                                                      | ex -> ()
-                                                                )
+                timer <- Some ( Globals.setTimeout((fun _ -> if unbox<obj>(editor.buffer.file) <> null then
+                                                                 let path = editor.buffer.file.path
+                                                                 LanguageService.tooltip path (int pos.row + 1) (int pos.column)
+                                                                    (fun s -> tooltip.[0].firstElementChild
+                                                                              |> fun n -> try
+                                                                                            if (jq "body /deep/ span.fsharp:hover").length > 0. then
+                                                                                                let o = unbox<DTO.TooltipResult>(Globals.JSON.parse s)
+                                                                                                if o.Data <> "No tooltip information" then
+                                                                                                    Globals.document.elementFromPoint(e.clientX, e.clientY)
+                                                                                                    |> Globals.console.log
+                                                                                                    let position = pixelPositionFromMouseEvent e editor
+                                                                                                    let n' = jq'(n)
+                                                                                                    n'.empty() |> ignore
+                                                                                                    o.Data.Replace("\\n", "</br>")
+                                                                                                    |> fun n ->  n.Replace("\n", "</br>")
+                                                                                                    |>  n'.append |> ignore
+                                                                                                    tooltip.css("left", position.left + 40.) |> ignore
+                                                                                                    tooltip.css("top", e.clientY + 20.) |> ignore
+                                                                                                    tooltip.fadeTo(300., 60.) |> ignore
+                                                                                          with
+                                                                                          | ex -> ()
+                                                                    )
                                                             |> ignore
                                                 ), time))
                 () :> obj) |> ignore
                     n.mouseleave(fun e -> clearTimer () :> obj) |> ignore
                     n.scroll(fun e -> clearTimer() :> obj) |> ignore
 
-    let remove () = 
+    let remove () =
         if JS.isDefined ed && JS.isPropertyDefined ed "getGrammar" && ed.getGrammar().name = "F#" then
             ed
             |> Globals.atom.views.getView
@@ -79,7 +80,7 @@ module TooltipHandler =
     let initialize (editor : IEditor) =
         remove ()
         if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
-            ed <- editor            
+            ed <- editor
             editor
             |> Globals.atom.views.getView
             |> getElementsByClass ".scroll-view"

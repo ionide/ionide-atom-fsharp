@@ -37,7 +37,7 @@ module LanguageService =
                     else
                         Globals.spawn("mono", [| location |])
         child.stdin.setEncoding( encoding);
-        service <- { service with State = State.On; PreviousState = service.State; Child = Some child }      
+        service <- { service with State = State.On; PreviousState = service.State; Child = Some child }
         do cb ()
 
 
@@ -74,15 +74,15 @@ module LanguageService =
     let project s cb =
         let str = sprintf "project \"%s\"\n" s
         ask str 1 cb
-        
+
 
     let parse path text cb =
         let str = "parse \"" + path + "\"\n" + text + "\n<<EOF>>\n"
         ask str 2 cb
-        
+
 
     let parseEditor (editor : IEditor) cb =
-        if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
+        if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" && unbox<obj>(editor.buffer.file) <> null then
             let path = editor.buffer.file.path
             let text = editor.getText()
             let action (s : string) =
@@ -99,7 +99,7 @@ module LanguageService =
         else
             cb "Error"
 
-    
+
 
     let parseCurrent cb =
         let editor = Globals.atom.workspace.getActiveTextEditor()

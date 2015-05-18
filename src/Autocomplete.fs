@@ -22,8 +22,8 @@ module AutocompleteProvider =
     type Provider = {
         selector : string
         disableForSelector: string
-        inclusionPriority : int 
-        excludeLowerPriority: bool 
+        inclusionPriority : int
+        excludeLowerPriority: bool
         getSuggestions : GetSuggestionOptions -> Atom.Promise.Promise  }
 
 
@@ -60,40 +60,40 @@ module AutocompleteProvider =
         | 156 -> "Breakpint" (* error *)
         | 168 -> "Misc-files" (* Misc1 *)
         | 174 ->  "Misc-files" (* Misc2 *)
-        | 180 -> "Misc-files" (* Misc3 *) 
+        | 180 -> "Misc-files" (* Misc3 *)
         | _ -> ""
 
 
     let getSuggestion (options:GetSuggestionOptions) =
-        let path = options.editor.buffer.file.path
-        let row = int options.bufferPosition.row + 1
-        let col = int options.bufferPosition.column
-        let prefix = options.prefix
-        Atom.Promise.create(fun () ->
-            let action = fun (s : string) ->
-                let msplit = s.Split('\n')
-                if msplit.Length > 1 then
-                    let msg = msplit.[1]
-                    try
-                        let result = unbox<DTO.CompletionResult>(Globals.JSON.parse msg)
-                        let pref = if prefix = "." || prefix = "=" then "" else prefix
-                        if result.Kind = "completion" then
-                            result.Data
-                            |> Seq.where(fun t -> t.Name.Contains(pref))
-                            |> Seq.map(fun t -> { Promise.Suggestion.text =  t.Name
-                                                  Promise.Suggestion.replacementPrefix = pref
-                                                  Promise.Suggestion.rightLabel = t.Glyph |> getNameFromGlyph
-                                                 // Promise.Suggestion.``type`` = t.Glyph |> getNameFromGlyph |> fun n -> n.ToLower().Replace(" ","")
-                                                })
-                            |> Seq.toArray
-                            |> Atom.Promise.resolve
-                        else
-                            Atom.Promise.resolve [||]
-                    with
-                    | ex -> Atom.Promise.resolve [||]
-            LanguageService.parseCurrent (fun _ -> LanguageService.completion path row col action))
+        if unbox<obj>(options.editor.buffer.file) <> null then 
+            let path = options.editor.buffer.file.path
+            let row = int options.bufferPosition.row + 1
+            let col = int options.bufferPosition.column
+            let prefix = options.prefix
+            Atom.Promise.create(fun () ->
+                let action = fun (s : string) ->
+                    let msplit = s.Split('\n')
+                    if msplit.Length > 1 then
+                        let msg = msplit.[1]
+                        try
+                            let result = unbox<DTO.CompletionResult>(Globals.JSON.parse msg)
+                            let pref = if prefix = "." || prefix = "=" then "" else prefix
+                            if result.Kind = "completion" then
+                                result.Data
+                                |> Seq.where(fun t -> t.Name.Contains(pref))
+                                |> Seq.map(fun t -> { Promise.Suggestion.text =  t.Name
+                                                      Promise.Suggestion.replacementPrefix = pref
+                                                      Promise.Suggestion.rightLabel = t.Glyph |> getNameFromGlyph
+                                                     // Promise.Suggestion.``type`` = t.Glyph |> getNameFromGlyph |> fun n -> n.ToLower().Replace(" ","")
+                                                    })
+                                |> Seq.toArray
+                                |> Atom.Promise.resolve
+                            else
+                                Atom.Promise.resolve [||]
+                        with
+                        | ex -> Atom.Promise.resolve [||]
+                LanguageService.parseCurrent (fun _ -> LanguageService.completion path row col action))
+            else Atom.Promise.create(fun () -> Atom.Promise.resolve [||])
 
 
     let create () = { selector = ".source.fsharp"; disableForSelector = ".source.fsharp .string"; inclusionPriority = 1; excludeLowerPriority = true; getSuggestions = getSuggestion}
-
-
