@@ -51,7 +51,7 @@ type FSharpIDE() =
         Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> ErrorPanel.handleEditorChange panel ed) |> subscriptions.Add
         Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> Globals.setTimeout((fun _ -> TooltipHandler.initialize ed), 500.) |> ignore) |> subscriptions.Add
         Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> ed |> parseProjectForEditor) |> subscriptions.Add
-        Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> ed.onDidSave (fun o -> LanguageService.parseEditor ed (fun _ -> ()) ) |> subscriptions.Add) |> subscriptions.Add
+        Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> if JS.isDefined ed && JS.isPropertyDefined ed "onDidSave" then ed.onDidSave (fun o -> LanguageService.parseEditor ed (fun _ -> ()) ) |> subscriptions.Add) |> subscriptions.Add
         Globals.atom.on'("FSharp:Highlight", unbox<Function>(HighlighterHandler.handle)) |> subscriptions.Add
         Globals.atom.on'("FSharp:Highlight", unbox<Function>(ErrorPanel.handle)) |> subscriptions.Add
 
