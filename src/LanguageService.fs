@@ -31,7 +31,7 @@ module LanguageService =
     let isOffOrError () = isError () || isOff ()
 
     let start cb =
-        let location = Globals.atom.packages.packageDirPaths.[0] + "/fsharp/bin/fsautocomplete.exe"
+        let location = Globals.atom.packages.packageDirPaths.[0] + "/FSharp/bin/fsautocomplete.exe"
         let child = if Globals._process.platform.StartsWith("win") then
                         Globals.spawn(location)
                     else
