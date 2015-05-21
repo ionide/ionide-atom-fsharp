@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FSharpLintSettings>
+    <Analysers>
+        <Analyser AnalyserId="FSharpLint.Typography">
+            <Rules>
+                <Rule Name="TrailingNewLineInFile">
+                    <RuleSettings>
+                        <Property name="Enabled">False</Property>
+                    </RuleSettings>
+                </Rule>
+            </Rules>
+            <AnalyserSettings />
+        </Analyser>
+        <Analyser AnalyserId="FSharpLint.SourceLength">
+            <Rules>
+                <Rule Name="MaxLinesInLambdaFunction">
+                    <RuleSettings>
+                        <Property name="Enabled">False</Property>
+                    </RuleSettings>
+                </Rule>
+            </Rules>
+            <AnalyserSettings />
+        </Analyser>
+    </Analysers>
+</FSharpLintSettings>
