@@ -10,7 +10,7 @@ open FunScript.TypeScript.text_buffer
 open FunScript.TypeScript.path
 
 open Atom
-open FSharp.Atom  
+open FSharp.Atom
 
 type FSharpIDE() =
     let mutable panel : IPanel option = None
@@ -18,16 +18,16 @@ type FSharpIDE() =
     let mutable notification : ITile option = None
     let subscriptions = ResizeArray()
 
-    let addStatusNotification status = 
+    let addStatusNotification status =
         notification |> Option.iter (fun n -> n.destroy())
-        statusbar |> Option.iter(fun s -> 
+        statusbar |> Option.iter(fun s ->
             let el = sprintf "<span class='fsharp-status'>F# Status - %s</span>" status |> jq
             notification <- s.addLeftTile({item =el ; priority = 100}) |> Some
 
         )
 
-    let parseProjectForEditor (editor: IEditor) = 
-        let parseProj p = 
+    let parseProjectForEditor (editor: IEditor) =
+        let parseProj p =
             let proj (ex : NodeJS.ErrnoException) (arr : string array) =
                 let projExist = arr |> Array.tryFind(fun a -> a.Split('.') |> fun n -> n.[n.Length - 1]  = "fsproj")
                 match projExist with
@@ -35,36 +35,39 @@ type FSharpIDE() =
                             LanguageService.project path (fun _ -> addStatusNotification "Ready")
                 | None -> addStatusNotification "Ready (.fsproj not found)"
             if JS.isDefined p then Globals.readdir(p, System.Func<NodeJS.ErrnoException, string array, unit>(proj))
+            else addStatusNotification "Ready (.fsproj not found)"
 
-        if JS.isDefined editor then
-            addStatusNotification "Loading"
+        if JS.isDefined editor && JS.isPropertyDefined editor "buffer" && unbox<obj>(editor.buffer) <> null && JS.isPropertyDefined editor.buffer "file" && unbox<obj>(editor.buffer.file) <> null then
             let p = editor.buffer.file.path
             if (p.Split('.') |> fun n -> n.[n.Length - 1]  = "fsproj") || ( JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#") then
                 if JS.isDefined p then
                     p |> Globals.dirname
-                      |> parseProj 
+                      |> parseProj
+                else addStatusNotification "Waiting for F# file"
+            else addStatusNotification "Waiting for F# file"
 
     let register panel =
         Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> LanguageService.parseEditor ed (fun _ -> ())) |> subscriptions.Add
         Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> ErrorPanel.handleEditorChange panel ed) |> subscriptions.Add
         Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> Globals.setTimeout((fun _ -> TooltipHandler.initialize ed), 500.) |> ignore) |> subscriptions.Add
-        Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> ed |> parseProjectForEditor) |> subscriptions.Add        
+        Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> ed |> parseProjectForEditor) |> subscriptions.Add
+        Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> if JS.isDefined ed && JS.isPropertyDefined ed "onDidSave" then ed.onDidSave (fun o -> LanguageService.parseEditor ed (fun _ -> ()) ) |> subscriptions.Add) |> subscriptions.Add
         Globals.atom.on'("FSharp:Highlight", unbox<Function>(HighlighterHandler.handle)) |> subscriptions.Add
         Globals.atom.on'("FSharp:Highlight", unbox<Function>(ErrorPanel.handle)) |> subscriptions.Add
-    
+
 
     let initialize panel =
         let editor = Globals.atom.workspace.getActiveTextEditor()
         editor |> parseProjectForEditor
         LanguageService.parseEditor editor (fun _ -> ())
-        editor |> ErrorPanel.handleEditorChange panel 
+        editor |> ErrorPanel.handleEditorChange panel
         editor |> TooltipHandler.initialize
         FAKE.register ()
 
     member x.provide ()=
-        AutocompleteProvider.create () 
+        AutocompleteProvider.create ()
 
-    member x.consumeStatusBar (sb : IStatusBar) = 
+    member x.consumeStatusBar (sb : IStatusBar) =
         statusbar <- Some sb
         addStatusNotification "Loading"
 

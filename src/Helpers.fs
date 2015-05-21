@@ -61,7 +61,12 @@ module DTO =
         Column : int
     }
 
-    type CompletionResult = {Kind : string; Data : string []}
+    type Completion = {
+        Name : string
+        Glyph : int
+    }
+
+    type CompletionResult = {Kind : string; Data : Completion []}
     type TooltipResult = {Kind : string; Data : string}
     type ParseResult = {Kind : string; Data : Error []}
     type FindDeclarationResult = {Kind : string; Data: Declaration}
