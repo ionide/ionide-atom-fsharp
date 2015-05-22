@@ -7,11 +7,13 @@ open FunScript.TypeScript.child_process
 open FunScript.TypeScript.AtomCore
 open FunScript.TypeScript.text_buffer
 
+
 open Atom
 
 [<ReflectedDefinition>]
 module HighlighterHandler =
     let mutable marked = Array.empty<IDisplayBufferMarker>
+
 
     let handle lst =
         marked |> Array.iter(fun m -> m.destroy() |> ignore)
@@ -28,6 +30,8 @@ module HighlighterHandler =
 
 [<ReflectedDefinition>]
 module ErrorPanel =
+    let mutable h : IDisposable option = None
+
     let create () =
         "<div class='tool-panel panel-bottom error-pane' id='pane'>
                 <div class='inset-panel'>
@@ -54,9 +58,10 @@ module ErrorPanel =
         t.click(fun x -> editor.setCursorBufferPosition [|e.StartLine; e.StartColumn |])
 
     let handleEditorChange (panel : IPanel) (editor : AtomCore.IEditor)  =
+        h |> Option.iter(fun h' -> h'.dispose () )
         if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
             panel.show()
-            editor.buffer.onDidStopChanging(fun _ -> LanguageService.parseCurrent (fun _ -> ())) |> ignore
+            h <- ( editor.buffer.onDidStopChanging(fun _ -> LanguageService.parseCurrent (fun _ -> ())) |> Some  )
         else
             panel.hide()
 
