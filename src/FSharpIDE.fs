@@ -17,6 +17,7 @@ type FSharpIDE() =
     let mutable statusbar : IStatusBar option = None
     let mutable notification : ITile option = None
     let subscriptions = ResizeArray()
+    let projects = ResizeArray<string>();
 
     let addStatusNotification status =
         notification |> Option.iter (fun n -> n.destroy())
@@ -32,7 +33,9 @@ type FSharpIDE() =
                 let projExist = arr |> Array.tryFind(fun a -> a.Split('.') |> fun n -> n.[n.Length - 1]  = "fsproj")
                 match projExist with
                 | Some a -> let path = p + "/" + a
-                            LanguageService.project path (fun _ -> addStatusNotification "Ready")
+                            if projects.Contains path |> not then
+                                projects.Add path
+                                LanguageService.project path (fun _ -> addStatusNotification "Ready")
                 | None -> addStatusNotification "Ready (.fsproj not found)"
             if JS.isDefined p then Globals.readdir(p, System.Func<NodeJS.ErrnoException, string array, unit>(proj))
             else addStatusNotification "Ready (.fsproj not found)"
@@ -52,9 +55,10 @@ type FSharpIDE() =
         Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> Globals.setTimeout((fun _ -> TooltipHandler.initialize ed), 500.) |> ignore) |> subscriptions.Add
         Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> ed |> parseProjectForEditor) |> subscriptions.Add
         Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> if JS.isDefined ed && JS.isPropertyDefined ed "onDidSave" then ed.onDidSave (fun o -> LanguageService.parseEditor ed (fun _ -> ()) ) |> subscriptions.Add) |> subscriptions.Add
-        Globals.atom.on'("FSharp:Highlight", unbox<Function>(HighlighterHandler.handle)) |> subscriptions.Add
-        Globals.atom.on'("FSharp:Highlight", unbox<Function>(ErrorPanel.handle)) |> subscriptions.Add
-
+        let t = Globals.atom.on'("FSharp:Highlight", unbox<Function>(HighlighterHandler.handle))
+        let t2 = Globals.atom.on'("FSharp:Highlight", unbox<Function>(ErrorPanel.handle))
+        t |> subscriptions.Add
+        t2 |> subscriptions.Add
 
     let initialize panel =
         let editor = Globals.atom.workspace.getActiveTextEditor()
