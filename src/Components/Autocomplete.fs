@@ -27,7 +27,7 @@ module AutocompleteProvider =
         getSuggestions : GetSuggestionOptions -> Atom.Promise.Promise  }
 
 
-    let getNameFromGlyph i =
+    let private getNameFromGlyph i =
         match i with
         | 0 ->  "Class"
         | 18 ->  "Enum"
@@ -65,34 +65,23 @@ module AutocompleteProvider =
 
 
     let getSuggestion (options:GetSuggestionOptions) =
-        if unbox<obj>(options.editor.buffer.file) <> null then 
+        if unbox<obj>(options.editor.buffer.file) <> null then
             let path = options.editor.buffer.file.path
             let row = int options.bufferPosition.row + 1
             let col = int options.bufferPosition.column
-            let prefix = options.prefix
+            let prefix = if options.prefix = "." || options.prefix = "=" then "" else options.prefix
             Atom.Promise.create(fun () ->
-                let action = fun (s : string) ->
-                    let msplit = s.Split('\n')
-                    if msplit.Length > 1 then
-                        let msg = msplit.[1]
-                        try
-                            let result = unbox<DTO.CompletionResult>(Globals.JSON.parse msg)
-                            let pref = if prefix = "." || prefix = "=" then "" else prefix
-                            if result.Kind = "completion" then
-                                result.Data
-                                |> Seq.where(fun t -> t.Name.Contains(pref))
-                                |> Seq.map(fun t -> { Promise.Suggestion.text =  t.Name
-                                                      Promise.Suggestion.replacementPrefix = pref
-                                                      Promise.Suggestion.rightLabel = t.Glyph |> getNameFromGlyph
-                                                     // Promise.Suggestion.``type`` = t.Glyph |> getNameFromGlyph |> fun n -> n.ToLower().Replace(" ","")
-                                                    })
-                                |> Seq.toArray
-                                |> Atom.Promise.resolve
-                            else
-                                Atom.Promise.resolve [||]
-                        with
-                        | ex -> Atom.Promise.resolve [||]
-                LanguageService.parseCurrent (fun _ -> LanguageService.completion path row col action))
+                Events.once Events.Completion (fun (result :DTO.CompletionResult) ->
+                    result.Data
+                    |> Seq.where(fun t -> t.Name.Contains(prefix))
+                    |> Seq.map(fun t -> { Promise.Suggestion.text =  t.Name
+                                          Promise.Suggestion.replacementPrefix = prefix
+                                          Promise.Suggestion.rightLabel = t.Glyph |> getNameFromGlyph
+                                         // Promise.Suggestion.``type`` = t.Glyph |> getNameFromGlyph |> fun n -> n.ToLower().Replace(" ","")
+                                        })
+                    |> Seq.toArray
+                    |> Atom.Promise.resolve )
+                )
             else Atom.Promise.create(fun () -> Atom.Promise.resolve [||])
 
 

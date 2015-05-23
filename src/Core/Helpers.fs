@@ -40,7 +40,7 @@ module ViewsHelpers =
 
 [<ReflectedDefinition>]
 module DTO =
-    
+
     type Error = {
         StartLine : int
         StartLineAlternate : int
@@ -70,3 +70,5 @@ module DTO =
     type TooltipResult = {Kind : string; Data : string}
     type ParseResult = {Kind : string; Data : Error []}
     type FindDeclarationResult = {Kind : string; Data: Declaration}
+
+

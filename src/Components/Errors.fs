@@ -6,33 +6,15 @@ open FunScript.TypeScript.fs
 open FunScript.TypeScript.child_process
 open FunScript.TypeScript.AtomCore
 open FunScript.TypeScript.text_buffer
-
-
 open Atom
 
 [<ReflectedDefinition>]
-module HighlighterHandler =
-    let mutable marked = Array.empty<IDisplayBufferMarker>
-
-
-    let handle lst =
-        marked |> Array.iter(fun m -> m.destroy() |> ignore)
-        marked <- Array.empty<IDisplayBufferMarker>
-        let editor = Globals.atom.workspace.getActiveTextEditor()
-        let action (item : DTO.Error) =
-            let marker = editor.markBufferRange(unbox<TextBuffer.IRange>([|[|float item.StartLine;float item.StartColumn|];[|float item.EndLine;  float item.EndColumn|]|]))
-            let cls = if item.Severity = "Warning" then "highlight-warning" else "highlight-error"
-            marked <- Array.append [|marker|] marked
-            decorateMarker(editor, marker, cls)
-            ()
-        lst |> Array.iter(action)
-        ()
-
-[<ReflectedDefinition>]
 module ErrorPanel =
-    let mutable h : IDisposable option = None
+    
+    let mutable private panel : IPanel option = None
+    let private subscriptions = ResizeArray()
 
-    let create () =
+    let private create () =
         "<div class='tool-panel panel-bottom error-pane' id='pane'>
                 <div class='inset-panel'>
                 <div class='panel-heading clearfix' style='height: 30px'>
@@ -47,7 +29,7 @@ module ErrorPanel =
             </div>"
         |> jq
 
-    let createRow (editor : IEditor) (e : DTO.Error)  =
+    let private createRow (editor : IEditor) (e : DTO.Error)  =
         let t = sprintf "<tr><td>%d : %d</td><td>%s</td><td>%s</td><td>%s</td></tr>"
                     e.StartLineAlternate
                     e.StartColumn
@@ -57,15 +39,13 @@ module ErrorPanel =
                 |> jq
         t.click(fun x -> editor.setCursorBufferPosition [|e.StartLine; e.StartColumn |])
 
-    let handleEditorChange (panel : IPanel) (editor : AtomCore.IEditor)  =
-        h |> Option.iter(fun h' -> h'.dispose () )
+    let private handleEditorChange (panel : IPanel) (editor : AtomCore.IEditor)  =
         if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
             panel.show()
-            h <- ( editor.buffer.onDidStopChanging(fun _ -> LanguageService.parseCurrent (fun _ -> ())) |> Some  )
         else
             panel.hide()
 
-    let handle lst =
+    let private handle lst =
         let editor = Globals.atom.workspace.getActiveTextEditor()
         if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
             let list = jq("#errorList")
@@ -73,3 +53,21 @@ module ErrorPanel =
             lst |> Array.iter(fun e -> let t = e |> createRow editor
                                        let r = t |> list.append
                                        ())
+
+    let activate () =
+        let p =
+            let t = create ()
+            Globals.atom.workspace.addBottomPanel (unbox<AnonymousType499>{PanelOptions.item = t; PanelOptions.priority = 100; PanelOptions.visible = false})
+        panel <- Some p
+
+        let t1 = Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> handleEditorChange p ed)
+        let t2 = unbox<Function> handle |> Events.on Events.Errors
+        subscriptions.Add t1
+        subscriptions.Add t2 
+        ()
+
+    let deactivate () =
+        panel |> Option.iter( fun p -> p.destroy())
+        subscriptions |> Seq.iter(fun n -> n.dispose())
+        subscriptions.Clear()
+        ()
