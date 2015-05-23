@@ -35,20 +35,26 @@ module Events =
         | Project -> "Fsharp_project"
         | Status -> "Fsharp_status"
 
+    let private log name o = 
+        Globals.console.log (name, System.DateTime.Now, o)
+
     let parseAndEmit<'T> t s =
         try
             let name = getName t
             let o = unbox<'T>(Globals.JSON.parse s)
+            log name o
             Globals.atom.emit(name, o)
         with
         | ex -> ()
 
     let emitEmpty t =
         let name = getName t
+        log name ()
         Globals.atom.emit(name, ())
 
     let emit t v = 
         let name = getName t
+        log name v
         Globals.atom.emit(name, v :> obj)
 
     let once t func =

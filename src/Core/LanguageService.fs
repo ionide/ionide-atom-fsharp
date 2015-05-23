@@ -31,7 +31,6 @@ module LanguageService =
 
     let ask (msg' : string) =
         let msg = msg'.Replace("\uFEFF", "")
-        //Globals.console.log ("ASKED: " + msg)
         service.Child |> Option.iter (fun c ->
             let action (data : obj) =
                 let s = data.ToString()
@@ -73,8 +72,6 @@ module LanguageService =
         Events.ServerStop |> Events.emitEmpty
         ()
 
-
-
     let project s =
         let str = sprintf "project \"%s\"\n" s
         ask str
@@ -82,7 +79,6 @@ module LanguageService =
     let parse path text =
         let str = "parse \"" + path + "\"\n" + text + "\n<<EOF>>\n"
         ask str
-
 
     let parseEditor (editor : IEditor) =
         if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" && unbox<obj>(editor.buffer.file) <> null then

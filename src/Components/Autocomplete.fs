@@ -18,14 +18,12 @@ module AutocompleteProvider =
         prefix : string
         scopeDescriptor : string[] }
 
-
     type Provider = {
         selector : string
         disableForSelector: string
         inclusionPriority : int
         excludeLowerPriority: bool
         getSuggestions : GetSuggestionOptions -> Atom.Promise.Promise  }
-
 
     let private getNameFromGlyph i =
         match i with
@@ -63,7 +61,6 @@ module AutocompleteProvider =
         | 180 -> "Misc-files" (* Misc3 *)
         | _ -> ""
 
-
     let getSuggestion (options:GetSuggestionOptions) =
         if unbox<obj>(options.editor.buffer.file) <> null then
             let path = options.editor.buffer.file.path
@@ -83,6 +80,5 @@ module AutocompleteProvider =
                     |> Atom.Promise.resolve )
                 )
             else Atom.Promise.create(fun () -> Atom.Promise.resolve [||])
-
 
     let create () = { selector = ".source.fsharp"; disableForSelector = ".source.fsharp .string"; inclusionPriority = 1; excludeLowerPriority = true; getSuggestions = getSuggestion}

@@ -24,7 +24,7 @@ module Parser =
                 | Some a -> let path = p + "/" + a
                             if projects.Contains path |> not then
                                 projects.Add path
-                                LanguageService.project path // (fun _ -> addStatusNotification "Ready") 
+                                LanguageService.project path
                 | None -> Events.emit Events.Status "Ready (.fsproj not found)"
             if JS.isDefined p then Globals.readdir(p, System.Func<NodeJS.ErrnoException, string array, unit>(proj))
             else Events.emit Events.Status "Ready (.fsproj not found)"

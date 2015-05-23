@@ -34,7 +34,6 @@ module TooltipHandler =
 
     let private reg editor time element =
         jq(".panes").append tooltip |> ignore
-
         element |> jq'
         |> fun n -> n.mousemove(fun e ->
                         let pos = getPosition e editor

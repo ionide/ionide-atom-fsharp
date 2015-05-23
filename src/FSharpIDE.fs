@@ -42,5 +42,4 @@ type FSharpIDE() =
         FAKE.deactivate ()
 
         LanguageService.stop ()
-
         ()
