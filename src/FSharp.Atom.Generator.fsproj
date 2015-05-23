@@ -45,17 +45,23 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" Condition="Exists('$(FSharpTargetsPath)')" />
   <ItemGroup>
-    <Compile Include="Bindings.fs" />
-    <Compile Include="Helpers.fs" />
-    <Compile Include="LanguageService.fs" />
-    <Compile Include="Autocomplete.fs" />
-    <Compile Include="Tooltips.fs" />
-    <Compile Include="Errors.fs" />
-    <Compile Include="FindDeclaration.fs" />
-    <Compile Include="FAKE.fs" />
+    
+    <Compile Include="Core\Bindings.fs" />
+    <Compile Include="Core\Helpers.fs" />
+    <Compile Include="Core\Events.fs" />
+    <Compile Include="Core\LanguageService.fs" />
+    <Compile Include="Components\Parser.fs" />
+    <Compile Include="Components\Autocomplete.fs" />
+    <Compile Include="Components\Tooltips.fs" />
+    <Compile Include="Components\Highlight.fs" />
+    <Compile Include="Components\Errors.fs" />
+    <Compile Include="Components\FindDeclaration.fs" />
+    <Compile Include="Components\FAKE.fs" />
+    <Compile Include="Components\StatusBar.fs" />
     <Compile Include="FSharpIDE.fs" />
     <Compile Include="main.fs" />
     <None Include="atom-bindings.fsx" />
+    
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

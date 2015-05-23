@@ -12,23 +12,23 @@ open FunScript.TypeScript.text_buffer
 open Atom
 
 [<ReflectedDefinition>]
-module FAKE = 
+module FAKE =
 
     type Options = {cwd : string}
     type ItemDescription = {data : string}
-    
-    let mutable currentNotification : Notification option = None
-    let mutable File : (string * string) option = None
-    let mutable taskListView : (atom.SelectListView * IPanel) option = None
-    
-    let jq (selector : string) = Globals.Dollar.Invoke selector
-    let jq'(selector : Element) = Globals.Dollar.Invoke selector
-    let jq'' (context: Element) (selector : string) = Globals.Dollar.Invoke (selector,context)
 
-    let notice isError text details =
+    let mutable private currentNotification : Notification option = None
+    let mutable private File : (string * string) option = None
+    let mutable private taskListView : (atom.SelectListView * IPanel) option = None
+
+    let private jq (selector : string) = Globals.Dollar.Invoke selector
+    let private jq'(selector : Element) = Globals.Dollar.Invoke selector
+    let private jq'' (context: Element) (selector : string) = Globals.Dollar.Invoke (selector,context)
+
+    let private notice isError text details =
         match currentNotification with
         | Some n -> let view = Globals.atom.views.getView (n)
-                    let t = ".content .detail .detail-content" |> jq'' view 
+                    let t = ".content .detail .detail-content" |> jq'' view
                     let line = "<div class='line'>" + details + "</div>"
                     t.append(line) |> ignore
                     ()
@@ -36,11 +36,11 @@ module FAKE =
                             Globals.atom.notifications.addError(text, { detail = details; dismissable = true })
                           else
                             Globals.atom.notifications.addInfo(text, { detail = details; dismissable = true })
-                  currentNotification <- Some n       
-   
+                  currentNotification <- Some n
 
-  
-    let handle error input =
+
+
+    let private handle error input =
         let output = input.ToString()
         Globals.console.log(output)
         if error then
@@ -49,7 +49,7 @@ module FAKE =
             notice false "" output
         ()
 
-    let handleExit (code:string) =
+    let private handleExit (code:string) =
         currentNotification |> Option.iter (fun n ->
             let view = Globals.atom.views.getView (n) |> jq'
             view.removeClass("info") |> ignore
@@ -63,7 +63,7 @@ module FAKE =
         )
 
 
-    let spawn location (cmd : string) =
+    let private spawn location (cmd : string) =
         let cmd' = cmd.Split(' ');
         let options = {cwd = Globals.atom.project.getPaths().[0]} |> unbox<AnonymousType599>
         let procs = if Globals._process.platform.StartsWith("win") then
@@ -78,9 +78,9 @@ module FAKE =
         procs.stderr.on("data", unbox<Function>(handle true )) |> ignore
         ()
 
-    let exec location cmd handler = 
+    let private exec location cmd handler =
         let options = {cwd = Globals.atom.project.getPaths().[0]} |> unbox<AnonymousType600>
-        
+
         let child =
             if Globals._process.platform.StartsWith("win") then
                 Globals.exec(location + " " + cmd, options, handler )
@@ -89,21 +89,21 @@ module FAKE =
         ()
 
 
-    let handlerAddItems (lv : atom.SelectListView) (error : Error) (stdout : Buffer) (stderr : Buffer) = 
+    let private handlerAddItems (lv : atom.SelectListView) (error : Error) (stdout : Buffer) (stderr : Buffer) =
         stdout.toString().Split('\n')
         |> Array.map(fun n -> {data = n} :> obj)
         |> lv.setItems
         |> ignore
 
-    let viewForItem desc = 
+    let private viewForItem desc =
         if JS.isDefined desc then
             sprintf "<li>%s</li>" desc.data |> jq
         else
             "<li></li>" |> jq
-                 
-    let regiterListView stopChangingCallback cancelledCallback confirmedCallback removeFiler=
+
+    let private regiterListView stopChangingCallback cancelledCallback confirmedCallback removeFiler=
         let listView = SelectListViewCtor ()
-        let editorView = 
+        let editorView =
             listView
             |> unbox<JQuery>
             |> fun t' -> t'.[0].firstChild
@@ -113,11 +113,11 @@ module FAKE =
         editorView.getBuffer().stoppedChangingDelay <- 200.
         editorView.getBuffer().onDidStopChanging(stopChangingCallback editorView listView ) |> ignore
 
-        let panel = 
+        let panel =
             { PanelOptions.item = unbox<JQuery> (listView)
               PanelOptions.priority = 100
               PanelOptions.visible = false }
-            |> Globals.atom.workspace.addModalPanel 
+            |> Globals.atom.workspace.addModalPanel
 
         do listView.``getFilterKey <-``(Func<_>(fun _ -> "name" :> obj))
         if removeFiler then listView.``getFilterQuery <-``(Func<_>(fun _ -> ""))
@@ -127,18 +127,18 @@ module FAKE =
 
         listView,panel
 
-    let registerTaskList () = 
+    let private registerTaskList () =
         let stopChangingCallback (ev : IEditor) (lv : atom.SelectListView) = fun () -> ()
         let cancelledCallback = Func<_>(fun _ -> taskListView |> Option.iter(fun (model, view) ->  view.hide()) :> obj)
-        let confirmedCallback = unbox<Func<_, _>> (fun (packageDescription : ItemDescription) -> 
+        let confirmedCallback = unbox<Func<_, _>> (fun (packageDescription : ItemDescription) ->
                                     taskListView |> Option.iter (fun (model, view) -> view.hide())
                                     File |> Option.iter( fun (build, fake) ->
-                                        spawn build packageDescription.data                                    
+                                        spawn build packageDescription.data
                                     )
             )
         regiterListView stopChangingCallback cancelledCallback confirmedCallback false
 
-    let BuildTask () = 
+    let private BuildTask () =
         taskListView |> Option.iter(fun (model, view) ->
         File |> Option.iter(fun (build, fake) ->
         view.show()
@@ -148,22 +148,22 @@ module FAKE =
         let matches = Regex.Matches(script, "Target \"([\\w.]+)\"") |> Seq.cast<Match> |> Seq.toArray
         let m = matches |> Array.map(fun m -> {data = m.Groups.[1].Value} :> obj)
         model.setItems m |> ignore
-        () 
-
-        
-        ))
-
-    let FAKENotFound () = 
         ()
 
-    let register () = 
+
+        ))
+
+    let private FAKENotFound () =
+        ()
+
+    let activate () =
         taskListView <- registerTaskList () |> Some
         let p = Globals.atom.project.getPaths().[0]
         let proj (ex : NodeJS.ErrnoException) (arr : string array) =
             let projExist = arr |> Array.tryFind(fun a -> a.Split('.') |> fun n -> n.[n.Length - 1]  = "cmd")
             match projExist with
             | Some a ->
-                let path = a |> Globals.atom.project.resolve 
+                let path = a |> Globals.atom.project.resolve
                 let file = path |> Globals.readFileSync
                                 |> fun n -> n.toString()
                 let regex = Regex.Match(file, "FAKE.exe ([\w.]+)")
@@ -173,10 +173,10 @@ module FAKE =
                     Atom.addCommand("atom-workspace", "FAKE: Build", BuildTask)
                 else
                     Atom.addCommand("atom-workspace", "FAKE: Build", FAKENotFound)
-
-
                 Globals.console.log File
             | None -> Atom.addCommand("atom-workspace", "FAKE: Build", FAKENotFound)
 
         if JS.isDefined p then Globals.readdir(p, System.Func<NodeJS.ErrnoException, string array, unit>(proj))
 
+    let deactivate () = 
+        ()
