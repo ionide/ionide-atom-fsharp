@@ -15,7 +15,7 @@ module HighlighterHandler =
     let mutable private marked = Array.empty<IDisplayBufferMarker>
     let private subscriptions = ResizeArray()
 
-    let private handle lst =
+    let private handle (o : DTO.ParseResult) =
         marked |> Array.iter(fun m -> m.destroy() |> ignore)
         marked <- Array.empty<IDisplayBufferMarker>
         let editor = Globals.atom.workspace.getActiveTextEditor()
@@ -25,7 +25,7 @@ module HighlighterHandler =
             marked <- Array.append [|marker|] marked
             decorateMarker(editor, marker, cls)
             ()
-        lst |> Array.iter(action)
+        o.Data |> Array.iter(action)
         ()
 
     let activate () =

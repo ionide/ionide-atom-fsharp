@@ -45,21 +45,21 @@ module ErrorPanel =
         else
             panel.hide()
 
-    let private handle lst =
+    let private handle (o : DTO.ParseResult) =
         let editor = Globals.atom.workspace.getActiveTextEditor()
         if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
             let list = jq("#errorList")
             list.children().remove() |> ignore
-            lst |> Array.iter(fun e -> let t = e |> createRow editor
-                                       let r = t |> list.append
-                                       ())
+            o.Data |> Array.iter(fun e -> let t = e |> createRow editor
+                                          let r = t |> list.append
+                                          ())
 
     let activate () =
         let p =
             let t = create ()
             Globals.atom.workspace.addBottomPanel (unbox<AnonymousType499>{PanelOptions.item = t; PanelOptions.priority = 100; PanelOptions.visible = false})
         panel <- Some p
-
+        Globals.atom.workspace.getActiveTextEditor() |>  handleEditorChange p
         let t1 = Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> handleEditorChange p ed)
         let t2 = unbox<Function> handle |> Events.on Events.Errors
         subscriptions.Add t1

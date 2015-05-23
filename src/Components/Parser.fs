@@ -39,13 +39,14 @@ module Parser =
             else Events.emit Events.Status "Waiting for F# file"
 
     let activate () = 
-        unbox<Function>(fun () -> Events.emit Events.Status "Ready (.fsproj not found)") 
+        unbox<Function>(fun () -> Events.emit Events.Status "Ready") 
         |> Events.on Events.Project
         |> subscriptions.Add
          
         let editor = Globals.atom.workspace.getActiveTextEditor()
         editor |> parseProjectForEditor
         LanguageService.parseEditor editor
+        h <- ( editor.buffer.onDidStopChanging(fun _ -> LanguageService.parseEditor editor) |> Some  )
 
         Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> LanguageService.parseEditor ed) |> subscriptions.Add
         Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> ed |> parseProjectForEditor) |> subscriptions.Add
