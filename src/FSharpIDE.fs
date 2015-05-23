@@ -24,12 +24,12 @@ type FSharpIDE() =
 
     member x.activate(state:obj) =
         do LanguageService.start ()
-        
+
         Parser.activate ()
         TooltipHandler.activate ()
         HighlighterHandler.activate ()
         ErrorPanel.activate ()
-        FindDeclaration.activate () 
+        FindDeclaration.activate ()
         FAKE.activate ()
         ()
 
@@ -38,7 +38,7 @@ type FSharpIDE() =
         TooltipHandler.deactivate ()
         HighlighterHandler.deactivate ()
         ErrorPanel.deactivate ()
-        FindDeclaration.deactivate () 
+        FindDeclaration.deactivate ()
         FAKE.deactivate ()
 
         LanguageService.stop ()

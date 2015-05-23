@@ -51,7 +51,7 @@ module LanguageService =
         let msg = msg'.Replace("\uFEFF", "")
         service.Child |> Option.iter (fun c ->
             c.stdin.write( msg, encoding)
-            c.stdout.on ("readable", unbox<Function> (c.stdout.read >> parseResponse )) |> ignore)
+            )
 
     let send (msg' : string) =
         let msg = msg'.Replace("\uFEFF", "")
@@ -67,6 +67,7 @@ module LanguageService =
         service <- { service with State = State.On; PreviousState = service.State; Child = Some child }
         Events.ServerStart |> Events.emitEmpty
         send "outputmode json\n"
+        child.stdout.on ("readable", unbox<Function> (child.stdout.read >> parseResponse )) |> ignore
         ()
 
     let stop () =
