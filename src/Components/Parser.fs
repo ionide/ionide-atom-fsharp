@@ -51,7 +51,8 @@ module Parser =
         Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> ed |> parseProjectForEditor) |> subscriptions.Add
         Globals.atom.workspace.onDidChangeActivePaneItem (fun ed ->
             h |> Option.iter(fun h' -> h'.dispose ())
-            h <- ( editor.buffer.onDidStopChanging(fun _ -> LanguageService.parseEditor ed) |> Some  )
+            if JS.isDefined editor && JS.isPropertyDefined editor "buffer" && unbox<obj>(editor.buffer) <> null && JS.isPropertyDefined editor.buffer "file" && unbox<obj>(editor.buffer.file) <> null then
+                h <- ( editor.buffer.onDidStopChanging(fun _ -> LanguageService.parseEditor ed) |> Some  )
         ) |> subscriptions.Add
        
     let deactivate () = 

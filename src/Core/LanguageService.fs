@@ -29,11 +29,10 @@ module LanguageService =
     let isNotError () = service.State <> State.Error
     let isOffOrError () = isError () || isOff ()
 
-    let ask (msg' : string) =
-        let msg = msg'.Replace("\uFEFF", "")
-        service.Child |> Option.iter (fun c ->
-            let action (data : obj) =
-                let s = data.ToString()
+    let private parseResponse (data : obj) =
+        if data <> null then
+            let response = data.ToString().Split('\n')
+            response |> Seq.iter(fun s ->
                 if s.Contains "\"Kind\":\"ERROR\"" then
                     Events.ServerError|> Events.emitEmpty
                 elif s.Contains "\"Kind\":\"project\"" then
@@ -46,9 +45,13 @@ module LanguageService =
                     s |> Events.parseAndEmit<DTO.TooltipResult> Events.Tooltips
                 elif s.Contains "\"Kind\":\"finddecl\"" then
                     s |> Events.parseAndEmit<DTO.TooltipResult> Events.FindDecl
+            )
 
+    let ask (msg' : string) =
+        let msg = msg'.Replace("\uFEFF", "")
+        service.Child |> Option.iter (fun c ->
             c.stdin.write( msg, encoding)
-            c.stdout.on ("data", unbox<Function> (action)) |> ignore)
+            c.stdout.on ("readable", unbox<Function> (c.stdout.read >> parseResponse )) |> ignore)
 
     let send (msg' : string) =
         let msg = msg'.Replace("\uFEFF", "")
