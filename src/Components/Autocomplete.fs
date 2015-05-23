@@ -78,7 +78,10 @@ module AutocompleteProvider =
                                         })
                     |> Seq.toArray
                     |> Atom.Promise.resolve )
+                LanguageService.completion path row col
                 )
-            else Atom.Promise.create(fun () -> Atom.Promise.resolve [||])
+            
+
+        else Atom.Promise.create(fun () -> Atom.Promise.resolve [||]) 
 
     let create () = { selector = ".source.fsharp"; disableForSelector = ".source.fsharp .string"; inclusionPriority = 1; excludeLowerPriority = true; getSuggestions = getSuggestion}

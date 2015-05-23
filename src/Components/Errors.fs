@@ -59,7 +59,7 @@ module ErrorPanel =
             let t = create ()
             Globals.atom.workspace.addBottomPanel (unbox<AnonymousType499>{PanelOptions.item = t; PanelOptions.priority = 100; PanelOptions.visible = false})
         panel <- Some p
-        Globals.atom.workspace.getActiveTextEditor() |>  handleEditorChange p
+        Globals.atom.workspace.getActiveTextEditor() |> handleEditorChange p
         let t1 = Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> handleEditorChange p ed)
         let t2 = unbox<Function> handle |> Events.on Events.Errors
         subscriptions.Add t1
