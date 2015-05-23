@@ -88,6 +88,7 @@ module TooltipHandler =
             |> Option.iter (fun n -> reg editor 500. n)
 
     let activate () = 
+        Globals.atom.workspace.getActiveTextEditor() |> initialize
         Globals.atom.workspace.onDidChangeActivePaneItem(fun ed -> initialize ed) |> ignore
         let s = unbox<Function> handler |> Events.on Events.Tooltips
         subscriptions.Add s
