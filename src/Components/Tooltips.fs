@@ -12,6 +12,7 @@ open Atom
 [<ReflectedDefinition>]
 module TooltipHandler =
     type private position = {row : float; column : float}
+    type position = {row : float; column : float}
     let mutable private ed = createEmpty<IEditor>()
     let mutable private event : JQueryMouseEventObject option = None
     let private subscriptions = ResizeArray()
@@ -50,26 +51,24 @@ module TooltipHandler =
                     n.mouseleave(fun e -> clearTimer () :> obj) |> ignore
                     n.scroll(fun e -> clearTimer() :> obj) |> ignore
 
-    let private handler editor = 
-        let action (o : DTO.TooltipResult) = 
-            event |> Option.iter(fun e ->
-            tooltip.[0].firstElementChild
-            |> fun n -> if (jq "body /deep/ span.fsharp:hover").length > 0. then
-                            if o.Data <> "No tooltip information" then
-                                Globals.document.elementFromPoint(e.clientX, e.clientY)
-                                |> Globals.console.log
-                                let position = pixelPositionFromMouseEvent e editor
-                                let n' = jq'(n)
-                                n'.empty() |> ignore
-                                o.Data.Replace("\\n", "</br>")
-                                |> fun n ->  n.Replace("\n", "</br>")
-                                |>  n'.append |> ignore
-                                tooltip.css("left", position.left + 40.) |> ignore
-                                tooltip.css("top", e.clientY + 20.) |> ignore
-                                tooltip.fadeTo(300., 60.) |> ignore
-            )
+    let private handler (o : DTO.TooltipResult) = 
 
-        unbox<Function> action |> Events.on Events.Tooltips
+        event |> Option.iter(fun e ->
+        tooltip.[0].firstElementChild
+        |> fun n -> if (jq "body /deep/ span.fsharp:hover").length > 0. then
+                        if o.Data <> "No tooltip information" then
+                            let position = pixelPositionFromMouseEvent e ed
+                            let n' = jq'(n)
+                            n'.empty() |> ignore
+                            o.Data.Replace("\\n", "</br>")
+                            |> fun n ->  n.Replace("\n", "</br>")
+                            |>  n'.append |> ignore
+                            tooltip.css("left", position.left + 40.) |> ignore
+                            tooltip.css("top", e.clientY + 20.) |> ignore
+                            tooltip.fadeTo(300., 60.) |> ignore
+        )
+
+      
 
     let private remove () =
         if JS.isDefined ed && JS.isPropertyDefined ed "getGrammar" && ed.getGrammar().name = "F#" then
