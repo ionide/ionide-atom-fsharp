@@ -14,8 +14,8 @@ open Atom
 [<ReflectedDefinition>]
 module FAKE =
 
-    type private Options = {cwd : string}
-    type private ItemDescription = {data : string}
+    type Options = {cwd : string}
+    type ItemDescription = {data : string}
 
     let mutable private currentNotification : Notification option = None
     let mutable private File : (string * string) option = None

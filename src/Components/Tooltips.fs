@@ -11,7 +11,6 @@ open Atom
 
 [<ReflectedDefinition>]
 module TooltipHandler =
-    type private position = {row : float; column : float}
     type position = {row : float; column : float}
     let mutable private ed = createEmpty<IEditor>()
     let mutable private event : JQueryMouseEventObject option = None
