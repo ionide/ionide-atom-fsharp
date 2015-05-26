@@ -21,7 +21,7 @@ module Events =
         | Completion
         | Tooltips
         | FindDecl
-        | Status 
+        | Status
 
     let private getName t =
         match t with
@@ -35,7 +35,7 @@ module Events =
         | Project -> "Fsharp_project"
         | Status -> "Fsharp_status"
 
-    let private log name o = 
+    let private log name o =
         Globals.console.log (name, System.DateTime.Now, o)
 
     let parseAndEmit<'T> t s =
@@ -47,12 +47,12 @@ module Events =
         with
         | ex -> ()
 
-    let emitEmpty t =
+    let emitEmpty t s =
         let name = getName t
-        log name ()
+        log name s
         Globals.atom.emit(name, ())
 
-    let emit t v = 
+    let emit t v =
         let name = getName t
         log name v
         Globals.atom.emit(name, v :> obj)

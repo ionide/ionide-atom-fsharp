@@ -34,9 +34,9 @@ module LanguageService =
             let response = data.ToString().Split('\n')
             response |> Seq.iter(fun s ->
                 if s.Contains "\"Kind\":\"ERROR\"" then
-                    Events.ServerError|> Events.emitEmpty
+                    s |> Events.emitEmpty Events.ServerError
                 elif s.Contains "\"Kind\":\"project\"" then
-                    Events.Project |> Events.emitEmpty
+                    s |> Events.emitEmpty Events.Project
                 elif s.Contains "\"Kind\":\"errors\"" then
                     s |> Events.parseAndEmit<DTO.ParseResult> Events.Errors
                 elif s.Contains "\"Kind\":\"completion\"" then
@@ -65,7 +65,7 @@ module LanguageService =
                         Globals.spawn("mono", [| location |])
         child.stdin.setEncoding( encoding);
         service <- { service with State = State.On; PreviousState = service.State; Child = Some child }
-        Events.ServerStart |> Events.emitEmpty
+        "" |> Events.emitEmpty Events.ServerStart
         send "outputmode json\n"
         child.stdout.on ("readable", unbox<Function> (child.stdout.read >> parseResponse )) |> ignore
         ()
@@ -73,7 +73,7 @@ module LanguageService =
     let stop () =
         service.Child |> Option.iter (fun n -> n.kill "SIGKILL")
         service <- { service with State = State.Off; PreviousState = service.State; Child = None }
-        Events.ServerStop |> Events.emitEmpty
+        "" |> Events.emitEmpty Events.ServerStop
         ()
 
     let project s =
