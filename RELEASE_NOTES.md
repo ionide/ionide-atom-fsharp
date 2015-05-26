@@ -1,3 +1,6 @@
+#### 0.3.3 - 26.05.2015
+* Update to new version of Language Services
+
 #### 0.3.2 - 26.05.2015
 * Better developer logging
 
