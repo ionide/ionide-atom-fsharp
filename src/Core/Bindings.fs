@@ -13,8 +13,6 @@ let addCommand(name:string, cmdName:string, func:unit -> unit) : unit = failwith
 [<JSEmitInline("atom.commands.add({0}, {1}, {2});")>]
 let addCommand'(name:string, context: string, func:unit -> unit) : unit = failwith "JS"
 
-
-
 module Promise =
     type Promise = class end
 
@@ -22,7 +20,7 @@ module Promise =
         text: string
         replacementPrefix : string
         rightLabel : string
-      //  ``type`` : string
+        ``type`` : string
     }
 
     [<JSEmitInline("new Promise(function(resolve){{0}()})")>]
