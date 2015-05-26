@@ -1,3 +1,6 @@
+#### 0.3.2 - 26.05.2015
+* Better developer logging
+
 #### 0.3.1 - 24.05.2015
 * Internal implementation changes
 
