@@ -1,3 +1,6 @@
+#### 0.3.4 - 27.05.2015
+* Update autocomplete
+
 #### 0.3.3 - 26.05.2015
 * Update to new version of Language Services
 
