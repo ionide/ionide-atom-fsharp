@@ -38,14 +38,18 @@ module Events =
     let private log name o =
         Globals.console.log (name, System.DateTime.Now, o)
 
+    let mutable last = ""
+
     let parseAndEmit<'T> t s =
         try
+            let s' = last + s
             let name = getName t
-            let o = unbox<'T>(Globals.JSON.parse s)
+            let o = unbox<'T>(Globals.JSON.parse s')
             log name o
             Globals.atom.emit(name, o)
+            last <- ""
         with
-        | ex -> ()
+        | ex -> last <- last + s
 
     let emitEmpty t s =
         let name = getName t

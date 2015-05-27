@@ -29,22 +29,38 @@ module LanguageService =
     let isNotError () = service.State <> State.Error
     let isOffOrError () = isError () || isOff ()
 
+    let mutable private last = Events.ServerError
+
     let private parseResponse (data : obj) =
         if data <> null then
             let response = data.ToString().Split('\n')
             response |> Seq.iter(fun s ->
                 if s.Contains "\"Kind\":\"ERROR\"" then
                     s |> Events.emitEmpty Events.ServerError
+                    last <- Events.ServerError
                 elif s.Contains "\"Kind\":\"project\"" then
                     s |> Events.emitEmpty Events.Project
+                    last <- Events.Project
                 elif s.Contains "\"Kind\":\"errors\"" then
                     s |> Events.parseAndEmit<DTO.ParseResult> Events.Errors
+                    last <- Events.Errors
                 elif s.Contains "\"Kind\":\"completion\"" then
                     s |> Events.parseAndEmit<DTO.CompletionResult> Events.Completion
+                    last <- Events.Completion
                 elif s.Contains "\"Kind\":\"tooltip\"" then
                     s |> Events.parseAndEmit<DTO.TooltipResult> Events.Tooltips
+                    last <- Events.Tooltips
                 elif s.Contains "\"Kind\":\"finddecl\"" then
                     s |> Events.parseAndEmit<DTO.TooltipResult> Events.FindDecl
+                    last <- Events.FindDecl
+                elif s.Contains "\"Kind\":\"INFO\"" then
+                    ()
+                elif s <> "" then
+                    match last with
+                    | Events.Errors -> s |> Events.parseAndEmit<DTO.ParseResult> Events.Errors
+                    | Events.Completion -> s |> Events.parseAndEmit<DTO.CompletionResult> Events.Completion
+                    | _ -> ()
+
             )
 
     let ask (msg' : string) =
@@ -56,6 +72,11 @@ module LanguageService =
     let send (msg' : string) =
         let msg = msg'.Replace("\uFEFF", "")
         do service.Child |> Option.iter (fun c -> c.stdin.write( msg, encoding) |> ignore)
+
+    let rec read (stream : stream.Readable) s =
+        match stream.read () with
+        | null -> s
+        | res -> res.ToString() + s |> read stream
 
     let start () =
         let location = Globals.atom.packages.packageDirPaths.[0] + "/FSharp/bin/fsautocomplete.exe"
