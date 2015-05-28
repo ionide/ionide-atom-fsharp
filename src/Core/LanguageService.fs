@@ -64,6 +64,9 @@ module LanguageService =
             )
 
     let ask (msg' : string) =
+
+
+        Globals.console.log msg'
         let msg = msg'.Replace("\uFEFF", "")
         service.Child |> Option.iter (fun c ->
             c.stdin.write( msg, encoding)
@@ -95,6 +98,7 @@ module LanguageService =
         service.Child |> Option.iter (fun n -> n.kill "SIGKILL")
         service <- { service with State = State.Off; PreviousState = service.State; Child = None }
         "" |> Events.emitEmpty Events.ServerStop
+
         ()
 
     let project s =
@@ -112,7 +116,7 @@ module LanguageService =
             parse path text
 
     let completion fn line col =
-        let str = sprintf "completion \"%s\" %d %d\n" fn line col
+        let str = sprintf "completion \"%s\" %d %d filter\n" fn line col
         ask str
 
     let tooltip fn line col =
