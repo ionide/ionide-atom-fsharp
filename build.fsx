@@ -51,6 +51,9 @@ let releaseNotesData =
 
 let release = List.head releaseNotesData
 
+let msg =  release.Notes |> List.fold (fun r s -> r + s + "\n") ""
+let releaseMsg = (sprintf "Release %s\n" release.NugetVersion) + msg
+
 #if MONO
 let apmTool = "apm"
 #else
@@ -158,7 +161,7 @@ Target "InstallDependencies" (fun _ ->
 
 Target "TagDevelopBranch" (fun _ ->
     StageAll ""
-    Git.Commit.Commit "" (sprintf "Bump version to %s" release.NugetVersion)
+    Git.Commit.Commit "" releaseMsg
     Branches.pushBranch "" "origin" "develop"
 
     let tagName = "develop-" + release.NugetVersion
@@ -182,7 +185,7 @@ Target "PushToMaster" (fun _ ->
     CopyRecursive "src/fsharp" tempReleaseDir true |> tracefn "%A"
 
     StageAll tempReleaseDir
-    Git.Commit.Commit tempReleaseDir (sprintf "Release %s" release.NugetVersion)
+    Git.Commit.Commit tempReleaseDir releaseMsg
     Branches.push tempReleaseDir
 )
 
