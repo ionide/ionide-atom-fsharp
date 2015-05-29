@@ -1,4 +1,4 @@
-#### 0.4.0 - 29.05.2015
+#### 0.4.1 - 29.05.2015
 * Update syntax highlighting
 * Drop dependency on ["language-fsharp"](https://atom.io/packages/language-fsharp) package
 
