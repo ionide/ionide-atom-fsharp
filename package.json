@@ -1,7 +1,7 @@
 {
   "name": "atom-fsharp",
   "main": "./lib/fsharp",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "Core plugin for F# development",
   "repository": "https://github.com/fsprojects/atom-fsharp",
   "license": "Appache 2.0",
