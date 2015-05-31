@@ -10,7 +10,7 @@ open FunScript.TypeScript.text_buffer
 open FunScript.TypeScript.path
 
 open Atom
-open FSharp.Atom
+open Atom.FSharp
 
 type FSharpIDE() =
     member x.provide ()=

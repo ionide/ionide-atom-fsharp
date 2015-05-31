@@ -1,4 +1,4 @@
-﻿namespace FSharp.Atom
+﻿namespace Atom.FSharp
 
 open FunScript
 open FunScript.TypeScript
@@ -26,5 +26,5 @@ module FindDeclaration =
         Globals.setTimeout((fun _ -> addCommand'("atom-text-editor", "symbols-view:go-to-declaration", handle )), 500.)
         |> ignore
 
-    let deactivate () = 
+    let deactivate () =
         ()

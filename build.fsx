@@ -37,7 +37,7 @@ let gitOwner = "fsprojects"
 let gitHome = "https://github.com/" + gitOwner
 
 // The name of the project on GitHub
-let gitName = "FSharp.Atom"
+let gitName = "atom-fsharp"
 
 // The url for the raw files hosted
 let gitRaw = environVarOrDefault "gitRaw" "https://raw.github.com/fsprojects"
@@ -69,7 +69,7 @@ Target "Clean" (fun _ ->
 )
 
 Target "BuildGenerator" (fun () ->
-    [ __SOURCE_DIRECTORY__ @@ "src" @@ "FSharp.Atom.Generator.fsproj" ]
+    [ __SOURCE_DIRECTORY__ @@ "src" @@ "Atom.FSharp.Generator.fsproj" ]
     |> MSBuildDebug "" "Rebuild"
     |> Log "AppBuild-Output: "
 )
@@ -78,13 +78,13 @@ Target "RunGenerator" (fun () ->
 
         (TimeSpan.FromMinutes 5.0)
         |> ProcessHelper.ExecProcess (fun p ->
-            p.FileName <- __SOURCE_DIRECTORY__ @@ "src" @@ "bin" @@ "Debug" @@ "FSharp.Atom.Generator.exe" )
+            p.FileName <- __SOURCE_DIRECTORY__ @@ "src" @@ "bin" @@ "Debug" @@ "Atom.FSharp.Generator.exe" )
         |> ignore
 )
 #if MONO
 #else
 Target "RunScript" (fun () ->
-    FSharp.Atom.Generator.translateModules()
+    Atom.FSharp.Generator.translateModules()
 )
 #endif
 

@@ -1,4 +1,4 @@
-﻿namespace FSharp.Atom
+﻿namespace Atom.FSharp
 
 open System
 open System.Text.RegularExpressions
@@ -178,5 +178,5 @@ module FAKE =
 
         if JS.isDefined p then Globals.readdir(p, System.Func<NodeJS.ErrnoException, string array, unit>(proj))
 
-    let deactivate () = 
+    let deactivate () =
         ()

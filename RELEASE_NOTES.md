@@ -1,3 +1,6 @@
+#### 0.4.2 - 31.05.2015
+* Update to new version of Language Services
+
 #### 0.4.1 - 29.05.2015
 * Update syntax highlighting
 * Drop dependency on ["language-fsharp"](https://atom.io/packages/language-fsharp) package

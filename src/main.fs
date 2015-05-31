@@ -1,4 +1,4 @@
-﻿module FSharp.Atom.Generator
+﻿module Atom.FSharp.Generator
 
 // --------------------------------------------------------------------------------------
 // Load the F# implementation and specify parameters for the translator

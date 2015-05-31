@@ -1,4 +1,4 @@
-﻿namespace FSharp.Atom
+﻿namespace Atom.FSharp
 
 open FunScript
 open FunScript.TypeScript
@@ -29,7 +29,7 @@ module AutocompleteProvider =
         if unbox<obj>(options.editor.buffer.file) <> null then
             let path = options.editor.buffer.file.path
             let row = int options.bufferPosition.row + 1
-            let col = int options.bufferPosition.column + 1
+            let col = int options.bufferPosition.column
             let prefix = if options.prefix = "." || options.prefix = "=" then "" else options.prefix
             Atom.Promise.create(fun () ->
                 Events.once Events.Completion (fun (result :DTO.CompletionResult) ->

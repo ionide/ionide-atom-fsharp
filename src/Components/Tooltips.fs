@@ -1,4 +1,4 @@
-﻿namespace FSharp.Atom
+﻿namespace Atom.FSharp
 
 open FunScript
 open FunScript.TypeScript
@@ -50,7 +50,7 @@ module TooltipHandler =
                     n.mouseleave(fun e -> clearTimer () :> obj) |> ignore
                     n.scroll(fun e -> clearTimer() :> obj) |> ignore
 
-    let private handler (o : DTO.TooltipResult) = 
+    let private handler (o : DTO.TooltipResult) =
 
         event |> Option.iter(fun e ->
         tooltip.[0].firstElementChild
@@ -67,7 +67,7 @@ module TooltipHandler =
                             tooltip.fadeTo(300., 60.) |> ignore
         )
 
-      
+
 
     let private remove () =
         if JS.isDefined ed && JS.isPropertyDefined ed "getGrammar" && ed.getGrammar().name = "F#" then
@@ -87,7 +87,7 @@ module TooltipHandler =
             |> Option.map (fun n -> n.[0] |> unbox<Element>)
             |> Option.iter (fun n -> reg editor 500. n)
 
-    let activate () = 
+    let activate () =
         Globals.atom.workspace.getActiveTextEditor() |> initialize
         Globals.atom.workspace.onDidChangeActivePaneItem(fun ed -> initialize ed) |> ignore
         let s = unbox<Function> handler |> Events.on Events.Tooltips
@@ -97,4 +97,4 @@ module TooltipHandler =
     let deactivate () =
         subscriptions |> Seq.iter(fun n -> n.dispose())
         subscriptions.Clear()
-        () 
+        ()

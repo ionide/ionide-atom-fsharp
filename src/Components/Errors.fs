@@ -1,4 +1,4 @@
-﻿namespace FSharp.Atom
+﻿namespace Atom.FSharp
 
 open FunScript
 open FunScript.TypeScript
@@ -10,7 +10,7 @@ open Atom
 
 [<ReflectedDefinition>]
 module ErrorPanel =
-    
+
     let mutable private panel : IPanel option = None
     let private subscriptions = ResizeArray()
 
@@ -63,7 +63,7 @@ module ErrorPanel =
         let t1 = Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> handleEditorChange p ed)
         let t2 = unbox<Function> handle |> Events.on Events.Errors
         subscriptions.Add t1
-        subscriptions.Add t2 
+        subscriptions.Add t2
         ()
 
     let deactivate () =
