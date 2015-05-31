@@ -1,5 +1,6 @@
 ﻿namespace Atom.FSharp
 
+
 open FunScript
 open FunScript.TypeScript
 open FunScript.TypeScript.fs
@@ -59,7 +60,10 @@ module TooltipHandler =
                             let position = pixelPositionFromMouseEvent e ed
                             let n' = jq'(n)
                             n'.empty() |> ignore
-                            o.Data.Replace("\\n", "</br>")
+                            //n'.text o.Data |> ignore
+                            o.Data |> jq("<div/>").text
+                            |> fun n -> n.html()
+                            |> fun n -> n.Replace("\\n", "</br>")
                             |> fun n ->  n.Replace("\n", "</br>")
                             |>  n'.append |> ignore
                             tooltip.css("left", position.left + 40.) |> ignore

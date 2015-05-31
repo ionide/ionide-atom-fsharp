@@ -1,5 +1,5 @@
 {
-    "name": "FSharp",
+    "name": "atom-fsharp",
     "main": "./lib/fsharp",
     "version": "0.0.0",
     "description": "Core plugin for F# development",

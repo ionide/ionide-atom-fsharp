@@ -1,3 +1,6 @@
+#### 0.4.5 - 31.05.2015
+* Fix tooltips - generic types
+
 #### 0.4.3 - 31.05.2015
 * Update to new version of Language Services
 
