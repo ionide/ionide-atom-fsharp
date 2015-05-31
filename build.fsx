@@ -65,7 +65,7 @@ let apmTool = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicati
 // --------------------------------------------------------------------------------------
 
 Target "Clean" (fun _ ->
-    CopyFile "src/fsharp" "README.md"
+    CopyFile "src/atom-fsharp" "README.md"
 )
 
 Target "BuildGenerator" (fun () ->
@@ -150,7 +150,7 @@ Target "GenerateBindings" (fun () ->
 Target "InstallDependencies" (fun _ ->
     let args = "install"
 
-    let srcDir = "src/fsharp"
+    let srcDir = "src/atom-fsharp"
     let result =
         ExecProcess (fun info ->
             info.FileName <- apmTool
@@ -182,7 +182,7 @@ Target "PushToMaster" (fun _ ->
         CopyRecursive tempGitDir (tempReleaseDir  </> ".git") true |> ignore
 
     cleanEverythingFromLastCheckout()
-    CopyRecursive "src/fsharp" tempReleaseDir true |> tracefn "%A"
+    CopyRecursive "src/atom-fsharp" tempReleaseDir true |> tracefn "%A"
 
     StageAll tempReleaseDir
     Git.Commit.Commit tempReleaseDir releaseMsg
