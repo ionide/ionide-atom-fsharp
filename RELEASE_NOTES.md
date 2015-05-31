@@ -1,3 +1,6 @@
+#### 0.4.7 - 31.05.2015
+* Update fsautocomplete.exe path
+
 #### 0.4.6 - 31.05.2015
 * Fix tooltips - generic types
 

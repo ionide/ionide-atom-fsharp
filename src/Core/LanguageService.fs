@@ -82,7 +82,7 @@ module LanguageService =
         | res -> res.ToString() + s |> read stream
 
     let start () =
-        let location = Globals.atom.packages.packageDirPaths.[0] + "/FSharp/bin/fsautocomplete.exe"
+        let location = Globals.atom.packages.packageDirPaths.[0] + "/atom-fsharp/bin/fsautocomplete.exe"
         let child = if Globals._process.platform.StartsWith("win") then
                         Globals.spawn(location)
                     else
