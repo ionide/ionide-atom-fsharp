@@ -1,5 +1,5 @@
-##FSharp.Atom
-![FSharp.Atom](https://raw.githubusercontent.com/fsprojects/FSharp.Atom/develop/gifs/ErrorPanel.png)
+##atom-fsharp
+![atom-fsharp](https://raw.githubusercontent.com/fsprojects/FSharp.Atom/develop/gifs/ErrorPanel.png)
 
 ## Features
 
