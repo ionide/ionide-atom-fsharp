@@ -1,3 +1,6 @@
+#### 0.4.9 - 06.06.2015
+* Fix [#56](https://github.com/fsprojects/FSharp.Atom/issues/56)
+
 #### 0.4.8 - 31.05.2015
 * Update fsautocomplete.exe path
 

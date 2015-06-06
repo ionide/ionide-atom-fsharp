@@ -163,12 +163,12 @@ module FAKE =
             let projExist = arr |> Array.tryFind(fun a -> a.Split('.') |> fun n -> n.[n.Length - 1]  = "cmd")
             match projExist with
             | Some a ->
-                let path = a |> Globals.atom.project.resolve
+                let path = p + "/" + a
                 let file = path |> Globals.readFileSync
                                 |> fun n -> n.toString()
                 let regex = Regex.Match(file, "FAKE.exe ([\w.]+)")
                 if regex.Success then
-                    let build = regex.Groups.[1].Value |> Globals.atom.project.resolve
+                    let build = p + "/" + regex.Groups.[1].Value
                     File <- Some (path, build )
                     Atom.addCommand("atom-workspace", "FAKE: Build", BuildTask)
                 else

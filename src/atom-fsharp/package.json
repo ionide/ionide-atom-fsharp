@@ -11,7 +11,8 @@
     "dependencies": {
         "jquery": "2.1.3",
         "atom-space-pen-views": "2.0.5",
-        "path": "*"
+        "path": "*",
+        "event-kit": "*"
     },
     "providedServices": {
         "autocomplete.provider": {

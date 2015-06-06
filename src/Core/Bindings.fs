@@ -49,6 +49,7 @@ type IDirectory = interface end
 type IDisposable = interface end
 type IStatusBar = interface end
 type ITile = interface end
+type IEmitter = interface end
 
 [<AutoOpen>]
 module Bindings =
@@ -88,6 +89,20 @@ module Bindings =
         initialLine : int
         initialColumn : int
     }
+
+    module Emitter = 
+        [<FunScript.JSEmitInline("new Emitter()")>]
+        let create () : IEmitter = failwith "JS"
+
+    type IEmitter with
+        [<FunScript.JSEmitInline("{0}.on({1}, {2})")>]
+        member __.on(name : string, cb : Function) : unit = failwith "JS"
+
+        [<FunScript.JSEmitInline("{0}.on({1}, {2})")>]
+        member __.on'(name : string, cb : Function) : IDisposable = failwith "JS"
+
+        [<FunScript.JSEmitInline("{0}.emit({1}, {2})")>]
+        member __.emit(name : string, o : obj) : unit = failwith "JS"
 
     type IDisposable with
         [<FunScript.JSEmitInline("({0}.dispose())")>]

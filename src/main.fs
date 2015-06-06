@@ -72,6 +72,7 @@ let translateModules() =
         yield "var atomSpaceView = require('atom-space-pen-views');"
         yield "var fs = require('fs');"
         yield "var path = require('path');"
+        yield "var Emitter = require('event-kit').Emitter;"
         yield ""
         yield "function wrappedFunScript() { \n" + coreJS + "\n }"
         yield "var _funcs = wrappedFunScript();"
