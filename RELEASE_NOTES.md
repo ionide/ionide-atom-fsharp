@@ -1,3 +1,6 @@
+#### 0.4.11 - 09.06.2015
+* Grammar updates
+
 #### 0.4.10 - 09.06.2015
 * Update FSAC
 * Add minimizing of error panel
