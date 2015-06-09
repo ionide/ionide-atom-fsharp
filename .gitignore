@@ -47,4 +47,7 @@ src/core/lib/core.js
 src/paket/lib/paket.js
 *ncrunch*
 src/core/README.md
+src/atom-fsharp/lib/
 src/fsharp/lib/fsharp.js
+src/atom-fsharp/lib/fsharp.js
+temp/
