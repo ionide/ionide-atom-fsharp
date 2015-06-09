@@ -19,8 +19,10 @@ module ErrorPanel =
                 <div class='inset-panel'>
                 <div class='panel-heading clearfix' style='height: 30px'>
                   <span>Errors</span>
+                  <i id='btnMin' class='fa fa-minus-square' style='float:right'></i>
+                  <i id='btnMax' class='fa fa-plus-square' style='float:right; display: none'></i>
                 </div>
-                <div class='scrollable' style='height: 120px'>
+                <div id='scrollPanel' class='scrollable' style='height: 120px'>
                     <table id='panelError' class='error-table outputPanel' >
                         <thead><th>Position</th><th>Message</th><th>Type</th><th>Category</th></thead>
                         <tbody id='errorList'>
@@ -28,6 +30,16 @@ module ErrorPanel =
                 </div>
             </div>"
         |> jq
+
+    let private addMinimize () =
+        (jq "#btnMin").click(fun _ -> (jq "#scrollPanel").height(0.) |> ignore
+                                      (jq "#btnMin").hide() |> ignore
+                                      (jq "#btnMax").show():> obj
+        ) |> ignore
+        (jq "#btnMax").click(fun _ -> (jq "#scrollPanel").height(120.) |> ignore
+                                      (jq "#btnMax").hide() |> ignore
+                                      (jq "#btnMin").show():> obj
+        ) |> ignore
 
     let private createRow (editor : IEditor) (e : DTO.Error)  =
         let t = sprintf "<tr><td>%d : %d</td><td>%s</td><td>%s</td><td>%s</td></tr>"
@@ -59,7 +71,9 @@ module ErrorPanel =
             let t = create ()
             Globals.atom.workspace.addBottomPanel (unbox<AnonymousType499>{PanelOptions.item = t; PanelOptions.priority = 100; PanelOptions.visible = false})
         panel <- Some p
+        addMinimize()
         Globals.atom.workspace.getActiveTextEditor() |> handleEditorChange p
+
         let t1 = Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> handleEditorChange p ed)
         let t2 = unbox<Function> handle |> Events.on Events.Errors
         subscriptions.Add t1
