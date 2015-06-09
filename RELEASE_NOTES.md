@@ -1,3 +1,7 @@
+#### 0.4.10 - 09.06.2015
+* Update FSAC
+* Add minimizing of error panel
+
 #### 0.4.9 - 06.06.2015
 * Fix [#56](https://github.com/fsprojects/FSharp.Atom/issues/56)
 
