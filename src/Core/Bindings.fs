@@ -50,6 +50,7 @@ type IDisposable = interface end
 type IStatusBar = interface end
 type ITile = interface end
 type IEmitter = interface end
+type OpenEditorPromise = interface end
 
 [<AutoOpen>]
 module Bindings =
@@ -90,7 +91,19 @@ module Bindings =
         initialColumn : int
     }
 
-    module Emitter = 
+    type OpenEditorOptions = {
+        split : string
+    }
+
+    type SpawnOption = {
+        cwd : string
+    }
+
+    type OpenEditorPromise with
+        [<FunScript.JSEmitInline("{0}.done({1})")>]
+        member __.created(cb : IEditor -> unit) : unit = failwith "JS"
+
+    module Emitter =
         [<FunScript.JSEmitInline("new Emitter()")>]
         let create () : IEmitter = failwith "JS"
 
@@ -128,6 +141,9 @@ module Bindings =
 
         [<FunScript.JSEmitInline("{0}.open({1}, {2})")>]
         member __.open'(fn : string, op : OpenOptions) : unit = failwith "JS"
+
+        [<FunScript.JSEmitInline("{0}.open({1}, {2})")>]
+        member __.openEditor(fn : string, op : OpenEditorOptions) : OpenEditorPromise = failwith "JS"
 
         [<FunScript.JSEmitInline("{0}.onDidChangeActivePaneItem({1})")>]
         member __.onDidChangeActivePaneItem(cb: IEditor -> unit) : IDisposable = failwith "JS"
@@ -207,6 +223,9 @@ module Bindings =
 
     [<JSEmitInline("{0}.getBoundingClientRect()")>]
     let getBoundingClientRect(o : obj) : Coordinates = failwith "JS"
+
+    [<JSEmitInline("{0}.component.setInputEnabled({1})")>]
+    let setComponentEnabled(e : Element, f : bool) = failwith "JS"
 
     type stream.Writable with
         [<FunScript.JSEmitInline("({0}.setEncoding({1}))")>]

@@ -78,6 +78,8 @@ module DTO =
         GlyphChar: string
     }
 
+    type CompilerLocationResult = {Kind : string; Data : string}
+
     type CompletionResult = {Kind : string; Data : Completion []}
     type TooltipResult = {Kind : string; Data : string}
     type ParseResult = {Kind : string; Data : Error []}

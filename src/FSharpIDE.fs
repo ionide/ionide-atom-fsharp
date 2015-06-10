@@ -31,6 +31,7 @@ type FSharpIDE() =
         ErrorPanel.activate ()
         FindDeclaration.activate ()
         FAKE.activate ()
+        Interactive.activate ()
         ()
 
     member x.deactivate() =
@@ -40,6 +41,7 @@ type FSharpIDE() =
         ErrorPanel.deactivate ()
         FindDeclaration.deactivate ()
         FAKE.deactivate ()
+        Interactive.deactivate ()
 
         LanguageService.stop ()
         ()

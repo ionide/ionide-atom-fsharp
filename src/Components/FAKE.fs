@@ -23,12 +23,12 @@ module FAKE =
 
     let private jq (selector : string) = Globals.Dollar.Invoke selector
     let private jq'(selector : Element) = Globals.Dollar.Invoke selector
-    let private jq'' (context: Element) (selector : string) = Globals.Dollar.Invoke (selector,context)
+    let private jqC (context: Element) (selector : string) = Globals.Dollar.Invoke (selector,context)
 
     let private notice isError text details =
         match currentNotification with
         | Some n -> let view = Globals.atom.views.getView (n)
-                    let t = ".content .detail .detail-content" |> jq'' view
+                    let t = ".content .detail .detail-content" |> jqC view
                     let line = "<div class='line'>" + details + "</div>"
                     t.append(line) |> ignore
                     ()

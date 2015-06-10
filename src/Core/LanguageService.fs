@@ -53,6 +53,9 @@ module LanguageService =
                 elif s.Contains "\"Kind\":\"finddecl\"" then
                     s |> Events.parseAndEmit<DTO.TooltipResult> Events.FindDecl
                     last <- Events.FindDecl
+                elif s.Contains "\"Kind\":\"compilerlocation\"" then
+                    s |> Events.parseAndEmit<DTO.CompilerLocationResult> Events.CompilerLocation
+                    last <- Events.CompilerLocation
                 elif s.Contains "\"Kind\":\"INFO\"" then
                     ()
                 elif s <> "" then
@@ -91,6 +94,7 @@ module LanguageService =
         service <- { service with State = State.On; PreviousState = service.State; Child = Some child }
         "" |> Events.emitEmpty Events.ServerStart
         send "outputmode json\n"
+        send "compilerlocation\n"
         child.stdout.on ("readable", unbox<Function> (child.stdout.read >> parseResponse )) |> ignore
         ()
 
