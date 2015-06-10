@@ -45,7 +45,6 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" Condition="Exists('$(FSharpTargetsPath)')" />
   <ItemGroup>
-
     <Compile Include="Core\Bindings.fs" />
     <Compile Include="Core\Helpers.fs" />
     <Compile Include="Core\Events.fs" />
@@ -61,7 +60,6 @@
     <Compile Include="FSharpIDE.fs" />
     <Compile Include="main.fs" />
     <None Include="atom-bindings.fsx" />
-
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
