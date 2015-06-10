@@ -46,7 +46,7 @@ module TooltipHandler =
                             timer <- Some ( Globals.setTimeout((fun _ -> if unbox<obj>(editor.buffer.file) <> null then
                                                                              let path = editor.buffer.file.path
                                                                              event <- Some e
-                                                                             LanguageService.tooltip path (int pos.row + 1) (int pos.column)), time))
+                                                                             LanguageService.tooltip path (int pos.row + 1) (int pos.column + 1)), time))
                             () :> obj) |> ignore
                     n.mouseleave(fun e -> clearTimer () :> obj) |> ignore
                     n.scroll(fun e -> clearTimer() :> obj) |> ignore
