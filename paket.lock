@@ -1,5 +1,5 @@
 NUGET
   remote: https://nuget.org/api/v2
   specs:
-    FAKE (3.31.0)
-    FunScript (1.1.93)
+    FAKE (3.35.0)
+    FunScript (1.1.94)
