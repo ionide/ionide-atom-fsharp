@@ -1,3 +1,7 @@
+#### 0.5.0 - 11.06.2015
+* Basic F# Interactive support (REPL)
+* Errors messages in tooltips
+
 #### 0.4.13 - 10.06.2015
 * Temporary Fix [#60](https://github.com/fsprojects/FSharp.Atom/issues/60)
 
