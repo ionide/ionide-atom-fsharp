@@ -59,6 +59,7 @@ module TooltipHandler =
                         if o.Data <> "No tooltip information" then
                             let position = pixelPositionFromMouseEvent e ed
                             let n' = jq'(n)
+
                             n'.empty() |> ignore
                             //n'.text o.Data |> ignore
                             o.Data |> jq("<div/>").text

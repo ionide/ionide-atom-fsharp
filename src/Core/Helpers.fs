@@ -16,6 +16,11 @@ module ViewsHelpers =
     let jq'(selector : Element) = Globals.Dollar.Invoke selector
     let (?) jq name = jq("#" + name)
 
+    type cords = {
+        mutable top : float
+        mutable left : float
+    }
+
     let getElementsByClass cls e =
         e
         |> fun n -> if JS.isDefined n then Some n else None
@@ -33,10 +38,16 @@ module ViewsHelpers =
     let screenPositionFromMouseEvent (e : JQueryMouseEventObject) (editor : IEditor) =
         editor.screenPositionForPixelPosition(pixelPositionFromMouseEvent e editor)
 
+
     let bufferPositionFromMouseEvent (e : JQueryMouseEventObject) (editor : IEditor) =
         pixelPositionFromMouseEvent e editor
+        |> fun n -> let t = unbox<cords>(n) //TEMPORARY BUG FIX
+                    t.top <- t.top + editor.displayBuffer.getScrollTop()
+                    t.left <- t.left + editor.displayBuffer.getScrollLeft()
+                    t
         |> editor.screenPositionForPixelPosition
         |> editor.bufferPositionForScreenPosition
+
 
 [<ReflectedDefinition>]
 module DTO =
