@@ -7,7 +7,7 @@ var path = require('path');
 var Emitter = require('event-kit').Emitter;
 
 function wrappedFunScript() { 
-var position___ctor$, position__GeneratedCompareTo, list_1_String____NilString___, list_1_String____ConsString___, cords___ctor$, ViewsHelpers__pixelPositionFromMouseEvent$, ViewsHelpers__jq_$, ViewsHelpers__jq$, ViewsHelpers__getElementsByClass$Element_Element_, ViewsHelpers__bufferPositionFromMouseEvent$, UnfoldEnumerator_2_Int32__String___ctor$Int32_String, UnfoldEnumerator_2_Int32__String_____ctor$Int32_String___, UnfoldEnumerator_2_Int32__Match___ctor$Int32_Match_1, UnfoldEnumerator_2_Int32__IDisposable___ctor$Int32_IDisposable_, UnfoldEnumerator_2_Int32__Completion___ctor$Int32_Completion_, UnfoldEnumerator_2_IEnumerator_1_Completion__Suggestion___ctor$IEnumerator_1_Completion__Suggestion_, UnfoldEnumerator_2_IEnumerator_1_Completion__Completion___ctor$IEnumerator_1_Completion__Completion_, UnfoldEnumerator_2_FSharpList_1_String____String_____ctor$FSharpList_1_String____String___, TupleSuggestion__IEnumerator_1_Completion_, TupleString____Int32, TupleString____FSharpList_1_String___, TupleString_String, TupleString_Int32, TupleSelectListView__IPanel_, TupleMatch_1_Int32, TupleIDisposable__Int32, TupleCompletion__Int32, TupleCompletion__IEnumerator_1_Completion_, TooltipHandler__tooltip, TooltipHandler__timer, TooltipHandler__subscriptions, TooltipHandler__remove$, TooltipHandler__reg$, TooltipHandler__lastPosition, TooltipHandler__initialize$, TooltipHandler__handler$, TooltipHandler__get_tooltip$, TooltipHandler__get_timer$, TooltipHandler__get_subscriptions$, TooltipHandler__get_lastPosition$, TooltipHandler__get_event$, TooltipHandler__get_ed$, TooltipHandler__getPosition$, TooltipHandler__event, TooltipHandler__ed, TooltipHandler__deactivate$, TooltipHandler__create$, TooltipHandler__clearTimer$, TooltipHandler__activate$, T___ctor$, Suggestion___ctor$, String__StartsWith$, String__SplitWithoutOptions$, String__Replace$, String__PrintFormatToString$, StatusBar__subscriptions, StatusBar__statusbar, StatusBar__notification, StatusBar__get_subscriptions$, StatusBar__get_statusbar$, StatusBar__get_notification$, StatusBar__addStatusNotification$, StatusBar__activate$, StatusBarOptions___ctor$, State__On, State__Off, Seq__Where$Completion_Completion_, Seq__Unfold$Int32__String___Int32_String___, Seq__Unfold$Int32__String_1Int32_String, Seq__Unfold$Int32__Match_1Int32_Match_1, Seq__Unfold$Int32__IDisposable_Int32_IDisposable_, Seq__Unfold$Int32__Completion_Int32_Completion_, Seq__Unfold$IEnumerator_1_Completion__Suggestion_IEnumerator_1_Completion__Suggestion_, Seq__Unfold$IEnumerator_1_Completion__Completion_IEnumerator_1_Completion__Completion_, Seq__Unfold$FSharpList_1_String____String___FSharpList_1_String____String___, Seq__ToArray$Suggestion_Suggestion_, Seq__ToArray$String___String___, Seq__ToArray$Match_1Match_1, Seq__OfList$String___String___, Seq__OfArray$String___String___, Seq__OfArray$String_1String, Seq__OfArray$Completion_Completion_, Seq__Map$Completion__Suggestion_Completion__Suggestion_, Seq__IterateIndexed$Suggestion_Suggestion_, Seq__IterateIndexed$String___String___, Seq__IterateIndexed$Match_1Match_1, Seq__Iterate$String_1String, Seq__Iterate$IDisposable_IDisposable_, Seq__FromFactory$Suggestion_Suggestion_, Seq__FromFactory$String___String___, Seq__FromFactory$String_1String, Seq__FromFactory$Match_1Match_1, Seq__FromFactory$IDisposable_IDisposable_, Seq__FromFactory$Completion_Completion_, Seq__FoldIndexedAux$Unit__Suggestion_Unit__Suggestion_, Seq__FoldIndexedAux$Unit__String___Unit__String___, Seq__FoldIndexedAux$Unit__String_1Unit__String, Seq__FoldIndexedAux$Unit__Match_1Unit__Match_1, Seq__FoldIndexedAux$Unit__IDisposable_Unit__IDisposable_, Seq__FoldIndexed$Suggestion__Unit_Suggestion__Unit_, Seq__FoldIndexed$String____Unit_String____Unit_, Seq__FoldIndexed$String_1_Unit_String_Unit_, Seq__FoldIndexed$Match_1_Unit_Match_1_Unit_, Seq__FoldIndexed$IDisposable__Unit_IDisposable__Unit_, Seq__Fold$String_1_Unit_String_Unit_, Seq__Fold$IDisposable__Unit_IDisposable__Unit_, Seq__Filter$Completion_Completion_, Seq__Enumerator$Suggestion_Suggestion_, Seq__Enumerator$String___String___, Seq__Enumerator$String_1String, Seq__Enumerator$Match_1Match_1, Seq__Enumerator$IDisposable_IDisposable_, Seq__Enumerator$Completion_Completion_, Seq__Delay$Suggestion_Suggestion_, Seq__Delay$Completion_Completion_, Seq__Cast$Match_1Match_1, ResizeArray__ToSeq$IDisposable_IDisposable_, ResizeArray_1_Object__get_Item$Object_, ResizeArray_1_Object__get_Count$Object_, Regex__MatchesWithOffset$, Regex__MatchesStatic$, Regex__Matches$, Regex__MatchFirstWithOffset$, Regex__MatchFirstStatic$, Regex__MatchFirst$, Regex__MatchCollectionToSeq$, Regex__Create$, Provider___ctor$, Parser__subscriptions, Parser__projects, Parser__parseProjectForEditor$, Parser__h, Parser__get_subscriptions$, Parser__get_projects$, Parser__get_h$, Parser__deactivate$, Parser__activate$, PanelOptions___ctor$, Options___ctor$, Option__Map$NodeList__JQuery_NodeList__JQuery_, Option__Map$NodeList__Element_NodeList__Element_, Option__Map$NodeList__Coordinates_NodeList__Coordinates_, Option__Map$HTMLElement__NodeList_HTMLElement__NodeList_, Option__Map$Element__HTMLElement_Element__HTMLElement_, Option__Iterate$Tuple_2_String__String_Tuple_2_String__String_, Option__Iterate$Tuple_2_SelectListView__IPanel_Tuple_2_SelectListView__IPanel_, Option__Iterate$Timer_Timer_, Option__Iterate$Notification_Notification_, Option__Iterate$JQuery_JQuery_, Option__Iterate$JQueryMouseEventObject_JQueryMouseEventObject_, Option__Iterate$ITile_ITile_, Option__Iterate$IStatusBar_IStatusBar_, Option__Iterate$IPanel_IPanel_, Option__Iterate$IDisposable_IDisposable_, Option__Iterate$Element_Element_, Option__Iterate$ChildProcess_ChildProcess_, Option__IsSome$Int32_Int32, Option__IsSome$IEnumerator_1_Completion_IEnumerator_1_Completion_, Option__IsSome$FSharpList_1_String___FSharpList_1_String___, Option__GetValue$Tuple_2_Suggestion__IEnumerator_1_Completion_Tuple_2_Suggestion__IEnumerator_1_Completion_, Option__GetValue$Tuple_2_String____Int32_Tuple_2_String____Int32_, Option__GetValue$Tuple_2_String____FSharpList_1_String___Tuple_2_String____FSharpList_1_String___, Option__GetValue$Tuple_2_String__String_Tuple_2_String__String_, Option__GetValue$Tuple_2_String__Int32_Tuple_2_String__Int32_, Option__GetValue$Tuple_2_SelectListView__IPanel_Tuple_2_SelectListView__IPanel_, Option__GetValue$Tuple_2_Match__Int32_Tuple_2_Match__Int32_, Option__GetValue$Tuple_2_IDisposable__Int32_Tuple_2_IDisposable__Int32_, Option__GetValue$Tuple_2_Completion__Int32_Tuple_2_Completion__Int32_, Option__GetValue$Tuple_2_Completion__IEnumerator_1_Completion_Tuple_2_Completion__IEnumerator_1_Completion_, Option__GetValue$Timer_Timer_, Option__GetValue$String_1String, Option__GetValue$Notification_Notification_, Option__GetValue$NodeList_NodeList_, Option__GetValue$JQuery_JQuery_, Option__GetValue$JQueryMouseEventObject_JQueryMouseEventObject_, Option__GetValue$Int32_Int32, Option__GetValue$ITile_ITile_, Option__GetValue$IStatusBar_IStatusBar_, Option__GetValue$IPanel_IPanel_, Option__GetValue$IEnumerator_1_Completion_IEnumerator_1_Completion_, Option__GetValue$IDisposable_IDisposable_, Option__GetValue$HTMLElement_HTMLElement_, Option__GetValue$FSharpList_1_String___FSharpList_1_String___, Option__GetValue$Element_Element_, Option__GetValue$Coordinates_Coordinates_, Option__GetValue$ChildProcess_ChildProcess_, OpenOptions___ctor$, NotificationsOptions___ctor$, Match__get_Groups$, MatchCollection__get_Item$, MatchCollection__get_Count$, List__Tail$String___String___, List__Head$String___String___, List__Empty$String___String___, List__CreateCons$String___String___, LanguageService__tooltip$, LanguageService__stop$, LanguageService__start$, LanguageService__service, LanguageService__send$, LanguageService__project$, LanguageService__parseResponse$, LanguageService__parseEditor$, LanguageService__parse$, LanguageService__last, LanguageService__get_service$, LanguageService__get_last$, LanguageService__get_encoding$, LanguageService__findDeclaration$, LanguageService__encoding, LanguageService__completion$, LanguageService__ask$, ItemDescription___ctor$, HighlighterHandler__subscriptions, HighlighterHandler__marked, HighlighterHandler__handle$, HighlighterHandler__get_subscriptions$, HighlighterHandler__get_marked$, HighlighterHandler__deactivate$, HighlighterHandler__activate$, Group__get_Success$, GroupCollection__get_Item$, FindDeclaration__openDec$, FindDeclaration__handle$Unit_Unit_, FindDeclaration__deactivate$, FindDeclaration__activate$, FSharpIDE__provide$, FSharpIDE__getSuggestion$, FSharpIDE__deactivate$, FSharpIDE__consumeStatusBar$, FSharpIDE__activate$, FSharpIDE___ctor$, FAKE__viewForItem$, FAKE__taskListView, FAKE__spawn$, FAKE__regiterListView$, FAKE__registerTaskList$, FAKE__notice$, FAKE__jq__$, FAKE__jq_$, FAKE__jq$, FAKE__handleExit$, FAKE__handle$Object_Object_, FAKE__get_taskListView$, FAKE__get_currentNotification$, FAKE__get_File$, FAKE__deactivate$, FAKE__currentNotification, FAKE__activate$, FAKE__File, FAKE__FAKENotFound$, FAKE__BuildTask$, Events__parseAndEmit$TooltipResult_TooltipResult_, Events__parseAndEmit$ParseResult_ParseResult_, Events__parseAndEmit$CompletionResult_CompletionResult_, Events__once$FindDeclarationResult__Unit_FindDeclarationResult__Unit_, Events__once$CompletionResult__Unit_CompletionResult__Unit_, Events__on$, Events__log$String_1_TooltipResult_String_TooltipResult_, Events__log$String_1_String_1String_String, Events__log$String_1_ParseResult_String_ParseResult_, Events__log$String_1_CompletionResult_String_CompletionResult_, Events__last, Events__get_last$, Events__get_emitter$, Events__getName$, Events__emitter, Events__emitEmpty$String_1String, Events__emit$String_1String, EventType__Tooltips, EventType__Status, EventType__ServerStop, EventType__ServerStart, EventType__ServerError, EventType__Project, EventType__FindDecl, EventType__Errors, EventType__Completion, ErrorPanel__subscriptions, ErrorPanel__panel, ErrorPanel__handleEditorChange$, ErrorPanel__handle$, ErrorPanel__get_subscriptions$, ErrorPanel__get_panel$, ErrorPanel__deactivate$, ErrorPanel__createRow$, ErrorPanel__create$, ErrorPanel__addMinimize$, ErrorPanel__activate$, DateTime__get_Now$, DateTime__createUnsafe$, CreateEnumerable_1_Suggestion___ctor$Suggestion_, CreateEnumerable_1_String___ctor$String, CreateEnumerable_1_String_____ctor$String___, CreateEnumerable_1_Match___ctor$Match_1, CreateEnumerable_1_IDisposable___ctor$IDisposable_, CreateEnumerable_1_Completion___ctor$Completion_, Capture__get_Value$, Capture__getValue$, AutocompleteProvider__getSuggestion$, AutocompleteProvider__create$, Atom__addCommand$, Array__ZeroCreate$Suggestion_Suggestion_, Array__ZeroCreate$String___String___, Array__ZeroCreate$Object_Object_, Array__ZeroCreate$Match_1Match_1, Array__TryPickIndexedAux$String_1_String_1String_String, Array__TryPickIndexed$String_1_String_1String_String, Array__TryFind$String_1String, Array__MapIndexed$String_1_String___String_String___, Array__MapIndexed$Match_1_Object_Match_1_Object_, Array__Map$String_1_String___String_String___, Array__Map$Match_1_Object_Match_1_Object_, Array__Length$String_1String, Array__Length$Match_1Match_1, Array__Length$IDisplayBufferMarker_IDisplayBufferMarker_, Array__Length$Error_Error_, Array__Iterate$IDisplayBufferMarker_IDisplayBufferMarker_, Array__Iterate$Error_Error_, Array__FoldIndexed$Unit__IDisplayBufferMarker_Unit__IDisplayBufferMarker_, Array__FoldIndexed$Unit__Error_Unit__Error_, Array__FoldIndexed$String____String_1String____String, Array__Fold$String_1_String___String_String___, Array__Fold$IDisplayBufferMarker__Unit_IDisplayBufferMarker__Unit_, Array__Fold$Error__Unit_Error__Unit_, Array__Empty$IDisplayBufferMarker_IDisplayBufferMarker_, Array__ConcatImpl$String_1String, Array__Concat$String_1String, Array__BoxedLength$, Array__Append$IDisplayBufferMarker_IDisplayBufferMarker_;
+var position___ctor$, position__GeneratedCompareTo, list_1_String____NilString___, list_1_String____ConsString___, list_1_String__NilString, list_1_String__ConsString, cords___ctor$, ViewsHelpers__pixelPositionFromMouseEvent$, ViewsHelpers__jq_$, ViewsHelpers__jq$, ViewsHelpers__getElementsByClass$Element_Element_, ViewsHelpers__bufferPositionFromMouseEvent$, UnfoldEnumerator_2_Int32__String___ctor$Int32_String, UnfoldEnumerator_2_Int32__String_____ctor$Int32_String___, UnfoldEnumerator_2_Int32__Match___ctor$Int32_Match_1, UnfoldEnumerator_2_Int32__IDisposable___ctor$Int32_IDisposable_, UnfoldEnumerator_2_Int32__Completion___ctor$Int32_Completion_, UnfoldEnumerator_2_IEnumerator_1_Completion__Suggestion___ctor$IEnumerator_1_Completion__Suggestion_, UnfoldEnumerator_2_IEnumerator_1_Completion__Completion___ctor$IEnumerator_1_Completion__Completion_, UnfoldEnumerator_2_FSharpList_1_String____String_____ctor$FSharpList_1_String____String___, UnfoldEnumerator_2_FSharpList_1_String__String___ctor$FSharpList_1_String__String, TupleSuggestion__IEnumerator_1_Completion_, TupleString____Int32, TupleString____FSharpList_1_String___, TupleString_String, TupleString_Int32, TupleString_FSharpList_1_String_, TupleSelectListView__IPanel_, TupleMatch_1_Int32, TupleIDisposable__Int32, TupleError__String, TupleCompletion__Int32, TupleCompletion__IEnumerator_1_Completion_, TooltipHandler__tooltip, TooltipHandler__timer, TooltipHandler__subscriptions, TooltipHandler__remove$, TooltipHandler__reg$, TooltipHandler__matchError$, TooltipHandler__lastPosition, TooltipHandler__initialize$, TooltipHandler__handler$, TooltipHandler__get_tooltip$, TooltipHandler__get_timer$, TooltipHandler__get_subscriptions$, TooltipHandler__get_lastPosition$, TooltipHandler__get_event$, TooltipHandler__get_errorArr$, TooltipHandler__get_ed$, TooltipHandler__getPosition$, TooltipHandler__event, TooltipHandler__errorHandler$, TooltipHandler__errorArr, TooltipHandler__ed, TooltipHandler__deactivate$, TooltipHandler__dashes$, TooltipHandler__create$, TooltipHandler__clearTimer$, TooltipHandler__activate$, T___ctor$, Suggestion___ctor$, String__StartsWith$, String__SplitWithoutOptions$, String__Replace$, String__PrintFormatToString$, StatusBar__subscriptions, StatusBar__statusbar, StatusBar__notification, StatusBar__get_subscriptions$, StatusBar__get_statusbar$, StatusBar__get_notification$, StatusBar__addStatusNotification$, StatusBar__activate$, StatusBarOptions___ctor$, State__On, State__Off, Seq__Where$Completion_Completion_, Seq__Unfold$Int32__String___Int32_String___, Seq__Unfold$Int32__String_1Int32_String, Seq__Unfold$Int32__Match_1Int32_Match_1, Seq__Unfold$Int32__IDisposable_Int32_IDisposable_, Seq__Unfold$Int32__Completion_Int32_Completion_, Seq__Unfold$IEnumerator_1_Completion__Suggestion_IEnumerator_1_Completion__Suggestion_, Seq__Unfold$IEnumerator_1_Completion__Completion_IEnumerator_1_Completion__Completion_, Seq__Unfold$FSharpList_1_String____String___FSharpList_1_String____String___, Seq__Unfold$FSharpList_1_String__String_1FSharpList_1_String__String, Seq__ToArray$Suggestion_Suggestion_, Seq__ToArray$String___String___, Seq__ToArray$String_1String, Seq__ToArray$Match_1Match_1, Seq__OfList$String___String___, Seq__OfList$String_1String, Seq__OfArray$String___String___, Seq__OfArray$String_1String, Seq__OfArray$Completion_Completion_, Seq__Map$Completion__Suggestion_Completion__Suggestion_, Seq__IterateIndexed$Suggestion_Suggestion_, Seq__IterateIndexed$String___String___, Seq__IterateIndexed$String_1String, Seq__IterateIndexed$Match_1Match_1, Seq__Iterate$String_1String, Seq__Iterate$IDisposable_IDisposable_, Seq__FromFactory$Suggestion_Suggestion_, Seq__FromFactory$String___String___, Seq__FromFactory$String_1String, Seq__FromFactory$Match_1Match_1, Seq__FromFactory$IDisposable_IDisposable_, Seq__FromFactory$Completion_Completion_, Seq__FoldIndexedAux$Unit__Suggestion_Unit__Suggestion_, Seq__FoldIndexedAux$Unit__String___Unit__String___, Seq__FoldIndexedAux$Unit__String_1Unit__String, Seq__FoldIndexedAux$Unit__Match_1Unit__Match_1, Seq__FoldIndexedAux$Unit__IDisposable_Unit__IDisposable_, Seq__FoldIndexed$Suggestion__Unit_Suggestion__Unit_, Seq__FoldIndexed$String____Unit_String____Unit_, Seq__FoldIndexed$String_1_Unit_String_Unit_, Seq__FoldIndexed$Match_1_Unit_Match_1_Unit_, Seq__FoldIndexed$IDisposable__Unit_IDisposable__Unit_, Seq__Fold$String_1_Unit_String_Unit_, Seq__Fold$IDisposable__Unit_IDisposable__Unit_, Seq__Filter$Completion_Completion_, Seq__Enumerator$Suggestion_Suggestion_, Seq__Enumerator$String___String___, Seq__Enumerator$String_1String, Seq__Enumerator$Match_1Match_1, Seq__Enumerator$IDisposable_IDisposable_, Seq__Enumerator$Completion_Completion_, Seq__Delay$Suggestion_Suggestion_, Seq__Delay$Completion_Completion_, Seq__Cast$Match_1Match_1, ResizeArray__ToSeq$IDisposable_IDisposable_, ResizeArray_1_Object__get_Item$Object_, ResizeArray_1_Object__get_Count$Object_, Regex__MatchesWithOffset$, Regex__MatchesStatic$, Regex__Matches$, Regex__MatchFirstWithOffset$, Regex__MatchFirstStatic$, Regex__MatchFirst$, Regex__MatchCollectionToSeq$, Regex__Create$, Provider___ctor$, Parser__subscriptions, Parser__projects, Parser__parseProjectForEditor$, Parser__h, Parser__get_subscriptions$, Parser__get_projects$, Parser__get_h$, Parser__deactivate$, Parser__activate$, PanelOptions___ctor$, Options___ctor$, Option__Map$NodeList__JQuery_NodeList__JQuery_, Option__Map$NodeList__Element_NodeList__Element_, Option__Map$NodeList__Coordinates_NodeList__Coordinates_, Option__Map$HTMLElement__NodeList_HTMLElement__NodeList_, Option__Map$Element__HTMLElement_Element__HTMLElement_, Option__Iterate$Tuple_2_String__String_Tuple_2_String__String_, Option__Iterate$Tuple_2_SelectListView__IPanel_Tuple_2_SelectListView__IPanel_, Option__Iterate$Timer_Timer_, Option__Iterate$Notification_Notification_, Option__Iterate$JQuery_JQuery_, Option__Iterate$JQueryMouseEventObject_JQueryMouseEventObject_, Option__Iterate$ITile_ITile_, Option__Iterate$IStatusBar_IStatusBar_, Option__Iterate$IPanel_IPanel_, Option__Iterate$IDisposable_IDisposable_, Option__Iterate$Element_Element_, Option__Iterate$ChildProcess_ChildProcess_, Option__IsSome$Int32_Int32, Option__IsSome$IEnumerator_1_Completion_IEnumerator_1_Completion_, Option__IsSome$FSharpList_1_String___FSharpList_1_String___, Option__IsSome$FSharpList_1_String_FSharpList_1_String_, Option__GetValue$Tuple_2_Suggestion__IEnumerator_1_Completion_Tuple_2_Suggestion__IEnumerator_1_Completion_, Option__GetValue$Tuple_2_String____Int32_Tuple_2_String____Int32_, Option__GetValue$Tuple_2_String____FSharpList_1_String___Tuple_2_String____FSharpList_1_String___, Option__GetValue$Tuple_2_String__String_Tuple_2_String__String_, Option__GetValue$Tuple_2_String__Int32_Tuple_2_String__Int32_, Option__GetValue$Tuple_2_String__FSharpList_1_String_Tuple_2_String__FSharpList_1_String_, Option__GetValue$Tuple_2_SelectListView__IPanel_Tuple_2_SelectListView__IPanel_, Option__GetValue$Tuple_2_Match__Int32_Tuple_2_Match__Int32_, Option__GetValue$Tuple_2_IDisposable__Int32_Tuple_2_IDisposable__Int32_, Option__GetValue$Tuple_2_Completion__Int32_Tuple_2_Completion__Int32_, Option__GetValue$Tuple_2_Completion__IEnumerator_1_Completion_Tuple_2_Completion__IEnumerator_1_Completion_, Option__GetValue$Timer_Timer_, Option__GetValue$String_1String, Option__GetValue$Notification_Notification_, Option__GetValue$NodeList_NodeList_, Option__GetValue$JQuery_JQuery_, Option__GetValue$JQueryMouseEventObject_JQueryMouseEventObject_, Option__GetValue$Int32_Int32, Option__GetValue$ITile_ITile_, Option__GetValue$IStatusBar_IStatusBar_, Option__GetValue$IPanel_IPanel_, Option__GetValue$IEnumerator_1_Completion_IEnumerator_1_Completion_, Option__GetValue$IDisposable_IDisposable_, Option__GetValue$HTMLElement_HTMLElement_, Option__GetValue$FSharpList_1_String___FSharpList_1_String___, Option__GetValue$FSharpList_1_String_FSharpList_1_String_, Option__GetValue$Error_Error_, Option__GetValue$Element_Element_, Option__GetValue$Coordinates_Coordinates_, Option__GetValue$ChildProcess_ChildProcess_, OpenOptions___ctor$, NotificationsOptions___ctor$, Match__get_Groups$, MatchCollection__get_Item$, MatchCollection__get_Count$, List__Tail$String___String___, List__Tail$String_1String, List__Head$String___String___, List__Head$String_1String, List__Empty$String___String___, List__Empty$String_1String, List__CreateCons$String___String___, List__CreateCons$String_1String, LanguageService__tooltip$, LanguageService__stop$, LanguageService__start$, LanguageService__service, LanguageService__send$, LanguageService__project$, LanguageService__parseResponse$, LanguageService__parseEditor$, LanguageService__parse$, LanguageService__last, LanguageService__get_service$, LanguageService__get_last$, LanguageService__get_encoding$, LanguageService__findDeclaration$, LanguageService__encoding, LanguageService__completion$, LanguageService__ask$, ItemDescription___ctor$, HighlighterHandler__subscriptions, HighlighterHandler__marked, HighlighterHandler__handle$, HighlighterHandler__get_subscriptions$, HighlighterHandler__get_marked$, HighlighterHandler__deactivate$, HighlighterHandler__activate$, Group__get_Success$, GroupCollection__get_Item$, FindDeclaration__openDec$, FindDeclaration__handle$Unit_Unit_, FindDeclaration__deactivate$, FindDeclaration__activate$, FSharpString__emptyIfNull$, FSharpString__Replicate$, FSharpString__Initialize$, FSharpString__Concat$, FSharpOption_1_Error__GeneratedCompareToError_, FSharpIDE__provide$, FSharpIDE__getSuggestion$, FSharpIDE__deactivate$, FSharpIDE__consumeStatusBar$, FSharpIDE__activate$, FSharpIDE___ctor$, FAKE__viewForItem$, FAKE__taskListView, FAKE__spawn$, FAKE__regiterListView$, FAKE__registerTaskList$, FAKE__notice$, FAKE__jq__$, FAKE__jq_$, FAKE__jq$, FAKE__handleExit$, FAKE__handle$Object_Object_, FAKE__get_taskListView$, FAKE__get_currentNotification$, FAKE__get_File$, FAKE__deactivate$, FAKE__currentNotification, FAKE__activate$, FAKE__File, FAKE__FAKENotFound$, FAKE__BuildTask$, Events__parseAndEmit$TooltipResult_TooltipResult_, Events__parseAndEmit$ParseResult_ParseResult_, Events__parseAndEmit$CompletionResult_CompletionResult_, Events__once$FindDeclarationResult__Unit_FindDeclarationResult__Unit_, Events__once$CompletionResult__Unit_CompletionResult__Unit_, Events__on$, Events__log$String_1_TooltipResult_String_TooltipResult_, Events__log$String_1_String_1String_String, Events__log$String_1_ParseResult_String_ParseResult_, Events__log$String_1_CompletionResult_String_CompletionResult_, Events__last, Events__get_last$, Events__get_emitter$, Events__getName$, Events__emitter, Events__emitEmpty$String_1String, Events__emit$String_1String, EventType__Tooltips, EventType__Status, EventType__ServerStop, EventType__ServerStart, EventType__ServerError, EventType__Project, EventType__FindDecl, EventType__Errors, EventType__Completion, Error__GeneratedCompareTo, ErrorPanel__subscriptions, ErrorPanel__panel, ErrorPanel__handleEditorChange$, ErrorPanel__handle$, ErrorPanel__get_subscriptions$, ErrorPanel__get_panel$, ErrorPanel__deactivate$, ErrorPanel__createRow$, ErrorPanel__create$, ErrorPanel__addMinimize$, ErrorPanel__activate$, DateTime__get_Now$, DateTime__createUnsafe$, CreateEnumerable_1_Suggestion___ctor$Suggestion_, CreateEnumerable_1_String___ctor$String, CreateEnumerable_1_String_____ctor$String___, CreateEnumerable_1_Match___ctor$Match_1, CreateEnumerable_1_IDisposable___ctor$IDisposable_, CreateEnumerable_1_Completion___ctor$Completion_, Capture__get_Value$, Capture__getValue$, AutocompleteProvider__getSuggestion$, AutocompleteProvider__create$, Atom__addCommand$, Array__ZeroCreate$Suggestion_Suggestion_, Array__ZeroCreate$String___String___, Array__ZeroCreate$String_1String, Array__ZeroCreate$Object_Object_, Array__ZeroCreate$Match_1Match_1, Array__TryPickIndexedAux$String_1_String_1String_String, Array__TryPickIndexedAux$Error__Error_Error__Error_, Array__TryPickIndexed$String_1_String_1String_String, Array__TryPickIndexed$Error__Error_Error__Error_, Array__TryFind$String_1String, Array__TryFind$Error_Error_, Array__MapIndexed$String_1_String___String_String___, Array__MapIndexed$Match_1_Object_Match_1_Object_, Array__Map$String_1_String___String_String___, Array__Map$Match_1_Object_Match_1_Object_, Array__Length$String_1String, Array__Length$Match_1Match_1, Array__Length$IDisplayBufferMarker_IDisplayBufferMarker_, Array__Length$Error_Error_, Array__Iterate$IDisplayBufferMarker_IDisplayBufferMarker_, Array__Iterate$Error_Error_, Array__Initialize$String_1String, Array__FoldIndexed$Unit__IDisplayBufferMarker_Unit__IDisplayBufferMarker_, Array__FoldIndexed$Unit__Error_Unit__Error_, Array__FoldIndexed$String____String_1String____String, Array__Fold$String_1_String___String_String___, Array__Fold$IDisplayBufferMarker__Unit_IDisplayBufferMarker__Unit_, Array__Fold$Error__Unit_Error__Unit_, Array__Empty$IDisplayBufferMarker_IDisplayBufferMarker_, Array__ConcatImpl$String_1String, Array__Concat$String_1String, Array__BoxedLength$, Array__Append$IDisplayBufferMarker_IDisplayBufferMarker_;
 Array__Append$IDisplayBufferMarker_IDisplayBufferMarker_ = (function(xs,ys)
 {
     return xs.concat(ys);;
@@ -97,27 +97,37 @@ Array__FoldIndexed$Unit__IDisplayBufferMarker_Unit__IDisplayBufferMarker_ = (fun
     };
     return acc;
 });
+Array__Initialize$String_1String = (function(n,f)
+{
+    var xs = Array__ZeroCreate$String_1String(0);
+    for (var i = 0; i <= (n - 1); i++)
+    {
+      xs[i] = f(i);
+      null;
+    };
+    return xs;
+});
 Array__Iterate$Error_Error_ = (function(f,xs)
 {
-    var _1638;
+    var _2079;
     return Array__Fold$Error__Unit_Error__Unit_((function(unitVar0)
     {
       return (function(x)
       {
         return f(x);
       });
-    }), _1638, xs);
+    }), _2079, xs);
 });
 Array__Iterate$IDisplayBufferMarker_IDisplayBufferMarker_ = (function(f,xs)
 {
-    var _1563;
+    var _2004;
     return Array__Fold$IDisplayBufferMarker__Unit_IDisplayBufferMarker__Unit_((function(unitVar0)
     {
       return (function(x)
       {
         return f(x);
       });
-    }), _1563, xs);
+    }), _2004, xs);
 });
 Array__Length$Error_Error_ = (function(xs)
 {
@@ -175,6 +185,23 @@ Array__MapIndexed$String_1_String___String_String___ = (function(f,xs)
     };
     return ys;
 });
+Array__TryFind$Error_Error_ = (function(f,xs)
+{
+    return Array__TryPickIndexed$Error__Error_Error__Error_((function(_arg1)
+    {
+      return (function(x)
+      {
+        if (f(x)) 
+        {
+          return {Tag: 1.000000, Value: x};
+        }
+        else
+        {
+          return {Tag: 0.000000};
+        };
+      });
+    }), xs);
+});
 Array__TryFind$String_1String = (function(f,xs)
 {
     return Array__TryPickIndexed$String_1_String_1String_String((function(_arg1)
@@ -192,9 +219,32 @@ Array__TryFind$String_1String = (function(f,xs)
       });
     }), xs);
 });
+Array__TryPickIndexed$Error__Error_Error__Error_ = (function(f,xs)
+{
+    return Array__TryPickIndexedAux$Error__Error_Error__Error_(f, 0, xs);
+});
 Array__TryPickIndexed$String_1_String_1String_String = (function(f,xs)
 {
     return Array__TryPickIndexedAux$String_1_String_1String_String(f, 0, xs);
+});
+Array__TryPickIndexedAux$Error__Error_Error__Error_ = (function(f,i,xs)
+{
+    if ((i == Array__Length$Error_Error_(xs))) 
+    {
+      return {Tag: 0.000000};
+    }
+    else
+    {
+      var result = f(i)(xs[i]);
+      if ((result.Tag == 0.000000)) 
+      {
+        return Array__TryPickIndexedAux$Error__Error_Error__Error_(f, (i + 1), xs);
+      }
+      else
+      {
+        return result;
+      };
+    };
 });
 Array__TryPickIndexedAux$String_1_String_1String_String = (function(f,i,xs)
 {
@@ -220,6 +270,10 @@ Array__ZeroCreate$Match_1Match_1 = (function(size)
     return new Array(size);;
 });
 Array__ZeroCreate$Object_Object_ = (function(size)
+{
+    return new Array(size);;
+});
+Array__ZeroCreate$String_1String = (function(size)
 {
     return new Array(size);;
 });
@@ -249,16 +303,16 @@ AutocompleteProvider__getSuggestion$ = (function(options)
       var path = (((options.editor.buffer).file).path);
       var row = ((options.bufferPosition.row) + 1);
       var col = ((options.bufferPosition.column) + 1);
-      var _2667;
+      var _3108;
       if (((options.prefix == ".") || (options.prefix == "="))) 
       {
-        _2667 = "";
+        _3108 = "";
       }
       else
       {
-        _2667 = options.prefix;
+        _3108 = options.prefix;
       };
-      var prefix = _2667;
+      var prefix = _3108;
       return new Promise(function(resolve){(function(unitVar0)
       {
         Events__once$CompletionResult__Unit_CompletionResult__Unit_((new EventType__Completion()), (function(result)
@@ -373,7 +427,7 @@ ErrorPanel__addMinimize$ = (function(unitVar0)
 });
 ErrorPanel__create$ = (function(unitVar0)
 {
-    return ViewsHelpers__jq$("\u003cdiv class=\u0027tool-panel panel-bottom error-pane\u0027 id=\u0027pane\u0027\u003e\r\n                \u003cdiv class=\u0027inset-panel\u0027\u003e\r\n                \u003cdiv class=\u0027panel-heading clearfix\u0027 style=\u0027height: 30px\u0027\u003e\r\n                  \u003cspan\u003eErrors\u003c/span\u003e\r\n                  \u003ci id=\u0027btnMin\u0027 class=\u0027fa fa-minus-square\u0027 style=\u0027float:right\u0027\u003e\u003c/i\u003e\r\n                  \u003ci id=\u0027btnMax\u0027 class=\u0027fa fa-plus-square\u0027 style=\u0027float:right; display: none\u0027\u003e\u003c/i\u003e\r\n                \u003c/div\u003e\r\n                \u003cdiv id=\u0027scrollPanel\u0027 class=\u0027scrollable\u0027 style=\u0027height: 120px\u0027\u003e\r\n                    \u003ctable id=\u0027panelError\u0027 class=\u0027error-table outputPanel\u0027 \u003e\r\n                        \u003cthead\u003e\u003cth\u003ePosition\u003c/th\u003e\u003cth\u003eMessage\u003c/th\u003e\u003cth\u003eType\u003c/th\u003e\u003cth\u003eCategory\u003c/th\u003e\u003c/thead\u003e\r\n                        \u003ctbody id=\u0027errorList\u0027\u003e\r\n                    \u003c/table\u003e\r\n                \u003c/div\u003e\r\n            \u003c/div\u003e");
+    return ViewsHelpers__jq$("\u003cdiv class=\u0027tool-panel panel-bottom error-pane\u0027 id=\u0027pane\u0027\u003e\n                \u003cdiv class=\u0027inset-panel\u0027\u003e\n                \u003cdiv class=\u0027panel-heading clearfix\u0027 style=\u0027height: 30px\u0027\u003e\n                  \u003cspan\u003eErrors\u003c/span\u003e\n                  \u003ci id=\u0027btnMin\u0027 class=\u0027fa fa-minus-square\u0027 style=\u0027float:right\u0027\u003e\u003c/i\u003e\n                  \u003ci id=\u0027btnMax\u0027 class=\u0027fa fa-plus-square\u0027 style=\u0027float:right; display: none\u0027\u003e\u003c/i\u003e\n                \u003c/div\u003e\n                \u003cdiv id=\u0027scrollPanel\u0027 class=\u0027scrollable\u0027 style=\u0027height: 120px\u0027\u003e\n                    \u003ctable id=\u0027panelError\u0027 class=\u0027error-table outputPanel\u0027 \u003e\n                        \u003cthead\u003e\u003cth\u003ePosition\u003c/th\u003e\u003cth\u003eMessage\u003c/th\u003e\u003cth\u003eType\u003c/th\u003e\u003cth\u003eCategory\u003c/th\u003e\u003c/thead\u003e\n                        \u003ctbody id=\u0027errorList\u0027\u003e\n                    \u003c/table\u003e\n                \u003c/div\u003e\n            \u003c/div\u003e");
 });
 ErrorPanel__createRow$ = (function(editor,e)
 {
@@ -451,6 +505,101 @@ ErrorPanel__handleEditorChange$ = (function(panel,editor)
     {
       return (panel.hide());
     };
+});
+Error__GeneratedCompareTo = (function(a)
+{
+    return (function(b)
+    {
+      var diff = (a.StartLine < b.StartLine ? -1 : (a.StartLine == b.StartLine ? 0 : 1));
+      if ((diff != 0)) 
+      {
+        return diff;
+      }
+      else
+      {
+        var _diff = (a.StartLineAlternate < b.StartLineAlternate ? -1 : (a.StartLineAlternate == b.StartLineAlternate ? 0 : 1));
+        if ((_diff != 0)) 
+        {
+          return _diff;
+        }
+        else
+        {
+          var __diff = (a.StartColumn < b.StartColumn ? -1 : (a.StartColumn == b.StartColumn ? 0 : 1));
+          if ((__diff != 0)) 
+          {
+            return __diff;
+          }
+          else
+          {
+            var ___diff = (a.StartColumnAlternate < b.StartColumnAlternate ? -1 : (a.StartColumnAlternate == b.StartColumnAlternate ? 0 : 1));
+            if ((___diff != 0)) 
+            {
+              return ___diff;
+            }
+            else
+            {
+              var ____diff = (a.EndLine < b.EndLine ? -1 : (a.EndLine == b.EndLine ? 0 : 1));
+              if ((____diff != 0)) 
+              {
+                return ____diff;
+              }
+              else
+              {
+                var _____diff = (a.EndLineAlternate < b.EndLineAlternate ? -1 : (a.EndLineAlternate == b.EndLineAlternate ? 0 : 1));
+                if ((_____diff != 0)) 
+                {
+                  return _____diff;
+                }
+                else
+                {
+                  var ______diff = (a.EndColumn < b.EndColumn ? -1 : (a.EndColumn == b.EndColumn ? 0 : 1));
+                  if ((______diff != 0)) 
+                  {
+                    return ______diff;
+                  }
+                  else
+                  {
+                    var _______diff = (a.EndColumnAlternate < b.EndColumnAlternate ? -1 : (a.EndColumnAlternate == b.EndColumnAlternate ? 0 : 1));
+                    if ((_______diff != 0)) 
+                    {
+                      return _______diff;
+                    }
+                    else
+                    {
+                      var ________diff = (a.Message < b.Message ? -1 : (a.Message == b.Message ? 0 : 1));
+                      if ((________diff != 0)) 
+                      {
+                        return ________diff;
+                      }
+                      else
+                      {
+                        var _________diff = (a.Severity < b.Severity ? -1 : (a.Severity == b.Severity ? 0 : 1));
+                        if ((_________diff != 0)) 
+                        {
+                          return _________diff;
+                        }
+                        else
+                        {
+                          var __________diff = (a.Subcategory < b.Subcategory ? -1 : (a.Subcategory == b.Subcategory ? 0 : 1));
+                          if ((__________diff != 0)) 
+                          {
+                            return __________diff;
+                          }
+                          else
+                          {
+                            return 0;
+                          };
+                        };
+                      };
+                    };
+                  };
+                };
+              };
+            };
+          };
+        };
+      };
+    });
 });
 EventType__Completion = (function()
 {
@@ -835,16 +984,16 @@ FAKE__notice$ = (function(isError,text,details)
 {
     if ((FAKE__currentNotification.Tag == 0.000000)) 
     {
-      var _2180;
+      var _2621;
       if (isError) 
       {
-        _2180 = ((window.atom).notifications).addError(text, (new NotificationsOptions___ctor$(details, true)));
+        _2621 = ((window.atom).notifications).addError(text, (new NotificationsOptions___ctor$(details, true)));
       }
       else
       {
-        _2180 = ((window.atom).notifications).addInfo(text, (new NotificationsOptions___ctor$(details, true)));
+        _2621 = ((window.atom).notifications).addInfo(text, (new NotificationsOptions___ctor$(details, true)));
       };
-      var n = _2180;
+      var n = _2621;
       FAKE__currentNotification = {Tag: 1.000000, Value: n};
     }
     else
@@ -870,7 +1019,7 @@ FAKE__registerTaskList$ = (function(unitVar0)
     });
     var cancelledCallback = (function()
     {
-      var _1960;
+      var _2401;
       return (function(_arg1)
       {
         return Option__Iterate$Tuple_2_SelectListView__IPanel_Tuple_2_SelectListView__IPanel_((function(tupledArg)
@@ -879,7 +1028,7 @@ FAKE__registerTaskList$ = (function(unitVar0)
           var view = tupledArg.Items[1.000000];
           return (view.hide());
         }), FAKE__taskListView);
-      })(_1960);
+      })(_2401);
     });
     var confirmedCallback = (function(packageDescription)
     {
@@ -909,21 +1058,21 @@ FAKE__regiterListView$ = (function(stopChangingCallback,cancelledCallback,confir
     var panel = ((window.atom).workspace).addModalPanel((new PanelOptions___ctor$(listView, false, priority)));
     (listView.getFilterKey = (function()
     {
-      var _2274;
+      var _2715;
       return (function(_arg1)
       {
         return "name";
-      })(_2274);
+      })(_2715);
     }));
     if (removeFiler) 
     {
       (listView.getFilterQuery = (function()
       {
-        var _2279;
+        var _2720;
         return (function(_arg2)
         {
           return "";
-        })(_2279);
+        })(_2720);
       }));
     }
     else
@@ -942,17 +1091,17 @@ FAKE__spawn$ = (function(location,cmd)
 {
     var cmd_ = String__SplitWithoutOptions$(cmd, [" "]);
     var options = (new Options___ctor$((((window.atom).project).getPaths())[0]));
-    var _1995;
+    var _2436;
     if (String__StartsWith$(((window.process).platform), "win")) 
     {
-      _1995 = (child_process.spawn(location, cmd_, options));
+      _2436 = (child_process.spawn(location, cmd_, options));
     }
     else
     {
       var prms = Array__Concat$String_1String(Seq__OfList$String___String___(List__CreateCons$String___String___([location], List__CreateCons$String___String___(cmd_, List__Empty$String___String___()))));
-      _1995 = (child_process.spawn("mono", prms, options));
+      _2436 = (child_process.spawn("mono", prms, options));
     };
-    var procs = _1995;
+    var procs = _2436;
     FAKE__currentNotification = {Tag: 0.000000};
     var ignored0 = (procs.on("exit", (function(code)
     {
@@ -1019,6 +1168,106 @@ FSharpIDE__getSuggestion$ = (function(x,options)
 FSharpIDE__provide$ = (function(x,unitVar1)
 {
     return AutocompleteProvider__create$();
+});
+FSharpOption_1_Error__GeneratedCompareToError_ = (function(a)
+{
+    return (function(b)
+    {
+      var isAThisCase = (a.Tag == 0.000000);
+      var isBThisCase = (b.Tag == 0.000000);
+      if ((isAThisCase && isBThisCase)) 
+      {
+        return 0;
+      }
+      else
+      {
+        if (isAThisCase) 
+        {
+          return -1;
+        }
+        else
+        {
+          if (isBThisCase) 
+          {
+            return 1;
+          }
+          else
+          {
+            var _isAThisCase = (a.Tag == 1.000000);
+            var _isBThisCase = (b.Tag == 1.000000);
+            if ((_isAThisCase && _isBThisCase)) 
+            {
+              var diff = Error__GeneratedCompareTo(Option__GetValue$Error_Error_(a))(Option__GetValue$Error_Error_(b));
+              if ((diff != 0)) 
+              {
+                return diff;
+              }
+              else
+              {
+                return 0;
+              };
+            }
+            else
+            {
+              if (_isAThisCase) 
+              {
+                return -1;
+              }
+              else
+              {
+                if (_isBThisCase) 
+                {
+                  return 1;
+                }
+                else
+                {
+                  throw ("Unknown union case");
+                  return null;
+                };
+              };
+            };
+          };
+        };
+      };
+    });
+});
+FSharpString__Concat$ = (function(sep,strings)
+{
+    return Seq__ToArray$String_1String(strings).join(sep);
+});
+FSharpString__Initialize$ = (function(count,initializer)
+{
+    if ((count < 0)) 
+    {
+      throw ("String length must be non-negative");
+      null;
+    }
+    else
+    {
+      ;
+    };
+    return FSharpString__Concat$("", Seq__OfArray$String_1String(Array__Initialize$String_1String(count, initializer)));
+});
+FSharpString__Replicate$ = (function(count,str)
+{
+    if ((count < 0)) 
+    {
+      throw ("String length must be non-negative");
+      null;
+    }
+    else
+    {
+      ;
+    };
+    var _str = FSharpString__emptyIfNull$(str);
+    return FSharpString__Initialize$(count, (function(_arg1)
+    {
+      return _str;
+    }));
+});
+FSharpString__emptyIfNull$ = (function(str)
+{
+    return str==null?"":str;;
 });
 FindDeclaration__activate$ = (function(unitVar0)
 {
@@ -1093,16 +1342,16 @@ HighlighterHandler__handle$ = (function(o)
     var action = (function(item)
     {
       var marker = (editor.markBufferRange([[item.StartLine, item.StartColumn], [item.EndLine, item.EndColumn]]));
-      var _1614;
+      var _2055;
       if ((item.Severity == "Warning")) 
       {
-        _1614 = "highlight-warning";
+        _2055 = "highlight-warning";
       }
       else
       {
-        _1614 = "highlight-error";
+        _2055 = "highlight-error";
       };
-      var cls = _1614;
+      var cls = _2055;
       HighlighterHandler__marked = Array__Append$IDisplayBufferMarker_IDisplayBufferMarker_([marker], HighlighterHandler__marked);
       editor.decorateMarker(marker, {type: 'highlight', class: cls});
     });
@@ -1342,13 +1591,35 @@ LanguageService__tooltip$ = (function(fn,line,col)
     })(fn)(line)(col);
     return LanguageService__ask$(str);
 });
+List__CreateCons$String_1String = (function(x,xs)
+{
+    return (new list_1_String__ConsString(x, xs));
+});
 List__CreateCons$String___String___ = (function(x,xs)
 {
     return (new list_1_String____ConsString___(x, xs));
 });
+List__Empty$String_1String = (function()
+{
+    return (new list_1_String__NilString());
+});
 List__Empty$String___String___ = (function()
 {
     return (new list_1_String____NilString___());
+});
+List__Head$String_1String = (function(_arg1)
+{
+    if ((_arg1.Tag == 1.000000)) 
+    {
+      var xs = _arg1.Item2;
+      var x = _arg1.Item1;
+      return x;
+    }
+    else
+    {
+      throw ("List was empty");
+      return null;
+    };
 });
 List__Head$String___String___ = (function(_arg1)
 {
@@ -1357,6 +1628,20 @@ List__Head$String___String___ = (function(_arg1)
       var xs = _arg1.Item2;
       var x = _arg1.Item1;
       return x;
+    }
+    else
+    {
+      throw ("List was empty");
+      return null;
+    };
+});
+List__Tail$String_1String = (function(_arg1)
+{
+    if ((_arg1.Tag == 1.000000)) 
+    {
+      var xs = _arg1.Item2;
+      var x = _arg1.Item1;
+      return xs;
     }
     else
     {
@@ -1411,6 +1696,14 @@ Option__GetValue$Coordinates_Coordinates_ = (function(option)
     return option.Value;;
 });
 Option__GetValue$Element_Element_ = (function(option)
+{
+    return option.Value;;
+});
+Option__GetValue$Error_Error_ = (function(option)
+{
+    return option.Value;;
+});
+Option__GetValue$FSharpList_1_String_FSharpList_1_String_ = (function(option)
 {
     return option.Value;;
 });
@@ -1490,6 +1783,10 @@ Option__GetValue$Tuple_2_SelectListView__IPanel_Tuple_2_SelectListView__IPanel_ 
 {
     return option.Value;;
 });
+Option__GetValue$Tuple_2_String__FSharpList_1_String_Tuple_2_String__FSharpList_1_String_ = (function(option)
+{
+    return option.Value;;
+});
 Option__GetValue$Tuple_2_String__Int32_Tuple_2_String__Int32_ = (function(option)
 {
     return option.Value;;
@@ -1509,6 +1806,10 @@ Option__GetValue$Tuple_2_String____Int32_Tuple_2_String____Int32_ = (function(op
 Option__GetValue$Tuple_2_Suggestion__IEnumerator_1_Completion_Tuple_2_Suggestion__IEnumerator_1_Completion_ = (function(option)
 {
     return option.Value;;
+});
+Option__IsSome$FSharpList_1_String_FSharpList_1_String_ = (function(option)
+{
+    return ((option.Tag == 1.000000) && true);
 });
 Option__IsSome$FSharpList_1_String___FSharpList_1_String___ = (function(option)
 {
@@ -1962,16 +2263,16 @@ Seq__Delay$Completion_Completion_ = (function(f)
 {
     return Seq__FromFactory$Completion_Completion_((function(unitVar0)
     {
-      var _2856;
-      return Seq__Enumerator$Completion_Completion_(f(_2856));
+      var _3297;
+      return Seq__Enumerator$Completion_Completion_(f(_3297));
     }));
 });
 Seq__Delay$Suggestion_Suggestion_ = (function(f)
 {
     return Seq__FromFactory$Suggestion_Suggestion_((function(unitVar0)
     {
-      var _2947;
-      return Seq__Enumerator$Suggestion_Suggestion_(f(_2947));
+      var _3388;
+      return Seq__Enumerator$Suggestion_Suggestion_(f(_3388));
     }));
 });
 Seq__Enumerator$Completion_Completion_ = (function(xs)
@@ -2143,8 +2444,8 @@ Seq__FromFactory$Completion_Completion_ = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _2784;
-        return __.factory(_2784);
+        var _3225;
+        return __.factory(_3225);
       })(impl, unitVar1);
     })};
 });
@@ -2169,8 +2470,8 @@ Seq__FromFactory$Match_1Match_1 = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _2509;
-        return __.factory(_2509);
+        var _2950;
+        return __.factory(_2950);
       })(impl, unitVar1);
     })};
 });
@@ -2208,8 +2509,8 @@ Seq__FromFactory$Suggestion_Suggestion_ = (function(f)
     {
       return (function(__,unitVar1)
       {
-        var _2939;
-        return __.factory(_2939);
+        var _3380;
+        return __.factory(_3380);
       })(impl, unitVar1);
     })};
 });
@@ -2237,7 +2538,7 @@ Seq__Iterate$String_1String = (function(f,xs)
 });
 Seq__IterateIndexed$Match_1Match_1 = (function(f,xs)
 {
-    var _2528;
+    var _2969;
     return Seq__FoldIndexed$Match_1_Unit_Match_1_Unit_((function(i)
     {
       return (function(unitVar1)
@@ -2247,7 +2548,21 @@ Seq__IterateIndexed$Match_1Match_1 = (function(f,xs)
           return f(i)(x);
         });
       });
-    }), _2528, xs);
+    }), _2969, xs);
+});
+Seq__IterateIndexed$String_1String = (function(f,xs)
+{
+    var _1816;
+    return Seq__FoldIndexed$String_1_Unit_String_Unit_((function(i)
+    {
+      return (function(unitVar1)
+      {
+        return (function(x)
+        {
+          return f(i)(x);
+        });
+      });
+    }), _1816, xs);
 });
 Seq__IterateIndexed$String___String___ = (function(f,xs)
 {
@@ -2265,7 +2580,7 @@ Seq__IterateIndexed$String___String___ = (function(f,xs)
 });
 Seq__IterateIndexed$Suggestion_Suggestion_ = (function(f,xs)
 {
-    var _2961;
+    var _3402;
     return Seq__FoldIndexed$Suggestion__Unit_Suggestion__Unit_((function(i)
     {
       return (function(unitVar1)
@@ -2275,7 +2590,7 @@ Seq__IterateIndexed$Suggestion_Suggestion_ = (function(f,xs)
           return f(i)(x);
         });
       });
-    }), _2961, xs);
+    }), _3402, xs);
 });
 Seq__Map$Completion__Suggestion_Completion__Suggestion_ = (function(f,xs)
 {
@@ -2336,6 +2651,22 @@ Seq__OfArray$String___String___ = (function(xs)
       };
     }), 0);
 });
+Seq__OfList$String_1String = (function(xs)
+{
+    return Seq__Unfold$FSharpList_1_String__String_1FSharpList_1_String__String((function(_arg1)
+    {
+      if ((_arg1.Tag == 1.000000)) 
+      {
+        var _xs = List__Tail$String_1String(_arg1);
+        var x = List__Head$String_1String(_arg1);
+        return {Tag: 1.000000, Value: (new TupleString_FSharpList_1_String_(x, _xs))};
+      }
+      else
+      {
+        return {Tag: 0.000000};
+      };
+    }), xs);
+});
 Seq__OfList$String___String___ = (function(xs)
 {
     return Seq__Unfold$FSharpList_1_String____String___FSharpList_1_String____String___((function(_arg1)
@@ -2356,6 +2687,19 @@ Seq__ToArray$Match_1Match_1 = (function(xs)
 {
     var ys = Array__ZeroCreate$Match_1Match_1(0);
     Seq__IterateIndexed$Match_1Match_1((function(i)
+    {
+      return (function(x)
+      {
+        ys[i] = x;
+        return null;
+      });
+    }), xs);
+    return ys;
+});
+Seq__ToArray$String_1String = (function(xs)
+{
+    var ys = Array__ZeroCreate$String_1String(0);
+    Seq__IterateIndexed$String_1String((function(i)
     {
       return (function(x)
       {
@@ -2390,6 +2734,63 @@ Seq__ToArray$Suggestion_Suggestion_ = (function(xs)
       });
     }), xs);
     return ys;
+});
+Seq__Unfold$FSharpList_1_String__String_1FSharpList_1_String__String = (function(f,seed)
+{
+    return Seq__FromFactory$String_1String((function(unitVar0)
+    {
+      var impl;
+      impl = (new UnfoldEnumerator_2_FSharpList_1_String__String___ctor$FSharpList_1_String__String(seed, f));
+      return {get_Current: (function(unitVar1)
+      {
+        return (function(__,unitVar1)
+        {
+          return __.current;
+        })(impl, unitVar1);
+      }), Dispose: (function(unitVar1)
+      {
+        return (function(__,unitVar1)
+        {
+          ;
+        })(impl, unitVar1);
+      }), MoveNext: (function(unitVar1)
+      {
+        return (function(__,unitVar1)
+        {
+          var next = (function(_unitVar0)
+          {
+            var currAcc = Option__GetValue$FSharpList_1_String_FSharpList_1_String_(__.acc);
+            var x = __.unfold(currAcc);
+            if ((x.Tag == 1.000000)) 
+            {
+              var value = Option__GetValue$Tuple_2_String__FSharpList_1_String_Tuple_2_String__FSharpList_1_String_(x).Items[0.000000];
+              var nextAcc = Option__GetValue$Tuple_2_String__FSharpList_1_String_Tuple_2_String__FSharpList_1_String_(x).Items[1.000000];
+              __.acc = {Tag: 1.000000, Value: nextAcc};
+              __.current = value;
+              return true;
+            }
+            else
+            {
+              __.acc = {Tag: 0.000000};
+              __.current = null;
+              return false;
+            };
+          });
+          return (Option__IsSome$FSharpList_1_String_FSharpList_1_String_(__.acc) && (function()
+          {
+            var _1894;
+            return next(_1894);
+          })());
+        })(impl, unitVar1);
+      }), Reset: (function(unitVar1)
+      {
+        return (function(__,unitVar1)
+        {
+          __.acc = {Tag: 1.000000, Value: __.seed};
+          __.current = null;
+        })(impl, unitVar1);
+      })};
+    }));
 });
 Seq__Unfold$FSharpList_1_String____String___FSharpList_1_String____String___ = (function(f,seed)
 {
@@ -2434,8 +2835,8 @@ Seq__Unfold$FSharpList_1_String____String___FSharpList_1_String____String___ = (
           });
           return (Option__IsSome$FSharpList_1_String___FSharpList_1_String___(__.acc) && (function()
           {
-            var _2088;
-            return next(_2088);
+            var _2529;
+            return next(_2529);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -2491,8 +2892,8 @@ Seq__Unfold$IEnumerator_1_Completion__Completion_IEnumerator_1_Completion__Compl
           });
           return (Option__IsSome$IEnumerator_1_Completion_IEnumerator_1_Completion_(__.acc) && (function()
           {
-            var _2833;
-            return next(_2833);
+            var _3274;
+            return next(_3274);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -2548,8 +2949,8 @@ Seq__Unfold$IEnumerator_1_Completion__Suggestion_IEnumerator_1_Completion__Sugge
           });
           return (Option__IsSome$IEnumerator_1_Completion_IEnumerator_1_Completion_(__.acc) && (function()
           {
-            var _2917;
-            return next(_2917);
+            var _3358;
+            return next(_3358);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -2605,8 +3006,8 @@ Seq__Unfold$Int32__Completion_Int32_Completion_ = (function(f,seed)
           });
           return (Option__IsSome$Int32_Int32(__.acc) && (function()
           {
-            var _2762;
-            return next(_2762);
+            var _3203;
+            return next(_3203);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -2719,8 +3120,8 @@ Seq__Unfold$Int32__Match_1Int32_Match_1 = (function(f,seed)
           });
           return (Option__IsSome$Int32_Int32(__.acc) && (function()
           {
-            var _2487;
-            return next(_2487);
+            var _2928;
+            return next(_2928);
           })());
         })(impl, unitVar1);
       }), Reset: (function(unitVar1)
@@ -2976,11 +3377,16 @@ TooltipHandler__activate$ = (function(unitVar0)
     {
       return TooltipHandler__initialize$(ed);
     }));
-    var s = Events__on$((new EventType__Tooltips()), (function(o)
+    var t = Events__on$((new EventType__Tooltips()), (function(o)
     {
       return TooltipHandler__handler$(o);
     }));
-    TooltipHandler__subscriptions.push(s);
+    TooltipHandler__subscriptions.push(t);
+    var e = Events__on$((new EventType__Errors()), (function(o)
+    {
+      return TooltipHandler__errorHandler$(o);
+    }));
+    TooltipHandler__subscriptions.push(e);
 });
 TooltipHandler__clearTimer$ = (function(unitVar0)
 {
@@ -2995,6 +3401,19 @@ TooltipHandler__create$ = (function(unitVar0)
 {
     return ViewsHelpers__jq$("\u003cdiv class=\u0027type-tooltip tooltip\u0027\u003e\u003cdiv class=\u0027tooltip-inner\u0027\u003e\u003c/div\u003e\u003c/div\u003e");
 });
+TooltipHandler__dashes$ = (function(s1,s2)
+{
+    var _1756;
+    if ((s2.length > s1.length)) 
+    {
+      _1756 = s2.length;
+    }
+    else
+    {
+      _1756 = s1.length;
+    };
+    return FSharpString__Concat$("", Seq__OfList$String_1String(List__CreateCons$String_1String("\n", List__CreateCons$String_1String(FSharpString__Replicate$(_1756, "-"), List__CreateCons$String_1String("\n", List__Empty$String_1String())))));
+});
 TooltipHandler__deactivate$ = (function(unitVar0)
 {
     Seq__Iterate$IDisposable_IDisposable_((function(n)
@@ -3002,6 +3421,10 @@ TooltipHandler__deactivate$ = (function(unitVar0)
       return (n.dispose());
     }), ResizeArray__ToSeq$IDisposable_IDisposable_(TooltipHandler__subscriptions));
     (TooltipHandler__subscriptions = []);
+});
+TooltipHandler__errorHandler$ = (function(o)
+{
+    TooltipHandler__errorArr = o.Data;
 });
 TooltipHandler__getPosition$ = (function(e,editor)
 {
@@ -3011,6 +3434,10 @@ TooltipHandler__getPosition$ = (function(e,editor)
 TooltipHandler__get_ed$ = (function()
 {
     return ({});
+});
+TooltipHandler__get_errorArr$ = (function()
+{
+    return [];
 });
 TooltipHandler__get_event$ = (function()
 {
@@ -3042,11 +3469,29 @@ TooltipHandler__handler$ = (function(o)
         {
           if ((o.Data != "No tooltip information")) 
           {
-            var position = ViewsHelpers__pixelPositionFromMouseEvent$(e)(TooltipHandler__ed);
+            var pixpos = ViewsHelpers__pixelPositionFromMouseEvent$(e)(TooltipHandler__ed);
+            var bufpos = ViewsHelpers__bufferPositionFromMouseEvent$(e, TooltipHandler__ed);
             var n_ = ViewsHelpers__jq_$(n);
             var ignored0 = (n_.empty());
-            var _ignored0 = (n_.append(String__Replace$(String__Replace$(((ViewsHelpers__jq$("\u003cdiv/\u003e").text(o.Data)).html()), "\\n", "\u003c/br\u003e"), "\n", "\u003c/br\u003e")));
-            var __ignored0 = (TooltipHandler__tooltip.css("left", (position.left + 40.000000)));
+            var err = Array__TryFind$Error_Error_((function(_err)
+            {
+              return TooltipHandler__matchError$(bufpos, _err);
+            }), TooltipHandler__errorArr);
+            var tip = (ViewsHelpers__jq$("\u003cdiv/\u003e").text(o.Data));
+            var _1569;
+            if ((FSharpOption_1_Error__GeneratedCompareToError_(err)({Tag: 0.000000}) == 0)) 
+            {
+              _1569 = tip;
+            }
+            else
+            {
+              var patternInput = (new TupleError__String(Option__GetValue$Error_Error_(err), Option__GetValue$Error_Error_(err).Message));
+              var _err = patternInput.Items[0.000000];
+              var emsg = patternInput.Items[1.000000];
+              _1569 = (tip.append(FSharpString__Concat$("", Seq__OfList$String_1String(List__CreateCons$String_1String(TooltipHandler__dashes$(o.Data, emsg), List__CreateCons$String_1String(":: Error - ", List__CreateCons$String_1String(_err.Subcategory, List__CreateCons$String_1String(" ::\n", List__CreateCons$String_1String(emsg, List__Empty$String_1String())))))))));
+            };
+            var _ignored0 = (n_.append(String__Replace$(String__Replace$((_1569.html()), "\\n", "\u003c/br\u003e"), "\n", "\u003c/br\u003e")));
+            var __ignored0 = (TooltipHandler__tooltip.css("left", (pixpos.left + 40.000000)));
             var ___ignored0 = (TooltipHandler__tooltip.css("top", ((e.clientY) + 20.000000)));
             var ____ignored0 = (TooltipHandler__tooltip.fadeTo(300.000000, 60.000000));
           }
@@ -3080,6 +3525,10 @@ TooltipHandler__initialize$ = (function(editor)
     {
       ;
     };
+});
+TooltipHandler__matchError$ = (function(pos,err)
+{
+    return ((((err.StartLine <= (pos.row)) && (err.EndLine >= (pos.row))) && (err.StartColumn <= (pos.column))) && (err.EndColumn >= (pos.column)));
 });
 TooltipHandler__reg$ = (function(editor,time,element)
 {
@@ -3149,6 +3598,11 @@ TupleCompletion__Int32 = (function(Item0,Item1)
     var __this = this;
     __this.Items = [Item0, Item1];
 });
+TupleError__String = (function(Item0,Item1)
+{
+    var __this = this;
+    __this.Items = [Item0, Item1];
+});
 TupleIDisposable__Int32 = (function(Item0,Item1)
 {
     var __this = this;
@@ -3160,6 +3614,11 @@ TupleMatch_1_Int32 = (function(Item0,Item1)
     __this.Items = [Item0, Item1];
 });
 TupleSelectListView__IPanel_ = (function(Item0,Item1)
+{
+    var __this = this;
+    __this.Items = [Item0, Item1];
+});
+TupleString_FSharpList_1_String_ = (function(Item0,Item1)
 {
     var __this = this;
     __this.Items = [Item0, Item1];
@@ -3188,6 +3647,15 @@ TupleSuggestion__IEnumerator_1_Completion_ = (function(Item0,Item1)
 {
     var __this = this;
     __this.Items = [Item0, Item1];
+});
+UnfoldEnumerator_2_FSharpList_1_String__String___ctor$FSharpList_1_String__String = (function(seed,unfold)
+{
+    var __this = this;
+    {};
+    __this.seed = seed;
+    __this.unfold = unfold;
+    __this.acc = {Tag: 1.000000, Value: __this.seed};
+    __this.current = null;
 });
 UnfoldEnumerator_2_FSharpList_1_String____String_____ctor$FSharpList_1_String____String___ = (function(seed,unfold)
 {
@@ -3335,6 +3803,20 @@ cords___ctor$ = (function(top,left)
     __this.top = top;
     __this.left = left;
 });
+list_1_String__ConsString = (function(Item1,Item2)
+{
+    var __this = this;
+    __this.Tag = 1.000000;
+    __this._CaseName = "Cons";
+    __this.Item1 = Item1;
+    __this.Item2 = Item2;
+});
+list_1_String__NilString = (function()
+{
+    var __this = this;
+    __this.Tag = 0.000000;
+    __this._CaseName = "Nil";
+});
 list_1_String____ConsString___ = (function(Item1,Item2)
 {
     var __this = this;
@@ -3395,6 +3877,7 @@ TooltipHandler__tooltip = TooltipHandler__get_tooltip$();
 TooltipHandler__lastPosition = TooltipHandler__get_lastPosition$();
 TooltipHandler__timer = TooltipHandler__get_timer$();
 TooltipHandler__event = TooltipHandler__get_event$();
+TooltipHandler__errorArr = TooltipHandler__get_errorArr$();
 HighlighterHandler__marked = HighlighterHandler__get_marked$();
 FAKE__taskListView = FAKE__get_taskListView$();
 FAKE__currentNotification = FAKE__get_currentNotification$();

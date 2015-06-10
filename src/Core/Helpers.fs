@@ -53,16 +53,26 @@ module ViewsHelpers =
 module DTO =
 
     type Error = {
+        /// 0-indexed first line of the error block
         StartLine : int
+        /// 1-indexed first line of the error block
         StartLineAlternate : int
+        /// 0-indexed first column of the error block
         StartColumn : int
+        /// 1-indexed first column of the error block
         StartColumnAlternate : int
+        /// 0-indexed last line of the error block
         EndLine : int
+        /// 1-indexed last line of the error block
         EndLineAlternate : int
+        /// 0-indexed last column of the error block
         EndColumn : int
+        /// 1-indexed last column of the error block
         EndColumnAlternate : int
+        /// Description of the error
         Message : string
         Severity : string
+        /// Type of the Error
         Subcategory : string
         }
 
