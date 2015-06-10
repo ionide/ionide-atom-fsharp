@@ -14,7 +14,7 @@ Since package changed it name to `atom-fsharp` after version `0.4.1` some errors
 - Tooltips
 - Commenting
 - Go to Declaration
-- Support for script files or F# projects (if plugin does not detect `.fsrpoj` file, just open it ).
+- Support for script files or F# projects (if plugin does not detect `.fsproj` file, just open it ).
 
 ## Contributing and copyright
 
