@@ -45,7 +45,6 @@
   </Choose>
   <Import Project="$(FSharpTargetsPath)" Condition="Exists('$(FSharpTargetsPath)')" />
   <ItemGroup>
-    <Compile Include="Core\Prelude.fs" />
     <Compile Include="Core\Bindings.fs" />
     <Compile Include="Core\Helpers.fs" />
     <Compile Include="Core\Events.fs" />
