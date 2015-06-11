@@ -1,3 +1,9 @@
+#### 0.5.1 - 11.06.2015
+* Add Reset F# Interactive 
+* Add Send File to F# Interactive
+* Fix [#64](https://github.com/fsprojects/FSharp.Atom/issues/64)
+* Update Errors messages in tooltips
+
 #### 0.5.0 - 11.06.2015
 * Basic F# Interactive support (REPL)
 * Errors messages in tooltips
