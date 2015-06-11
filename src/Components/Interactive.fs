@@ -32,27 +32,29 @@ module Interactive =
         fsiProc <- fs |> Some
         fs.stdout.on ("data", unbox<Function> (handle)) |> ignore
 
-
-    /// Opens the REPL pane and starts an Fsi Process if needed
-    let private openFsi () =
-        let edit = Globals.atom.workspace.getActiveTextEditor()
-        let g = edit.getGrammar()
-        Globals.atom.workspace.openEditor("F# Interactive", {split = "right"}).created(fun ed ->
-            fsiEditor <- Some ed
-            ed.setGrammar g
-            let view = Globals.atom.views.getView ed
-            setComponentEnabled(view, false)
-            if fsiProc.IsNone && fsipath <> "" then
-                startFsi ()
-            )
-
-
     /// Kills the Fsi Process and reloads the REPL pane
     let private resetFsi() =
         if fsiProc.IsSome then fsiProc.Value.kill()
         if fsiEditor.IsSome then
             startFsi()
             fsiEditor.Value.buffer.reload() |> ignore
+
+
+    /// Opens the REPL pane and starts an Fsi Process if needed
+    let private openFsi () =
+        let edit = Globals.atom.workspace.getActiveTextEditor()
+        let g = Globals.atom.grammars.grammarForScopeName("source.fsharp")
+        Globals.atom.workspace.openEditor("F# Interactive", {split = "right"}).created(fun ed ->
+            fsiEditor <- Some ed
+            ed.setGrammar g
+            let view = Globals.atom.views.getView ed
+            setComponentEnabled(view, false)
+            if fsipath <> "" then
+                resetFsi ()
+            )
+
+
+
 
 
     /// Send a block of text to FSI
@@ -71,6 +73,7 @@ module Interactive =
     /// Finds FSI on the system
     let private handleLocation (n : DTO.CompilerLocationResult) =
         fsipath <- Globals.joinOverload2 (n.Data, "fsi.exe")
+        resetFsi ()
         ()
 
 //  TODO - Throwing Errors every time it's called

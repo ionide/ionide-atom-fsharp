@@ -52,6 +52,7 @@ type IStatusBar          = interface end
 type ITile               = interface end
 type IEmitter            = interface end
 type OpenEditorPromise   = interface end
+type IGrammarRegistery   = interface end
 
 [<AutoOpen>]
 module Bindings =
@@ -108,6 +109,10 @@ module Bindings =
         [<FunScript.JSEmitInline("new Emitter()")>]
         let create () : IEmitter = failwith "JS"
 
+    type IGrammarRegistery with
+        [<FunScript.JSEmitInline("{0}.grammarForScopeName({1})")>]
+        member __.grammarForScopeName(name : string) : IGrammar = failwith "JS"
+
     type IEmitter with
         [<FunScript.JSEmitInline("{0}.on({1}, {2})")>]
         member __.on(name : string, cb : Function) : unit = failwith "JS"
@@ -158,6 +163,10 @@ module Bindings =
 
         [<FunScript.JSEmitInline("({0}.notifications)")>]
         member __.notifications with get () : NotificationManager = failwith "never"
+
+        [<FunScript.JSEmitInline("({0}.grammars)")>]
+        member __.grammars with get () : IGrammarRegistery = failwith "never"
+
 
         [<FunScript.JSEmitInline("{0}.on({1}, {2})")>]
         member __.on'(name : string, cb : Function) : IDisposable = failwith "JS"
