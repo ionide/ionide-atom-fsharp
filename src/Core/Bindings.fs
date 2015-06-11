@@ -157,6 +157,11 @@ module Bindings =
         [<FunScript.JSEmitInline("{0}.onDidAddTextEditor({1})")>]
         member __.onDidAddTextEditor(cb: AddTextEditorEvent -> unit) : IDisposable = failwith "JS"
 
+        [<FunScript.JSEmitInline("{0}.getTextEditors()")>]
+        member __.getTextEditors() : IEditor array = failwith "JS"
+
+
+
     type IAtom with
         [<FunScript.JSEmitInline("({0}.views)")>]
         member __.views with get () : ViewRegistry = failwith "never"

@@ -110,6 +110,10 @@ module Interactive =
         Atom.addCommand("atom-text-editor", "FSI:Send-File", sendFile)
         Atom.addCommand("atom-text-editor", "FSI:Reset-REPL", resetFsi)
         subscriptions.Add s
+        Globals.atom.workspace.getTextEditors() |> Array.iter(fun e ->
+            if e.getTitle() = "F# Interactive" then
+                openFsi()
+            )
         ()
 
     let deactivate () =
