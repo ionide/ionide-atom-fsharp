@@ -200,6 +200,13 @@ Target "Release" (fun _ ->
     if result <> 0 then failwithf "Error during running apm with %s" args
 )
 
+#I @"packages/FSharpLint"
+#r @"packages/FSharpLint/FSharpLint.FAKE.dll"
+open FSharpLint.FAKE
+
+Target "Lint" (fun _ ->
+    !! "src/**/*.fsproj" |> Seq.iter (FSharpLint (fun o -> { o with FailBuildIfAnyWarnings = true })))
+
 // --------------------------------------------------------------------------------------
 // Run generator by default. Invoke 'build <Target>' to override
 // --------------------------------------------------------------------------------------
@@ -208,11 +215,13 @@ Target "Default" DoNothing
 
 #if MONO
 "Clean"
+  ==> "Lint"
   ==> "BuildGenerator"
   ==> "RunGenerator"
   ==> "InstallDependencies"
 #else
 "Clean"
+  ==> "Lint"
   ==> "RunScript"
   ==> "InstallDependencies"
 #endif

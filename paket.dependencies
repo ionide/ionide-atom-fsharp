@@ -1,4 +1,5 @@
 source https://nuget.org/api/v2
 
 nuget FAKE
+nuget FSharpLint
 nuget FunScript
