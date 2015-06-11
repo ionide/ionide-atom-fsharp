@@ -50,4 +50,4 @@ src/core/README.md
 src/atom-fsharp/lib/
 src/fsharp/lib/fsharp.js
 src/atom-fsharp/lib/fsharp.js
-temp/
+/temp/release

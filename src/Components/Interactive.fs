@@ -50,7 +50,7 @@ module Interactive =
     /// Kills the Fsi Process and reloads the REPL pane
     let private resetFsi() =
         if fsiProc.IsSome then fsiProc.Value.kill()
-        if fsiEditor.IsSome then 
+        if fsiEditor.IsSome then
             startFsi()
             fsiEditor.Value.buffer.reload() |> ignore
 
@@ -58,7 +58,7 @@ module Interactive =
     /// Send a block of text to FSI
     // TODO - trying to get it to open the repl if it's not already open
     let private sendToFsi (msg' : string) =
-        if fsiProc.IsNone then openFsi() 
+        if fsiProc.IsNone then openFsi()
         let msg = msg'.Replace("\uFEFF", "") + ";;\n"
         fsiEditor |> Option.iter( fun ed ->
             ed.insertText msg |> ignore
@@ -68,10 +68,9 @@ module Interactive =
             )
 
 
-    /// Detects the OS platform to find FSI on the system
+    /// Finds FSI on the system
     let private handleLocation (n : DTO.CompilerLocationResult) =
-        let name = if Globals._process.platform.StartsWith("win") then "fsi.exe" else "fsharpi"
-        fsipath <- Globals.joinOverload2 (n.Data, name)
+        fsipath <- Globals.joinOverload2 (n.Data, "fsi.exe")
         ()
 
 //  TODO - Throwing Errors every time it's called
