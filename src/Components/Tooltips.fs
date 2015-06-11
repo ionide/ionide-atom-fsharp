@@ -71,25 +71,25 @@ module TooltipHandler =
         tooltip.[0].firstElementChild
         |> fun n -> 
             if (jq "body /deep/ span.fsharp:hover").length > 0. then
+                let pixpos = pixelPositionFromMouseEvent e ed
+                let bufpos = bufferPositionFromMouseEvent e ed
+                let err = errorArr |> Array.tryFind (matchError bufpos) 
+                let n' = jq'(n)
+                n'.empty() |> ignore
+                let errTip s = 
+                    if err.IsNone then "" else
+                    let err, emsg = err.Value, err.Value.Message
+                    String.concat "" [(dashes s emsg);":: Error - ";err.Subcategory;" ::\n"; emsg ]
                 if o.Data <> "No tooltip information" then
-                    let pixpos = pixelPositionFromMouseEvent e ed
-                    let bufpos = bufferPositionFromMouseEvent e ed
-                    let n' = jq'(n)
-                    n'.empty() |> ignore
-                    let err = errorArr |> Array.tryFind (matchError bufpos) 
-                    let tip =  (o.Data |> jq("<div/>").text)
-                    if err = None then tip else
-                        let err, emsg = err.Value, err.Value.Message
-                        tip.append( String.concat "" 
-                            [   (dashes o.Data emsg);
-                                ":: Error - ";err.Subcategory;" ::\n"; emsg ])
-                    |> fun n -> n.html()
-                    |> fun n -> n.Replace("\\n", "</br>")
-                    |> fun n -> n.Replace("\n", "</br>")
-                    |>  n'.append |> ignore
-                    tooltip.css("left"  , pixpos.left + 40.) |> ignore
-                    tooltip.css("top"   , e.clientY   + 20.) |> ignore
-                    tooltip.fadeTo(300., 60.) |> ignore
+                    (o.Data |> jq("<div/>").text).append(errTip o.Data)
+                else (errTip "" |> jq("<div/>").text)
+                |> fun n -> n.html()
+                |> fun n -> n.Replace("\\n", "</br>")
+                |> fun n -> n.Replace("\n" , "</br>")
+                |>  n'.append |> ignore
+                tooltip.css("left"  , pixpos.left + 40.) |> ignore
+                tooltip.css("top"   , e.clientY   + 20.) |> ignore
+                tooltip.fadeTo(300., 60.) |> ignore
         )
 
 
@@ -98,21 +98,21 @@ module TooltipHandler =
 
     let private remove () =
         if JS.isDefined ed && JS.isPropertyDefined ed "getGrammar" && ed.getGrammar().name = "F#" then
-            ed
-            |> Globals.atom.views.getView
+            ed |> Globals.atom.views.getView
             |> getElementsByClass ".scroll-view"
-            |> Option.map (fun n -> n.[0] |> unbox<Element> |> jq')
+            |> Option.map  (fun n -> n.[0] |> unbox<Element> |> jq')
             |> Option.iter (fun n -> n.unbind() |> ignore)
+
 
     let private initialize (editor : IEditor) =
         remove ()
         if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
             ed <- editor
-            editor
-            |> Globals.atom.views.getView
+            editor |> Globals.atom.views.getView
             |> getElementsByClass ".scroll-view"
-            |> Option.map (fun n -> n.[0] |> unbox<Element>)
+            |> Option.map  (fun n -> n.[0] |> unbox<Element>)
             |> Option.iter (fun n -> reg editor 500. n)
+
 
     let activate () =
         Globals.atom.workspace.getActiveTextEditor() |> initialize
