@@ -72,7 +72,10 @@ module Interactive =
 
     /// Finds FSI on the system
     let private handleLocation (n : DTO.CompilerLocationResult) =
-        fsipath <- Globals.joinOverload2 (n.Data, "fsi.exe")
+        fsipath <- if Globals._process.platform.StartsWith("win") then
+                        Globals.joinOverload2 (n.Data, "fsi.exe")
+                    else
+                        "fsharpi"
         resetFsi ()
         ()
 
