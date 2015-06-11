@@ -1,3 +1,6 @@
+#### 0.5.3 - 11.06.2015
+* Change FSI path for non-Windows OS
+
 #### 0.5.2 - 11.06.2015
 * Fix getGrammar for FSI  
 
