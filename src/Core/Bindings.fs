@@ -1,26 +1,27 @@
-[<ReflectedDefinition>]
-module Atom
+namespace Atom
 
 open FunScript
 open FunScript.TypeScript
 open FunScript.TypeScript.AtomCore
 open FunScript.TypeScript.atom
 
+[<ReflectedDefinition>][<AutoOpen>]
+module Atom =
 
-[<JSEmit("var cmd = {}; cmd[{1}]=function() { return {2}(); }; return atom.commands.add({0}, cmd);")>]
-let addCommand(name:string, cmdName:string, func:unit -> unit) : unit = failwith "JS"
+    [<JSEmit("var cmd = {}; cmd[{1}]=function() { return {2}(); }; return atom.commands.add({0}, cmd);")>]
+    let addCommand(name:string, cmdName:string, func:unit -> unit) : unit = failwith "JS"
 
-[<JSEmitInline("atom.commands.add({0}, {1}, {2});")>]
-let addCommand'(name:string, context: string, func:unit -> unit) : unit = failwith "JS"
+    [<JSEmitInline("atom.commands.add({0}, {1}, {2});")>]
+    let addCommand'(name:string, context: string, func:unit -> unit) : unit = failwith "JS"
 
 module Promise =
     type Promise = class end
 
     type Suggestion = {
-        text: string
+        text              : string
         replacementPrefix : string
-        rightLabel : string
-        ``type`` : string
+        rightLabel        : string
+        ``type``          : string
     }
 
     [<JSEmitInline("new Promise(function(resolve){{0}()})")>]
@@ -42,32 +43,32 @@ module JS =
     [<JSEmitInline("({0} != undefined)")>]
     let isDefined (o: obj) : bool = failwith "never"
 
-type ViewRegistry = interface end
+type ViewRegistry        = interface end
 type NotificationManager = interface end
-type Notification = interface end
-type IDirectory = interface end
-type IDisposable = interface end
-type IStatusBar = interface end
-type ITile = interface end
-type IEmitter = interface end
-type OpenEditorPromise = interface end
+type Notification        = interface end
+type IDirectory          = interface end
+type IDisposable         = interface end
+type IStatusBar          = interface end
+type ITile               = interface end
+type IEmitter            = interface end
+type OpenEditorPromise   = interface end
 
 [<AutoOpen>]
 module Bindings =
 
     type StatusBarOptions = {
-        item: JQuery;
+        item     : JQuery;
         priority : int
     }
 
     type PanelOptions = {
-        item: JQuery
-        visible : bool
+        item     : JQuery
+        visible  : bool
         priority : int
     }
 
     type Coordinates = {
-        top : float
+        top  : float
         left : float
     }
 
@@ -77,8 +78,8 @@ module Bindings =
 
     type AddTextEditorEvent = {
         textEditor : IEditor
-        pane : IPane
-        index : int
+        pane       : IPane
+        index      : int
     }
 
     type NotificationsOptions = {

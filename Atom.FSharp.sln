@@ -8,7 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{67EDE4A4-AC6E-407A-987D-A4B6334C29F2}"
 	ProjectSection(SolutionItems) = preProject
 		build.fsx = build.fsx
-		src\fsharp\package.json = src\fsharp\package.json
+		src\atom-fsharp\package.json = src\atom-fsharp\package.json
 		paket.dependencies = paket.dependencies
 		paket.lock = paket.lock
 		README.md = README.md
