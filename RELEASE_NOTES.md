@@ -1,5 +1,8 @@
+#### 0.5.2 - 11.06.2015
+* Fix getGrammar for FSI  
+
 #### 0.5.1 - 11.06.2015
-* Add Reset F# Interactive 
+* Add Reset F# Interactive
 * Add Send File to F# Interactive
 * Fix [#64](https://github.com/fsprojects/FSharp.Atom/issues/64)
 * Update Errors messages in tooltips
