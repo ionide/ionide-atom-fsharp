@@ -1,3 +1,6 @@
+#### 0.5.5 - 11.06.2015
+* Update autocomplete
+
 #### 0.5.4 - 11.06.2015
 * Run StartFSI if F# Interactive window is open on plugin start.
 
