@@ -8,5 +8,7 @@
 # For more detailed documentation see
 # https://atom.io/docs/latest/advanced/keymaps
 
-'atom-text-editor':
+'atom-text-editor[data-grammar~=fsharp]':
     'alt-enter': 'FSI:Send-Selection'
+    'ctrl-space': 'fsharp:autocomplete'
+    'cmd-space': 'fsharp:autocomplete'

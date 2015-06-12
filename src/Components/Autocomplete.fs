@@ -12,6 +12,13 @@ open Atom
 
 [<ReflectedDefinition>]
 module AutocompleteProvider =
+    [<JSEmitInline("atom.commands.dispatch(atom.views.getView(atom.workspace.getActiveTextEditor()),'autocomplete-plus:activate');")>]
+    let dispatchAutocompleteCommand () : unit = failwith "JS"
+
+
+    let mutable isForced = false
+    let mutable lastResult : DTO.CompletionResult option = None
+
     type GetSuggestionOptions = {
         editor : AtomCore.IEditor
         bufferPosition : TextBuffer.IPoint
@@ -25,6 +32,7 @@ module AutocompleteProvider =
         excludeLowerPriority: bool
         getSuggestions : GetSuggestionOptions -> Atom.Promise.Promise  }
 
+
     let getSuggestion (options:GetSuggestionOptions) =
         if unbox<obj>(options.editor.buffer.file) <> null then
             let path = options.editor.buffer.file.path
@@ -32,8 +40,25 @@ module AutocompleteProvider =
             let col = int options.bufferPosition.column + 1
             let prefix = if options.prefix = "." || options.prefix = "=" then "" else options.prefix
             Atom.Promise.create(fun () ->
-                Events.once Events.Completion (fun (result :DTO.CompletionResult) ->
-                    result.Data
+                if isForced || lastResult.IsNone || options.prefix = "." then
+                    Events.once Events.Errors (fun _ ->
+                        Events.once Events.Completion (fun result ->
+                            lastResult <- Some result
+                            isForced <- false
+                            result.Data
+                            |> Seq.where(fun t -> t.Name.Contains(prefix))
+                            |> Seq.map(fun t -> { Promise.Suggestion.text =  t.Name
+                                                  Promise.Suggestion.replacementPrefix = prefix
+                                                  Promise.Suggestion.rightLabel = t.Glyph
+                                                  Promise.Suggestion.``type`` = t.GlyphChar
+                                                })
+                            |> Seq.toArray
+                            |> Atom.Promise.resolve)
+                        LanguageService.completion path row col )
+                    LanguageService.parseEditor options.editor
+                else
+                    isForced <- false
+                    lastResult.Value.Data
                     |> Seq.where(fun t -> t.Name.Contains(prefix))
                     |> Seq.map(fun t -> { Promise.Suggestion.text =  t.Name
                                           Promise.Suggestion.replacementPrefix = prefix
@@ -41,11 +66,12 @@ module AutocompleteProvider =
                                           Promise.Suggestion.``type`` = t.GlyphChar
                                         })
                     |> Seq.toArray
-                    |> Atom.Promise.resolve )
-                LanguageService.completion path row col
-                )
-
-
+                    |> Atom.Promise.resolve)
         else Atom.Promise.create(fun () -> Atom.Promise.resolve [||])
 
-    let create () = { selector = ".source.fsharp"; disableForSelector = ".source.fsharp .string"; inclusionPriority = 1; excludeLowerPriority = true; getSuggestions = getSuggestion}
+
+    let create () =
+        Atom.addCommand("atom-text-editor","fsharp:autocomplete", fun _ ->
+            dispatchAutocompleteCommand ()
+            isForced <- true)
+        { selector = ".source.fsharp"; disableForSelector = ".source.fsharp .string"; inclusionPriority = 1; excludeLowerPriority = true; getSuggestions = getSuggestion}

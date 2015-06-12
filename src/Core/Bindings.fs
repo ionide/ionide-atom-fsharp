@@ -8,6 +8,8 @@ open FunScript.TypeScript.atom
 [<ReflectedDefinition>][<AutoOpen>]
 module Atom =
 
+    
+
     [<JSEmit("var cmd = {}; cmd[{1}]=function() { return {2}(); }; return atom.commands.add({0}, cmd);")>]
     let addCommand(name:string, cmdName:string, func:unit -> unit) : unit = failwith "JS"
 
