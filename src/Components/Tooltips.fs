@@ -39,11 +39,11 @@ module TooltipHandler =
         element |> jq'
         |> fun n -> n.mousemove( fun e ->
             let pos = getPosition e editor
-            if pos  = 
+            if pos  =
                 lastPosition then () :> obj else
                 clearTimer()
                 lastPosition <- pos
-                timer <- Some ( Globals.setTimeout(( fun _ -> 
+                timer <- Some ( Globals.setTimeout(( fun _ ->
                     if unbox<obj>(editor.buffer.file) <> null then
                         let path = editor.buffer.file.path
                         event <- Some e
@@ -53,30 +53,30 @@ module TooltipHandler =
                     n.scroll(fun e -> clearTimer() :> obj) |> ignore
 
 
-    /// Check if the position of the cursor over the textbuffer is within 
+    /// Check if the position of the cursor over the textbuffer is within
     /// the bounds of the error block
     let private matchError (pos:TextBuffer.IPoint) (err: DTO.Error) =
-        float err.StartLine    <=  pos.row     && 
+        float err.StartLine    <=  pos.row     &&
         float err.EndLine      >=  pos.row     &&
-        float err.StartColumn  <=  pos.column  && 
+        float err.StartColumn  <=  pos.column  &&
         float err.EndColumn    >=  pos.column
 
     /// Draw a line of dashes the same length as the longer string
     let dashes (s1:string) (s2:string) =
         String.concat "" ["\n"; String.replicate (max s1.Length s2.Length) "-";"\n"]
-        
+
 
     let private handler (o : DTO.TooltipResult) =
         event |> Option.iter(fun e ->
         tooltip.[0].firstElementChild
-        |> fun n -> 
+        |> fun n ->
             if (jq "body /deep/ span.fsharp:hover").length > 0. then
                 let pixpos = pixelPositionFromMouseEvent e ed
                 let bufpos = bufferPositionFromMouseEvent e ed
-                let err = errorArr |> Array.tryFind (matchError bufpos) 
+                let err = errorArr |> Array.tryFind (matchError bufpos)
                 let n' = jq'(n)
                 n'.empty() |> ignore
-                let errTip s = 
+                let errTip s =
                     if err.IsNone then "" else
                     let err, emsg = err.Value, err.Value.Message
                     String.concat "" [(dashes s emsg);":: Error - ";err.Subcategory;" ::\n"; emsg ]
@@ -87,8 +87,11 @@ module TooltipHandler =
                 |> fun n -> n.Replace("\\n", "</br>")
                 |> fun n -> n.Replace("\n" , "</br>")
                 |>  n'.append |> ignore
-                tooltip.css("left"  , pixpos.left + 40.) |> ignore
-                tooltip.css("top"   , e.clientY   + 20.) |> ignore
+                let j = jq(".panes")
+                let x = e.pageX - j.offset().left
+                let y = e.pageY - j.offset().top
+                tooltip.css("left" , x) |> ignore
+                tooltip.css("top"  , y) |> ignore
                 tooltip.fadeTo(300., 60.) |> ignore
         )
 
