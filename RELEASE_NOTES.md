@@ -1,4 +1,7 @@
-#### 0.5.5 - 11.06.2015
+#### 0.5.6 - 13.06.2015
+* Fix [#62](https://github.com/fsprojects/FSharp.Atom/issues/62)
+
+#### 0.5.5 - 13.06.2015
 * Update autocomplete
 
 #### 0.5.4 - 11.06.2015
