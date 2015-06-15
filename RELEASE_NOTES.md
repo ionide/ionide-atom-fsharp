@@ -1,3 +1,6 @@
+#### 0.5.7 - 17.06.2015
+* Add FSI: Send Line
+
 #### 0.5.6 - 13.06.2015
 * Fix [#62](https://github.com/fsprojects/FSharp.Atom/issues/62)
 

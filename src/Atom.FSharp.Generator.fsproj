@@ -58,6 +58,7 @@
     <Compile Include="Components\FAKE.fs" />
     <Compile Include="Components\StatusBar.fs" />
     <Compile Include="Components\Interactive.fs" />
+    <Compile Include="Components\FsLabPanel.fs" />
     <Compile Include="FSharpIDE.fs" />
     <Compile Include="main.fs" />
     <None Include="atom-bindings.fsx" />
