@@ -10,5 +10,6 @@
 
 'atom-text-editor[data-grammar~=fsharp]':
     'alt-enter': 'FSI:Send-Selection'
+    'alt-/':'FSI:Send-Line'
     'ctrl-space': 'fsharp:autocomplete'
     'cmd-space': 'fsharp:autocomplete'
