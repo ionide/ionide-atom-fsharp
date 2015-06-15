@@ -53,10 +53,6 @@ module Interactive =
                 resetFsi ()
             )
 
-
-
-
-
     /// Send a block of text to FSI
     // TODO - trying to get it to open the repl if it's not already open
     let private sendToFsi (msg' : string) =
@@ -72,31 +68,33 @@ module Interactive =
 
     /// Finds FSI on the system
     let private handleLocation (n : DTO.CompilerLocationResult) =
-        fsipath <- if Globals._process.platform.StartsWith("win") then
+        fsipath <-  if Globals._process.platform.StartsWith("win") then
                         Globals.joinOverload2 (n.Data, "fsi.exe")
                     else
                         "fsharpi"
         resetFsi ()
         ()
 
-//  TODO - Throwing Errors every time it's called
     /// Send the current line at the cursor's position to FSI
-//    let sendLine () =
-//        let editor = Globals.atom.workspace.getActiveTextEditor()
-//        editor.lineForBufferRow(editor.getCursor().getBufferRow())
-//        |> sendToFsi
-//        ()
-
+    let private sendLine () =
+        let editor = Globals.atom.workspace.getActiveTextEditor()
+        editor.lineTextForBufferRow(editor.getCursorBufferPosition().row).Trim()
+        |> sendToFsi
+        editor.moveDown(1.)
+        editor.moveToBeginningOfLine()
+        ()
 
     /// Send the currently selected text to FSI
-    let sendSelection () =
+    let private sendSelection () =
         let editor = Globals.atom.workspace.getActiveTextEditor()
         editor.getSelectedText () |> sendToFsi
+        editor.moveDown(1.)
+        editor.moveToBeginningOfLine()
         ()
 
 
     /// Send all of the text of the active editor window to FSI
-    let sendFile () =
+    let private sendFile () =
         let editor = Globals.atom.workspace.getActiveTextEditor()
         editor.getText() |> sendToFsi
         ()
@@ -105,7 +103,7 @@ module Interactive =
     let activate () =
         let s = unbox<Function>(handleLocation) |> Events.on Events.CompilerLocation
         Atom.addCommand("atom-workspace", "FSI:Open", openFsi)
-      //  Atom.addCommand("atom-text-editor", "FSI:Send-Line", sendLine)
+        Atom.addCommand("atom-text-editor", "FSI:Send-Line", sendLine)
         Atom.addCommand("atom-text-editor", "FSI:Send-Selection", sendSelection)
         Atom.addCommand("atom-text-editor", "FSI:Send-File", sendFile)
         Atom.addCommand("atom-text-editor", "FSI:Reset-REPL", resetFsi)

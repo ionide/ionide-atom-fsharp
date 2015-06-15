@@ -8,7 +8,7 @@ open FunScript.TypeScript.atom
 [<ReflectedDefinition>][<AutoOpen>]
 module Atom =
 
-    
+
 
     [<JSEmit("var cmd = {}; cmd[{1}]=function() { return {2}(); }; return atom.commands.add({0}, cmd);")>]
     let addCommand(name:string, cmdName:string, func:unit -> unit) : unit = failwith "JS"
@@ -73,6 +73,11 @@ module Bindings =
     type Coordinates = {
         top  : float
         left : float
+    }
+
+    type Point = {
+        row  : float
+        column : float
     }
 
     type BufferChangeEvent = {
@@ -228,6 +233,19 @@ module Bindings =
     type IEditor with
         [<FunScript.JSEmitInline("({0}.onDidSave({1}))")>]
         member __.onDidSave(cb: obj -> unit) : IDisposable = failwith "JS"
+
+        [<FunScript.JSEmitInline("({0}.lineTextForBufferRow({1}))")>]
+        member __.lineTextForBufferRow(row: float) : string = failwith "JS"
+
+        [<FunScript.JSEmitInline("({0}.getCursorBufferPosition())")>]
+        member __.getCursorBufferPosition() : Point = failwith "JS"
+
+        [<FunScript.JSEmitInline("({0}.moveDown({1}))")>]
+        member __.moveDown(i : float) : unit = failwith "JS"
+
+        [<FunScript.JSEmitInline("({0}.moveToBeginningOfLine())")>]
+        member __.moveToBeginningOfLine() : unit = failwith "JS"
+
 
     [<JSEmitInline("{0}.decorateMarker({1}, {type: 'highlight', class: {2}})")>]
     let decorateMarker(ed : IEditor, marker : IDisplayBufferMarker, cls : string) : unit = failwith "JS"
