@@ -1,4 +1,7 @@
-#### 0.5.7 - 17.06.2015
+#### 0.5.8 - 16.06.2015
+* Add support for non-Windows in FAKE: Build
+
+#### 0.5.7 - 15.06.2015
 * Add FSI: Send Line
 
 #### 0.5.6 - 13.06.2015
