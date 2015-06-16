@@ -14,6 +14,7 @@ open Atom
 module ViewsHelpers =
     let jq(selector : string) = Globals.Dollar.Invoke selector
     let jq'(selector : Element) = Globals.Dollar.Invoke selector
+    let jqC (context: Element) (selector : string) = Globals.Dollar.Invoke (selector,context)
     let (?) jq name = jq("#" + name)
 
     type cords = {

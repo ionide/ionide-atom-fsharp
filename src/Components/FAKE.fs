@@ -20,11 +20,7 @@ module FAKE =
     let mutable private currentNotification : Notification option = None
     let mutable private File : (string * string) option = None
     let mutable private taskListView : (atom.SelectListView * IPanel) option = None
-
-    let private jq (selector : string) = Globals.Dollar.Invoke selector
-    let private jq'(selector : Element) = Globals.Dollar.Invoke selector
-    let private jqC (context: Element) (selector : string) = Globals.Dollar.Invoke (selector,context)
-
+    
     let private notice isError text details =
         match currentNotification with
         | Some n -> let view = Globals.atom.views.getView (n)
@@ -44,7 +40,7 @@ module FAKE =
         let output = input.ToString()
         Globals.console.log(output)
         if error then
-            notice true "Paket error" output
+            notice true "FAKE error" output
         else
             notice false "" output
         ()
@@ -62,7 +58,6 @@ module FAKE =
                 view.addClass("icon-flame") |> ignore
         )
 
-
     let private spawn location (cmd : string) =
         let cmd' = cmd.Split(' ');
         let options = {cwd = Globals.atom.project.getPaths().[0]} |> unbox<AnonymousType599>
@@ -70,24 +65,13 @@ module FAKE =
                         Globals.spawn(location, cmd', options)
                     else
                         let prms = Array.concat [ [|location|]; cmd']
-                        Globals.spawn("mono", prms, options)
+                        Globals.spawn("sh", prms, options)
 
         currentNotification <- None
         procs.on("exit",unbox<Function>(handleExit)) |> ignore
         procs.stdout.on("data", unbox<Function>(handle false )) |> ignore
         procs.stderr.on("data", unbox<Function>(handle true )) |> ignore
         ()
-
-    let private exec location cmd handler =
-        let options = {cwd = Globals.atom.project.getPaths().[0]} |> unbox<AnonymousType600>
-
-        let child =
-            if Globals._process.platform.StartsWith("win") then
-                Globals.exec(location + " " + cmd, options, handler )
-            else
-                Globals.exec("mono " + location + " " + cmd, options, handler )
-        ()
-
 
     let private handlerAddItems (lv : atom.SelectListView) (error : Error) (stdout : Buffer) (stderr : Buffer) =
         stdout.toString().Split('\n')
@@ -154,19 +138,20 @@ module FAKE =
         ))
 
     let private FAKENotFound () =
-        ()
+        notice true "FAKE error" "FAKE script not found"
 
     let activate () =
         taskListView <- registerTaskList () |> Some
         let p = Globals.atom.project.getPaths().[0]
         let proj (ex : NodeJS.ErrnoException) (arr : string array) =
-            let projExist = arr |> Array.tryFind(fun a -> a.Split('.') |> fun n -> n.[n.Length - 1]  = "cmd")
+            let ext = if Globals._process.platform.StartsWith("win") then "cmd" else "sh"
+            let projExist = arr |> Array.tryFind(fun a -> a.Split('.') |> fun n -> n.[n.Length - 1]  = ext)
             match projExist with
             | Some a ->
                 let path = p + "/" + a
                 let file = path |> Globals.readFileSync
                                 |> fun n -> n.toString()
-                let regex = Regex.Match(file, "FAKE.exe ([\w.]+)")
+                let regex = Regex.Match(file, "FAKE.exe.* ([\w]+\.fsx)")
                 if regex.Success then
                     let build = p + "/" + regex.Groups.[1].Value
                     File <- Some (path, build )
