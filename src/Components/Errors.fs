@@ -19,8 +19,8 @@ module ErrorPanel =
                 <div class='inset-panel'>
                 <div class='panel-heading clearfix' style='height: 30px'>
                   <span>Errors</span>
-                  <i id='btnMin' class='fa fa-minus-square' style='float:right'></i>
-                  <i id='btnMax' class='fa fa-plus-square' style='float:right; display: none'></i>
+                  <span id='btnMin' class='icon-min' style='float:right'></span>
+                  <span id='btnMax' class='icon-max' style='float:right; display: none'></span>
                 </div>
                 <div id='scrollPanel' class='scrollable' style='height: 120px'>
                     <table id='panelError' class='error-table outputPanel' >
