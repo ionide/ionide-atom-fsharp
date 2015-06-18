@@ -1,3 +1,6 @@
+#### 0.5.9 - 16.06.2015
+* Fix min/max buttons for error panel
+
 #### 0.5.8 - 16.06.2015
 * Add support for non-Windows in FAKE: Build
 
