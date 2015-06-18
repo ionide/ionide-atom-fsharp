@@ -17,12 +17,11 @@ module FAKE =
     type Options = {cwd : string}
     type ItemDescription = {data : string}
 
-    let mutable private currentNotification : Notification option = None
     let mutable private File : (string * string) option = None
     let mutable private taskListView : (atom.SelectListView * IPanel) option = None
     
-    let private notice isError text details =
-        match currentNotification with
+    let private notice (currentNotification:Notification option ref) isError text details =
+        match !currentNotification with
         | Some n -> let view = Globals.atom.views.getView (n)
                     let t = ".content .detail .detail-content" |> jqC view
                     let line = "<div class='line'>" + details + "</div>"
@@ -32,21 +31,21 @@ module FAKE =
                             Globals.atom.notifications.addError(text, { detail = details; dismissable = true })
                           else
                             Globals.atom.notifications.addInfo(text, { detail = details; dismissable = true })
-                  currentNotification <- Some n
+                  currentNotification := Some n
 
 
 
-    let private handle error input =
+    let private handle currentNotification error input =
         let output = input.ToString()
         Globals.console.log(output)
         if error then
-            notice true "FAKE error" output
+            notice currentNotification true "FAKE error" output
         else
-            notice false "" output
+            notice currentNotification false "" output
         ()
 
-    let private handleExit (code:string) =
-        currentNotification |> Option.iter (fun n ->
+    let private handleExit currentNotification (code:string) =
+        !currentNotification |> Option.iter (fun n ->
             let view = Globals.atom.views.getView (n) |> jq'
             view.removeClass("info") |> ignore
             view.removeClass("icon-info") |> ignore
@@ -67,10 +66,10 @@ module FAKE =
                         let prms = Array.concat [ [|location|]; cmd']
                         Globals.spawn("sh", prms, options)
 
-        currentNotification <- None
-        procs.on("exit",unbox<Function>(handleExit)) |> ignore
-        procs.stdout.on("data", unbox<Function>(handle false )) |> ignore
-        procs.stderr.on("data", unbox<Function>(handle true )) |> ignore
+        let currentNotification = ref None
+        procs.on("exit",unbox<Function>(handleExit currentNotification)) |> ignore
+        procs.stdout.on("data", unbox<Function>(handle currentNotification false)) |> ignore
+        procs.stderr.on("data", unbox<Function>(handle currentNotification true)) |> ignore
         ()
 
     let private handlerAddItems (lv : atom.SelectListView) (error : Error) (stdout : Buffer) (stderr : Buffer) =
@@ -138,7 +137,7 @@ module FAKE =
         ))
 
     let private FAKENotFound () =
-        notice true "FAKE error" "FAKE script not found"
+        notice (ref None) true "FAKE error" "FAKE script not found"
 
     let activate () =
         taskListView <- registerTaskList () |> Some
