@@ -3,6 +3,8 @@
 // See https://github.com/atom/atom-dark-ui/blob/master/styles/ui-variables.less
 // for a full listing of what's available.
 @import "ui-variables";
+@import "octicon-utf-codes";
+@import "octicon-mixins";
 
 .core {
 }
@@ -23,7 +25,7 @@
     overflow-y: scroll;
 }
 
-.error-pane {  
+.error-pane {
   position:relative;
   .error-table {
     width:100%;
@@ -44,6 +46,30 @@
     }
     td {
     }
+  }
+
+
+
+  .icon-min{
+      .octicon(dash, 1.2em);
+      display: inline-block;
+      //opacity: .6;
+     // padding: 0 .4em;
+
+      &::before {
+        text-align: center;
+      }
+  }
+
+  .icon-max{
+      .octicon(plus, 1.2em);
+      display: inline-block;
+     // opacity: .6;
+     // padding: 0 .4em;
+
+      &::before {
+        text-align: center;
+      }
   }
 
   pre {
