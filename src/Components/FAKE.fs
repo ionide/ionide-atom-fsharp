@@ -11,115 +11,28 @@ open FunScript.TypeScript.text_buffer
 
 open Atom
 
+
 [<ReflectedDefinition>]
 module FAKE =
-
-    type Options = {cwd : string}
-    type ItemDescription = {data : string}
-
     let mutable private File : (string * string) option = None
     let mutable private taskListView : (atom.SelectListView * IPanel) option = None
-    
-    let private notice (currentNotification:Notification option ref) isError text details =
-        match !currentNotification with
-        | Some n -> let view = Globals.atom.views.getView (n)
-                    let t = ".content .detail .detail-content" |> jqC view
-                    let line = "<div class='line'>" + details + "</div>"
-                    t.append(line) |> ignore
-                    ()
-        | None -> let n = if isError then
-                            Globals.atom.notifications.addError(text, { detail = details; dismissable = true })
-                          else
-                            Globals.atom.notifications.addInfo(text, { detail = details; dismissable = true })
-                  currentNotification := Some n
 
-
-
-    let private handle currentNotification error input =
-        let output = input.ToString()
-        Globals.console.log(output)
-        if error then
-            notice currentNotification true "FAKE error" output
-        else
-            notice currentNotification false "" output
-        ()
-
-    let private handleExit currentNotification (code:string) =
-        !currentNotification |> Option.iter (fun n ->
-            let view = Globals.atom.views.getView (n) |> jq'
-            view.removeClass("info") |> ignore
-            view.removeClass("icon-info") |> ignore
-            if code = "0" && view.hasClass("error") |> not then
-                view.addClass("success") |> ignore
-                view.addClass("icon-check") |> ignore
-            else
-                view.addClass("error") |> ignore
-                view.addClass("icon-flame") |> ignore
-        )
-
-    let private spawn location (cmd : string) =
-        let cmd' = cmd.Split(' ');
-        let options = {cwd = Globals.atom.project.getPaths().[0]} |> unbox<AnonymousType599>
-        let procs = if Globals._process.platform.StartsWith("win") then
-                        Globals.spawn(location, cmd', options)
-                    else
-                        let prms = Array.concat [ [|location|]; cmd']
-                        Globals.spawn("sh", prms, options)
-
-        let currentNotification = ref None
-        procs.on("exit",unbox<Function>(handleExit currentNotification)) |> ignore
-        procs.stdout.on("data", unbox<Function>(handle currentNotification false)) |> ignore
-        procs.stderr.on("data", unbox<Function>(handle currentNotification true)) |> ignore
-        ()
-
-    let private handlerAddItems (lv : atom.SelectListView) (error : Error) (stdout : Buffer) (stderr : Buffer) =
-        stdout.toString().Split('\n')
-        |> Array.map(fun n -> {data = n} :> obj)
-        |> lv.setItems
-        |> ignore
-
-    let private viewForItem desc =
+    let private viewForItem (desc : ListView.ItemDescription) =
         if JS.isDefined desc then
             sprintf "<li>%s</li>" desc.data |> jq
         else
             "<li></li>" |> jq
 
-    let private regiterListView stopChangingCallback cancelledCallback confirmedCallback removeFiler=
-        let listView = SelectListViewCtor ()
-        let editorView =
-            listView
-            |> unbox<JQuery>
-            |> fun t' -> t'.[0].firstChild
-            |> unbox<FunScript.TypeScript.atom.EditorView>
-            |> fun n -> n.getModel()
-
-        editorView.getBuffer().stoppedChangingDelay <- 200.
-        editorView.getBuffer().onDidStopChanging(stopChangingCallback editorView listView ) |> ignore
-
-        let panel =
-            { PanelOptions.item = unbox<JQuery> (listView)
-              PanelOptions.priority = 100
-              PanelOptions.visible = false }
-            |> Globals.atom.workspace.addModalPanel
-
-        do listView.``getFilterKey <-``(Func<_>(fun _ -> "name" :> obj))
-        if removeFiler then listView.``getFilterQuery <-``(Func<_>(fun _ -> ""))
-        do listView.``viewForItem <-``(unbox<Func<_,_>>(viewForItem) )
-        do listView.``cancelled <-``(cancelledCallback)
-        do listView.``confirmed <-`` (confirmedCallback)
-
-        listView,panel
-
     let private registerTaskList () =
         let stopChangingCallback (ev : IEditor) (lv : atom.SelectListView) = fun () -> ()
         let cancelledCallback = Func<_>(fun _ -> taskListView |> Option.iter(fun (model, view) ->  view.hide()) :> obj)
-        let confirmedCallback = unbox<Func<_, _>> (fun (packageDescription : ItemDescription) ->
+        let confirmedCallback = unbox<Func<_, _>> (fun (packageDescription : ListView.ItemDescription) ->
                                     taskListView |> Option.iter (fun (model, view) -> view.hide())
                                     File |> Option.iter( fun (build, fake) ->
-                                        spawn build packageDescription.data
+                                        Process.spawnWithNotifications build "sh" packageDescription.data |> ignore
                                     )
             )
-        regiterListView stopChangingCallback cancelledCallback confirmedCallback false
+        ListView.regiterListView stopChangingCallback cancelledCallback confirmedCallback viewForItem false
 
     let private BuildTask () =
         taskListView |> Option.iter(fun (model, view) ->
@@ -129,21 +42,19 @@ module FAKE =
         let script = fake |> Globals.readFileSync
                           |> fun n -> n.toString()
         let matches = Regex.Matches(script, "Target \"([\\w.]+)\"") |> Seq.cast<Match> |> Seq.toArray
-        let m = matches |> Array.map(fun m -> {data = m.Groups.[1].Value} :> obj)
+        let m = matches |> Array.map(fun m -> {ListView.data = m.Groups.[1].Value} :> obj)
         model.setItems m |> ignore
         ()
-
-
         ))
 
     let private FAKENotFound () =
-        notice (ref None) true "FAKE error" "FAKE script not found"
+        Process.notice (ref None) true "FAKE error" "FAKE script not found"
 
     let activate () =
         taskListView <- registerTaskList () |> Some
         let p = Globals.atom.project.getPaths().[0]
         let proj (ex : NodeJS.ErrnoException) (arr : string array) =
-            let ext = if Globals._process.platform.StartsWith("win") then "cmd" else "sh"
+            let ext = if Process.isWin() then "cmd" else "sh"
             let projExist = arr |> Array.tryFind(fun a -> a.Split('.') |> fun n -> n.[n.Length - 1]  = ext)
             match projExist with
             | Some a ->

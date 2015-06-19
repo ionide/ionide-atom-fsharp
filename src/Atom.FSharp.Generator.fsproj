@@ -46,8 +46,11 @@
   <Import Project="$(FSharpTargetsPath)" Condition="Exists('$(FSharpTargetsPath)')" />
   <ItemGroup>
     <Compile Include="Core\Bindings.fs" />
-    <Compile Include="Core\Helpers.fs" />
+    <Compile Include="Core\ViewHelpers.fs" />
+    <Compile Include="Core\ListViewHelpers.fs" />
+    <Compile Include="Core\ProcessHelpers.fs" />
     <Compile Include="Core\Events.fs" />
+    <Compile Include="Core\DTO.fs" />
     <Compile Include="Core\LanguageService.fs" />
     <Compile Include="Components\Parser.fs" />
     <Compile Include="Components\Autocomplete.fs" />

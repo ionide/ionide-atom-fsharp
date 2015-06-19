@@ -26,9 +26,7 @@ module Interactive =
 
     /// Starts the Fsi Process with a listener on its standard out stream
     let private startFsi () =
-        let p = Globals.atom.project.getPaths().[0]
-
-        let fs = Globals.spawn( fsipath, [||], unbox<AnonymousType599> {cwd = p })
+        let fs = Process.spawnSame fsipath ""
         fsiProc <- fs |> Some
         fs.stdout.on ("data", unbox<Function> (handle)) |> ignore
 
@@ -68,7 +66,7 @@ module Interactive =
 
     /// Finds FSI on the system
     let private handleLocation (n : DTO.CompilerLocationResult) =
-        fsipath <-  if Globals._process.platform.StartsWith("win") then
+        fsipath <-  if Process.isWin() then
                         Globals.joinOverload2 (n.Data, "fsi.exe")
                     else
                         "fsharpi"

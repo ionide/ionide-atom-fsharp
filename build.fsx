@@ -16,8 +16,11 @@ open Fake.ZipHelper
 #else
 #load "src/atom-bindings.fsx"
 #load "src/Core/Bindings.fs"
-#load "src/Core/Helpers.fs"
+#load "src/Core/ViewHelpers.fs"
+#load "src/Core/ProcessHelpers.fs"
+#load "src/Core/ListViewHelpers.fs"
 #load "src/Core/Events.fs"
+#load "src/Core/DTO.fs"
 #load "src/Core/LanguageService.fs"
 #load "src/Components/Parser.fs"
 #load "src/Components/Autocomplete.fs"
