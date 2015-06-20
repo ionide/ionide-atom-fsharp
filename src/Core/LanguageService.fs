@@ -50,6 +50,10 @@ module LanguageService =
                 elif s.Contains "\"Kind\":\"tooltip\"" then
                     s |> Events.parseAndEmit<DTO.TooltipResult> Events.Tooltips
                     last <- Events.Tooltips
+                elif s.Contains "\"Kind\":\"toolbar\"" then
+                    s |> Events.parseAndEmit<DTO.TooltipResult> Events.Toolbars
+                    last <- Events.Toolbars
+
                 elif s.Contains "\"Kind\":\"finddecl\"" then
                     s |> Events.parseAndEmit<DTO.TooltipResult> Events.FindDecl
                     last <- Events.FindDecl
@@ -120,6 +124,11 @@ module LanguageService =
     let tooltip fn line col =
         let str = sprintf "tooltip \"%s\" %d %d\n" fn line col
         ask str
+
+    let toolbar fn line col =
+        let str = sprintf "toolbar \"%s\" %d %d\n" fn line col
+        ask str
+
 
     let findDeclaration fn line col =
         let str = sprintf "finddecl \"%s\" %d %d\n" fn line col

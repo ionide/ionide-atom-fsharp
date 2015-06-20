@@ -15,19 +15,48 @@ module TooltipHandler =
     type position = {row : float; column : float}
     let mutable private ed = createEmpty<IEditor>()
     let mutable private event : JQueryMouseEventObject option = None
+    //let mutable private bar = None : IPanel option
+    let mutable private bar = createEmpty<IPanel>()
     let private subscriptions = ResizeArray()
 
-    let private create () =
-        "<div class='type-tooltip tooltip'><div class='tooltip-inner'></div></div>" |> jq
+    let private createTooltip () =
+        "<div class='type-tooltip tooltip'>
+            <div class='tooltip-inner'></div>
+        </div>" |> jq
+
+    // Create toolbar to display the type signature of the symbol under the cursor
+    let private createToolbar () =
+        //"<div class='type-toolbar tooltip'><div class='toolbar-inner'></div></div>" |> jq
+        "<div class='type-toolbar panel-bottom type-pane' id='pane' style='height: 20px'> 
+            <div class='toolbar-inner'> _ .. _ </div>
+        </div>"
+        |> jq
+
+//        "<div class='type-toolbar panel-bottom type-pane' id='pane'>
+//            <div class='inset-panel'> LVL1
+//                <div class='panel-heading clearfix' style='height: 25px'>
+//                  <span>LVL2</span>
+//                </div>
+//            </div>
+//        </div>"
+
+
 
     let private getPosition e editor =
         let bufferPt = bufferPositionFromMouseEvent e editor
-        {row = bufferPt.row; column = bufferPt.column}
+        { row = bufferPt.row; column = bufferPt.column }
 
-    let mutable private lastPosition = {row = 0.; column = 0.}
+    let private getCursor (editor:IEditor) =
+        let bufferPt = editor.getCursorBufferPosition()
+        { row = bufferPt.row; column = bufferPt.column }
+
+
+    let mutable private lastMousePosition = {row = 0.; column = 0.}
+    let mutable private lastCursorPosition = {row = 0.; column = 0.}
     let mutable private errorArr : DTO.Error [] = [||]
     let mutable private timer : NodeJS.Timer option = None
-    let private tooltip = create ()
+    let private tooltip = createTooltip ()
+    let private toolbar = createToolbar ()
 
     let private clearTimer () =
         tooltip.fadeOut() |> ignore
@@ -40,17 +69,30 @@ module TooltipHandler =
         |> fun n -> n.mousemove( fun e ->
             let pos = getPosition e editor
             if pos  =
-                lastPosition then () :> obj else
+                lastMousePosition then () :> obj else
                 clearTimer()
-                lastPosition <- pos
+                lastMousePosition <- pos
                 timer <- Some ( Globals.setTimeout(( fun _ ->
                     if unbox<obj>(editor.buffer.file) <> null then
                         let path = editor.buffer.file.path
                         event <- Some e
                         LanguageService.tooltip path (int pos.row + 1) (int pos.column + 1)), time))
                 () :> obj) |> ignore
-                    n.mouseleave(fun e -> clearTimer () :> obj) |> ignore
-                    n.scroll(fun e -> clearTimer() :> obj) |> ignore
+                    n.mouseleave(fun _ -> clearTimer () :> obj) |> ignore
+                    n.scroll(fun _ -> clearTimer() :> obj) |> ignore
+
+
+    // Register the context when the language service will ask for toolbar information
+    let private reg2 editor  =
+        jq(".panes").append toolbar |> ignore
+        let pos = getCursor  editor
+        if pos  = lastCursorPosition then ()  else
+        lastCursorPosition <- pos
+        if unbox<obj>(editor.buffer.file) <> null then
+            let path = editor.buffer.file.path
+            LanguageService.toolbar path (int pos.row + 1) (int pos.column + 1)
+            () 
+
 
 
     /// Check if the position of the cursor over the textbuffer is within
@@ -66,12 +108,13 @@ module TooltipHandler =
         String.concat "" ["\n"; String.replicate (max s1.Length s2.Length) "-";"\n"]
 
 
-    let private handler (o : DTO.TooltipResult) =
+
+
+    let private mouseHandler (o : DTO.TooltipResult) =
         event |> Option.iter(fun e ->
         tooltip.[0].firstElementChild
         |> fun n ->
             if (jq "body /deep/ span.fsharp:hover").length > 0. then
-                let pixpos = pixelPositionFromMouseEvent e ed
                 let bufpos = bufferPositionFromMouseEvent e ed
                 let err = errorArr |> Array.tryFind (matchError bufpos)
                 let n' = jq'(n)
@@ -96,8 +139,28 @@ module TooltipHandler =
         )
 
 
+
+    let private cursorHandler (o: DTO.TooltipResult) =
+        toolbar.[0].firstElementChild
+        |> fun n ->
+            let n' = jq'(n)
+            n'.empty() |> ignore
+            if o.Data <> "No tooltip information" then
+                let str = o.Data.Substring(0, o.Data.IndexOf('\n'))
+                (str |> jq("<div/>").text)
+                |> fun n -> n.html()
+                |>  n'.append |> ignore
+
+
     let private errorHandler (o : DTO.ParseResult) = errorArr <- o.Data
 
+
+
+    let private handleEditorChange (panel : IPanel) (editor : AtomCore.IEditor)  =
+        if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
+            panel.show()
+        else
+            panel.hide()
 
     let private remove () =
         if JS.isDefined ed && JS.isPropertyDefined ed "getGrammar" && ed.getGrammar().name = "F#" then
@@ -114,19 +177,35 @@ module TooltipHandler =
             editor |> Globals.atom.views.getView
             |> getElementsByClass ".scroll-view"
             |> Option.map  (fun n -> n.[0] |> unbox<Element>)
-            |> Option.iter (fun n -> reg editor 500. n)
+            |> Option.iter (fun n -> reg editor 500. n
+                                     reg2 editor
+                            )
 
 
     let activate () =
-        Globals.atom.workspace.getActiveTextEditor() |> initialize
+        let b =
+            let t = createToolbar ()
+            Globals.atom.workspace.addBottomPanel(unbox<AnonymousType499>{PanelOptions.item = t; PanelOptions.priority = 100; PanelOptions.visible = false})
+        bar <- b
+        let editor = Globals.atom.workspace.getActiveTextEditor() 
+        editor |> initialize
+        editor |> handleEditorChange b
+        editor.getBuffer().onDidStopChanging(fun () -> reg2 editor) |> ignore
+        //editor.cursorMoved()
         Globals.atom.workspace.onDidChangeActivePaneItem(fun ed -> initialize ed) |> ignore
-        let t = unbox<Function> handler |> Events.on Events.Tooltips
-        subscriptions.Add t
-        let e = unbox<Function> errorHandler |> Events.on Events.Errors
-        subscriptions.Add e
+        
+        let tp = Globals.atom.workspace.onDidChangeActivePaneItem(fun ed -> handleEditorChange b ed)
+        subscriptions.Add tp
+        let tt = unbox<Function> mouseHandler |> Events.on Events.Tooltips
+        subscriptions.Add tt
+        let err = unbox<Function> errorHandler |> Events.on Events.Errors
+        subscriptions.Add err
+        let tb = unbox<Function> cursorHandler |> Events.on Events.Toolbars
+        subscriptions.Add tb
         ()
 
     let deactivate () =
         subscriptions |> Seq.iter(fun n -> n.dispose())
         subscriptions.Clear()
         ()
+
