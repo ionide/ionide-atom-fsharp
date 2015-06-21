@@ -14,11 +14,13 @@ module ErrorPanel =
     let mutable private panel : IPanel option = None
     let private subscriptions = ResizeArray()
 
+//                  <span>Errors</span>
+
     let private create () =
         "<div class='tool-panel panel-bottom error-pane' id='pane'>
-                <div class='inset-panel'>
+            <div class='inset-panel'>
                 <div class='panel-heading clearfix' style='height: 30px'>
-                  <span>Errors</span>
+                  <span>Dev-Errors</span>
                   <span id='btnMin' class='icon-min' style='float:right'></span>
                   <span id='btnMax' class='icon-max' style='float:right; display: none'></span>
                 </div>
@@ -71,6 +73,7 @@ module ErrorPanel =
             let t = create ()
             Globals.atom.workspace.addBottomPanel (unbox<AnonymousType499>{PanelOptions.item = t; PanelOptions.priority = 100; PanelOptions.visible = false})
         panel <- Some p
+       
         addMinimize()
         Globals.atom.workspace.getActiveTextEditor() |> handleEditorChange p
 

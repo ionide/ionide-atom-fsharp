@@ -246,6 +246,9 @@ module Bindings =
         [<FunScript.JSEmitInline("({0}.moveToBeginningOfLine())")>]
         member __.moveToBeginningOfLine() : unit = failwith "JS"
 
+        [<FunScript.JSEmitInline("({0}.onDidChangeCursorPosition({1}))")>]
+        member __.onDidChangeCursorPosition(cb: obj -> unit) : IDisposable = failwith "JS"
+
 
     [<JSEmitInline("{0}.decorateMarker({1}, {type: 'highlight', class: {2}})")>]
     let decorateMarker(ed : IEditor, marker : IDisplayBufferMarker, cls : string) : unit = failwith "JS"
