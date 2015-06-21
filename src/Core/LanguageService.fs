@@ -31,6 +31,9 @@ module LanguageService =
 
     let mutable private last = Events.ServerError
 
+    // flag to send tooltip response to the proper event stream
+    let mutable private toolbarFlag = false
+
     let private parseResponse (data : obj) =
         if data <> null then
             let response = data.ToString().Split('\n')
@@ -48,12 +51,12 @@ module LanguageService =
                     s |> Events.parseAndEmit<DTO.CompletionResult> Events.Completion
                     last <- Events.Completion
                 elif s.Contains "\"Kind\":\"tooltip\"" then
-                    s |> Events.parseAndEmit<DTO.TooltipResult> Events.Tooltips
-                    last <- Events.Tooltips
-                elif s.Contains "\"Kind\":\"toolbar\"" then
-                    s |> Events.parseAndEmit<DTO.TooltipResult> Events.Toolbars
-                    last <- Events.Toolbars
-
+                    if toolbarFlag then
+                        s |> Events.parseAndEmit<DTO.TooltipResult> Events.Toolbars
+                        last <- Events.Toolbars
+                    else
+                        s |> Events.parseAndEmit<DTO.TooltipResult> Events.Tooltips
+                        last <- Events.Tooltips
                 elif s.Contains "\"Kind\":\"finddecl\"" then
                     s |> Events.parseAndEmit<DTO.TooltipResult> Events.FindDecl
                     last <- Events.FindDecl
@@ -122,11 +125,13 @@ module LanguageService =
         ask str
 
     let tooltip fn line col =
+        toolbarFlag <- false
         let str = sprintf "tooltip \"%s\" %d %d\n" fn line col
         ask str
 
     let toolbar fn line col =
-        let str = sprintf "toolbar \"%s\" %d %d\n" fn line col
+        toolbarFlag <- true
+        let str = sprintf "tooltip \"%s\" %d %d\n" fn line col
         ask str
 
 

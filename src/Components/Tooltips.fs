@@ -26,20 +26,10 @@ module TooltipHandler =
 
     // Create toolbar to display the type signature of the symbol under the cursor
     let private createToolbar () =
-        //"<div class='type-toolbar tooltip'><div class='toolbar-inner'></div></div>" |> jq
         "<div class='type-toolbar panel-bottom type-pane' id='pane' style='height: 20px'> 
-            <div class='toolbar-inner'> _ .. _ </div>
+            <div class='toolbar-inner'></div>
         </div>"
         |> jq
-
-//        "<div class='type-toolbar panel-bottom type-pane' id='pane'>
-//            <div class='inset-panel'> LVL1
-//                <div class='panel-heading clearfix' style='height: 25px'>
-//                  <span>LVL2</span>
-//                </div>
-//            </div>
-//        </div>"
-
 
 
     let private getPosition e editor =
@@ -51,10 +41,10 @@ module TooltipHandler =
         { row = bufferPt.row; column = bufferPt.column }
 
 
-    let mutable private lastMousePosition = {row = 0.; column = 0.}
+    let mutable private lastMousePosition  = {row = 0.; column = 0.}
     let mutable private lastCursorPosition = {row = 0.; column = 0.}
-    let mutable private errorArr : DTO.Error [] = [||]
-    let mutable private timer : NodeJS.Timer option = None
+    let mutable private errorArr    = [||] : DTO.Error []
+    let mutable private timer       = None : NodeJS.Timer option 
     let private tooltip = createTooltip ()
     let private toolbar = createToolbar ()
 
@@ -80,11 +70,18 @@ module TooltipHandler =
                 () :> obj) |> ignore
                     n.mouseleave(fun _ -> clearTimer () :> obj) |> ignore
                     n.scroll(fun _ -> clearTimer() :> obj) |> ignore
+        let pos = getCursor  editor
+        if pos  = lastCursorPosition then ()  else
+        lastCursorPosition <- pos
+        if unbox<obj>(editor.buffer.file) <> null then
+            let path = editor.buffer.file.path
+            LanguageService.toolbar path (int pos.row + 1) (int pos.column + 1)
+            () 
 
 
     // Register the context when the language service will ask for toolbar information
     let private reg2 editor  =
-        jq(".panes").append toolbar |> ignore
+        //jq(".panes").append toolbar |> ignore
         let pos = getCursor  editor
         if pos  = lastCursorPosition then ()  else
         lastCursorPosition <- pos
@@ -109,14 +106,13 @@ module TooltipHandler =
 
 
 
-
     let private mouseHandler (o : DTO.TooltipResult) =
         event |> Option.iter(fun e ->
         tooltip.[0].firstElementChild
         |> fun n ->
             if (jq "body /deep/ span.fsharp:hover").length > 0. then
                 let bufpos = bufferPositionFromMouseEvent e ed
-                let err = errorArr |> Array.tryFind (matchError bufpos)
+                let err = errorArr |> Array.tryFind (matchError bufpos)  // Check if the position in the buffer has any errors associated with it
                 let n' = jq'(n)
                 n'.empty() |> ignore
                 let errTip s =
@@ -139,28 +135,31 @@ module TooltipHandler =
         )
 
 
-
     let private cursorHandler (o: DTO.TooltipResult) =
         toolbar.[0].firstElementChild
         |> fun n ->
             let n' = jq'(n)
             n'.empty() |> ignore
             if o.Data <> "No tooltip information" then
-                let str = o.Data.Substring(0, o.Data.IndexOf('\n'))
+                //let str = o.Data.Substring(0, o.Data.IndexOf('\n'))
+                let str = o.Data  //.Substring(0, o.Data.IndexOf('\n'))
                 (str |> jq("<div/>").text)
                 |> fun n -> n.html()
                 |>  n'.append |> ignore
+                
 
 
     let private errorHandler (o : DTO.ParseResult) = errorArr <- o.Data
 
 
-
+    // Controls whether the type signature toolbar is displayed by checking the syntax grammar in Atom
     let private handleEditorChange (panel : IPanel) (editor : AtomCore.IEditor)  =
         if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
             panel.show()
+            reg2 editor
         else
             panel.hide()
+
 
     let private remove () =
         if JS.isDefined ed && JS.isPropertyDefined ed "getGrammar" && ed.getGrammar().name = "F#" then
@@ -177,9 +176,7 @@ module TooltipHandler =
             editor |> Globals.atom.views.getView
             |> getElementsByClass ".scroll-view"
             |> Option.map  (fun n -> n.[0] |> unbox<Element>)
-            |> Option.iter (fun n -> reg editor 500. n
-                                     reg2 editor
-                            )
+            |> Option.iter (fun n -> reg editor 500. n )
 
 
     let activate () =
@@ -190,12 +187,17 @@ module TooltipHandler =
         let editor = Globals.atom.workspace.getActiveTextEditor() 
         editor |> initialize
         editor |> handleEditorChange b
-        editor.getBuffer().onDidStopChanging(fun () -> reg2 editor) |> ignore
-        //editor.cursorMoved()
+
+        //editor.getBuffer().onDidStopChanging(fun () -> reg2 editor) |> ignore
+       // editor.cursorMoved(fun () -> reg2 editor)
+
         Globals.atom.workspace.onDidChangeActivePaneItem(fun ed -> initialize ed) |> ignore
         
         let tp = Globals.atom.workspace.onDidChangeActivePaneItem(fun ed -> handleEditorChange b ed)
         subscriptions.Add tp
+
+
+        //Globals.atom.workspace.getActiveTextEditor().cu
         let tt = unbox<Function> mouseHandler |> Events.on Events.Tooltips
         subscriptions.Add tt
         let err = unbox<Function> errorHandler |> Events.on Events.Errors
