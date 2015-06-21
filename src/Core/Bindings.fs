@@ -249,6 +249,10 @@ module Bindings =
         [<FunScript.JSEmitInline("({0}.onDidChangeCursorPosition({1}))")>]
         member __.onDidChangeCursorPosition(cb: obj -> unit) : IDisposable = failwith "JS"
 
+        [<FunScript.JSEmitInline("({0}.onDidDestroy({1}))")>]
+        member __.onDidDestroy(cb: obj -> unit) : IDisposable = failwith "JS"
+        
+
     type IConfig with
         [<FunScript.JSEmitInline("({0}.onDidChange({1},{2}, {3}))")>]
         member __.onDidChange(keyPath: string, optional : obj, cb: obj -> unit) : IDisposable = failwith "JS"
