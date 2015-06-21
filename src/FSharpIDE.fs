@@ -27,8 +27,9 @@ type FSharpIDE() =
 
         Parser.activate ()
         HighlighterHandler.activate ()
-        ErrorPanel.activate ()
         TooltipHandler.activate ()     // needs to follow error panel so it appears above it
+        ErrorPanel.activate ()
+        ToolbarHandler.activate()
         FindDeclaration.activate ()
         FAKE.activate ()
         Interactive.activate ()
@@ -39,6 +40,7 @@ type FSharpIDE() =
         TooltipHandler.deactivate ()
         HighlighterHandler.deactivate ()
         ErrorPanel.deactivate ()
+        ToolbarHandler.deactivate()
         FindDeclaration.deactivate ()
         FAKE.deactivate ()
         Interactive.deactivate ()

@@ -26,6 +26,7 @@ open Fake.ZipHelper
 #load "src/Components/Autocomplete.fs"
 #load "src/Components/Tooltips.fs"
 #load "src/Components/Highlight.fs"
+#load "src/Components/Toolbar.fs"
 #load "src/Components/Errors.fs"
 #load "src/Components/FindDeclaration.fs"
 #load "src/Components/FAKE.fs"
