@@ -14,8 +14,13 @@ open Atom
 
 [<ReflectedDefinition>]
 module FAKE =
+    type BuildData = {Name : string; Start : DateTime; mutable End : DateTime option; mutable Output : string; mutable TextEditor : IEditor option}
+
     let mutable private File : (string * string) option = None
     let mutable private taskListView : (atom.SelectListView * IPanel) option = None
+    let mutable private buildListView : (atom.SelectListView * IPanel) option = None
+    let mutable private BuildList = ResizeArray()
+
 
     let private viewForItem (desc : ListView.ItemDescription) =
         if JS.isDefined desc then
@@ -27,11 +32,46 @@ module FAKE =
         let stopChangingCallback (ev : IEditor) (lv : atom.SelectListView) = fun () -> ()
         let cancelledCallback = Func<_>(fun _ -> taskListView |> Option.iter(fun (model, view) ->  view.hide()) :> obj)
         let confirmedCallback = unbox<Func<_, _>> (fun (packageDescription : ListView.ItemDescription) ->
-                                    taskListView |> Option.iter (fun (model, view) -> view.hide())
-                                    File |> Option.iter( fun (build, fake) ->
-                                        Process.spawnWithNotifications build "sh" packageDescription.data |> ignore
-                                    )
+            taskListView |> Option.iter (fun (model, view) -> view.hide())
+            File |> Option.iter( fun (build, fake) ->
+                let data = {Name = packageDescription.data; Start = DateTime.Now; End = None; Output = ""; TextEditor = None}
+                BuildList.Add data
+                let fakeProcess = Process.spawnWithNotifications build "sh" packageDescription.data
+                fakeProcess.on("exit",unbox<Function>(fun _ -> data.End <- Some DateTime.Now)) |> ignore
+                fakeProcess.stdout.on("data", unbox<Function>(fun e ->
+                    data.Output <- data.Output + e.ToString()
+                    data.TextEditor |> Option.iter (fun te ->
+                        let b = te.getBuffer()
+                        e.ToString() |> b.append |> ignore
+                        )
+                    )) |> ignore
+                fakeProcess.stderr.on("data", unbox<Function>(fun e ->
+                    data.Output <- data.Output + e.ToString()
+                    data.TextEditor |> Option.iter (fun te ->
+                        let b = te.getBuffer()
+                        e.ToString() |> b.append |> ignore
+                    )
+                )) |> ignore
+
+                ()
             )
+        )
+        ListView.regiterListView stopChangingCallback cancelledCallback confirmedCallback viewForItem false
+
+    let private registerBuildList () =
+        let stopChangingCallback (ev : IEditor) (lv : atom.SelectListView) = fun () -> ()
+        let cancelledCallback = Func<_>(fun _ -> buildListView |> Option.iter(fun (model, view) ->  view.hide()) :> obj)
+        let confirmedCallback = unbox<Func<_, _>> (fun (buildDescription : ListView.ItemDescription) ->
+            buildListView |> Option.iter (fun (model, view) -> view.hide())
+            let build = BuildList |> Seq.find(fun n -> let desc = sprintf "%s - %s %s" n.Name (n.Start.ToShortDateString()) (n.Start.ToShortTimeString())
+                                                       desc = buildDescription.data)
+
+            Globals.atom.workspace.openEditor(buildDescription.data, {split = "right"}).created(fun ed ->
+                build.TextEditor <- Some ed
+                let view = Globals.atom.views.getView ed
+                setComponentEnabled(view, false))
+            ()
+        )
         ListView.regiterListView stopChangingCallback cancelledCallback confirmedCallback viewForItem false
 
     let private BuildTask () =
@@ -47,11 +87,28 @@ module FAKE =
         ()
         ))
 
+    let private ShowBuildList () =
+        buildListView |> Option.iter(fun (model, view) ->
+            view.show()
+            model.focusFilterEditor() |> ignore
+            let m = BuildList
+                    |> Seq.sortBy(fun n -> n.Start)
+                    |> Seq.map(fun n ->
+                        let name = sprintf "%s - %s %s" n.Name (n.Start.ToShortDateString()) (n.Start.ToShortTimeString())
+                        {ListView.data = name } :> obj)
+                    |> Seq.toArray
+                    |> Array.rev
+
+            model.setItems m |> ignore
+            ()
+        )
+
     let private FAKENotFound () =
         Process.notice (ref None) true "FAKE error" "FAKE script not found"
 
     let activate () =
         taskListView <- registerTaskList () |> Some
+        buildListView <- registerBuildList () |> Some
         let p = Globals.atom.project.getPaths().[0]
         let proj (ex : NodeJS.ErrnoException) (arr : string array) =
             let ext = if Process.isWin() then "cmd" else "sh"
@@ -66,6 +123,7 @@ module FAKE =
                     let build = p + "/" + regex.Groups.[1].Value
                     File <- Some (path, build )
                     Atom.addCommand("atom-workspace", "FAKE: Build", BuildTask)
+                    Atom.addCommand("atom-workspace", "FAKE: Show Builds", ShowBuildList)
                 else
                     Atom.addCommand("atom-workspace", "FAKE: Build", FAKENotFound)
                 Globals.console.log File
