@@ -67,10 +67,6 @@ module ToolbarHandler =
             panel.hide()
             bar.hide()
 
-    let run exe args = System.Diagnostics.Process.Start( exe, args)
-
-
-
     let private remove () =
         cursorSubscription |> Option.iter (fun cs ->
             cs.dispose()
