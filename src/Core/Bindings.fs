@@ -249,6 +249,14 @@ module Bindings =
         [<FunScript.JSEmitInline("({0}.onDidChangeCursorPosition({1}))")>]
         member __.onDidChangeCursorPosition(cb: obj -> unit) : IDisposable = failwith "JS"
 
+    type IConfig with
+        [<FunScript.JSEmitInline("({0}.onDidChange({1},{2}, {3}))")>]
+        member __.onDidChange(keyPath: string, optional : obj, cb: obj -> unit) : IDisposable = failwith "JS"
+        [<FunScript.JSEmitInline("({0}.onDidChange({1},{2}))")>]
+        member __.onDidChange'(keyPath: string, cb: obj -> unit) : IDisposable = failwith "JS"
+        [<FunScript.JSEmitInline("({0}.set({1},{2}))")>]
+        member __.set(keyPath: string, value: obj) : bool = failwith "JS"
+
 
     [<JSEmitInline("{0}.decorateMarker({1}, {type: 'highlight', class: {2}})")>]
     let decorateMarker(ed : IEditor, marker : IDisplayBufferMarker, cls : string) : unit = failwith "JS"
