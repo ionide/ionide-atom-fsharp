@@ -114,8 +114,6 @@ module TooltipHandler =
     let private errorHandler (o : DTO.ParseResult) = errorArr <- o.Data
 
 
-
-
     let private remove () =
         if JS.isDefined ed && JS.isPropertyDefined ed "getGrammar" && ed.getGrammar().name = "F#" then
             ed |> Globals.atom.views.getView
