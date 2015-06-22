@@ -68,6 +68,8 @@ module FAKE =
 
             Globals.atom.workspace.openEditor(buildDescription.data, {split = "right"}).created(fun ed ->
                 build.TextEditor <- Some ed
+                ed.insertText build.Output
+                ed.onDidDestroy(fun _ -> build.TextEditor <- None) |> ignore
                 let view = Globals.atom.views.getView ed
                 setComponentEnabled(view, false))
             ()

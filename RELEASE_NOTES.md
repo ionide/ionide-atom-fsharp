@@ -1,3 +1,7 @@
+#### 0.6.0 - 21.06.2015
+* Quick Info Panel
+* FAKE Build Output viewer.
+
 #### 0.5.10 - 16.06.2015
 * Fix min/max buttons for error panel
 
