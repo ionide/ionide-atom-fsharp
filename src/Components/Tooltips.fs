@@ -19,7 +19,7 @@ module TooltipHandler =
     let mutable private event : JQueryMouseEventObject option = None
     let mutable private bar = createEmpty<IPanel>()
     let private subscriptions = ResizeArray()
-    let mutable cursorSubscription : IDisposable option = None
+    let mutable cursorSubscription : Disposable option = None
 
     let private createTooltip () =
         "<div class='type-tooltip tooltip'>
@@ -135,7 +135,7 @@ module TooltipHandler =
 
     let activate () =
         Globals.atom.workspace.getActiveTextEditor() |> initialize
-        Globals.atom.workspace.onDidChangeActivePaneItem(fun ed -> initialize ed) |> ignore
+        Globals.atom.workspace.onDidChangeActivePaneItem((fun ed -> initialize ed ) |> unbox<Function>) |> ignore
         let tt = unbox<Function> mouseHandler |> Events.on Events.Tooltips
         subscriptions.Add tt
         let err = unbox<Function> errorHandler |> Events.on Events.Errors

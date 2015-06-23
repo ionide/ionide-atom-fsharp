@@ -13,7 +13,7 @@ open Atom
 module FindDeclaration =
 
     let private openDec (data : DTO.FindDeclarationResult) =
-        Globals.atom.workspace.open'(data.Data.File, {OpenOptions.initialColumn = (data.Data.Column - 1); OpenOptions.initialLine = (data.Data.Line - 1) })
+        Globals.atom.workspace._open(data.Data.File, {OpenOptions.initialColumn = (data.Data.Column - 1); OpenOptions.initialLine = (data.Data.Line - 1) })
 
     let private handle e =
         let editor = Globals.atom.workspace.getActiveTextEditor()
@@ -23,7 +23,7 @@ module FindDeclaration =
         Events.once Events.FindDecl openDec
 
     let activate () =
-        Globals.setTimeout((fun _ -> addCommand'("atom-text-editor", "symbols-view:go-to-declaration", handle )), 500.)
+        Globals.setTimeout((fun _ -> Globals.atom.commands.add("atom-text-editor", "symbols-view:go-to-declaration", handle |> unbox<Function> ) |> ignore), 500.)
         |> ignore
 
     let deactivate () =

@@ -14,7 +14,7 @@ open Atom
 module Parser =
     let private projects = ResizeArray<string>()
     let private subscriptions = ResizeArray()
-    let mutable private h : IDisposable option = None
+    let mutable private h : Disposable option = None
 
     let private parseProjectForEditor (editor: IEditor) =
         let parseProj p =
@@ -50,13 +50,13 @@ module Parser =
         if JS.isDefined editor && JS.isPropertyDefined editor "buffer" && unbox<obj>(editor.buffer) <> null && JS.isPropertyDefined editor.buffer "file" && unbox<obj>(editor.buffer.file) <> null then
             h <- ( editor.buffer.onDidStopChanging(fun _ -> LanguageService.parseEditor editor) |> Some  )
 
-        Globals.atom.workspace.onDidChangeActivePaneItem (fun ed ->
+        Globals.atom.workspace.onDidChangeActivePaneItem ((fun ed ->
             ed |> LanguageService.parseEditor
             ed |> parseProjectForEditor
             h |> Option.iter(fun h' -> h'.dispose ())
             if JS.isDefined ed && JS.isPropertyDefined ed "buffer" && unbox<obj>(ed.buffer) <> null && JS.isPropertyDefined ed.buffer "file" && unbox<obj>(ed.buffer.file) <> null then
                 h <- ( ed.buffer.onDidStopChanging(fun _ -> LanguageService.parseEditor ed) |> Some  )
-
+        ) |> unbox<Function>   
         ) |> subscriptions.Add
 
 

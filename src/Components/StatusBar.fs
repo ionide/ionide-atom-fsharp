@@ -19,7 +19,7 @@ module StatusBar =
         notification |> Option.iter (fun n -> n.destroy())
         statusbar |> Option.iter(fun s ->
             let el = sprintf "<span class='fsharp-status'>F# Status - %s</span>" status |> jq
-            notification <- s.addLeftTile({item =el ; priority = 100}) |> Some
+            notification <- s.addLeftTile({StatusBarOptions.item =el ; priority = 100}) |> Some
 
         )
 

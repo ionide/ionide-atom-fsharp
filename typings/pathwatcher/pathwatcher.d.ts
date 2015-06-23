@@ -55,7 +55,8 @@ declare module PathWatcher {
 		getEntries(callback:Function):void;
 		subscribeToNativeChangeEvents():void;
 		unsubscribeFromNativeChangeEvents():void;
-		isPathPrefixOf(prefix:string, fullPath:string):boolean;
+        isPathPrefixOf(prefix: string, fullPath: string): boolean;
+        resolve() : string;
 	}
 }
 
