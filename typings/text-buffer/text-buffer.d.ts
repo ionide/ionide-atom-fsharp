@@ -241,7 +241,7 @@ declare module TextBuffer {
         positionForCharacterIndex(offset:number):IPoint;
         getMaxCharacterIndex():number;
         loadSync():ITextBuffer;
-        load():Q.IPromise<ITextBuffer>;
+        //load():Q.IPromise<ITextBuffer>;
         finishLoading():ITextBuffer;
         handleTextChange(event:any):any;
         destroy():any;
@@ -254,7 +254,7 @@ declare module TextBuffer {
         hasMultipleEditors():boolean;
         reload():any;
         updateCachedDiskContentsSync():string;
-        updateCachedDiskContents():Q.IPromise<string>;
+        //updateCachedDiskContents():Q.IPromise<string>;
         getBaseName():string;
         getPath():string;
         getUri():string;

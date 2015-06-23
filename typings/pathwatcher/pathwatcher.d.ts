@@ -25,7 +25,7 @@ declare module PathWatcher {
 		getBaseName():string;
 		write(text:string):void;
 		readSync(flushCache:boolean):string;
-		read(flushCache?:boolean):Q.Promise<string>;
+		//read(flushCache?:boolean):Q.Promise<string>;
 		exists():boolean;
 		setDigest(contents:string):void;
 		getDigest():string;

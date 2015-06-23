@@ -41,7 +41,7 @@ declare module AtomCore {
 		fullScreen:boolean;
 
 		// delegate to model property's method
-		open(uri:string, options:any):Q.Promise<View>;
+		//open(uri:string, options:any):Q.Promise<View>;
 		openSync(uri:string, options?:any):any;
 		saveActivePaneItem():any;
 		saveActivePaneItemAs():any;
@@ -948,20 +948,20 @@ declare module AtomCore {
 		resolve(uri:string):string;
 		relativize(fullPath:string):string;
 		contains(pathToCheck:string):boolean;
-		open(filePath:string, options?:any):Q.Promise<IEditor>;
+		//open(filePath:string, options?:any):Q.Promise<IEditor>;
 		openSync(filePath:string, options?:any):IEditor;
 		getBuffers():TextBuffer.ITextBuffer;
 		isPathModified(filePath:string):boolean;
 		findBufferForPath(filePath:string):TextBuffer.ITextBuffer;
 		bufferForPathSync(filePath:string):TextBuffer.ITextBuffer;
-		bufferForPath(filePath:string):Q.Promise<TextBuffer.ITextBuffer>;
+		//bufferForPath(filePath:string):Q.Promise<TextBuffer.ITextBuffer>;
 		bufferForId(id:any):TextBuffer.ITextBuffer;
 		buildBufferSync(absoluteFilePath:string):TextBuffer.ITextBuffer;
-		buildBuffer(absoluteFilePath:string):Q.Promise<TextBuffer.ITextBuffer>;
+		//buildBuffer(absoluteFilePath:string):Q.Promise<TextBuffer.ITextBuffer>;
 		addBuffer(buffer:TextBuffer.ITextBuffer, options?:any):any;
 		addBufferAtIndex(buffer:TextBuffer.ITextBuffer, index:number, options?:any):any;
-		scan(regex:any, options:any, iterator:any):Q.Promise<any>;
-		replace(regex:any, replacementText:any, filePaths:any, iterator:any):Q.Promise<any>;
+		//scan(regex:any, options:any, iterator:any):Q.Promise<any>;
+		//replace(regex:any, replacementText:any, filePaths:any, iterator:any):Q.Promise<any>;
 		buildEditorForBuffer(buffer:any, editorOptions:any):IEditor;
 		eachBuffer(...args:any[]):any;
 	}
@@ -975,10 +975,10 @@ declare module AtomCore {
 		serializeParams():{paneContainer:any;fullScreen:boolean;};
 		eachEditor(callback:Function):void;
 		getEditors():IEditor[];
-		open(uri:string, options:any):Q.Promise<View>;
+		//open(uri:string, options:any):Q.Promise<View>;
 		openLicense():void;
 		openSync(uri:string, options:any):any;
-		openURIInPane(uri:string, pane:any, options:any):Q.Promise<View>;
+		//openURIInPane(uri:string, pane:any, options:any):Q.Promise<View>;
 		reopenItemSync():any;
 		registerOpener(opener:(urlToOpen:string)=>any):void;
 		unregisterOpener(opener:Function):void;
@@ -1051,7 +1051,7 @@ declare module AtomCore {
 		getStylesheetType(): string;
 		load(): IPackage;
 		reset(): void;
-		activate(): Q.Promise<any[]>;
+		//activate(): Q.Promise<any[]>;
 		activateNow(): void;
 	  // TBD
   }
@@ -1072,7 +1072,7 @@ declare module AtomCore {
 		activate():void;
 		registerPackageActivator(activator:any, types:any):void;
 		activatePackages(packages:any):void;
-		activatePackage(name:string):Q.Promise<IPackage>;
+		//activatePackage(name:string):Q.Promise<IPackage>;
 		deactivatePackages():void;
 		deactivatePackage(name:string):void;
 		getActivePackages():any;
