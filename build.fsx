@@ -145,11 +145,14 @@ Target "GenerateBindings" (fun () ->
     fsharpBin |> Option.iter (fun fsharpBin ->
       System.Environment.SetEnvironmentVariable("FSHARP_BIN", fsharpBin))
 
-    (TimeSpan.FromMinutes 15.0)
-    |> ProcessHelper.ExecProcess (fun p ->
-      p.FileName <- typings @@ "FunScript.TypeScript" @@ "FunScript.TypeScript.exe"
-      p.WorkingDirectory <- typings @@ "FunScript.TypeScript")
-    |> ignore
+    let result = (TimeSpan.FromMinutes 15.0)
+                 |> ProcessHelper.ExecProcess (fun p ->
+                      p.FileName <- typings @@ "FunScript.TypeScript" @@ "FunScript.TypeScript.exe"
+                      p.WorkingDirectory <- typings @@ "FunScript.TypeScript")
+    if result = 0 then
+        !! (typings @@ "FunScript.TypeScript" @@ "Output" @@ "*.dll" ) |>
+        CopyFiles "lib"
+    ()
 )
 
 Target "InstallDependencies" (fun _ ->

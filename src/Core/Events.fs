@@ -70,10 +70,10 @@ module Events =
 
     let once t func =
         let name = getName t
-        let s : IDisposable option ref = ref None
-        s := (emitter.on'(name, unbox<Function>(fun o -> !s |> Option.iter(fun s' -> s'.dispose())
-                                                         func o) ) |> Some)
+        let s : Disposable option ref = ref None
+        s := (emitter.on(name, unbox<Function>(fun o -> !s |> Option.iter(fun s' -> s'.dispose())
+                                                        func o) ) |> Some)
 
     let on t func =
         let name = getName t
-        emitter.on'(name, func)
+        emitter.on(name, func)

@@ -8,6 +8,8 @@
 /// <reference path="../space-pen/space-pen.d.ts" />
 /// <reference path="../emissary/emissary.d.ts" />
 /// <reference path="../pathwatcher/pathwatcher.d.ts" />
+/// <reference path="../text-buffer/text-buffer.d.ts" />
+/// <reference path="../status-bar/status-bar.d.ts" />
 
 // Policy: this definition file only declare element related to `atom`.
 // if js file include to another npm package (e.g. "space-pen", "mixto" and "emissary").
@@ -23,7 +25,13 @@ interface Window {
 
 declare module AtomCore {
 
-    // https://atom.io/docs/v0.84.0/advanced/view-system
+    interface IEmitter {
+        on(name: string, callback: Function): Disposable;
+        emit(name : string, o : any) : void;
+    }
+
+
+// https://atom.io/docs/v0.84.0/advanced/view-system
 	interface IWorkspaceViewStatic {
 		new ():IWorkspaceView;
 
@@ -39,7 +47,7 @@ declare module AtomCore {
 		fullScreen:boolean;
 
 		// delegate to model property's method
-		open(uri:string, options:any):Q.Promise<View>;
+		//open(uri:string, options:any):Q.Promise<View>;
 		openSync(uri:string, options?:any):any;
 		saveActivePaneItem():any;
 		saveActivePaneItemAs():any;
@@ -528,6 +536,13 @@ declare module AtomCore {
 		// Serializable.includeInto(Editor);
 		// Delegator.includeInto(Editor);
 
+        onDidSave(callback: Function): Disposable;
+        lineTextForBufferRow(row: number): string;
+        moveDown(i: number): void;
+        moveToBeginningOfLine(): void;
+        onDidChangeCursorPosition(callback : Function) : Disposable;
+        onDidDestroy(callback : Function) : Disposable;
+
 		deserializing:boolean;
 		callDisplayBufferCreatedHook:boolean;
 		registerEditor:boolean;
@@ -589,7 +604,7 @@ declare module AtomCore {
 		getTextInRange(range:any):any;
 		getLineCount():number;
 		getBuffer():TextBuffer.ITextBuffer;
-		getUri():string;
+		getURI():string;
 		isBufferRowBlank(bufferRow:any):boolean;
 		isBufferRowCommented(bufferRow:any):void;
 		nextNonBlankBufferRow(bufferRow:any):void;
@@ -679,7 +694,8 @@ declare module AtomCore {
 		getMarkers():IDisplayBufferMarker[];
 		findMarkers(...args:any[]):IDisplayBufferMarker[];
 		markScreenRange(...args:any[]):IDisplayBufferMarker;
-		markBufferRange(...args:any[]):IDisplayBufferMarker;
+        markBufferRange(...args: any[]): IDisplayBufferMarker;
+        markBufferRange(o: any[]): IDisplayBufferMarker;
 		markScreenPosition(...args:any[]):IDisplayBufferMarker;
 		markBufferPosition(...args:any[]):IDisplayBufferMarker;
 		destroyMarker(...args:any[]):boolean;
@@ -839,26 +855,12 @@ declare module AtomCore {
 		getVerticalScrollbarWidth():any;
 		setVerticalScrollbarWidth(width:any):any;
 		// deprecated joinLine():any;
-
-		markBufferRange(buffer: TextBuffer.IRange) : IDisplayBufferMarker;
 	}
 
 	interface IGrammar {
 		scopeName: string;
-		name : string;
-		// TBD
+        name : string;
 	}
-
-    interface IPanel {
-        destroy() : void;
-        onDidChangeVisible(callback : Function) : any;
-        onDidDestroy(callback : Function) : any
-				getItem() : any;
-				getPriority() : number;
-				isVisable() : boolean;
-				hide() : void;
-				show() : void;
-    }
 
 	interface IPane /* extends Theorist.Model */ {
 		items:any[];
@@ -898,8 +900,8 @@ declare module AtomCore {
 		saveItem(item:any, nextAction:Function):void;
 		saveItemAs(item:any, nextAction:Function):void;
 		saveItems():any[];
-		itemForUri(uri:any):any;
-		activateItemForUri(uri:any):any;
+		itemForURI(uri:any):any;
+		activateItemForURI(uri:any):any;
 		copyActiveItem():void;
 		splitLeft(params:any):IPane;
 		splitRight(params:any):IPane;
@@ -954,43 +956,63 @@ declare module AtomCore {
 		destroyRepo():any;
 		destroyUnretainedBuffers():any;
 		getRepo():IGit;
-		getPath():string;
+        getPaths(): string[];
+        getDirectories(): PathWatcher.IDirectory[];
 		setPath(projectPath:string):any;
 		getRootDirectory():PathWatcher.IDirectory;
 		resolve(uri:string):string;
 		relativize(fullPath:string):string;
 		contains(pathToCheck:string):boolean;
-		open(filePath:string, options?:any):Q.Promise<IEditor>;
+		//open(filePath:string, options?:any):Q.Promise<IEditor>;
 		openSync(filePath:string, options?:any):IEditor;
 		getBuffers():TextBuffer.ITextBuffer;
 		isPathModified(filePath:string):boolean;
 		findBufferForPath(filePath:string):TextBuffer.ITextBuffer;
 		bufferForPathSync(filePath:string):TextBuffer.ITextBuffer;
-		bufferForPath(filePath:string):Q.Promise<TextBuffer.ITextBuffer>;
+		//bufferForPath(filePath:string):Q.Promise<TextBuffer.ITextBuffer>;
 		bufferForId(id:any):TextBuffer.ITextBuffer;
 		buildBufferSync(absoluteFilePath:string):TextBuffer.ITextBuffer;
-		buildBuffer(absoluteFilePath:string):Q.Promise<TextBuffer.ITextBuffer>;
+		//buildBuffer(absoluteFilePath:string):Q.Promise<TextBuffer.ITextBuffer>;
 		addBuffer(buffer:TextBuffer.ITextBuffer, options?:any):any;
 		addBufferAtIndex(buffer:TextBuffer.ITextBuffer, index:number, options?:any):any;
-		scan(regex:any, options:any, iterator:any):Q.Promise<any>;
-		replace(regex:any, replacementText:any, filePaths:any, iterator:any):Q.Promise<any>;
+		//scan(regex:any, options:any, iterator:any):Q.Promise<any>;
+		//replace(regex:any, replacementText:any, filePaths:any, iterator:any):Q.Promise<any>;
 		buildEditorForBuffer(buffer:any, editorOptions:any):IEditor;
-		eachBuffer(...args:any[]):any;
-	}
+        eachBuffer(...args: any[]): any;
+        onDidChangePaths(callback : Function) :Disposable;
+
+    }
+
+    interface IPanel
+    {
+        destroy(): void;
+        onDidChangeVisible(callback: Function): any;
+        onDidDestroy(callback: Function): any;
+        getItem(): any;
+        getPriority(): number;
+        isVisable(): boolean;
+        hide(): void;
+        show(): void;
+    }
 
 	interface IWorkspaceStatic {
 		new():IWorkspace;
 	}
 
+    interface OpenPromise {
+        done(callback : Function) : void
+    }
+
+
 	interface IWorkspace {
 		deserializeParams(params:any):any;
 		serializeParams():{paneContainer:any;fullScreen:boolean;};
 		eachEditor(callback:Function):void;
-		getEditors():IEditor[];
-		open(uri:string, options:any):Q.Promise<View>;
+        getTextEditors():IEditor[];
+        open(uri: string, options: any): OpenPromise;
 		openLicense():void;
 		openSync(uri:string, options:any):any;
-		openUriInPane(uri:string, pane:any, options:any):Q.Promise<View>;
+		//openURIInPane(uri:string, pane:any, options:any):Q.Promise<View>;
 		reopenItemSync():any;
 		registerOpener(opener:(urlToOpen:string)=>any):void;
 		unregisterOpener(opener:Function):void;
@@ -1000,20 +1022,22 @@ declare module AtomCore {
 		saveAll():void;
 		activateNextPane():any;
 		activatePreviousPane():any;
-		paneForUri: (uri:string) => IPane;
+		paneForURI: (uri:string) => IPane;
 		saveActivePaneItem():any;
 		saveActivePaneItemAs():any;
 		destroyActivePaneItem():any;
 		destroyActivePane():any;
-		getActiveTextEditor():IEditor;
+        getActiveTextEditor(): IEditor;
 		increaseFontSize():void;
 		decreaseFontSize():void;
 		resetFontSize():void;
 		itemOpened(item:any):void;
 		onPaneItemDestroyed(item:any):void;
-		destroyed():void;
-		addBottomPanel(options: {item : any; visable : boolean; priority : number;}) : IPanel;
-		onDidChangeActivePaneItem(callback:Function):void;
+        destroyed(): void;
+        onDidChangeActivePaneItem(callback: Function): Disposable;
+        onDidAddTextEditor(callback: Function): Disposable;
+        addModalPanel(o: any): IPanel;
+        addBottomPanel(o : any) : IPanel;
 	}
 
 	interface IAtomSettings {
@@ -1047,7 +1071,8 @@ declare module AtomCore {
 
 	interface IConfig {
 		get(keyPath:string):any;
-		// TBD
+        onDidChange(keyPath: string, callback: Function): Disposable;
+        set(keyPath: string, value : any) : boolean;
 	}
 
 	interface IKeymapManager {
@@ -1065,7 +1090,7 @@ declare module AtomCore {
 		getStylesheetType(): string;
 		load(): IPackage;
 		reset(): void;
-		activate(): Q.Promise<any[]>;
+		//activate(): Q.Promise<any[]>;
 		activateNow(): void;
 	  // TBD
   }
@@ -1086,7 +1111,7 @@ declare module AtomCore {
 		activate():void;
 		registerPackageActivator(activator:any, types:any):void;
 		activatePackages(packages:any):void;
-		activatePackage(name:string):Q.Promise<IPackage>;
+		//activatePackage(name:string):Q.Promise<IPackage>;
 		deactivatePackages():void;
 		deactivatePackage(name:string):void;
 		getActivePackages():any;
@@ -1159,12 +1184,71 @@ declare module AtomCore {
 		new(state:IAtomState):IAtom;
 	}
 
+	class Disposable {
+		constructor(disposalAction:any);
+		dispose():void;
+	}
+
+	class CommandRegistry {
+		add(target:string, commandName:string, callback:Function):Disposable;
+		findCommands(params:Object):Object[];
+		dispatch(target:any,commandName:string):void;
+    }
+
+    
+
+    interface IViewRegistry {
+        getView(o : any) : Element;
+    }
+
+    interface INotificationsOptions {
+        detail: string;
+        dismissable : boolean;
+    }
+
+    interface INotification {}
+
+    interface INotificationManager {
+        addSuccess(message: string, options: INotificationsOptions): INotification;
+        addInfo(message: string, options: INotificationsOptions): INotification;
+        addWarning(message: string, options: INotificationsOptions): INotification;
+        addError(message: string, options: INotificationsOptions): INotification;
+        addFatalError(message: string, options: INotificationsOptions): INotification;
+
+    }
+
+    interface IGrammarRegistery {
+        grammarForScopeName(name : string) : IGrammar
+    }
+
+    interface ITile {
+        getPriority(): number;
+        getItem(): JQuery;
+        destroy() : void;
+    }
+
+    interface IStatusBar {
+        addLeftTile(o: any): ITile;
+        addRightTile(o: any): ITile;
+        getLeftTiles(): ITile[];
+        getRightTiles(): ITile[];
+    }
+
+
 	// https://atom.io/docs/api/v0.106.0/api/classes/Atom.html
 	/* Global Atom class : instance members */
 	interface IAtom {
 		constructor:IAtomStatic;
+        
+        //***************
+        views: IViewRegistry;
+        notifications: INotificationManager;
+        grammars: IGrammarRegistery;
+        on(name : string, callback : Function) : Disposable;
 
-		state:IAtomState;
+        
+        //***************
+        state: IAtomState;
 		mode:string;
 		deserializers:IDeserializerManager;
 		config: IConfig;
@@ -1188,6 +1272,8 @@ declare module AtomCore {
 		workspaceView: IWorkspaceView;
 		workspace: IWorkspace;
 		// really exists? end
+
+		commands: CommandRegistry;
 
 		initialize:Function;
 		// registerRepresentationClass:Function;
@@ -1243,9 +1329,6 @@ declare module AtomCore {
 		getUserInitScriptPath:Function;
 		requireUserInitScript:Function;
 		requireWithGlobals:Function;
-
-		on(name : string, callback : Function) : void;
-		emit(name : string, data : any) : void;
 	}
 
 	interface IBufferedNodeProcessStatic {
@@ -1771,335 +1854,10 @@ declare module "atom" {
 		cancel():any;
 	}
 
+
+
 	var WorkspaceView:AtomCore.IWorkspaceViewStatic;
 
 	var Task:AtomCore.ITaskStatic;
 	var Workspace:AtomCore.IWorkspaceStatic;
-}
-
-
-declare module StatusBar {
-	interface IStatusBarViewStatic {
-		content():any;
-
-		new(...args:any[]):IStatusBarView;
-	}
-
-	interface IStatusBarView extends View {
-
-		initialize():any;
-		attach():any;
-		destroy():any;
-		appendLeft(view:View):any;
-		prependLeft(view:View):any;
-		appendRight(view:View):any;
-		prependRight(view:View):any;
-		getActiveBuffer():TextBuffer.ITextBuffer;
-		getActiveItem():any;
-		storeActiveBuffer():TextBuffer.ITextBuffer;
-		subscribeToBuffer(event:string, callback:Function):any;
-		subscribeAllToBuffer():any[];
-		unsubscribeAllFromBuffer():any[];
-	}
-}
-
-
-
-
-declare module TextBuffer {
-
-	interface IPointStatic {
-		new (row?:number, column?:number):IPoint;
-
-		fromObject(point:IPoint, copy?:boolean):IPoint;
-		fromObject(object:number[]):IPoint;
-		fromObject(object:{row:number; column:number;}):IPoint;
-
-		min(point1:IPoint, point2:IPoint):IPoint;
-		min(point1:number[], point2:IPoint):IPoint;
-		min(point1:{row:number; column:number;}, point2:IPoint):IPoint;
-
-		min(point1:IPoint, point2:number[]):IPoint;
-		min(point1:number[], point2:number[]):IPoint;
-		min(point1:{row:number; column:number;}, point2:number[]):IPoint;
-
-		min(point1:IPoint, point2:{row:number; column:number;}):IPoint;
-		min(point1:number[], point2:{row:number; column:number;}):IPoint;
-		min(point1:{row:number; column:number;}, point2:{row:number; column:number;}):IPoint;
-	}
-
-	interface IPoint {
-		constructor: IPointStatic;
-
-		row:number;
-		column:number;
-
-		copy():IPoint;
-		freeze():IPoint;
-
-		translate(delta:IPoint):IPoint;
-		translate(delta:number[]):IPoint;
-		translate(delta:{row:number; column:number;}):IPoint;
-
-		add(other:IPoint):IPoint;
-		add(other:number[]):IPoint;
-		add(other:{row:number; column:number;}):IPoint;
-
-		splitAt(column:number):IPoint[];
-		compare(other:IPoint):number;
-		isEqual(other:IPoint):boolean;
-		isLessThan(other:IPoint):boolean;
-		isLessThanOrEqual(other:IPoint):boolean;
-		isGreaterThan(other:IPoint):boolean;
-		isGreaterThanOrEqual(other:IPoint):boolean;
-		toArray():number[];
-		serialize():number[];
-	}
-
-	interface IRangeStatic {
-		deserialize(array:IPoint[]):IRange;
-
-		fromObject(object:IPoint[]):IRange;
-
-		fromObject(object:IRange, copy?:boolean):IRange;
-
-		fromObject(object:{start: IPoint; end: IPoint}):IRange;
-		fromObject(object:{start: number[]; end: IPoint}):IRange;
-		fromObject(object:{start: {row:number; column:number;}; end: IPoint}):IRange;
-
-		fromObject(object:{start: IPoint; end: number[]}):IRange;
-		fromObject(object:{start: number[]; end: number[]}):IRange;
-		fromObject(object:{start: {row:number; column:number;}; end: number[]}):IRange;
-
-		fromObject(object:{start: IPoint; end: {row:number; column:number;}}):IRange;
-		fromObject(object:{start: number[]; end: {row:number; column:number;}}):IRange;
-		fromObject(object:{start: {row:number; column:number;}; end: {row:number; column:number;}}):IRange;
-
-		fromText(point:IPoint, text:string):IRange;
-		fromText(point:number[], text:string):IRange;
-		fromText(point:{row:number; column:number;}, text:string):IRange;
-		fromText(text:string):IRange;
-
-		fromPointWithDelta(startPoint:IPoint, rowDelta:number, columnDelta:number):IRange;
-		fromPointWithDelta(startPoint:number[], rowDelta:number, columnDelta:number):IRange;
-		fromPointWithDelta(startPoint:{row:number; column:number;}, rowDelta:number, columnDelta:number):IRange;
-
-		new(point1:IPoint, point2:IPoint):IRange;
-		new(point1:number[], point2:IPoint):IRange;
-		new(point1:{row:number; column:number;}, point2:IPoint):IRange;
-
-		new(point1:IPoint, point2:number[]):IRange;
-		new(point1:number[], point2:number[]):IRange;
-		new(point1:{row:number; column:number;}, point2:number[]):IRange;
-
-		new(point1:IPoint, point2:{row:number; column:number;}):IRange;
-		new(point1:number[], point2:{row:number; column:number;}):IRange;
-		new(point1:{row:number; column:number;}, point2:{row:number; column:number;}):IRange;
-	}
-
-	interface IRange {
-		constructor:IRangeStatic;
-
-		start: IPoint;
-		end: IPoint;
-
-		serialize():number[][];
-		copy():IRange;
-		freeze():IRange;
-		isEqual(other:IRange):boolean;
-		isEqual(other:IPoint[]):boolean;
-
-		compare(object:IPoint[]):number;
-
-		compare(object:{start: IPoint; end: IPoint}):number;
-		compare(object:{start: number[]; end: IPoint}):number;
-		compare(object:{start: {row:number; column:number;}; end: IPoint}):number;
-
-		compare(object:{start: IPoint; end: number[]}):number;
-		compare(object:{start: number[]; end: number[]}):number;
-		compare(object:{start: {row:number; column:number;}; end: number[]}):number;
-
-		compare(object:{start: IPoint; end: {row:number; column:number;}}):number;
-		compare(object:{start: number[]; end: {row:number; column:number;}}):number;
-		compare(object:{start: {row:number; column:number;}; end: {row:number; column:number;}}):number;
-
-		isSingleLine():boolean;
-		coversSameRows(other:IRange):boolean;
-
-		add(object:IPoint[]):IRange;
-
-		add(object:{start: IPoint; end: IPoint}):IRange;
-		add(object:{start: number[]; end: IPoint}):IRange;
-		add(object:{start: {row:number; column:number;}; end: IPoint}):IRange;
-
-		add(object:{start: IPoint; end: number[]}):IRange;
-		add(object:{start: number[]; end: number[]}):IRange;
-		add(object:{start: {row:number; column:number;}; end: number[]}):IRange;
-
-		add(object:{start: IPoint; end: {row:number; column:number;}}):IRange;
-		add(object:{start: number[]; end: {row:number; column:number;}}):IRange;
-		add(object:{start: {row:number; column:number;}; end: {row:number; column:number;}}):IRange;
-
-		translate(startPoint:IPoint, endPoint:IPoint):IRange;
-		translate(startPoint:IPoint):IRange;
-
-		intersectsWith(otherRange:IRange):boolean;
-		containsRange(otherRange:IRange, exclusive:boolean):boolean;
-
-		containsPoint(point:IPoint, exclusive:boolean):boolean;
-		containsPoint(point:number[], exclusive:boolean):boolean;
-		containsPoint(point:{row:number; column:number;}, exclusive:boolean):boolean;
-
-		intersectsRow(row:number):boolean;
-		intersectsRowRange(startRow:number, endRow:number):boolean;
-		union(otherRange:IRange):IRange;
-		isEmpty():boolean;
-		toDelta():IPoint;
-		getRowCount():number;
-		getRows():number[];
-	}
-
-	interface IHistory {
-		// TBD
-	}
-
-	interface IMarkerManager {
-		// TBD
-	}
-
-	interface IMarker {
-		// TBD
-	}
-
-	interface IBufferPatch {
-		// TBD
-	}
-
-	interface ITextBufferStatic {
-		Point: IPointStatic;
-		Range: IRangeStatic;
-		newlineRegex:any;
-
-		new (text:string): ITextBuffer;
-		new (params:any): ITextBuffer;
-	}
-
-	interface IFile {
-		path : string;
-	}
-
-	interface ITextBuffer extends Emissary.IEmitter, Emissary.ISubscriber {
-		// Delegator.includeInto(TextBuffer);
-		// Serializable.includeInto(TextBuffer);
-
-		cachedText:string;
-		stoppedChangingDelay:number;
-		stoppedChangingTimeout:any;
-		cachedDiskContents:string;
-		conflict:boolean;
-		file: IFile; // pathwatcher.IFile
-		refcount:number;
-
-		lines:string[];
-		lineEndings:string[];
-		offsetIndex:any; // span-skip-list.SpanSkipList
-		history:IHistory;
-		markers:IMarkerManager;
-		loaded:boolean;
-		digestWhenLastPersisted:string;
-		modifiedWhenLastPersisted:boolean;
-		useSerializedText:boolean;
-
-		deserializeParams(params:any):any;
-		serializeParams():any;
-
-		getText():string;
-		getLines():string;
-		isEmpty():boolean;
-		getLineCount():number;
-		getLastRow():number;
-		lineForRow(row:number):string;
-		getLastLine():string;
-		lineEndingForRow(row:number):string;
-		lineLengthForRow(row:number):number;
-		setText(text:string):IRange;
-		setTextViaDiff(text:any):any[];
-		setTextInRange(range:IRange, text:string, normalizeLineEndings?:boolean):IRange;
-		insert(position:IPoint, text:string, normalizeLineEndings?:boolean):IRange;
-		append(text:string, normalizeLineEndings?:boolean):IRange;
-		delete(range:IRange):IRange;
-		deleteRow(row:number):IRange;
-		deleteRows(startRow:number, endRow:number):IRange;
-		buildPatch(oldRange:IRange, newText:string, normalizeLineEndings?:boolean):IBufferPatch;
-		applyPatch(patch:IBufferPatch):any;
-		getTextInRange(range:IRange):string;
-		clipRange(range:IRange):IRange;
-		clipPosition(position:IPoint):IPoint;
-		getFirstPosition():IPoint;
-		getEndPosition():IPoint;
-		getRange():IRange;
-		rangeForRow(row:number, includeNewline?:boolean):IRange;
-		characterIndexForPosition(position:IPoint):number;
-		positionForCharacterIndex(offset:number):IPoint;
-		getMaxCharacterIndex():number;
-		loadSync():ITextBuffer;
-		load():Q.IPromise<ITextBuffer>;
-		finishLoading():ITextBuffer;
-		handleTextChange(event:any):any;
-		destroy():any;
-		isAlive():boolean;
-		isDestroyed():boolean;
-		isRetained():boolean;
-		retain():ITextBuffer;
-		release():ITextBuffer;
-		subscribeToFile():any;
-		hasMultipleEditors():boolean;
-		reload():any;
-		updateCachedDiskContentsSync():string;
-		updateCachedDiskContents():Q.IPromise<string>;
-		getBaseName():string;
-		getPath():string;
-		getUri():string;
-		setPath(filePath:string):any;
-		save():void;
-		saveAs(filePath:string):any;
-		isModified():boolean;
-		isInConflict():boolean;
-		destroyMarker(id:any):any;
-		matchesInCharacterRange(regex:any, startIndex:any, endIndex:any):any[];
-		scan(regex:any, iterator:any):any;
-		backwardsScan(regex:any, iterator:any):any;
-		replace(regex:any, replacementText:any):any;
-		scanInRange(regex:any, range:any, iterator:any, reverse:any):any;
-		backwardsScanInRange(regex:any, range:any, iterator:any):any;
-		isRowBlank(row:number):boolean;
-		previousNonBlankRow(startRow:number):number;
-		nextNonBlankRow(startRow:number):number;
-		usesSoftTabs():boolean;
-		cancelStoppedChangingTimeout():any;
-		scheduleModifiedEvents():any;
-		emitModifiedStatusChanged(modifiedStatus:any):any;
-		logLines(start:number, end:number):void;
-
-		// delegate to history property
-		undo():any;
-		redo():any;
-		transact(fn:Function):any;
-		beginTransaction():any;
-		commitTransaction():any;
-		abortTransaction():any;
-		clearUndoStack():any;
-
-		// delegate to markers property
-		markRange(range:any, properties:any):any;
-		markPosition(range:any, properties:any):any;
-		getMarker(id:number):IMarker;
-		getMarkers():IMarker[];
-		getMarkerCount():number;
-	}
-}
-
-declare module "text-buffer" {
-	var _: TextBuffer.ITextBufferStatic;
-	export = _;
 }

@@ -66,12 +66,12 @@ module FAKE =
             let build = BuildList |> Seq.find(fun n -> let desc = sprintf "%s - %s %s" n.Name (n.Start.ToShortDateString()) (n.Start.ToShortTimeString())
                                                        desc = buildDescription.data)
 
-            Globals.atom.workspace.openEditor(buildDescription.data, {split = "right"}).created(fun ed ->
+            Globals.atom.workspace._open(buildDescription.data, {split = "right"})._done((fun ed ->
                 build.TextEditor <- Some ed
-                ed.insertText build.Output
-                ed.onDidDestroy(fun _ -> build.TextEditor <- None) |> ignore
+                ed.insertText build.Output |> ignore
+                ed.onDidDestroy((fun _ -> build.TextEditor <- None) |> unbox<Function>) |> ignore
                 let view = Globals.atom.views.getView ed
-                setComponentEnabled(view, false))
+                setComponentEnabled(view, false)) |> unbox<Function>)
             ()
         )
         ListView.regiterListView stopChangingCallback cancelledCallback confirmedCallback viewForItem false
@@ -124,12 +124,12 @@ module FAKE =
                 if regex.Success then
                     let build = p + "/" + regex.Groups.[1].Value
                     File <- Some (path, build )
-                    Atom.addCommand("atom-workspace", "FAKE: Build", BuildTask)
-                    Atom.addCommand("atom-workspace", "FAKE: Show Builds", ShowBuildList)
+                    Globals.atom.commands.add("atom-workspace", "FAKE: Build", BuildTask |> unbox<Function>) |> ignore
+                    Globals.atom.commands.add("atom-workspace", "FAKE: Show Builds", ShowBuildList |> unbox<Function>) |> ignore
                 else
-                    Atom.addCommand("atom-workspace", "FAKE: Build", FAKENotFound)
+                    Globals.atom.commands.add("atom-workspace", "FAKE: Build", FAKENotFound |> unbox<Function>) |> ignore
                 Globals.console.log File
-            | None -> Atom.addCommand("atom-workspace", "FAKE: Build", FAKENotFound)
+            | None -> Globals.atom.commands.add("atom-workspace", "FAKE: Build", FAKENotFound |> unbox<Function>) |> ignore
 
         if JS.isDefined p then Globals.readdir(p, System.Func<NodeJS.ErrnoException, string array, unit>(proj))
 

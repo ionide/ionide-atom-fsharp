@@ -17,7 +17,7 @@ module ToolbarHandler =
     let mutable private ed  = createEmpty<IEditor>()
     let mutable private bar = createEmpty<IPanel>()
     let private subscriptions = ResizeArray()
-    let mutable cursorSubscription : IDisposable option = None
+    let mutable cursorSubscription : Disposable option = None
 
 
     // Create toolbar to display the type signature of the symbol under the cursor
@@ -42,11 +42,16 @@ module ToolbarHandler =
     // Because the type signature for classes is multiple lines and will not fit
     // within the toolbar we cut out the list of members and properties
     let format_data (tinfo:string) = 
-        let ti  =tinfo.Trim()
-        if ti.StartsWith("type") then
-            let idx = ti.IndexOf('=')
-            ti.Substring(0,idx-1)
-        else ti
+        let ti  = tinfo.Trim().Replace('\r',' ').Replace('\n',' ')
+        let ti' =
+            if ti.StartsWith("Multiple") then
+                let idx = ti.IndexOf("type")
+                ti.Substring(idx)
+            else ti
+        if ti'.StartsWith("type") then
+            let idx = ti'.IndexOf('=')
+            ti'.Substring(0,idx-1)
+        else ti'
         |> (+) "> "
         
 
@@ -77,17 +82,17 @@ module ToolbarHandler =
         remove()
         if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
             ed <- editor
-            cursorSubscription <-  editor.onDidChangeCursorPosition(fun n -> askForToolbar ed ) |> Some
+            cursorSubscription <-  editor.onDidChangeCursorPosition((fun n -> askForToolbar ed) |> unbox<Function>   ) |> Some
 
     let activate () =
         let b =
             let t = createToolbar ()
-            Globals.atom.workspace.addBottomPanel(unbox<AnonymousType499>{PanelOptions.item = t; PanelOptions.priority = 100; PanelOptions.visible = true})
+            Globals.atom.workspace.addBottomPanel({PanelOptions.item = t; PanelOptions.priority = 100; PanelOptions.visible = true})
         bar <- b
         Globals.atom.workspace.getActiveTextEditor() |> initialize
-        Globals.atom.workspace.onDidChangeActivePaneItem(fun ed -> initialize ed) |> ignore
+        Globals.atom.workspace.onDidChangeActivePaneItem((fun ed -> initialize ed) |> unbox<Function>  ) |> ignore
         
-        let tp = Globals.atom.workspace.onDidChangeActivePaneItem(fun ed -> handleEditorChange b ed)
+        let tp = Globals.atom.workspace.onDidChangeActivePaneItem((fun ed -> handleEditorChange b ed) |> unbox<Function>  )
         subscriptions.Add tp
 
         let tb = unbox<Function> cursorHandler |> Events.on Events.Toolbars

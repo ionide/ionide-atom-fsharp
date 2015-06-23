@@ -71,7 +71,7 @@ module AutocompleteProvider =
 
 
     let create () =
-        Atom.addCommand("atom-text-editor","fsharp:autocomplete", fun _ ->
+        Globals.atom.commands.add("atom-text-editor","fsharp:autocomplete", (fun _ ->
             dispatchAutocompleteCommand ()
-            isForced <- true)
+            isForced <- true) |> unbox<Function>) |> ignore
         { selector = ".source.fsharp"; disableForSelector = ".source.fsharp .string"; inclusionPriority = 1; excludeLowerPriority = true; getSuggestions = getSuggestion}

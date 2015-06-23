@@ -21,7 +21,7 @@ module Process =
         Globals._process.platform.StartsWith("win")
 
     ///Create new notification or append text to existing notification
-    let notice (currentNotification:Notification option ref) isError text details =
+    let notice (currentNotification: INotification option ref) isError text details =
         match !currentNotification with
         | Some n -> let view = Globals.atom.views.getView (n)
                     let t = ".content .detail .detail-content" |> jqC view
@@ -29,9 +29,9 @@ module Process =
                     t.append(line) |> ignore
                     ()
         | None -> let n = if isError then
-                            Globals.atom.notifications.addError(text, { detail = details; dismissable = true })
+                            Globals.atom.notifications.addError(text, { detail = details; dismissable = true } |> unbox<INotificationsOptions> )
                           else
-                            Globals.atom.notifications.addInfo(text, { detail = details; dismissable = true })
+                            Globals.atom.notifications.addInfo(text, { detail = details; dismissable = true } |> unbox<INotificationsOptions>)
                   currentNotification := Some n
 
     ///Handle process output for spawnWithNotifications
@@ -61,7 +61,7 @@ module Process =
     ///Spawn process
     let spawn location linuxCmd (cmd : string) =
         let cmd' = if cmd = "" then [||] else cmd.Split(' ')
-        let options = {cwd = Globals.atom.project.getPaths().[0]} |> unbox<AnonymousType599>
+        let options = {cwd = Globals.atom.project.getPaths().[0]} |> unbox<AnonymousType598>
         let procs = if isWin() then
                         Globals.spawn(location, cmd', options)
                     else
@@ -79,13 +79,13 @@ module Process =
     ///Spawn process - same way on Windows and non-Windows
     let spawnSame location (cmd : string) =
         let cmd' = if cmd = "" then [||] else cmd.Split(' ')
-        let options = {cwd = Globals.atom.project.getPaths().[0]} |> unbox<AnonymousType599>
+        let options = {cwd = Globals.atom.project.getPaths().[0]} |> unbox<AnonymousType598>
         Globals.spawn(location, cmd', options)
 
     //Spawn process - add default notification handlers
     let spawnWithNotifications location linuxCmd (cmd : string) =
         let cmd' = if cmd = "" then [||] else cmd.Split(' ')
-        let options = {cwd = Globals.atom.project.getPaths().[0]} |> unbox<AnonymousType599>
+        let options = {cwd = Globals.atom.project.getPaths().[0]} |> unbox<AnonymousType598>
         let procs = if isWin() then
                         Globals.spawn(location, cmd', options)
                     else

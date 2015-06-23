@@ -77,7 +77,7 @@ module ErrorPanel =
         addMinimize()
         Globals.atom.workspace.getActiveTextEditor() |> handleEditorChange p
 
-        let t1 = Globals.atom.workspace.onDidChangeActivePaneItem (fun ed -> handleEditorChange p ed)
+        let t1 = Globals.atom.workspace.onDidChangeActivePaneItem ((fun ed -> handleEditorChange p ed) |> unbox<Function>)
         let t2 = unbox<Function> handle |> Events.on Events.Errors
         subscriptions.Add t1
         subscriptions.Add t2

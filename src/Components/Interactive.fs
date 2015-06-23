@@ -42,14 +42,14 @@ module Interactive =
     let private openFsi () =
         let edit = Globals.atom.workspace.getActiveTextEditor()
         let g = Globals.atom.grammars.grammarForScopeName("source.fsharp")
-        Globals.atom.workspace.openEditor("F# Interactive", {split = "right"}).created(fun ed ->
+        Globals.atom.workspace._open("F# Interactive", {split = "right"})._done((fun ed ->
             fsiEditor <- Some ed
             ed.setGrammar g
             let view = Globals.atom.views.getView ed
             setComponentEnabled(view, false)
             if fsipath <> "" then
                 resetFsi ()
-            )
+            ) |> unbox<Function>)
 
     /// Send a block of text to FSI
     // TODO - trying to get it to open the repl if it's not already open
@@ -100,11 +100,11 @@ module Interactive =
 
     let activate () =
         let s = unbox<Function>(handleLocation) |> Events.on Events.CompilerLocation
-        Atom.addCommand("atom-workspace", "FSI:Open", openFsi)
-        Atom.addCommand("atom-text-editor", "FSI:Send-Line", sendLine)
-        Atom.addCommand("atom-text-editor", "FSI:Send-Selection", sendSelection)
-        Atom.addCommand("atom-text-editor", "FSI:Send-File", sendFile)
-        Atom.addCommand("atom-text-editor", "FSI:Reset-REPL", resetFsi)
+        Globals.atom.commands.add("atom-workspace", "FSI:Open", openFsi |> unbox<Function>) |> ignore
+        Globals.atom.commands.add("atom-text-editor", "FSI:Send-Line", sendLine |> unbox<Function>)  |> ignore
+        Globals.atom.commands.add("atom-text-editor", "FSI:Send-Selection", sendSelection |> unbox<Function>)  |> ignore
+        Globals.atom.commands.add("atom-text-editor", "FSI:Send-File", sendFile |> unbox<Function>)  |> ignore
+        Globals.atom.commands.add("atom-text-editor", "FSI:Reset-REPL", resetFsi |> unbox<Function>)  |> ignore
         subscriptions.Add s
         Globals.atom.workspace.getTextEditors() |> Array.iter(fun e ->
             if e.getTitle() = "F# Interactive" then

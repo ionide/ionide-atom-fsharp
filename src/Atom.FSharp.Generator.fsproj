@@ -76,29 +76,14 @@
     <Reference Include="FunScript.TypeScript.Binding.atom">
       <HintPath>..\lib\FunScript.TypeScript.Binding.atom.dll</HintPath>
     </Reference>
-    <Reference Include="FunScript.TypeScript.Binding.emissary">
-      <HintPath>..\lib\FunScript.TypeScript.Binding.emissary.dll</HintPath>
-    </Reference>
     <Reference Include="FunScript.TypeScript.Binding.jquery">
       <HintPath>..\lib\FunScript.TypeScript.Binding.jquery.dll</HintPath>
     </Reference>
     <Reference Include="FunScript.TypeScript.Binding.lib">
       <HintPath>..\lib\FunScript.TypeScript.Binding.lib.dll</HintPath>
     </Reference>
-    <Reference Include="FunScript.TypeScript.Binding.mixto">
-      <HintPath>..\lib\FunScript.TypeScript.Binding.mixto.dll</HintPath>
-    </Reference>
     <Reference Include="FunScript.TypeScript.Binding.node">
       <HintPath>..\lib\FunScript.TypeScript.Binding.node.dll</HintPath>
-    </Reference>
-    <Reference Include="FunScript.TypeScript.Binding.pathwatcher">
-      <HintPath>..\lib\FunScript.TypeScript.Binding.pathwatcher.dll</HintPath>
-    </Reference>
-    <Reference Include="FunScript.TypeScript.Binding.q">
-      <HintPath>..\lib\FunScript.TypeScript.Binding.q.dll</HintPath>
-    </Reference>
-    <Reference Include="FunScript.TypeScript.Binding.space_pen">
-      <HintPath>..\lib\FunScript.TypeScript.Binding.space_pen.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Choose>

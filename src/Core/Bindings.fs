@@ -5,17 +5,6 @@ open FunScript.TypeScript
 open FunScript.TypeScript.AtomCore
 open FunScript.TypeScript.atom
 
-[<ReflectedDefinition>][<AutoOpen>]
-module Atom =
-
-
-
-    [<JSEmit("var cmd = {}; cmd[{1}]=function() { return {2}(); }; return atom.commands.add({0}, cmd);")>]
-    let addCommand(name:string, cmdName:string, func:unit -> unit) : unit = failwith "JS"
-
-    [<JSEmitInline("atom.commands.add({0}, {1}, {2});")>]
-    let addCommand'(name:string, context: string, func:unit -> unit) : unit = failwith "JS"
-
 module Promise =
     type Promise = class end
 
@@ -45,20 +34,13 @@ module JS =
     [<JSEmitInline("({0} != undefined)")>]
     let isDefined (o: obj) : bool = failwith "never"
 
-type ViewRegistry        = interface end
-type NotificationManager = interface end
-type Notification        = interface end
-type IDirectory          = interface end
-type IDisposable         = interface end
-type IStatusBar          = interface end
-type ITile               = interface end
-type IEmitter            = interface end
-type OpenEditorPromise   = interface end
-type IGrammarRegistery   = interface end
+module Emitter =
+    [<FunScript.JSEmitInline("new Emitter()")>]
+    let create () : IEmitter = failwith "JS"
+
 
 [<AutoOpen>]
-module Bindings =
-
+module HelperStructures = 
     type StatusBarOptions = {
         item     : JQuery;
         priority : int
@@ -108,159 +90,13 @@ module Bindings =
         cwd : string
     }
 
-    type OpenEditorPromise with
-        [<FunScript.JSEmitInline("{0}.done({1})")>]
-        member __.created(cb : IEditor -> unit) : unit = failwith "JS"
+[<AutoOpen>]
+module Bindings =
 
-    module Emitter =
-        [<FunScript.JSEmitInline("new Emitter()")>]
-        let create () : IEmitter = failwith "JS"
-
-    type IGrammarRegistery with
-        [<FunScript.JSEmitInline("{0}.grammarForScopeName({1})")>]
-        member __.grammarForScopeName(name : string) : IGrammar = failwith "JS"
-
-    type IEmitter with
-        [<FunScript.JSEmitInline("{0}.on({1}, {2})")>]
-        member __.on(name : string, cb : Function) : unit = failwith "JS"
-
-        [<FunScript.JSEmitInline("{0}.on({1}, {2})")>]
-        member __.on'(name : string, cb : Function) : IDisposable = failwith "JS"
-
-        [<FunScript.JSEmitInline("{0}.emit({1}, {2})")>]
-        member __.emit(name : string, o : obj) : unit = failwith "JS"
-
-    type IDisposable with
-        [<FunScript.JSEmitInline("({0}.dispose())")>]
-        member __.dispose() : unit = failwith "never"
-
-    type IDirectory with
-        [<FunScript.JSEmitInline("({0}.resolve())")>]
-        member __.resolve() : string = failwith "never"
-
-    type IProject with
-        [<FunScript.JSEmitInline("({0}.getPaths())")>]
-        member __.getPaths() : string [] = failwith "never"
-
-        [<FunScript.JSEmitInline("({0}.getDirectories())")>]
-        member __.getDirectories() : IDirectory [] = failwith "never"
-
-        [<FunScript.JSEmitInline("({0}.onDidChangePaths({1}))")>]
-        member __.onDidChangePaths(cb: string[] -> unit) : IDisposable = failwith "JS"
-
-    type IWorkspace with
-        [<FunScript.JSEmitInline("{0}.addModalPanel({1})")>]
-        member __.addModalPanel(o: obj) : IPanel = failwith "JS"
-
-        [<FunScript.JSEmitInline("{0}.open({1}, {2})")>]
-        member __.open'(fn : string, op : OpenOptions) : unit = failwith "JS"
-
-        [<FunScript.JSEmitInline("{0}.open({1}, {2})")>]
-        member __.openEditor(fn : string, op : OpenEditorOptions) : OpenEditorPromise = failwith "JS"
-
-        [<FunScript.JSEmitInline("{0}.onDidChangeActivePaneItem({1})")>]
-        member __.onDidChangeActivePaneItem(cb: IEditor -> unit) : IDisposable = failwith "JS"
-
-        [<FunScript.JSEmitInline("{0}.onDidAddTextEditor({1})")>]
-        member __.onDidAddTextEditor(cb: AddTextEditorEvent -> unit) : IDisposable = failwith "JS"
-
-        [<FunScript.JSEmitInline("{0}.getTextEditors()")>]
-        member __.getTextEditors() : IEditor array = failwith "JS"
-
-
-
-    type IAtom with
-        [<FunScript.JSEmitInline("({0}.views)")>]
-        member __.views with get () : ViewRegistry = failwith "never"
-
-        [<FunScript.JSEmitInline("({0}.notifications)")>]
-        member __.notifications with get () : NotificationManager = failwith "never"
-
-        [<FunScript.JSEmitInline("({0}.grammars)")>]
-        member __.grammars with get () : IGrammarRegistery = failwith "never"
-
-
-        [<FunScript.JSEmitInline("{0}.on({1}, {2})")>]
-        member __.on'(name : string, cb : Function) : IDisposable = failwith "JS"
-
-    type NotificationManager with
-        [<FunScript.JSEmitInline("{0}.addSuccess({1}, {2})")>]
-        member __.addSuccess(message: string, options: NotificationsOptions) : Notification = failwith "JS"
-
-        [<FunScript.JSEmitInline("{0}.addInfo({1}, {2})")>]
-        member __.addInfo(message: string, options: NotificationsOptions) : Notification = failwith "JS"
-
-        [<FunScript.JSEmitInline("{0}.addWarning({1}, {2})")>]
-        member __.addWarning(message: string, options: NotificationsOptions) : Notification = failwith "JS"
-
-        [<FunScript.JSEmitInline("{0}.addError({1}, {2})")>]
-        member __.addError(message: string, options: NotificationsOptions) : Notification = failwith "JS"
-
-        [<FunScript.JSEmitInline("{0}.addFatalError({1}, {2})")>]
-        member __.addFatalError(message: string, options: NotificationsOptions) : Notification = failwith "JS"
-
-    type IStatusBar with
-        [<FunScript.JSEmitInline("{0}.addLeftTile({1})")>]
-        member __.addLeftTile(o: StatusBarOptions) : ITile = failwith "JS"
-
-        [<FunScript.JSEmitInline("{0}.addRightTile({1})")>]
-        member __.addRightTile(o: StatusBarOptions) : ITile = failwith "JS"
-
-        [<FunScript.JSEmitInline("{0}.getLeftTiles()")>]
-        member __.getLeftTiles() : ITile[] = failwith "JS"
-
-        [<FunScript.JSEmitInline("{0}.getRightTiles()")>]
-        member __.getRightTiles() : ITile[] = failwith "JS"
-
-    type ITile with
-        [<FunScript.JSEmitInline("{0}.getPriority()")>]
-        member __.getPriority() : int = failwith "JS"
-
-        [<FunScript.JSEmitInline("{0}.getItem()")>]
-        member __.getItem() : JQuery = failwith "JS"
-
-        [<FunScript.JSEmitInline("{0}.destroy()")>]
-        member __.destroy() : unit = failwith "JS"
-
-    type ViewRegistry with
-        [<FunScript.JSEmitInline("({0}.getView({1}))")>]
-        member __.getView(o : obj) : Element = failwith "never"
 
     type TextBuffer.ITextBuffer with
         [<FunScript.JSEmitInline("({0}.onDidStopChanging({1}))")>]
-        member __.onDidStopChanging(cb: unit -> unit) : IDisposable = failwith "JS"
-
-    type IEditor with
-        [<FunScript.JSEmitInline("({0}.onDidSave({1}))")>]
-        member __.onDidSave(cb: obj -> unit) : IDisposable = failwith "JS"
-
-        [<FunScript.JSEmitInline("({0}.lineTextForBufferRow({1}))")>]
-        member __.lineTextForBufferRow(row: float) : string = failwith "JS"
-
-        [<FunScript.JSEmitInline("({0}.getCursorBufferPosition())")>]
-        member __.getCursorBufferPosition() : Point = failwith "JS"
-
-        [<FunScript.JSEmitInline("({0}.moveDown({1}))")>]
-        member __.moveDown(i : float) : unit = failwith "JS"
-
-        [<FunScript.JSEmitInline("({0}.moveToBeginningOfLine())")>]
-        member __.moveToBeginningOfLine() : unit = failwith "JS"
-
-        [<FunScript.JSEmitInline("({0}.onDidChangeCursorPosition({1}))")>]
-        member __.onDidChangeCursorPosition(cb: obj -> unit) : IDisposable = failwith "JS"
-
-        [<FunScript.JSEmitInline("({0}.onDidDestroy({1}))")>]
-        member __.onDidDestroy(cb: obj -> unit) : IDisposable = failwith "JS"
-        
-
-    type IConfig with
-        [<FunScript.JSEmitInline("({0}.onDidChange({1},{2}, {3}))")>]
-        member __.onDidChange(keyPath: string, optional : obj, cb: obj -> unit) : IDisposable = failwith "JS"
-        [<FunScript.JSEmitInline("({0}.onDidChange({1},{2}))")>]
-        member __.onDidChange'(keyPath: string, cb: obj -> unit) : IDisposable = failwith "JS"
-        [<FunScript.JSEmitInline("({0}.set({1},{2}))")>]
-        member __.set(keyPath: string, value: obj) : bool = failwith "JS"
-
+        member __.onDidStopChanging(cb: unit -> unit) : Disposable = failwith "JS"    
 
     [<JSEmitInline("{0}.decorateMarker({1}, {type: 'highlight', class: {2}})")>]
     let decorateMarker(ed : IEditor, marker : IDisplayBufferMarker, cls : string) : unit = failwith "JS"

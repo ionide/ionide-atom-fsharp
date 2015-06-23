@@ -25,7 +25,7 @@ declare module PathWatcher {
 		getBaseName():string;
 		write(text:string):void;
 		readSync(flushCache:boolean):string;
-		read(flushCache?:boolean):Q.Promise<string>;
+		//read(flushCache?:boolean):Q.Promise<string>;
 		exists():boolean;
 		setDigest(contents:string):void;
 		getDigest():string;
@@ -55,7 +55,8 @@ declare module PathWatcher {
 		getEntries(callback:Function):void;
 		subscribeToNativeChangeEvents():void;
 		unsubscribeFromNativeChangeEvents():void;
-		isPathPrefixOf(prefix:string, fullPath:string):boolean;
+        isPathPrefixOf(prefix: string, fullPath: string): boolean;
+        resolve() : string;
 	}
 }
 
