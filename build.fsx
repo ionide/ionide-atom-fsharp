@@ -121,7 +121,7 @@ Target "GenerateBindings" (fun () ->
           let deps, lines =
             [ for line in lines do
                 let mtch = reg.Match(line)
-                if mtch.Success then
+                if mtch.Success then                                                       
                   let depName = Path.GetFileName(mtch.Groups.[1].Value)
                   if not (noInline.Contains depName) then yield true, depName
                  else yield false, line ] |> List.partition fst
@@ -158,7 +158,7 @@ Target "InstallDependencies" (fun _ ->
     let srcDir = "src/atom-fsharp"
     let result =
         ExecProcess (fun info ->
-            info.FileName <- apmTool
+            info.FileName <- apmTool                                                          
             info.WorkingDirectory <- srcDir
             info.Arguments <- args) System.TimeSpan.MaxValue
     if result <> 0 then failwithf "Error during running apm with %s" args
