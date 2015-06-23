@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40418.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Atom.FSharp.Generator", "src\Atom.FSharp.Generator.fsproj", "{D1081029-2369-4DAA-9F33-2353C5C9ED02}"
 EndProject
@@ -13,6 +13,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{67EDE4A4
 		paket.lock = paket.lock
 		README.md = README.md
 		RELEASE_NOTES.md = RELEASE_NOTES.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Typings", "Typings", "{712104FC-35E5-4C31-AA35-3EB451B3FEBD}"
+	ProjectSection(SolutionItems) = preProject
+		typings\atom\atom.d.ts = typings\atom\atom.d.ts
+		typings\emissary\emissary.d.ts = typings\emissary\emissary.d.ts
+		typings\jquery\jquery.d.ts = typings\jquery\jquery.d.ts
+		typings\mixto\mixto.d.ts = typings\mixto\mixto.d.ts
+		typings\node\node.d.ts = typings\node\node.d.ts
+		typings\pathwatcher\pathwatcher.d.ts = typings\pathwatcher\pathwatcher.d.ts
+		typings\q\Q.d.ts = typings\q\Q.d.ts
+		typings\space-pen\space-pen.d.ts = typings\space-pen\space-pen.d.ts
+		typings\status-bar\status-bar.d.ts = typings\status-bar\status-bar.d.ts
+		typings\text-buffer\text-buffer.d.ts = typings\text-buffer\text-buffer.d.ts
 	EndProjectSection
 EndProject
 Global
