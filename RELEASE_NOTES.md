@@ -1,3 +1,6 @@
+#### 0.6.2 - 26.06.2015
+* Update FAKE script detection
+
 #### 0.6.1 - 25.06.2015
 * Internal changes - update to new Atom bindings
 * Fix keyboard shortcuts on Mac.
