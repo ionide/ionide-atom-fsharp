@@ -28,8 +28,8 @@ redistribution for both commercial and non-commercial purposes.
 
 * Clone this repository
 * Run `build.cmd` (for Windows) or `build.sh` (for Linux / Mac ) to build project
-* Copy `src/fsharp` to Atom package folder OR (for easy development) create symbolic directory link beween `src/fsharp` and Atom package folder. It can be done with following command:  
-    ``apm develop fsharp <full path to src/fsharp folder>``
+* Copy `src/atom-fsharp` to Atom package folder OR (for easy development) create symbolic directory link beween `src/atom-fsharp` and Atom package folder. It can be done with following command:  
+    ``apm develop atom-fsharp <full path to src/atom-fsharp folder>``
 * Type ``atom -d`` in command line to run Atom in development mode. If you open any F# file errors panel in the bottom should appear.
 
 ### Maintainer(s)
