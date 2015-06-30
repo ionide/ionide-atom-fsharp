@@ -4,22 +4,14 @@
 module DTO =
 
     type Error = {
-        /// 0-indexed first line of the error block
-        StartLine : int
         /// 1-indexed first line of the error block
-        StartLineAlternate : int
-        /// 0-indexed first column of the error block
-        StartColumn : int
+        StartLine : int
         /// 1-indexed first column of the error block
-        StartColumnAlternate : int
-        /// 0-indexed last line of the error block
-        EndLine : int
+        StartColumn : int
         /// 1-indexed last line of the error block
-        EndLineAlternate : int
-        /// 0-indexed last column of the error block
-        EndColumn : int
+        EndLine : int
         /// 1-indexed last column of the error block
-        EndColumnAlternate : int
+        EndColumn : int
         /// Description of the error
         Message : string
         Severity : string
@@ -39,9 +31,29 @@ module DTO =
         GlyphChar: string
     }
 
+    type SymbolUse = {
+      Filename : string
+      StartLine : int
+      StartColumn : int
+      EndLine : int
+      EndColumn : int
+      IsFromDefinition : bool
+      IsFromAttribute : bool
+      IsFromComputationExpression : bool
+      IsFromDispatchSlotImplementation : bool
+      IsFromPattern : bool
+      IsFromType : bool
+    }
+
+    type SymbolUses = {
+        Name : string
+        Uses : SymbolUse array
+    }
+
     type CompilerLocationResult = {Kind : string; Data : string}
 
     type CompletionResult = {Kind : string; Data : Completion []}
+    type SymbolUseResult = {Kind : string; Data : SymbolUses }
     type TooltipResult = {Kind : string; Data : string}
     type ParseResult = {Kind : string; Data : Error []}
     type FindDeclarationResult = {Kind : string; Data: Declaration}

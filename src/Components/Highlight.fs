@@ -20,7 +20,7 @@ module HighlighterHandler =
         marked <- Array.empty<IDisplayBufferMarker>
         let editor = Globals.atom.workspace.getActiveTextEditor()
         let action (item : DTO.Error) =
-            let marker = editor.markBufferRange([|[|float item.StartLine;float item.StartColumn|];[|float item.EndLine;  float item.EndColumn|]|])
+            let marker = editor.markBufferRange([|[|float (item.StartLine - 1);float (item.StartColumn - 1)|];[|float (item.EndLine - 1);  float (item.EndColumn - 1)|]|])
             let cls = if item.Severity = "Warning" then "highlight-warning" else "highlight-error"
             marked <- Array.append [|marker|] marked
             decorateMarker(editor, marker, cls)

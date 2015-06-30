@@ -22,6 +22,7 @@ module Events =
         | Project
         | Errors
         | Completion
+        | SymbolUse
         | Tooltips
         | Toolbars
         | FindDecl
@@ -35,6 +36,7 @@ module Events =
         | ServerError -> "Fsharp_error"
         | Errors -> "Fsharp_errors"
         | Completion -> "Fsharp_completion"
+        | SymbolUse -> "Fsharp_symboluse"
         | Tooltips -> "FSharp_tooltips"
         | Toolbars -> "FSharp_toolbars"
         | FindDecl -> "FSharp_finddecl"

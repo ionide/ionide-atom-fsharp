@@ -50,6 +50,9 @@ module LanguageService =
                 elif s.Contains "\"Kind\":\"completion\"" then
                     s |> Events.parseAndEmit<DTO.CompletionResult> Events.Completion
                     last <- Events.Completion
+                elif s.Contains "\"Kind\":\"symboluse\"" then
+                    s |> Events.parseAndEmit<DTO.SymbolUseResult> Events.SymbolUse
+                    last <- Events.SymbolUse
                 elif s.Contains "\"Kind\":\"tooltip\"" then
                     if toolbarFlag then
                         s |> Events.parseAndEmit<DTO.TooltipResult> Events.Toolbars
@@ -122,6 +125,10 @@ module LanguageService =
 
     let completion fn line col =
         let str = sprintf "completion \"%s\" %d %d filter\n" fn line col
+        ask str
+
+    let symbolUse fn line col =
+        let str = sprintf "symboluse \"%s\" %d %d" fn line col
         ask str
 
     let tooltip fn line col =
