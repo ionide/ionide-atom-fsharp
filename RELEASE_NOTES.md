@@ -1,3 +1,7 @@
+#### 0.6.3 - 30.06.2015
+* Add usage highlights
+* Remove autocomplete in comments
+
 #### 0.6.2 - 26.06.2015
 * Update FAKE script detection
 

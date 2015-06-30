@@ -27,7 +27,7 @@ module HighlightUse =
             let marker = editor.markBufferRange([|[|float (item.StartLine - 1);float (item.StartColumn - 1)|];[|float (item.EndLine - 1);  float (item.EndColumn - 1)|]|])
             let cls = if item.IsFromDefinition then "highlight-symboluse-declaration" else "highlight-symboluse"
             marked <- Array.append [|marker|] marked
-            decorateMarker(editor, marker, cls)
+            decorateMarker(editor, marker, cls) 
             ()
         data.Data.Uses |> Array.iter(action)
         ()
@@ -53,6 +53,7 @@ module HighlightUse =
 
     let private initialize (editor : IEditor) =
         remove()
+        clearHighlight()
         if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
             ed <- editor
             cursorSubscription <-  editor.onDidChangeCursorPosition((fun n -> askForSymbolUse ed) |> unbox<Function>   ) |> Some

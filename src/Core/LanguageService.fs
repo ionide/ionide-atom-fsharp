@@ -53,6 +53,9 @@ module LanguageService =
                 elif s.Contains "\"Kind\":\"symboluse\"" then
                     s |> Events.parseAndEmit<DTO.SymbolUseResult> Events.SymbolUse
                     last <- Events.SymbolUse
+                elif s.Contains "\"Kind\":\"helptext\"" then
+                    s |> Events.parseAndEmit<DTO.HelptextResult> Events.Helptext
+                    last <- Events.Helptext
                 elif s.Contains "\"Kind\":\"tooltip\"" then
                     if toolbarFlag then
                         s |> Events.parseAndEmit<DTO.TooltipResult> Events.Toolbars
@@ -115,6 +118,10 @@ module LanguageService =
 
     let parse path text =
         let str = "parse \"" + path + "\"\n" + text + "\n<<EOF>>\n"
+        ask str
+
+    let helptext s =
+        let str = sprintf "helptext %s\n" s
         ask str
 
     let parseEditor (editor : IEditor) =

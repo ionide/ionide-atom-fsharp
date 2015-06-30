@@ -51,6 +51,7 @@ module DTO =
     }
 
     type CompilerLocationResult = {Kind : string; Data : string}
+    type HelptextResult = {Kind : string; Data : obj}
 
     type CompletionResult = {Kind : string; Data : Completion []}
     type SymbolUseResult = {Kind : string; Data : SymbolUses }

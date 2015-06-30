@@ -28,6 +28,7 @@ module Events =
         | FindDecl
         | Status
         | CompilerLocation
+        | Helptext
 
     let private getName t =
         match t with
@@ -43,6 +44,7 @@ module Events =
         | Project -> "Fsharp_project"
         | Status -> "Fsharp_status"
         | CompilerLocation -> "Fsharp_compiler"
+        | Helptext -> "Fsharp_helptext"
 
     let private log name o =
         Globals.console.log (name, System.DateTime.Now, o)
