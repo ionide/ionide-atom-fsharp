@@ -33,6 +33,7 @@ type FSharpIDE() =
         FindDeclaration.activate ()
         FAKE.activate ()
         Interactive.activate ()
+        HighlightUse.activate ()
         ()
 
     member x.deactivate() =
@@ -44,6 +45,6 @@ type FSharpIDE() =
         FindDeclaration.deactivate ()
         FAKE.deactivate ()
         Interactive.deactivate ()
-
+        HighlightUse.deactivate ()
         LanguageService.stop ()
         ()
