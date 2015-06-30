@@ -57,14 +57,6 @@ module HighlightUse =
             ed <- editor
             cursorSubscription <-  editor.onDidChangeCursorPosition((fun n -> askForSymbolUse ed) |> unbox<Function>   ) |> Some
 
-    let private handle e =
-        let editor = Globals.atom.workspace.getActiveTextEditor()
-        let name = editor.buffer.file.path;
-        let position = editor.getCursorBufferPosition()
-        Globals.console.log "highlight invoked"
-        LanguageService.symbolUse name (int position.row + 1) (int position.column + 1)
-        Events.once Events.SymbolUse showHighlight
-
     let activate () =
         Globals.atom.workspace.getActiveTextEditor() |> initialize
         Globals.atom.workspace.onDidChangeActivePaneItem((fun ed -> initialize ed) |> unbox<Function>  ) |> ignore
