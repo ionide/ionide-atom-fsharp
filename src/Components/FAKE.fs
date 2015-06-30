@@ -122,7 +122,7 @@ module FAKE =
                                 |> fun n -> n.toString()
                 let regex = Regex.Matches(file, "FAKE.exe.* ([\w]+\.fsx)")
                 if regex.Count > 0 then
-                    [1 .. regex.Count - 1] |> Seq.iter (fun i ->
+                    [0 .. regex.Count - 1] |> Seq.iter (fun i ->
                         if File.IsNone then
                             let build = p + "/" + regex.[i].Groups.[1].Value
                             if Globals.existsSync build then
