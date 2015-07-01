@@ -1,0 +1,7 @@
+J:\GitHub\Forks\atom-fsharp\src\Atom.FSharp.Bindings\bin\Debug\Atom.FSharp.Bindings.XML
+J:\GitHub\Forks\atom-fsharp\src\Atom.FSharp.Bindings\bin\Debug\Atom.FSharp.Bindings.dll
+J:\GitHub\Forks\atom-fsharp\src\Atom.FSharp.Bindings\bin\Debug\Atom.FSharp.Bindings.pdb
+J:\GitHub\Forks\atom-fsharp\src\Atom.FSharp.Bindings\bin\Debug\FSharp.Core.dll
+J:\GitHub\Forks\atom-fsharp\src\Atom.FSharp.Bindings\bin\Debug\FSharp.Core.xml
+J:\GitHub\Forks\atom-fsharp\src\Atom.FSharp.Bindings\obj\Debug\Atom.FSharp.Bindings.dll
+J:\GitHub\Forks\atom-fsharp\src\Atom.FSharp.Bindings\obj\Debug\Atom.FSharp.Bindings.pdb
