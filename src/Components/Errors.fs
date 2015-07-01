@@ -45,13 +45,13 @@ module ErrorPanel =
 
     let private createRow (editor : IEditor) (e : DTO.Error)  =
         let t = sprintf "<tr><td>%d : %d</td><td>%s</td><td>%s</td><td>%s</td></tr>"
-                    e.StartLineAlternate
+                    e.StartLine
                     e.StartColumn
                     e.Message
                     e.Severity
                     e.Subcategory
                 |> jq
-        t.click(fun x -> editor.setCursorBufferPosition [|e.StartLine; e.StartColumn |])
+        t.click(fun x -> editor.setCursorBufferPosition [|e.StartLine - 1; e.StartColumn - 1 |])
 
     let private handleEditorChange (panel : IPanel) (editor : AtomCore.IEditor)  =
         if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
@@ -73,7 +73,7 @@ module ErrorPanel =
             let t = create ()
             Globals.atom.workspace.addBottomPanel (unbox<AnonymousType499>{PanelOptions.item = t; PanelOptions.priority = 100; PanelOptions.visible = false})
         panel <- Some p
-       
+
         addMinimize()
         Globals.atom.workspace.getActiveTextEditor() |> handleEditorChange p
 

@@ -8,18 +8,11 @@ open FunScript.TypeScript.atom
 module Promise =
     type Promise = class end
 
-    type Suggestion = {
-        text              : string
-        replacementPrefix : string
-        rightLabel        : string
-        ``type``          : string
-    }
-
     [<JSEmitInline("new Promise(function(resolve){{0}()})")>]
     let create( cb : unit -> unit) : Promise = failwith "JS"
 
     [<JSEmitInline("resolve({0})")>]
-    let resolve (o : Suggestion[]) : unit = failwith "JS"
+    let resolve (o : obj[]) : unit = failwith "JS"
 
 module JS =
     [<JSEmitInline("({1}[{0}])")>]
@@ -40,7 +33,7 @@ module Emitter =
 
 
 [<AutoOpen>]
-module HelperStructures = 
+module HelperStructures =
     type StatusBarOptions = {
         item     : JQuery;
         priority : int
@@ -96,7 +89,7 @@ module Bindings =
 
     type TextBuffer.ITextBuffer with
         [<FunScript.JSEmitInline("({0}.onDidStopChanging({1}))")>]
-        member __.onDidStopChanging(cb: unit -> unit) : Disposable = failwith "JS"    
+        member __.onDidStopChanging(cb: unit -> unit) : Disposable = failwith "JS"
 
     [<JSEmitInline("{0}.decorateMarker({1}, {type: 'highlight', class: {2}})")>]
     let decorateMarker(ed : IEditor, marker : IDisplayBufferMarker, cls : string) : unit = failwith "JS"

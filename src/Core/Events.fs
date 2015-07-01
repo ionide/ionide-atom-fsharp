@@ -22,11 +22,13 @@ module Events =
         | Project
         | Errors
         | Completion
+        | SymbolUse
         | Tooltips
         | Toolbars
         | FindDecl
         | Status
         | CompilerLocation
+        | Helptext
 
     let private getName t =
         match t with
@@ -35,12 +37,14 @@ module Events =
         | ServerError -> "Fsharp_error"
         | Errors -> "Fsharp_errors"
         | Completion -> "Fsharp_completion"
+        | SymbolUse -> "Fsharp_symboluse"
         | Tooltips -> "FSharp_tooltips"
         | Toolbars -> "FSharp_toolbars"
         | FindDecl -> "FSharp_finddecl"
         | Project -> "Fsharp_project"
         | Status -> "Fsharp_status"
         | CompilerLocation -> "Fsharp_compiler"
+        | Helptext -> "Fsharp_helptext"
 
     let private log name o =
         Globals.console.log (name, System.DateTime.Now, o)

@@ -18,20 +18,34 @@ module AutocompleteProvider =
 
     let mutable isForced = false
     let mutable lastResult : DTO.CompletionResult option = None
+    let mutable emitter : IEmitter option = None
+
 
     type GetSuggestionOptions = {
-        editor : AtomCore.IEditor
-        bufferPosition : TextBuffer.IPoint
-        prefix : string
+        editor          : AtomCore.IEditor
+        bufferPosition  : TextBuffer.IPoint
+        prefix          : string
         scopeDescriptor : string[] }
 
     type Provider = {
-        selector : string
-        disableForSelector: string
-        inclusionPriority : int
-        excludeLowerPriority: bool
-        getSuggestions : GetSuggestionOptions -> Atom.Promise.Promise  }
+        selector             : string
+        disableForSelector   : string
+        inclusionPriority    : int
+        excludeLowerPriority : bool
+        getSuggestions       : GetSuggestionOptions -> Atom.Promise.Promise  }
 
+    type SuggestionList = { emitter             : IEmitter}
+    type Manager =        { suggestionList      : SuggestionList }
+    type Module =         { autocompleteManager : Manager }
+    type Package =        { mainModule          : Module }
+
+    type Suggestion = {
+        text              : string
+        replacementPrefix : string
+        rightLabel        : string
+        ``type``          : string
+        description       : string
+    }
 
     let getSuggestion (options:GetSuggestionOptions) =
         if unbox<obj>(options.editor.buffer.file) <> null then
@@ -47,12 +61,13 @@ module AutocompleteProvider =
                             isForced <- false
                             result.Data
                             |> Seq.where(fun t -> t.Name.Contains(prefix))
-                            |> Seq.map(fun t -> { Promise.Suggestion.text =  t.Name
-                                                  Promise.Suggestion.replacementPrefix = prefix
-                                                  Promise.Suggestion.rightLabel = t.Glyph
-                                                  Promise.Suggestion.``type`` = t.GlyphChar
-                                                })
-                            |> Seq.toArray
+                            |> Seq.map(fun t -> { text =  t.Name
+                                                  replacementPrefix = prefix
+                                                  rightLabel = t.Glyph
+                                                  ``type`` = t.GlyphChar
+                                                  description = ""
+                                                } :> obj)
+                            |> Seq.toArray  
                             |> Atom.Promise.resolve)
                         LanguageService.completion path row col )
                     LanguageService.parseEditor options.editor
@@ -60,11 +75,12 @@ module AutocompleteProvider =
                     isForced <- false
                     lastResult.Value.Data
                     |> Seq.where(fun t -> t.Name.Contains(prefix))
-                    |> Seq.map(fun t -> { Promise.Suggestion.text =  t.Name
-                                          Promise.Suggestion.replacementPrefix = prefix
-                                          Promise.Suggestion.rightLabel = t.Glyph
-                                          Promise.Suggestion.``type`` = t.GlyphChar
-                                        })
+                    |> Seq.map(fun t -> { text =  t.Name
+                                          replacementPrefix = prefix
+                                          rightLabel = t.Glyph
+                                          ``type`` = t.GlyphChar
+                                          description = ""
+                                        } :> obj)
                     |> Seq.toArray
                     |> Atom.Promise.resolve)
         else Atom.Promise.create(fun () -> Atom.Promise.resolve [||])
@@ -72,6 +88,17 @@ module AutocompleteProvider =
 
     let create () =
         Globals.atom.commands.add("atom-text-editor","fsharp:autocomplete", (fun _ ->
+            if emitter.IsNone then
+                let package = Globals.atom.packages.getLoadedPackage("autocomplete-plus") |> unbox<Package>
+                let e = package.mainModule.autocompleteManager.suggestionList.emitter
+                let handler () =
+                    let selected = jq "li.selected span.word-container .word"
+                    let text = selected.text()
+                    LanguageService.helptext text
+                    () :> obj
+                e.on("did-select-next", handler |> unbox<Function>) |> ignore
+                e.on("did-select-previous", handler |> unbox<Function>) |> ignore
+                emitter <- Some e
             dispatchAutocompleteCommand ()
             isForced <- true) |> unbox<Function>) |> ignore
-        { selector = ".source.fsharp"; disableForSelector = ".source.fsharp .string"; inclusionPriority = 1; excludeLowerPriority = true; getSuggestions = getSuggestion}
+        { selector = ".source.fsharp"; disableForSelector = ".source.fsharp .string, .source.fsharp .comment"; inclusionPriority = 1; excludeLowerPriority = true; getSuggestions = getSuggestion}

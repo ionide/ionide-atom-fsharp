@@ -120,12 +120,16 @@ module FAKE =
                 let path = p + "/" + a
                 let file = path |> Globals.readFileSync
                                 |> fun n -> n.toString()
-                let regex = Regex.Match(file, "FAKE.exe.* ([\w]+\.fsx)")
-                if regex.Success then
-                    let build = p + "/" + regex.Groups.[1].Value
-                    File <- Some (path, build )
-                    Globals.atom.commands.add("atom-workspace", "FAKE: Build", BuildTask |> unbox<Function>) |> ignore
-                    Globals.atom.commands.add("atom-workspace", "FAKE: Show Builds", ShowBuildList |> unbox<Function>) |> ignore
+                let regex = Regex.Matches(file, "FAKE.exe.* ([\w]+\.fsx)")
+                if regex.Count > 0 then
+                    [0 .. regex.Count - 1] |> Seq.iter (fun i ->
+                        if File.IsNone then
+                            let build = p + "/" + regex.[i].Groups.[1].Value
+                            if Globals.existsSync build then
+                                File <- Some (path, build )
+                                Globals.atom.commands.add("atom-workspace", "FAKE: Build", BuildTask |> unbox<Function>) |> ignore
+                                Globals.atom.commands.add("atom-workspace", "FAKE: Show Builds", ShowBuildList |> unbox<Function>) |> ignore
+                    )
                 else
                     Globals.atom.commands.add("atom-workspace", "FAKE: Build", FAKENotFound |> unbox<Function>) |> ignore
                 Globals.console.log File
