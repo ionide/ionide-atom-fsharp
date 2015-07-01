@@ -23,10 +23,9 @@ module Parser =
                 let projfile = files |> Array.tryFind(fun s -> s.EndsWith(".fsproj"))
                 match projfile with
                 | None ->
-                    Globals.console.log dir
                     let parent = if dir.LastIndexOf(Globals.sep) > 0 then dir.Substring(0, dir.LastIndexOf Globals.sep) else ""
                     if System.String.IsNullOrEmpty parent then None else findFsProj parent
-                | Some p -> dir + "/" + p |> Some
+                | Some p -> dir + Globals.sep + p |> Some
 
             let findProjFile p =
                 if JS.isDefined p then
