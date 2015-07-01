@@ -1,3 +1,8 @@
+#### 0.6.4 - 01.07.2015
+* Fix highlighting usages bug
+* Fix '.fsproj' files resolving
+* Update internal messaging system
+
 #### 0.6.3 - 30.06.2015
 * Add usage highlights
 * Remove autocomplete in comments

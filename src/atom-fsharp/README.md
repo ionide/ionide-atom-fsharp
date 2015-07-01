@@ -1,20 +1,19 @@
-
-** Edit 31.05.2015 **
-
-Since package changed it name to `atom-fsharp` after version `0.4.1` some errors can occur after updating plugin to the version `+0.4.1`. In case of any problems, please check if plugin is showing only once in Atom's Installed Packages view. If it's listed 2 times (as `fsharp` and `atom-fsharp`, please uninstall `fsharp` plugin )
-
 ##atom-fsharp
 
 ![atom-fsharp](https://raw.githubusercontent.com/fsprojects/FSharp.Atom/develop/gifs/ErrorPanel.png)
 
 ## Features
 
+- Syntax highlighting
 - Auto completions
 - Error highlighting and error list in bottom panel
 - Tooltips
 - Commenting
 - Go to Declaration
 - Support for script files or F# projects (if plugin does not detect `.fsproj` file, just open it ).
+- F# Interactive (REPL) Panel
+- Highlighting usages
+- Quick Info panel  
 
 ## Contributing and copyright
 
