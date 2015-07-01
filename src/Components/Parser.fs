@@ -12,31 +12,29 @@ open Atom
 
 [<ReflectedDefinition>]
 module Parser =
-    let private projects = ResizeArray<string>()
     let private subscriptions = ResizeArray()
     let mutable private h : Disposable option = None
 
     let private parseProjectForEditor (editor: IEditor) =
-        let parseProj p =
-            let proj (ex : NodeJS.ErrnoException) (arr : string array) =
-                let projExist = arr |> Array.tryFind(fun a -> a.Split('.') |> fun n -> n.[n.Length - 1]  = "fsproj")
-                match projExist with
-                | Some a -> let path = p + "/" + a
-                            if projects.Contains path |> not then
-                                projects.Add path
-                                LanguageService.project path
-                | None -> Events.emit Events.Status "Ready (.fsproj not found)"
-            if JS.isDefined p then Globals.readdir(p, System.Func<NodeJS.ErrnoException, string array, unit>(proj))
-            else Events.emit Events.Status "Ready (.fsproj not found)"
-
         if JS.isDefined editor && JS.isPropertyDefined editor "buffer" && unbox<obj>(editor.buffer) <> null && JS.isPropertyDefined editor.buffer "file" && unbox<obj>(editor.buffer.file) <> null then
             let p = editor.buffer.file.path
-            if (p.Split('.') |> fun n -> n.[n.Length - 1]  = "fsproj") || ( JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#") then
+            let rec findFsProj dir =
+                let files = Globals.readdirSync dir
+                let projfile = files |> Array.tryFind(fun s -> s.EndsWith(".fsproj"))
+                match projfile with
+                | None ->
+                    Globals.console.log dir
+                    let parent = if dir.LastIndexOf(Globals.sep) > 0 then dir.Substring(0, dir.LastIndexOf Globals.sep) else ""
+                    if System.String.IsNullOrEmpty parent then None else findFsProj parent
+                | Some p -> dir + "/" + p |> Some
+
+            let findProjFile p =
                 if JS.isDefined p then
                     p |> Globals.dirname
-                      |> parseProj
+                      |> findFsProj
+                      |> Option.iter LanguageService.project
                 else Events.emit Events.Status "Waiting for F# file"
-            else Events.emit Events.Status "Waiting for F# file"
+            findProjFile p
 
     let activate () =
         unbox<Function>(fun () -> Events.emit Events.Status "Ready"
@@ -56,7 +54,7 @@ module Parser =
             h |> Option.iter(fun h' -> h'.dispose ())
             if JS.isDefined ed && JS.isPropertyDefined ed "buffer" && unbox<obj>(ed.buffer) <> null && JS.isPropertyDefined ed.buffer "file" && unbox<obj>(ed.buffer.file) <> null then
                 h <- ( ed.buffer.onDidStopChanging(fun _ -> LanguageService.parseEditor ed) |> Some  )
-        ) |> unbox<Function>   
+        ) |> unbox<Function>
         ) |> subscriptions.Add
 
 
