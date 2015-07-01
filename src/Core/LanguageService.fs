@@ -135,7 +135,7 @@ module LanguageService =
         ask str
 
     let symbolUse fn line col =
-        let str = sprintf "symboluse \"%s\" %d %d" fn line col
+        let str = sprintf "symboluse \"%s\" %d %d\n" fn line col
         ask str
 
     let tooltip fn line col =
