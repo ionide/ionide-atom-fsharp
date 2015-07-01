@@ -17,7 +17,6 @@ module Parser =
 
     let private parseProjectForEditor (editor: IEditor) =
         if JS.isDefined editor && JS.isPropertyDefined editor "buffer" && unbox<obj>(editor.buffer) <> null && JS.isPropertyDefined editor.buffer "file" && unbox<obj>(editor.buffer.file) <> null then
-            let p = editor.buffer.file.path
             let rec findFsProj dir =
                 let files = Globals.readdirSync dir
                 let projfile = files |> Array.tryFind(fun s -> s.EndsWith(".fsproj"))
@@ -27,13 +26,12 @@ module Parser =
                     if System.String.IsNullOrEmpty parent then None else findFsProj parent
                 | Some p -> dir + Globals.sep + p |> Some
 
-            let findProjFile p =
-                if JS.isDefined p then
-                    p |> Globals.dirname
-                      |> findFsProj
-                      |> Option.iter LanguageService.project
-                else Events.emit Events.Status "Waiting for F# file"
-            findProjFile p
+            let p = editor.buffer.file.path
+            if JS.isDefined p then
+                p |> Globals.dirname
+                  |> findFsProj
+                  |> Option.iter LanguageService.project
+            else Events.emit Events.Status "Waiting for F# file"
 
     let activate () =
         unbox<Function>(fun () -> Events.emit Events.Status "Ready"
