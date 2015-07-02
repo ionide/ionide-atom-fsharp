@@ -1,3 +1,6 @@
+#### 0.6.5 - 01.07.2015
+* Add FAKE: Build Default command
+
 #### 0.6.4 - 01.07.2015
 * Fix highlighting usages bug
 * Fix '.fsproj' files resolving
