@@ -1,7 +1,7 @@
 # Keybindings require three things to be fully defined: A selector that is
 # matched against the focused element, the keystroke and the command to
 # execute.
-#
+#..
 # Below is a basic keybinding which registers on all platforms by applying to
 # the root workspace element.
 
@@ -13,3 +13,5 @@
     'alt-/':'FSI:Send-Line'
     'ctrl-space': 'fsharp:autocomplete'
     'cmd-space': 'fsharp:autocomplete'
+'atom-workspace':
+    'f5': 'FAKE:Build-Default'
