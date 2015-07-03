@@ -1,7 +1,10 @@
-#### 0.7.1 - 01.07.2015
+#### 0.7.2 - 03.07.2015
+* Remove Status Bar information
+
+#### 0.7.1 - 03.07.2015
 * Move error handling to linter plugin
 
-#### 0.6.5 - 01.07.2015
+#### 0.6.5 - 02.07.2015
 * Add FAKE: Build Default command
 
 #### 0.6.4 - 01.07.2015
