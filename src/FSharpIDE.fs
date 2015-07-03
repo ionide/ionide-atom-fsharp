@@ -19,9 +19,6 @@ type FSharpIDE() =
     member x.provideErrors () =
         ErrorLinterProvider.create ()
 
-    member x.consumeStatusBar (sb : IStatusBar) =
-        StatusBar.activate sb
-
     member x.getSuggestion(options : AutocompleteProvider.GetSuggestionOptions) =
         AutocompleteProvider.getSuggestion options
 

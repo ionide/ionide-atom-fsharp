@@ -30,7 +30,6 @@ open Fake.ZipHelper
 #load "src/Components/Errors.fs"
 #load "src/Components/FindDeclaration.fs"
 #load "src/Components/FAKE.fs"
-#load "src/Components/StatusBar.fs"
 #load "src/Components/Interactive.fs"
 #load "src/FSharpIDE.fs"
 #load "src/main.fs"

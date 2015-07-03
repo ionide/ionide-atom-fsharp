@@ -23,7 +23,6 @@ module ErrorLinterProvider =
         ``type`` : string
         text    : string
         filePath : string
-
         range: float[][]
     }
 
@@ -31,7 +30,8 @@ module ErrorLinterProvider =
         Atom.Promise.create(fun () ->
             Events.once Events.Errors (fun (n : DTO.ParseResult) ->
                 let map (item : DTO.Error) =
-                    let range = [|[|float (item.StartLine - 1); float (item.StartColumn - 1)|];[|float (item.EndLine - 1);  float (item.EndColumn - 1)|]|]
+                    let range = [|[|float (item.StartLine - 1); float (item.StartColumn - 1)|];
+                                  [|float (item.EndLine - 1);  float (item.EndColumn - 1)|]|]
                     { ``type`` = item.Severity
                       text = item.Message
                       filePath = editor.buffer.file.path

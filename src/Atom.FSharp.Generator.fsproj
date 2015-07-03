@@ -59,7 +59,6 @@
     <Compile Include="Components\Errors.fs" />
     <Compile Include="Components\FindDeclaration.fs" />
     <Compile Include="Components\FAKE.fs" />
-    <Compile Include="Components\StatusBar.fs" />
     <Compile Include="Components\Interactive.fs" />
     <Compile Include="Components\FsLabPanel.fs" />
     <Compile Include="Components\HighlightUse.fs" />
