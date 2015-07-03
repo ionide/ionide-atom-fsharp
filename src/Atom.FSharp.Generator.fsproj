@@ -56,7 +56,6 @@
     <Compile Include="Components\Autocomplete.fs" />
     <Compile Include="Components\Tooltips.fs" />
     <Compile Include="Components\Toolbar.fs" />
-    <Compile Include="Components\Highlight.fs" />
     <Compile Include="Components\Errors.fs" />
     <Compile Include="Components\FindDeclaration.fs" />
     <Compile Include="Components\FAKE.fs" />
