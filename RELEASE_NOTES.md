@@ -1,3 +1,6 @@
+#### 0.7.0 - 01.07.2015
+* Move error handling to linter plugin
+
 #### 0.6.5 - 01.07.2015
 * Add FAKE: Build Default command
 

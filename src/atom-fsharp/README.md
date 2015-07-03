@@ -1,12 +1,14 @@
 ##atom-fsharp
 
+From version 0.7.0 plugin is using [linter](https://atom.io/packages/linter) plugin to handle error highlighting and error list display. Installation of this plugin is required. 
+
 ![atom-fsharp](https://raw.githubusercontent.com/fsprojects/FSharp.Atom/develop/gifs/ErrorPanel.png)
 
 ## Features
 
 - Syntax highlighting
 - Auto completions
-- Error highlighting and error list in bottom panel
+- Error highlighting and error list in bottom panel (linter plugin required)
 - Tooltips
 - Commenting
 - Go to Declaration
