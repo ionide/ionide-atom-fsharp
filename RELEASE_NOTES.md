@@ -1,3 +1,6 @@
+#### 0.7.3 - 13.07.2015
+* Fix FSI: Send Line key binding on Mac
+
 #### 0.7.2 - 03.07.2015
 * Remove Status Bar information
 
