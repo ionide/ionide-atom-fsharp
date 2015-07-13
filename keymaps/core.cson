@@ -15,3 +15,6 @@
     'cmd-space': 'fsharp:autocomplete'
 'atom-workspace':
     'f5': 'FAKE:Build-Default'
+
+'.platform-darwin atom-workspace atom-text-editor:not([mini])[data-grammar~=fsharp]':
+    'ctrl-cmd-l':'FSI:Send-Line'
