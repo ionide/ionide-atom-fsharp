@@ -14,6 +14,13 @@
         "path": "*",
         "event-kit": "*"
     },
+    "consumedServices": {
+        "yeoman-environment": {
+             "versions": {
+               "^1.0.0": "consumeYeomanEnvironment"
+             }
+        }
+    },
     "providedServices": {
         "autocomplete.provider": {
             "versions": {
