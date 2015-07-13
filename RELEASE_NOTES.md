@@ -1,3 +1,6 @@
+#### 0.8.0 - 13.07.2015
+* Integration with yeoman scaffolding
+
 #### 0.7.3 - 13.07.2015
 * Fix FSI: Send Line key binding on Mac
 

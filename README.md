@@ -1,6 +1,8 @@
 ##atom-fsharp
 
-From version 0.7.0 plugin is using [linter](https://atom.io/packages/linter) plugin to handle error highlighting and error list display. Installation of this plugin is required. 
+From version 0.8.0 plugin is using [atom-yeoman](https://atom.io/packages/atom-yeoman) plugin to provide way of creating new projects in editor. Installation of this plugin is required. Also installation of [yeoman](http://yeoman.io/) and [F# generator](https://www.npmjs.com/package/generator-fsharp)
+
+From version 0.7.0 plugin is using [linter](https://atom.io/packages/linter) plugin to handle error highlighting and error list display. Installation of this plugin is required.
 
 ![atom-fsharp](https://raw.githubusercontent.com/fsprojects/FSharp.Atom/develop/gifs/ErrorPanel.png)
 
