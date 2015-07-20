@@ -10,11 +10,13 @@
 
 'atom-workspace atom-text-editor:not([mini])[data-grammar~=fsharp]':
     'alt-enter': 'FSI:Send-Selection'
-    'alt-/':'FSI:Send-Line'
     'ctrl-space': 'fsharp:autocomplete'
     'cmd-space': 'fsharp:autocomplete'
 'atom-workspace':
     'f5': 'FAKE:Build-Default'
+
+'.platform-win32 atom-workspace atom-text-editor:not([mini])[data-grammar~=fsharp]':
+    'alt-/':'FSI:Send-Line'
 
 '.platform-darwin atom-workspace atom-text-editor:not([mini])[data-grammar~=fsharp]':
     'ctrl-cmd-l':'FSI:Send-Line'
