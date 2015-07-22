@@ -65,7 +65,7 @@ module FAKE =
         let cancelledCallback = Func<_>(fun _ -> buildListView |> Option.iter(fun (model, view) ->  view.hide()) :> obj)
         let confirmedCallback = unbox<Func<_, _>> (fun (buildDescription : ListView.ItemDescription) ->
             buildListView |> Option.iter (fun (model, view) -> view.hide())
-            let build = BuildList |> Seq.find(fun n -> let desc = sprintf "%s - %s %s" n.Name (n.Start.ToShortDateString()) (n.Start.ToShortTimeString())
+            let build = BuildList |> Seq.find(fun n -> let desc = sprintf "%s - %s %s" n.Name (n.Start.ToShortDateString().Replace("\\","-") ) (n.Start.ToShortTimeString().Replace("\\","-"))
                                                        desc = buildDescription.data)
 
             Globals.atom.workspace._open(buildDescription.data, {split = "right"})._done((fun ed ->
