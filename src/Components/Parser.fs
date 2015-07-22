@@ -18,13 +18,15 @@ module Parser =
     let private parseProjectForEditor (editor: IEditor) =
         if JS.isDefined editor && JS.isPropertyDefined editor "buffer" && unbox<obj>(editor.buffer) <> null && JS.isPropertyDefined editor.buffer "file" && unbox<obj>(editor.buffer.file) <> null then
             let rec findFsProj dir =
-                let files = Globals.readdirSync dir
-                let projfile = files |> Array.tryFind(fun s -> s.EndsWith(".fsproj"))
-                match projfile with
-                | None ->
-                    let parent = if dir.LastIndexOf(Globals.sep) > 0 then dir.Substring(0, dir.LastIndexOf Globals.sep) else ""
-                    if System.String.IsNullOrEmpty parent then None else findFsProj parent
-                | Some p -> dir + Globals.sep + p |> Some
+                if Globals.lstatSync(dir).isDirectory() then
+                    let files = Globals.readdirSync dir
+                    let projfile = files |> Array.tryFind(fun s -> s.EndsWith(".fsproj"))
+                    match projfile with
+                    | None ->
+                        let parent = if dir.LastIndexOf(Globals.sep) > 0 then dir.Substring(0, dir.LastIndexOf Globals.sep) else ""
+                        if System.String.IsNullOrEmpty parent then None else findFsProj parent
+                    | Some p -> dir + Globals.sep + p |> Some
+                else None
 
             let p = editor.buffer.file.path
             if JS.isDefined p then
