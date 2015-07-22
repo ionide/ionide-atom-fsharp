@@ -24,10 +24,11 @@ module HighlightUse =
         clearHighlight ()
         let editor = Globals.atom.workspace.getActiveTextEditor()
         let action (item : DTO.SymbolUse) =
-            let marker = editor.markBufferRange([|[|float (item.StartLine - 1);float (item.StartColumn - 1)|];[|float (item.EndLine - 1);  float (item.EndColumn - 1)|]|])
-            let cls = if item.IsFromDefinition then "highlight-symboluse-declaration" else "highlight-symboluse"
-            marked <- Array.append [|marker|] marked
-            decorateMarker(editor, marker, cls) 
+            if JS.isPropertyDefined editor "markBufferRange" then
+                let marker = editor.markBufferRange([|[|float (item.StartLine - 1);float (item.StartColumn - 1)|];[|float (item.EndLine - 1);  float (item.EndColumn - 1)|]|])
+                let cls = if item.IsFromDefinition then "highlight-symboluse-declaration" else "highlight-symboluse"
+                marked <- Array.append [|marker|] marked
+                decorateMarker(editor, marker, cls)
             ()
         data.Data.Uses |> Array.iter(action)
         ()
