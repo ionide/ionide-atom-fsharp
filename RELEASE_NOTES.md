@@ -1,3 +1,6 @@
+#### 0.8.2 - 22.07.2015
+* Fix multiple small errors
+
 #### 0.8.1 - 20.07.2015
 * Fix FSI: Send Line key binding on Mac
 
