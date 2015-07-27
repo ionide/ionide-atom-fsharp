@@ -125,7 +125,7 @@ module TooltipHandler =
     let private initialize (editor : IEditor) =
         remove ()
 
-        if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
+        if isFSharpEditor editor then
             ed <- editor
             editor |> Globals.atom.views.getView
             |> getElementsByClass ".scroll-view"

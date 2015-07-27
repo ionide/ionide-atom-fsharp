@@ -41,7 +41,7 @@ module ToolbarHandler =
 
     // Because the type signature for classes is multiple lines and will not fit
     // within the toolbar we cut out the list of members and properties
-    let format_data (tinfo:string) = 
+    let format_data (tinfo:string) =
         let ti  = tinfo.Trim().Replace('\r',' ').Replace('\n',' ')
         let ti' =
             if ti.StartsWith("Multiple") then
@@ -53,19 +53,19 @@ module ToolbarHandler =
             ti'.Substring(0,idx-1)
         else ti'
         |> (+) "> "
-        
+
 
     let private cursorHandler (o: DTO.TooltipResult) =
         let tb = jq(".toolbar-inner")
         tb.empty() |> ignore
-        if o.Data <> "No tooltip information" then            
+        if o.Data <> "No tooltip information" then
             tb.append(format_data o.Data) |> ignore
         ()
 
 
     // Controls whether the type signature toolbar is displayed by checking the syntax grammar in Atom
     let private handleEditorChange (panel : IPanel) (editor : AtomCore.IEditor)  =
-        if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
+        if isFSharpEditor editor then
             panel.show()
             bar.show()
         else
@@ -78,11 +78,11 @@ module ToolbarHandler =
             cursorSubscription <- None
         )
 
-    let private initialize (editor : IEditor) = 
+    let private initialize (editor : IEditor) =
         remove()
-        if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
+        if isFSharpEditor editor then
             ed <- editor
-            cursorSubscription <-  editor.onDidChangeCursorPosition((fun n -> askForToolbar ed) |> unbox<Function>   ) |> Some
+            cursorSubscription <- (OnCursorStopMoving editor 300. (fun n -> askForToolbar ed)) |> Some
 
     let activate () =
         let b =
@@ -91,7 +91,7 @@ module ToolbarHandler =
         bar <- b
         Globals.atom.workspace.getActiveTextEditor() |> initialize
         Globals.atom.workspace.onDidChangeActivePaneItem((fun ed -> initialize ed) |> unbox<Function>  ) |> ignore
-        
+
         let tp = Globals.atom.workspace.onDidChangeActivePaneItem((fun ed -> handleEditorChange b ed) |> unbox<Function>  )
         subscriptions.Add tp
 

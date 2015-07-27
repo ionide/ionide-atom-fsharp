@@ -125,7 +125,7 @@ module LanguageService =
         ask str
 
     let parseEditor (editor : IEditor) =
-        if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" && unbox<obj>(editor.buffer.file) <> null then
+        if isFSharpEditor editor && unbox<obj>(editor.buffer.file) <> null then
             let path = editor.buffer.file.path
             let text = editor.getText()
             parse path text

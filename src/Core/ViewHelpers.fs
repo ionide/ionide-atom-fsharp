@@ -15,7 +15,7 @@ module ViewsHelpers =
     let jq(selector : string) = Globals.Dollar.Invoke selector
     let jq'(selector : Element) = Globals.Dollar.Invoke selector
     let jqC (context: Element) (selector : string) = Globals.Dollar.Invoke (selector,context)
-    
+
     type cords = {
         mutable top : float
         mutable left : float
@@ -47,3 +47,23 @@ module ViewsHelpers =
                     t
         |> editor.screenPositionForPixelPosition
         |> editor.bufferPositionForScreenPosition
+
+    let isFSharpEditor (editor : IEditor) =
+        JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#"
+
+    let private getCursor (editor:IEditor) =
+        let bufferPt = editor.getCursorBufferPosition()
+        { row = bufferPt.row; column = bufferPt.column }
+
+    let private clearTimer timer =
+        !timer |> Option.iter (Globals.clearTimeout)
+        timer := None
+
+    let private stopMovingHandler timer timeout callback = fun n ->
+        clearTimer timer
+        timer := Some (Globals.setTimeout(( fun _ -> callback n),timeout ) )
+
+
+    let OnCursorStopMoving (editor : IEditor) timeout callback =
+        let mutable timer = ref None : NodeJS.Timer option ref    
+        editor.onDidChangeCursorPosition(stopMovingHandler timer timeout callback |> unbox<Function>)

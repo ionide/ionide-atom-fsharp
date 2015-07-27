@@ -55,9 +55,9 @@ module HighlightUse =
     let private initialize (editor : IEditor) =
         remove()
         clearHighlight()
-        if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" then
+        if isFSharpEditor editor then
             ed <- editor
-            cursorSubscription <-  editor.onDidChangeCursorPosition((fun n -> askForSymbolUse ed) |> unbox<Function>   ) |> Some
+            cursorSubscription <- (OnCursorStopMoving editor 300.  (fun n -> askForSymbolUse ed)) |> Some
 
     let activate () =
         Globals.atom.workspace.getActiveTextEditor() |> initialize
