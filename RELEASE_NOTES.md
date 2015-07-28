@@ -1,3 +1,6 @@
+#### 0.8.4 - 27.07.2015
+* Fix performance issues 
+
 #### 0.8.3 - 27.07.2015
 * Fix path display in FSI panel
 
