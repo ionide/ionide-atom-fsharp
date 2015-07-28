@@ -36,23 +36,14 @@ module Parser =
             else Events.emit Events.Status "Waiting for F# file"
 
     let activate () =
-        unbox<Function>(fun () -> Events.emit Events.Status "Ready"
-                                  Globals.atom.workspace.getActiveTextEditor() |> LanguageService.parseEditor)
-        |> Events.on Events.Project
-        |> subscriptions.Add
-
         let editor = Globals.atom.workspace.getActiveTextEditor()
         editor |> parseProjectForEditor
         LanguageService.parseEditor editor
-        if JS.isDefined editor && JS.isPropertyDefined editor "buffer" && unbox<obj>(editor.buffer) <> null && JS.isPropertyDefined editor.buffer "file" && unbox<obj>(editor.buffer.file) <> null then
-            h <- ( editor.buffer.onDidStopChanging(fun _ -> LanguageService.parseEditor editor) |> Some  )
 
         Globals.atom.workspace.onDidChangeActivePaneItem ((fun ed ->
-            ed |> LanguageService.parseEditor
             ed |> parseProjectForEditor
             h |> Option.iter(fun h' -> h'.dispose ())
-            if JS.isDefined ed && JS.isPropertyDefined ed "buffer" && unbox<obj>(ed.buffer) <> null && JS.isPropertyDefined ed.buffer "file" && unbox<obj>(ed.buffer.file) <> null then
-                h <- ( ed.buffer.onDidStopChanging(fun _ -> LanguageService.parseEditor ed) |> Some  )
+
         ) |> unbox<Function>
         ) |> subscriptions.Add
 
