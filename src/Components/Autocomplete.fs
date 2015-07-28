@@ -19,6 +19,7 @@ module AutocompleteProvider =
     let mutable isForced = false
     let mutable lastResult : DTO.CompletionResult option = None
     let mutable emitter : IEmitter option = None
+    let mutable lastRow = 0
 
 
     type GetSuggestionOptions = {
@@ -54,8 +55,9 @@ module AutocompleteProvider =
             let col = int options.bufferPosition.column + 1
             let prefix = if options.prefix = "." || options.prefix = "=" then "" else options.prefix
             Atom.Promise.create(fun () ->
-                if isForced || lastResult.IsNone || options.prefix = "." then
+                if isForced || lastResult.IsNone || options.prefix = "." || lastRow <> row then
                     Events.once Events.Completion (fun result ->
+                        lastRow <- row
                         lastResult <- Some result
                         isForced <- false
                         result.Data
