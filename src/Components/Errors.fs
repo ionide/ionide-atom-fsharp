@@ -11,8 +11,6 @@ open Atom
 
 [<ReflectedDefinition>]
 module ErrorLinterProvider =
-
-
     type Provider = {
         grammarScopes : string[]
         scope         : string
@@ -21,9 +19,9 @@ module ErrorLinterProvider =
 
     type LintResult = {
         ``type`` : string
-        text    : string
+        text     : string
         filePath : string
-        range: float[][]
+        range    : float[][]
     }
 
     let lint (editor : IEditor) =

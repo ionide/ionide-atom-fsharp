@@ -34,6 +34,7 @@ type FSharpIDE() =
         FAKE.activate ()
         Interactive.activate ()
         HighlightUse.activate ()
+        AddFileHandler.activate ()
         ()
 
     member x.deactivate() =

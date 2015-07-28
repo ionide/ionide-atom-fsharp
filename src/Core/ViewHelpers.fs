@@ -49,7 +49,9 @@ module ViewsHelpers =
         |> editor.bufferPositionForScreenPosition
 
     let isFSharpEditor (editor : IEditor) =
-        JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#"
+        JS.isDefined editor &&
+        JS.isPropertyDefined editor "getGrammar" &&
+        editor.getGrammar().name = "F#"
 
     let private getCursor (editor:IEditor) =
         let bufferPt = editor.getCursorBufferPosition()
@@ -62,8 +64,7 @@ module ViewsHelpers =
     let private stopMovingHandler timer timeout callback = fun n ->
         clearTimer timer
         timer := Some (Globals.setTimeout(( fun _ -> callback n),timeout ) )
-
-
+        
     let OnCursorStopMoving (editor : IEditor) timeout callback =
-        let mutable timer = ref None : NodeJS.Timer option ref    
+        let mutable timer = ref None : NodeJS.Timer option ref
         editor.onDidChangeCursorPosition(stopMovingHandler timer timeout callback |> unbox<Function>)
