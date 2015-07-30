@@ -28,33 +28,35 @@ module FAKE =
         else
             "<li></li>" |> jq
 
+    let private startBuild (packageDescription :  ListView.ItemDescription) =
+        File |> Option.iter( fun (build, fake) ->
+            let data = {Name = packageDescription.data; Start = DateTime.Now; End = None; Output = ""; TextEditor = None}
+            BuildList.Add data
+            let fakeProcess = Process.spawnWithNotifications build "sh" packageDescription.data
+            fakeProcess.on("exit",unbox<Function>(fun _ -> data.End <- Some DateTime.Now)) |> ignore
+            fakeProcess.stdout.on("data", unbox<Function>(fun e ->
+                data.Output <- data.Output + e.ToString()
+                data.TextEditor |> Option.iter (fun te ->
+                    let b = te.getBuffer()
+                    e.ToString() |> b.append |> ignore
+                    )
+                )) |> ignore
+            fakeProcess.stderr.on("data", unbox<Function>(fun e ->
+                data.Output <- data.Output + e.ToString()
+                data.TextEditor |> Option.iter (fun te ->
+                    let b = te.getBuffer()
+                    e.ToString() |> b.append |> ignore
+                )
+            )) |> ignore
+        )
+        ()
+
     let private registerTaskList () =
         let stopChangingCallback (ev : IEditor) (lv : atom.SelectListView) = fun () -> ()
         let cancelledCallback = Func<_>(fun _ -> taskListView |> Option.iter(fun (model, view) ->  view.hide()) :> obj)
         let confirmedCallback = unbox<Func<_, _>> (fun (packageDescription : ListView.ItemDescription) ->
             taskListView |> Option.iter (fun (model, view) -> view.hide())
-            File |> Option.iter( fun (build, fake) ->
-                let data = {Name = packageDescription.data; Start = DateTime.Now; End = None; Output = ""; TextEditor = None}
-                BuildList.Add data
-                let fakeProcess = Process.spawnWithNotifications build "sh" packageDescription.data
-                fakeProcess.on("exit",unbox<Function>(fun _ -> data.End <- Some DateTime.Now)) |> ignore
-                fakeProcess.stdout.on("data", unbox<Function>(fun e ->
-                    data.Output <- data.Output + e.ToString()
-                    data.TextEditor |> Option.iter (fun te ->
-                        let b = te.getBuffer()
-                        e.ToString() |> b.append |> ignore
-                        )
-                    )) |> ignore
-                fakeProcess.stderr.on("data", unbox<Function>(fun e ->
-                    data.Output <- data.Output + e.ToString()
-                    data.TextEditor |> Option.iter (fun te ->
-                        let b = te.getBuffer()
-                        e.ToString() |> b.append |> ignore
-                    )
-                )) |> ignore
-
-                ()
-            )
+            startBuild packageDescription
         )
         ListView.regiterListView stopChangingCallback cancelledCallback confirmedCallback viewForItem false
 
@@ -63,7 +65,7 @@ module FAKE =
         let cancelledCallback = Func<_>(fun _ -> buildListView |> Option.iter(fun (model, view) ->  view.hide()) :> obj)
         let confirmedCallback = unbox<Func<_, _>> (fun (buildDescription : ListView.ItemDescription) ->
             buildListView |> Option.iter (fun (model, view) -> view.hide())
-            let build = BuildList |> Seq.find(fun n -> let desc = sprintf "%s - %s %s" n.Name (n.Start.ToShortDateString()) (n.Start.ToShortTimeString())
+            let build = BuildList |> Seq.find(fun n -> let desc = sprintf "%s - %s %s" n.Name (n.Start.ToShortDateString().Replace("\\","-") ) (n.Start.ToShortTimeString().Replace("\\","-"))
                                                        desc = buildDescription.data)
 
             Globals.atom.workspace._open(buildDescription.data, {split = "right"})._done((fun ed ->
@@ -88,6 +90,10 @@ module FAKE =
         model.setItems m |> ignore
         ()
         ))
+
+    let private BuildDefault () =
+        let packageDescription = {ListView.data = "" }
+        startBuild packageDescription
 
     let private ShowBuildList () =
         buildListView |> Option.iter(fun (model, view) ->
@@ -127,8 +133,9 @@ module FAKE =
                             let build = p + "/" + regex.[i].Groups.[1].Value
                             if Globals.existsSync build then
                                 File <- Some (path, build )
-                                Globals.atom.commands.add("atom-workspace", "FAKE: Build", BuildTask |> unbox<Function>) |> ignore
-                                Globals.atom.commands.add("atom-workspace", "FAKE: Show Builds", ShowBuildList |> unbox<Function>) |> ignore
+                                Globals.atom.commands.add("atom-workspace", "FAKE:Build", BuildTask |> unbox<Function>) |> ignore
+                                Globals.atom.commands.add("atom-workspace", "FAKE:Build-Default", BuildDefault |> unbox<Function>) |> ignore
+                                Globals.atom.commands.add("atom-workspace", "FAKE:Show-Builds", ShowBuildList |> unbox<Function>) |> ignore
                     )
                 else
                     Globals.atom.commands.add("atom-workspace", "FAKE: Build", FAKENotFound |> unbox<Function>) |> ignore

@@ -13,22 +13,22 @@ open Atom
 open Atom.FSharp
 
 type FSharpIDE() =
-    member x.provide ()=
+    member x.provide () =
         AutocompleteProvider.create ()
 
-    member x.consumeStatusBar (sb : IStatusBar) =
-        StatusBar.activate sb
+    member x.provideErrors () =
+        ErrorLinterProvider.create ()
 
     member x.getSuggestion(options : AutocompleteProvider.GetSuggestionOptions) =
         AutocompleteProvider.getSuggestion options
 
-    member x.activate(state:obj) =
-        do LanguageService.start ()
+    member x.consumeYeomanEnvironment (gen : YeomanHandler.generator) =
+        YeomanHandler.activate gen
 
+    member x.activate(state:obj) =
+        LanguageService.start ()
         Parser.activate ()
-        HighlighterHandler.activate ()
-        TooltipHandler.activate ()     
-        ErrorPanel.activate ()
+        TooltipHandler.activate ()
         ToolbarHandler.activate()             // needs to follow error panel so it appears above it
         FindDeclaration.activate ()
         FAKE.activate ()
@@ -39,8 +39,6 @@ type FSharpIDE() =
     member x.deactivate() =
         Parser.deactivate ()
         TooltipHandler.deactivate ()
-        HighlighterHandler.deactivate ()
-        ErrorPanel.deactivate ()
         ToolbarHandler.deactivate()
         FindDeclaration.deactivate ()
         FAKE.deactivate ()

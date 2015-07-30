@@ -1,20 +1,23 @@
-
-** Edit 31.05.2015 **
-
-Since package changed it name to `atom-fsharp` after version `0.4.1` some errors can occur after updating plugin to the version `+0.4.1`. In case of any problems, please check if plugin is showing only once in Atom's Installed Packages view. If it's listed 2 times (as `fsharp` and `atom-fsharp`, please uninstall `fsharp` plugin )
-
 ##atom-fsharp
+
+From version 0.8.0 plugin is using [atom-yeoman](https://atom.io/packages/atom-yeoman) plugin to provide way of creating new projects in editor. Installation of this plugin is required. Also installation of [yeoman](http://yeoman.io/) and [F# generator](https://www.npmjs.com/package/generator-fsharp)
+
+From version 0.7.0 plugin is using [linter](https://atom.io/packages/linter) plugin to handle error highlighting and error list display. Installation of this plugin is required.
 
 ![atom-fsharp](https://raw.githubusercontent.com/fsprojects/FSharp.Atom/develop/gifs/ErrorPanel.png)
 
 ## Features
 
+- Syntax highlighting
 - Auto completions
-- Error highlighting and error list in bottom panel
+- Error highlighting and error list in bottom panel (linter plugin required)
 - Tooltips
 - Commenting
 - Go to Declaration
 - Support for script files or F# projects (if plugin does not detect `.fsproj` file, just open it ).
+- F# Interactive (REPL) Panel
+- Highlighting usages
+- Quick Info panel  
 
 ## Contributing and copyright
 

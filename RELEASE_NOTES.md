@@ -1,3 +1,35 @@
+#### 0.8.4 - 27.07.2015
+* Fix performance issues 
+
+#### 0.8.3 - 27.07.2015
+* Fix path display in FSI panel
+
+#### 0.8.2 - 22.07.2015
+* Fix multiple small errors
+
+#### 0.8.1 - 20.07.2015
+* Fix FSI: Send Line key binding on Mac
+
+#### 0.8.0 - 13.07.2015
+* Integration with yeoman scaffolding
+
+#### 0.7.3 - 13.07.2015
+* Fix FSI: Send Line key binding on Mac
+
+#### 0.7.2 - 03.07.2015
+* Remove Status Bar information
+
+#### 0.7.1 - 03.07.2015
+* Move error handling to linter plugin
+
+#### 0.6.5 - 02.07.2015
+* Add FAKE: Build Default command
+
+#### 0.6.4 - 01.07.2015
+* Fix highlighting usages bug
+* Fix '.fsproj' files resolving
+* Update internal messaging system
+
 #### 0.6.3 - 30.06.2015
 * Add usage highlights
 * Remove autocomplete in comments

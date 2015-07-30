@@ -18,7 +18,7 @@ module Interactive =
 
     let private handle (data : obj) =
         if data <> null then
-            let response = data.ToString()
+            let response = data.ToString().Replace("\\","\\\\") 
             fsiEditor |> Option.iter (fun ed ->
                 ed.insertText response |> ignore
                 )

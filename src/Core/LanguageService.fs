@@ -125,7 +125,7 @@ module LanguageService =
         ask str
 
     let parseEditor (editor : IEditor) =
-        if JS.isDefined editor && JS.isPropertyDefined editor "getGrammar" && editor.getGrammar().name = "F#" && unbox<obj>(editor.buffer.file) <> null then
+        if isFSharpEditor editor && unbox<obj>(editor.buffer.file) <> null then
             let path = editor.buffer.file.path
             let text = editor.getText()
             parse path text
@@ -135,7 +135,7 @@ module LanguageService =
         ask str
 
     let symbolUse fn line col =
-        let str = sprintf "symboluse \"%s\" %d %d" fn line col
+        let str = sprintf "symboluse \"%s\" %d %d\n" fn line col
         ask str
 
     let tooltip fn line col =

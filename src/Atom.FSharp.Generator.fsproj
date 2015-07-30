@@ -56,14 +56,13 @@
     <Compile Include="Components\Autocomplete.fs" />
     <Compile Include="Components\Tooltips.fs" />
     <Compile Include="Components\Toolbar.fs" />
-    <Compile Include="Components\Highlight.fs" />
     <Compile Include="Components\Errors.fs" />
     <Compile Include="Components\FindDeclaration.fs" />
     <Compile Include="Components\FAKE.fs" />
-    <Compile Include="Components\StatusBar.fs" />
     <Compile Include="Components\Interactive.fs" />
     <Compile Include="Components\FsLabPanel.fs" />
     <Compile Include="Components\HighlightUse.fs" />
+    <Compile Include="Components\Yeoman.fs" />
     <Compile Include="FSharpIDE.fs" />
     <Compile Include="main.fs" />
     <None Include="atom-bindings.fsx" />

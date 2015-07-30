@@ -12,8 +12,7 @@ open Atom
 [<ReflectedDefinition>]
 module Events =
 
-    let emitter = Emitter.create()
-
+    let private emitter = Emitter.create()
 
     type EventType =
         | ServerStart
@@ -49,18 +48,32 @@ module Events =
     let private log name o =
         Globals.console.log (name, System.DateTime.Now, o)
 
-    let mutable last = ""
+    let mutable private last = ""
+
+    let private tryParse<'T> s =
+        try
+            let res = unbox<'T>(Globals.JSON.parse s) |> Some
+            last <- ""
+            res
+        with
+        | ex ->
+            try
+                let s' = last + s
+                let res = unbox<'T>(Globals.JSON.parse s') |> Some
+                last <- ""
+                res
+            with
+            | ex ->
+                last <- last + s
+                None
 
     let parseAndEmit<'T> t s =
-        try
-            let s' = last + s
+        s |> tryParse<'T>
+        |> Option.iter(fun o ->
             let name = getName t
-            let o = unbox<'T>(Globals.JSON.parse s')
             log name o
             emitter.emit(name, o)
-            last <- ""
-        with
-        | ex -> last <- last + s
+        )
 
     let emitEmpty t s =
         let name = getName t

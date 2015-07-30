@@ -1,7 +1,7 @@
 # Keybindings require three things to be fully defined: A selector that is
 # matched against the focused element, the keystroke and the command to
 # execute.
-#
+#..
 # Below is a basic keybinding which registers on all platforms by applying to
 # the root workspace element.
 
@@ -10,6 +10,13 @@
 
 'atom-workspace atom-text-editor:not([mini])[data-grammar~=fsharp]':
     'alt-enter': 'FSI:Send-Selection'
-    'alt-/':'FSI:Send-Line'
     'ctrl-space': 'fsharp:autocomplete'
     'cmd-space': 'fsharp:autocomplete'
+'atom-workspace':
+    'f5': 'FAKE:Build-Default'
+
+'.platform-win32 atom-workspace atom-text-editor:not([mini])[data-grammar~=fsharp]':
+    'alt-/':'FSI:Send-Line'
+
+'.platform-darwin atom-workspace atom-text-editor:not([mini])[data-grammar~=fsharp]':
+    'ctrl-cmd-l':'FSI:Send-Line'

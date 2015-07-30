@@ -55,22 +55,20 @@ module AutocompleteProvider =
             let prefix = if options.prefix = "." || options.prefix = "=" then "" else options.prefix
             Atom.Promise.create(fun () ->
                 if isForced || lastResult.IsNone || options.prefix = "." then
-                    Events.once Events.Errors (fun _ ->
-                        Events.once Events.Completion (fun result ->
-                            lastResult <- Some result
-                            isForced <- false
-                            result.Data
-                            |> Seq.where(fun t -> t.Name.Contains(prefix))
-                            |> Seq.map(fun t -> { text =  t.Name
-                                                  replacementPrefix = prefix
-                                                  rightLabel = t.Glyph
-                                                  ``type`` = t.GlyphChar
-                                                  description = ""
-                                                } :> obj)
-                            |> Seq.toArray  
-                            |> Atom.Promise.resolve)
-                        LanguageService.completion path row col )
-                    LanguageService.parseEditor options.editor
+                    Events.once Events.Completion (fun result ->
+                        lastResult <- Some result
+                        isForced <- false
+                        result.Data
+                        |> Seq.where(fun t -> t.Name.Contains(prefix))
+                        |> Seq.map(fun t -> { text =  t.Name
+                                              replacementPrefix = prefix
+                                              rightLabel = t.Glyph
+                                              ``type`` = t.GlyphChar
+                                              description = ""
+                                            } :> obj)
+                        |> Seq.toArray
+                        |> Atom.Promise.resolve)
+                    LanguageService.completion path row col
                 else
                     isForced <- false
                     lastResult.Value.Data
