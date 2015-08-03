@@ -28,6 +28,7 @@ module Interactive =
     let private startFsi () =
         let fs = Process.spawnSame fsipath ""
         fsiProc <- fs |> Some
+        fs.stderr.on ("data", unbox<Function> (handle)) |> ignore
         fs.stdout.on ("data", unbox<Function> (handle)) |> ignore
 
     /// Kills the Fsi Process and reloads the REPL pane
