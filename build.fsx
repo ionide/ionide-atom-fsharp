@@ -80,11 +80,10 @@ Target "BuildGenerator" (fun () ->
 )
 
 Target "RunGenerator" (fun () ->
-
-        (TimeSpan.FromMinutes 5.0)
-        |> ProcessHelper.ExecProcess (fun p ->
-            p.FileName <- __SOURCE_DIRECTORY__ @@ "src" @@ "bin" @@ "Debug" @@ "Atom.FSharp.Generator.exe" )
-        |> ignore
+    (TimeSpan.FromMinutes 5.0)
+    |> ProcessHelper.ExecProcess (fun p ->
+        p.FileName <- __SOURCE_DIRECTORY__ @@ "src" @@ "bin" @@ "Debug" @@ "Atom.FSharp.Generator.exe" )
+    |> ignore
 )
 #if MONO
 #else
