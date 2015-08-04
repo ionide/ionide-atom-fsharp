@@ -103,6 +103,7 @@ module LanguageService =
         send "outputmode json\n"
         send "compilerlocation\n"
         child.stdout.on ("readable", unbox<Function> (child.stdout.read >> parseResponse )) |> ignore
+        child.stderr.on("data", unbox<Function>( fun n -> Globals.console.error (n.ToString()))) |> ignore
         ()
 
     let stop () =

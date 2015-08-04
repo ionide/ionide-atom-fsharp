@@ -60,29 +60,31 @@ module AutocompleteProvider =
                         lastRow <- row
                         lastResult <- Some result
                         isForced <- false
-                        result.Data
-                        |> Seq.where(fun t -> t.Name.Contains(prefix))
-                        |> Seq.map(fun t -> { text =  t.Name
-                                              replacementPrefix = prefix
-                                              rightLabel = t.Glyph
-                                              ``type`` = t.GlyphChar
-                                              description = ""
-                                            } :> obj)
-                        |> Seq.toArray
-                        |> Atom.Promise.resolve)
+                        let r = result.Data
+                                |> Seq.where(fun t -> t.Name.Contains(prefix))
+                                |> Seq.map(fun t -> { text =  t.Name
+                                                      replacementPrefix = prefix
+                                                      rightLabel = t.Glyph
+                                                      ``type`` = t.GlyphChar
+                                                      description = " "
+                                                    } :> obj)
+                                |> Seq.toArray
+                        if r.Length > 0 then LanguageService.helptext (r.[0] :?> Suggestion).text
+                        r |> Atom.Promise.resolve)
                     LanguageService.completion path row col
                 else
                     isForced <- false
-                    lastResult.Value.Data
-                    |> Seq.where(fun t -> t.Name.Contains(prefix))
-                    |> Seq.map(fun t -> { text =  t.Name
-                                          replacementPrefix = prefix
-                                          rightLabel = t.Glyph
-                                          ``type`` = t.GlyphChar
-                                          description = ""
-                                        } :> obj)
-                    |> Seq.toArray
-                    |> Atom.Promise.resolve)
+                    let r = lastResult.Value.Data
+                            |> Seq.where(fun t -> t.Name.Contains(prefix))
+                            |> Seq.map(fun t -> { text =  t.Name
+                                                  replacementPrefix = prefix
+                                                  rightLabel = t.Glyph
+                                                  ``type`` = t.GlyphChar
+                                                  description = " "
+                                                } :> obj)
+                            |> Seq.toArray
+                    if r.Length > 0 then LanguageService.helptext (r.[0] :?> Suggestion).text
+                    r |> Atom.Promise.resolve)
         else Atom.Promise.create(fun () -> Atom.Promise.resolve [||])
 
 
@@ -91,14 +93,21 @@ module AutocompleteProvider =
             if emitter.IsNone then
                 let package = Globals.atom.packages.getLoadedPackage("autocomplete-plus") |> unbox<Package>
                 let e = package.mainModule.autocompleteManager.suggestionList.emitter
-                let handler () =
-                    let selected = jq "li.selected span.word-container .word"
+                let handler flag =
+                    let selected = if flag then (jq "li.selected").prev().find(" span.word-container .word")
+                                   else (jq "li.selected").next().find(" span.word-container .word")
                     let text = selected.text()
                     LanguageService.helptext text
+                    
                     () :> obj
-                e.on("did-select-next", handler |> unbox<Function>) |> ignore
-                e.on("did-select-previous", handler |> unbox<Function>) |> ignore
+                e.on("did-select-next", (fun _ -> handler false) |> unbox<Function>) |> ignore
+                e.on("did-select-previous", (fun _ -> handler true) |> unbox<Function>) |> ignore
                 emitter <- Some e
             dispatchAutocompleteCommand ()
             isForced <- true) |> unbox<Function>) |> ignore
+        Events.on Events.Helptext ((fun (n : DTO.HelptextResult) ->
+            let h = jq "div.suggestion-description span"
+            h.text(n.Data.Text) |> ignore ) |> unbox<Function>) |> ignore
+
+
         { selector = ".source.fsharp"; disableForSelector = ".source.fsharp .string, .source.fsharp .comment"; inclusionPriority = 1; excludeLowerPriority = true; getSuggestions = getSuggestion}
