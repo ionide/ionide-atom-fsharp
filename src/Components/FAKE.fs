@@ -65,8 +65,11 @@ module FAKE =
         let cancelledCallback = Func<_>(fun _ -> buildListView |> Option.iter(fun (model, view) ->  view.hide()) :> obj)
         let confirmedCallback = unbox<Func<_, _>> (fun (buildDescription : ListView.ItemDescription) ->
             buildListView |> Option.iter (fun (model, view) -> view.hide())
-            let build = BuildList |> Seq.find(fun n -> let desc = sprintf "%s - %s %s" n.Name (n.Start.ToShortDateString().Replace("\\","-") ) (n.Start.ToShortTimeString().Replace("\\","-"))
-                                                       desc = buildDescription.data)
+            let build = BuildList |> Seq.find(fun n ->
+                let dateString = n.Start.ToShortDateString().Replace("\\",".").Replace("/",".")
+                let timeString = n.Start.ToShortTimeString().Replace("\\",".").Replace("/", ".")
+                let desc = sprintf "%s - %s %s" n.Name dateString timeString
+                desc = buildDescription.data)
 
             Globals.atom.workspace._open(buildDescription.data, {split = "right"})._done((fun ed ->
                 build.TextEditor <- Some ed
@@ -102,7 +105,10 @@ module FAKE =
             let m = BuildList
                     |> Seq.sortBy(fun n -> n.Start)
                     |> Seq.map(fun n ->
-                        let name = sprintf "%s - %s %s" n.Name (n.Start.ToShortDateString()) (n.Start.ToShortTimeString())
+                        let dateString = n.Start.ToShortDateString().Replace("\\",".").Replace("/",".")
+                        let timeString = n.Start.ToShortTimeString().Replace("\\",".").Replace("/", ".")
+
+                        let name = sprintf "%s - %s %s" n.Name dateString timeString
                         {ListView.data = name } :> obj)
                     |> Seq.toArray
                     |> Array.rev
