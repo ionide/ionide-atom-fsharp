@@ -63,6 +63,7 @@
     <Compile Include="Components\FsLabPanel.fs" />
     <Compile Include="Components\HighlightUse.fs" />
     <Compile Include="Components\Yeoman.fs" />
+    <Compile Include="Components\AddFile.fs" />
     <Compile Include="FSharpIDE.fs" />
     <Compile Include="main.fs" />
     <None Include="atom-bindings.fsx" />

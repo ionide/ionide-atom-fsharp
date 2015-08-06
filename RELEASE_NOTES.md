@@ -1,5 +1,12 @@
+#### 0.9.1 - 04.08.2015
+* Fix date format in FAKE builds list
+
+#### 0.9.0 - 04.08.2015
+* Add autocomplete help text support
+* Detecting changes in fsproj files  
+
 #### 0.8.4 - 27.07.2015
-* Fix performance issues 
+* Fix performance issues
 
 #### 0.8.3 - 27.07.2015
 * Fix path display in FSI panel

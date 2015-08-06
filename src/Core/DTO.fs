@@ -50,8 +50,13 @@ module DTO =
         Uses : SymbolUse array
     }
 
+    type Helptext = {
+        Name : string
+        Text : string
+    }
+
     type CompilerLocationResult = {Kind : string; Data : string}
-    type HelptextResult = {Kind : string; Data : obj}
+    type HelptextResult = {Kind : string; Data : Helptext}
 
     type CompletionResult = {Kind : string; Data : Completion []}
     type SymbolUseResult = {Kind : string; Data : SymbolUses }

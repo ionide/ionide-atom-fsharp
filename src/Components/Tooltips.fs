@@ -106,7 +106,7 @@ module TooltipHandler =
                 let x = e.pageX - j.offset().left
                 let y = e.pageY - j.offset().top
                 tooltip.css("left" , x) |> ignore
-                tooltip.css("top"  , y) |> ignore
+                tooltip.css("top"  , y - 20.) |> ignore
                 tooltip.fadeTo(300., 60.) |> ignore
         )
 

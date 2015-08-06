@@ -38,7 +38,7 @@ module LanguageService =
         if data <> null then
             let response = data.ToString().Split('\n')
             response |> Seq.iter(fun s ->
-                if s.Contains "\"Kind\":\"ERROR\"" then
+                if s.Contains "\"Kind\":\"error\"" then
                     s |> Events.emitEmpty Events.ServerError
                     last <- Events.ServerError
                 elif s.Contains "\"Kind\":\"project\"" then
@@ -69,7 +69,7 @@ module LanguageService =
                 elif s.Contains "\"Kind\":\"compilerlocation\"" then
                     s |> Events.parseAndEmit<DTO.CompilerLocationResult> Events.CompilerLocation
                     last <- Events.CompilerLocation
-                elif s.Contains "\"Kind\":\"INFO\"" then
+                elif s.Contains "\"Kind\":\"info\"" then
                     ()
                 elif s <> "" then
                     match last with
@@ -103,6 +103,7 @@ module LanguageService =
         send "outputmode json\n"
         send "compilerlocation\n"
         child.stdout.on ("readable", unbox<Function> (child.stdout.read >> parseResponse )) |> ignore
+        child.stderr.on("data", unbox<Function>( fun n -> Globals.console.error (n.ToString()))) |> ignore
         ()
 
     let stop () =

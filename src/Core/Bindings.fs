@@ -85,6 +85,10 @@ module HelperStructures =
 
 [<AutoOpen>]
 module Bindings =
+    type IAtom with
+
+        [<FunScript.JSEmitInline("({0}.emitter)")>]
+        member __.emitter with get() : IEmitter = failwith "JS"
 
 
     type TextBuffer.ITextBuffer with

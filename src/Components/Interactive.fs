@@ -18,7 +18,7 @@ module Interactive =
 
     let private handle (data : obj) =
         if data <> null then
-            let response = data.ToString().Replace("\\","\\\\") 
+            let response = data.ToString().Replace("\\","\\\\")
             fsiEditor |> Option.iter (fun ed ->
                 ed.insertText response |> ignore
                 )
@@ -28,6 +28,7 @@ module Interactive =
     let private startFsi () =
         let fs = Process.spawnSame fsipath ""
         fsiProc <- fs |> Some
+        fs.stderr.on ("data", unbox<Function> (handle)) |> ignore
         fs.stdout.on ("data", unbox<Function> (handle)) |> ignore
 
     /// Kills the Fsi Process and reloads the REPL pane
@@ -55,11 +56,17 @@ module Interactive =
     // TODO - trying to get it to open the repl if it's not already open
     let private sendToFsi (msg' : string) =
         if fsiProc.IsNone then openFsi()
+        
+        let editor = Globals.atom.workspace.getActiveTextEditor()
+        let dir = Globals.dirname(editor.getPath())
         let msg = msg'.Replace("\uFEFF", "") + ";;\n"
+
         fsiEditor |> Option.iter( fun ed ->
             ed.insertText msg |> ignore
             )
         fsiProc |> Option.iter( fun cproc ->
+            let cd = "#cd \"\"\"" + dir + "\"\"\";;\n"
+            cproc.stdin.write(cd, "utf-8") 
             cproc.stdin.write(msg, "utf-8")
             )
 

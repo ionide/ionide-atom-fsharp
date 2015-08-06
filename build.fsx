@@ -32,6 +32,7 @@ open Fake.ZipHelper
 #load "src/Components/FAKE.fs"
 #load "src/Components/Interactive.fs"
 #load "src/Components/Yeoman.fs"
+#load "src/Components/AddFile.fs"
 #load "src/FSharpIDE.fs"
 #load "src/main.fs"
 #endif
@@ -80,11 +81,10 @@ Target "BuildGenerator" (fun () ->
 )
 
 Target "RunGenerator" (fun () ->
-
-        (TimeSpan.FromMinutes 5.0)
-        |> ProcessHelper.ExecProcess (fun p ->
-            p.FileName <- __SOURCE_DIRECTORY__ @@ "src" @@ "bin" @@ "Debug" @@ "Atom.FSharp.Generator.exe" )
-        |> ignore
+    (TimeSpan.FromMinutes 5.0)
+    |> ProcessHelper.ExecProcess (fun p ->
+        p.FileName <- __SOURCE_DIRECTORY__ @@ "src" @@ "bin" @@ "Debug" @@ "Atom.FSharp.Generator.exe" )
+    |> ignore
 )
 #if MONO
 #else
