@@ -104,4 +104,5 @@ module ToolbarHandler =
         subscriptions |> Seq.iter(fun n -> n.dispose())
         subscriptions.Clear()
         cursorSubscription |> Option.iter (fun cs -> cs.dispose())
+        bar.destroy ()
         ()
