@@ -12,6 +12,9 @@
     'alt-enter': 'FSI:Send-Selection'
     'ctrl-space': 'fsharp:autocomplete'
     'cmd-space': 'fsharp:autocomplete'
+    'f12': 'symbols-view:go-to-declaration'
+    'alt-f12': 'symbols-view:return-from-declaration'
+
 'atom-workspace':
     'f5': 'FAKE:Build-Default'
 
