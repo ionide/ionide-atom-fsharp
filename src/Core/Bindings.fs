@@ -39,6 +39,11 @@ module HelperStructures =
         priority : int
     }
 
+    type ConfigChange<'T> = {
+        oldValue : 'T
+        newValue : 'T 
+    }
+
     type PanelOptions = {
         item     : JQuery
         visible  : bool

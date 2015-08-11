@@ -1,3 +1,8 @@
+#### 0.10.0 - 10.08.2015
+* Add settings for turning on / off quick info panel and highlight use
+* Add return from declaration implementation
+* Add keyboard shortcuts for go to declaration and return from declaration
+
 #### 0.9.1 - 04.08.2015
 * Fix date format in FAKE builds list
 
