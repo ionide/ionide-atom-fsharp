@@ -1,3 +1,6 @@
+#### 0.10.1 - 12.08.2015
+* Add Mono path to plugin settings
+
 #### 0.10.0 - 10.08.2015
 * Add settings for turning on / off quick info panel and highlight use
 * Add return from declaration implementation
