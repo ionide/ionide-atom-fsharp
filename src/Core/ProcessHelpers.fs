@@ -20,6 +20,13 @@ module Process =
     let isWin () =
         Globals._process.platform.StartsWith("win")
 
+    let fromPath name =
+        if isWin () then
+            name
+        else
+            let path = Globals.atom.config.get("atom-fsharp.MonoPath") |> unbox<string>
+            path + "/" + name
+
     ///Create new notification or append text to existing notification
     let notice (currentNotification: INotification option ref) isError text details =
         match !currentNotification with

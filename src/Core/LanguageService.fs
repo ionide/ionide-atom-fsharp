@@ -96,7 +96,7 @@ module LanguageService =
 
     let start () =
         let location = Globals.atom.packages.packageDirPaths.[0] + "/atom-fsharp/bin/fsautocomplete.exe"
-        let child = Process.spawnSimple location "mono"
+        let child = Process.fromPath "mono" |> Process.spawnSimple location 
         child.stdin.setEncoding( encoding);
         service <- { service with State = State.On; PreviousState = service.State; Child = Some child }
         "" |> Events.emitEmpty Events.ServerStart

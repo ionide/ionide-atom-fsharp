@@ -51,5 +51,7 @@ src/atom-fsharp/lib/
 src/fsharp/lib/fsharp.js
 src/atom-fsharp/lib/fsharp.js
 /temp/release
+src/atom-fsharp/bin-fantomas/
+
 temp
 .fake
