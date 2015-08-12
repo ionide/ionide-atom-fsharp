@@ -87,7 +87,22 @@ let translateModules() =
                 // ( if i = meths.Length then "" else "," )
         yield "config:  {
             ShowQuickInfoPanel: {type: 'boolean', 'default': true},
-            ShowUseHighlights: {type: 'boolean', 'default': true}}"
+            ShowUseHighlights: {type: 'boolean', 'default': true},
+            MonoPath: {type: 'string', 'default': '/usr/bin'}"
+
+        //yield  "FormatDocument: {type: 'object', properties: {
+        //        SemicolonAtEndOfLine : {type: 'boolean', 'default': true},
+        //        NoSpaceBeforeArgument : {type: 'boolean', 'default': true},
+        //        NoSpaceBeforeColon : {type: 'boolean', 'default': true},
+        //        NoSpaceAfterComma : {type: 'boolean', 'default': true},
+        //        NoSpaceAfterSemiColon : {type: 'boolean', 'default': true},
+        //        IndentOnTryWith : {type: 'boolean', 'default': true},
+        //        NoSpaceAroundDelimiter : {type: 'boolean', 'default': true},
+        //        ReorderOpenDeclaration : {type: 'boolean', 'default': true},
+        //        StrictMode : {type: 'boolean', 'default': true}
+        //    }}"
+        yield "}"
+
         yield "};" ]
       |> String.concat "\n"
     System.IO.File.WriteAllText(System.IO.Path.Combine(root, fileName), moduleJS)

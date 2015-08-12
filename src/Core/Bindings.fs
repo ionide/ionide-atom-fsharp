@@ -41,7 +41,7 @@ module HelperStructures =
 
     type ConfigChange<'T> = {
         oldValue : 'T
-        newValue : 'T 
+        newValue : 'T
     }
 
     type PanelOptions = {
@@ -90,6 +90,7 @@ module HelperStructures =
 
 [<AutoOpen>]
 module Bindings =
+
     type IAtom with
 
         [<FunScript.JSEmitInline("({0}.emitter)")>]
@@ -114,6 +115,10 @@ module Bindings =
 
     [<JSEmitInline("{0}.component.setInputEnabled({1})")>]
     let setComponentEnabled(e : Element, f : bool) = failwith "JS"
+
+    [<FunScript.JSEmitInline("(child_process.execFile({0}, {1}, {2}, {3}))")>]
+    let execFile(file : string, args : string[], options : child_process.AnonymousType599, cb: Error -> Buffer -> Buffer -> unit) : child_process.ChildProcess = failwith "JS"
+
 
     type stream.Writable with
         [<FunScript.JSEmitInline("({0}.setEncoding({1}))")>]

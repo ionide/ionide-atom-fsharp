@@ -33,6 +33,7 @@ open Fake.ZipHelper
 #load "src/Components/Interactive.fs"
 #load "src/Components/Yeoman.fs"
 #load "src/Components/AddFile.fs"
+#load "src/Components/Format.fs"
 #load "src/FSharpIDE.fs"
 #load "src/main.fs"
 #endif
