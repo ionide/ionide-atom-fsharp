@@ -1,3 +1,6 @@
+#### 0.11.0 - 12.08.2015
+* Update of language grammar definition
+
 #### 0.10.1 - 12.08.2015
 * Add Mono path to plugin settings
 
