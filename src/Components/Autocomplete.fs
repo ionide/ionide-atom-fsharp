@@ -21,6 +21,7 @@ module AutocompleteProvider =
     let mutable emitter : IEmitter option = None
     let mutable lastRow = 0
 
+    let a'' = "a"
 
     type GetSuggestionOptions = {
         editor          : AtomCore.IEditor
@@ -29,13 +30,13 @@ module AutocompleteProvider =
         scopeDescriptor : string[] }
 
     type Provider = {
-        selector             : string
+        selector             : string;
         disableForSelector   : string
         inclusionPriority    : int
         excludeLowerPriority : bool
         getSuggestions       : GetSuggestionOptions -> Atom.Promise.Promise  }
 
-    type SuggestionList = { emitter             : IEmitter}
+    type SuggestionList = { emitter             : IEmitter }
     type Manager =        { suggestionList      : SuggestionList }
     type Module =         { autocompleteManager : Manager }
     type Package =        { mainModule          : Module }
@@ -98,7 +99,7 @@ module AutocompleteProvider =
                                    else (jq "li.selected").next().find(" span.word-container .word")
                     let text = selected.text()
                     LanguageService.helptext text
-                    
+
                     () :> obj
                 e.on("did-select-next", (fun _ -> handler false) |> unbox<Function>) |> ignore
                 e.on("did-select-previous", (fun _ -> handler true) |> unbox<Function>) |> ignore
