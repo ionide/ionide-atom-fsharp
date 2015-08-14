@@ -1,3 +1,6 @@
+#### 0.11.3 - 14.08.2015
+* Send to FSI bug fix
+
 #### 0.11.2 - 14.08.2015
 * Update of language grammar definition
 
