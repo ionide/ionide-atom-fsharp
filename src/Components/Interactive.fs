@@ -56,19 +56,20 @@ module Interactive =
     // TODO - trying to get it to open the repl if it's not already open
     let private sendToFsi (msg' : string) =
         if fsiProc.IsNone then openFsi()
-        
-        let editor = Globals.atom.workspace.getActiveTextEditor()
-        let dir = Globals.dirname(editor.getPath())
-        let msg = msg'.Replace("\uFEFF", "") + ";;\n"
 
-        fsiEditor |> Option.iter( fun ed ->
-            ed.insertText msg |> ignore
-            )
-        fsiProc |> Option.iter( fun cproc ->
-            let cd = "#cd \"\"\"" + dir + "\"\"\";;\n"
-            cproc.stdin.write(cd, "utf-8") 
-            cproc.stdin.write(msg, "utf-8")
-            )
+        let editor = Globals.atom.workspace.getActiveTextEditor()
+        if isFSharpEditor editor then 
+            let dir = Globals.dirname(editor.getPath())
+            let msg = msg'.Replace("\uFEFF", "") + ";;\n"
+
+            fsiEditor |> Option.iter( fun ed ->
+                ed.insertText msg |> ignore
+                )
+            fsiProc |> Option.iter( fun cproc ->
+                let cd = "#cd \"\"\"" + dir + "\"\"\";;\n"
+                cproc.stdin.write(cd, "utf-8")
+                cproc.stdin.write(msg, "utf-8")
+                )
 
 
     /// Finds FSI on the system
