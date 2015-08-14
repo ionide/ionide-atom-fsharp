@@ -142,7 +142,7 @@
             "patterns": [
                 {
                     "name": "meta.binding.fsharp",
-                    "begin": "(val mutable|val|let mutable|let|member|static member|override|let!)(\\s+rec|mutable)?\\s+(\\([^\\s-]*\\)|[_a-zA-Z]([a-zA-Z0-9,\\.]|(?<=,)\\s)*|``.*``)",
+                    "begin": "(val mutable|val|let mutable|let|member|static member|override|let!)(\\s+rec|mutable)?(\\s+private|internal|public)?\\s+(\\([^\\s-]*\\)|[_a-zA-Z]([a-zA-Z0-9,\\.]|(?<=,)\\s)*|``.*``)",
                     "end": "((with)|=|$)",
                     "beginCaptures": {
                         "1": {
@@ -152,6 +152,9 @@
                             "name": "keyword.other.function-recursive.fsharp"
                         },
                         "3": {
+                            "name": "keyword.other.access.fsharp"
+                        },
+                        "4": {
                             "name": "variable.other.binding.fsharp"
                         }
                     },
@@ -350,7 +353,7 @@
             "patterns": [
                 {
                     "name": "record.fsharp",
-                    "match": "(type)[\\s]+(private|internal|public)?[\\s]*([a-zA-Z0-9'<>^:,. ]+)((with)|=|(\\(\\)))",
+                    "match": "(type)[\\s]+(private|internal|public)?[\\s]*([a-zA-Z0-9'<>^:,. ]+)((with)|(=)|(\\(\\)))",
 
                     "captures": {
                         "1": {
@@ -366,6 +369,9 @@
                             "name": "keyword.other.fsharp"
                         },
                         "6": {
+                            "name": "keyword.other.fsharp"
+                        },
+                        "7": {
                             "name": "constant.language.unit.fsharp"
                         }
                     }
