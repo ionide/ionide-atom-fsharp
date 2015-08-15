@@ -1,3 +1,6 @@
+#### 0.12.0 - 15.08.2015
+* Add File formatting
+
 #### 0.11.4 - 14.08.2015
 * Update of language grammar definition
 
