@@ -76,14 +76,12 @@ module Process =
                         Globals.spawn(linuxCmd, prms, options)
         procs
 
-    let exec location linuxCmd (cmd : string) =
-        let cmd' = if cmd = "" then [||] else cmd.Split(' ')
-
+    let exec location linuxCmd cmd = 
         let options = {cwd = Globals.atom.project.getPaths().[0]} |> unbox<AnonymousType599>
         let procs = if isWin() then
-                        execFile(location, cmd', options, fun _ _ _ -> Globals.console.log "aaa")
+                        execFile(location, cmd, options, fun _ _ _ -> Globals.console.log "aaa")
                     else
-                        let prms = Array.concat [ [|location|]; cmd']
+                        let prms = Array.concat [ [|location|]; cmd]
                         execFile(linuxCmd, prms, options, fun _ _ _ -> ())
         procs
 
