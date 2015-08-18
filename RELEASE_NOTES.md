@@ -1,3 +1,7 @@
+#### 0.12.1 - 18.08.2015
+* Force file parsing before autocomplete
+* Look for fsproj file only for F# files
+
 #### 0.12.0 - 15.08.2015
 * Add File formatting
 
