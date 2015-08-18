@@ -56,23 +56,25 @@ module AutocompleteProvider =
             let col = int options.bufferPosition.column + 1
             let prefix = if options.prefix = "." || options.prefix = "=" then "" else options.prefix
             Atom.Promise.create(fun () ->
-                if isForced || lastResult.IsNone || options.prefix = "." || lastRow <> row then
-                    Events.once Events.Completion (fun result ->
-                        lastRow <- row
-                        lastResult <- Some result
-                        isForced <- false
-                        let r = result.Data
-                                |> Seq.where(fun t -> t.Name.Contains(prefix))
-                                |> Seq.map(fun t -> { text =  t.Name
-                                                      replacementPrefix = prefix
-                                                      rightLabel = t.Glyph
-                                                      ``type`` = t.GlyphChar
-                                                      description = " "
-                                                    } :> obj)
-                                |> Seq.toArray
-                        if r.Length > 0 then LanguageService.helptext (r.[0] :?> Suggestion).text
-                        r |> Atom.Promise.resolve)
-                    LanguageService.completion path row col
+                if isForced || lastResult.IsNone || prefix = "" || lastRow <> row  then
+                    Events.once Events.Errors (fun result ->
+                        Events.once Events.Completion (fun result ->
+                            lastRow <- row
+                            lastResult <- Some result
+                            isForced <- false
+                            let r = result.Data
+                                    |> Seq.where(fun t -> t.Name.Contains(prefix))
+                                    |> Seq.map(fun t -> { text =  t.Name
+                                                          replacementPrefix = prefix
+                                                          rightLabel = t.Glyph
+                                                          ``type`` = t.GlyphChar
+                                                          description = " "
+                                                        } :> obj)
+                                    |> Seq.toArray
+                            if r.Length > 0 then LanguageService.helptext (r.[0] :?> Suggestion).text
+                            r |> Atom.Promise.resolve)
+                        LanguageService.completion path row col)
+                    LanguageService.parseEditor options.editor
                 else
                     isForced <- false
                     let r = lastResult.Value.Data
