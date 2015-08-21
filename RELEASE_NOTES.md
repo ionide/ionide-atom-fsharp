@@ -1,3 +1,6 @@
+#### 0.12.2 - 21.08.2015
+* Fix multiline errors display
+
 #### 0.12.1 - 18.08.2015
 * Force file parsing before autocomplete
 * Look for fsproj file only for F# files
