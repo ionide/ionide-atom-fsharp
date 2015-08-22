@@ -1,3 +1,6 @@
+#### 0.12.4 - 22.08.2015
+* Fix error panel bug
+
 #### 0.12.3 - 22.08.2015
 * Fix Highlighting Bug ([#121](https://github.com/fsprojects/FSharp.Atom/issues/121))
 
