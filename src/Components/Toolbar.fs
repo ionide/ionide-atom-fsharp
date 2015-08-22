@@ -34,6 +34,8 @@ module ToolbarHandler =
     /// Makes request for toolbar informations
     let private askForToolbar (editor : IEditor)  =
         if unbox<obj>(editor.buffer.file) <> null then
+            let tb = jq(".toolbar-inner")
+            tb.empty() |> ignore
             let pos = getCursor editor
             let path = editor.buffer.file.path
             LanguageService.toolbar path (int pos.row + 1) (int pos.column + 1)
