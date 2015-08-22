@@ -1,3 +1,6 @@
+#### 0.12.3 - 22.08.2015
+* Fix Highlighting Bug ([#121](https://github.com/fsprojects/FSharp.Atom/issues/121))
+
 #### 0.12.2 - 21.08.2015
 * Fix multiline errors display
 
