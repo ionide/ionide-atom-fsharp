@@ -104,8 +104,8 @@
                 },
                 {
                     "name": "comment.block.fsharp",
-                    "begin": "\\(\\*",
-                    "end": "\\*\\)",
+                    "begin": "\\(\\*[^\\)]",
+                    "end": "[^\\(]\\*\\)",
                     "patterns": [
                         {
                             "include": "#comments"
