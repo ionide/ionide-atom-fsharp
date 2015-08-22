@@ -1,3 +1,6 @@
+#### 0.12.5 - 23.08.2015
+* Fix clearing quick info panel
+
 #### 0.12.4 - 22.08.2015
 * Fix error panel bug
 
