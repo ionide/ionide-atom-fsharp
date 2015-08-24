@@ -19,5 +19,5 @@ module AddFileHandler =
 
     let activate () =
         Globals.atom.emitter.on("advanced-new-file-created", (fun (n : string) -> Globals.console.log n) |> unbox<Function> )
-        |> ignore     
+        |> ignore
         ()
