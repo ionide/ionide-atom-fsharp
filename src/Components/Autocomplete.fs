@@ -21,8 +21,6 @@ module AutocompleteProvider =
     let mutable emitter : IEmitter option = None
     let mutable lastRow = 0
 
-    let a'' = "a"
-
     type GetSuggestionOptions = {
         editor          : AtomCore.IEditor
         bufferPosition  : TextBuffer.IPoint
@@ -99,7 +97,14 @@ module AutocompleteProvider =
                 let handler flag =
                     let selected = if flag then (jq "li.selected").prev().find(" span.word-container .word")
                                    else (jq "li.selected").next().find(" span.word-container .word")
-                    let text = selected.text()
+
+                    let text = if selected.length > 0. then
+                                    selected.text()
+                               else
+                                    if flag then
+                                        (jq ".suggestion-list-scroller .list-group li").last().find(" span.word-container .word").text()
+                                    else
+                                        (jq ".suggestion-list-scroller .list-group li").first().find(" span.word-container .word").text()
                     LanguageService.helptext text
 
                     () :> obj
