@@ -1,3 +1,6 @@
+#### 0.12.8 - 24.08.2015
+* Fix Highlighting Bug ([#113](https://github.com/fsprojects/FSharp.Atom/issues/113))
+
 #### 0.12.7 - 24.08.2015
 * Fix autocomplete helptext ([#115](https://github.com/fsprojects/FSharp.Atom/issues/115))
 
