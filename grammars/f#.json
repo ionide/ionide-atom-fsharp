@@ -28,6 +28,9 @@
             "include": "#chars"
         },
         {
+            "include": "#double_tick"
+        },
+        {
             "include": "#definition"
         },
         {
@@ -41,9 +44,6 @@
         },
         {
             "include": "#keywords"
-        },
-        {
-            "include": "#double_tick"
         },
         {
             "include": "#records"
@@ -142,8 +142,8 @@
             "patterns": [
                 {
                     "name": "meta.binding.fsharp",
-                    "begin": "(val mutable|val|let mutable|let|member|static member|override|let!)(\\s+rec|mutable)?(\\s+private|internal|public)?\\s+(\\([^\\s-]*\\)|[_a-zA-Z]([_a-zA-Z0-9,\\.]|(?<=,)\\s)*|``.*``)",
-                    "end": "((with)|=|$)",
+                    "begin": "(val mutable|val|let mutable|let|member|static member|override|let!)(\\s+rec|mutable)?(\\s+private|internal|public)?\\s+(\\([^\\s-]*\\)|[_a-zA-Z]([_a-zA-Z0-9,\\.]|(?<=,)\\s)*)",
+                    "end": "((``.*``)|(with)|=|$)",
                     "beginCaptures": {
                         "1": {
                             "name": "keyword.other.binding.fsharp"
@@ -163,7 +163,10 @@
                             "name": "keyword.other.fsharp"
                         },
                         "2": {
-                            "name": "punctuation.separator.function.type-constraint.fsharp"
+                            "name": "variable.other.binding.fsharp"
+                        },
+                        "3": {
+                            "name": "keyword.other.fsharp"
                         }
                     },
                     "patterns": [
@@ -178,7 +181,7 @@
             "patterns": [
                 {
                     "name": "keyword.other.fsharp",
-                    "match": "\\b(yield!|yield|class|match|delegate|of|new|in|as|if|then|else|elif|for|begin|end|inherit|do|let\\!|return\\!|return|interface|with|member|try|finally|and)\\b"
+                    "match": "\\b(yield!|yield|class|match|delegate|of|new|in|as|if|then|else|elif|for|begin|end|inherit|do|let\\!|return\\!|return|interface|with|member|try|finally|and|when|use|use\\!)\\b"
                 },
                 {
                     "name": "meta.preprocessor.fsharp",
@@ -333,17 +336,17 @@
         "double_tick": {
             "patterns": [
                 {
-                    "name": "source.fsharp",
-                    "begin": "(?=[^\\\\])(``)",
-                    "end": "(``)",
-                    "beginCaptures": {
+                    "name": "variable.other.binding.fsharp",
+                    "match":"(``)(.*)(``)",
+                    "captures": {
                         "1": {
-                            "name": "source.fsharp"
-                        }
-                    },
-                    "endCaptures": {
+                            "name": "string.quoted.single.fsharp"
+                        },
                         "1": {
-                            "name": "source.fsharp"
+                            "name": "variable.other.binding.fsharp"
+                        },
+                        "3": {
+                            "name": "string.quoted.single.fsharp"
                         }
                     }
                 }
