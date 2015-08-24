@@ -1,3 +1,6 @@
+#### 0.12.6 - 24.08.2015
+* Quick info panel using only one line.
+
 #### 0.12.5 - 23.08.2015
 * Fix clearing quick info panel
 
