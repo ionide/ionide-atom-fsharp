@@ -1,3 +1,6 @@
+#### 0.12.7 - 24.08.2015
+* Fix autocomplete helptext ([#115](https://github.com/fsprojects/FSharp.Atom/issues/115))
+
 #### 0.12.6 - 24.08.2015
 * Quick info panel using only one line.
 
