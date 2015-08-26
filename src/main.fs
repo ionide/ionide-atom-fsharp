@@ -84,10 +84,25 @@ let translateModules() =
           let parArgs = String.concat "" [ for j in 1 .. m.GetParameters().Length -> sprintf "(p%i)" j ]
           yield m.Name + ": function(" + parNames + ") {"
           yield "  return _funcs[" + string i + "](_self)" + parArgs + "; }" + ","
-                // ( if i = meths.Length then "" else "," )
+
         yield "config:  {
             ShowQuickInfoPanel: {type: 'boolean', 'default': true},
-            ShowUseHighlights: {type: 'boolean', 'default': true}}"
+            ShowUseHighlights: {type: 'boolean', 'default': true},
+            MonoPath: {type: 'string', 'default': '/usr/bin'},"
+
+        yield  "FormatDocument: {type: 'object', properties: {
+                SemicolonAtEndOfLine : {type: 'boolean', 'default': false},
+                NoSpaceBeforeArgument : {type: 'boolean', 'default': true},
+                NoSpaceBeforeColon : {type: 'boolean', 'default': true},
+                NoSpaceAfterComma : {type: 'boolean', 'default': true},
+                NoSpaceAfterSemiColon : {type: 'boolean', 'default': true},
+                IndentOnTryWith : {type: 'boolean', 'default': false},
+                NoSpaceAroundDelimiter : {type: 'boolean', 'default': true},
+                ReorderOpenDeclaration : {type: 'boolean', 'default': false},
+                StrictMode : {type: 'boolean', 'default': false}
+            }}"
+        yield "}"
+
         yield "};" ]
       |> String.concat "\n"
     System.IO.File.WriteAllText(System.IO.Path.Combine(root, fileName), moduleJS)

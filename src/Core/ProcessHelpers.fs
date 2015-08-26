@@ -20,6 +20,13 @@ module Process =
     let isWin () =
         Globals._process.platform.StartsWith("win")
 
+    let fromPath name =
+        if isWin () then
+            name
+        else
+            let path = Globals.atom.config.get("atom-fsharp.MonoPath") |> unbox<string>
+            path + "/" + name
+
     ///Create new notification or append text to existing notification
     let notice (currentNotification: INotification option ref) isError text details =
         match !currentNotification with
@@ -67,6 +74,15 @@ module Process =
                     else
                         let prms = Array.concat [ [|location|]; cmd']
                         Globals.spawn(linuxCmd, prms, options)
+        procs
+
+    let exec location linuxCmd cmd = 
+        let options = {cwd = Globals.atom.project.getPaths().[0]} |> unbox<AnonymousType599>
+        let procs = if isWin() then
+                        execFile(location, cmd, options, fun _ _ _ -> Globals.console.log "aaa")
+                    else
+                        let prms = Array.concat [ [|location|]; cmd]
+                        execFile(linuxCmd, prms, options, fun _ _ _ -> ())
         procs
 
     ///Simple process spawn - just location of executable file

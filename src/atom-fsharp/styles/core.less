@@ -25,70 +25,7 @@
     overflow-y: scroll;
 }
 
-.error-pane {
-  position:relative;
-  .error-table {
-    width:100%;
-    line-height: 1.42;
-    th {
-      .border-flip(@tool-panel-background-color);
-      border-top: 1px solid transparent;
-      padding:2px;
-      padding-top:0px;
-    }
-    tr.selected {
-      background-color: @background-color-selected;
-    }
-    tr:hover {
-      background-color: @background-color-selected;
-      color: @text-color-selected;
-      cursor:pointer;
-    }
-    td {
-    }
-  }
 
-
-
-  .icon-min{
-      .octicon(dash, 1.2em);
-      display: inline-block;
-      //opacity: .6;
-     // padding: 0 .4em;
-
-      &::before {
-        text-align: center;
-      }
-  }
-
-  .icon-max{
-      .octicon(plus, 1.2em);
-      display: inline-block;
-     // opacity: .6;
-     // padding: 0 .4em;
-
-      &::before {
-        text-align: center;
-      }
-  }
-
-  pre {
-    background: #161719;
-    font-size: 10px;
-    margin: 0px;
-    padding: 0px;
-    border:none;
-  }
-  .pending {
-    color: @text-color-warning;
-  }
-  .success {
-    color: @text-color-success;
-  }
-  .fail {
-    color: @text-color-error;
-  }
-}
 
 .type-tooltip {
   font-family: Consolas, monospace;

@@ -18,7 +18,7 @@ module ErrorLinterProvider =
         lint          : IEditor -> Atom.Promise.Promise  }
 
     type LintResult = {
-        ``type`` : string
+        ``type`` : string   
         text     : string
         filePath : string
         range    : float[][]
@@ -31,7 +31,7 @@ module ErrorLinterProvider =
                     let range = [|[|float (item.StartLine - 1); float (item.StartColumn - 1)|];
                                   [|float (item.EndLine - 1);  float (item.EndColumn - 1)|]|]
                     { ``type`` = item.Severity
-                      text = item.Message
+                      text = item.Message.Replace("\n", "")
                       filePath = editor.buffer.file.path
                       range = range
                     } :> obj

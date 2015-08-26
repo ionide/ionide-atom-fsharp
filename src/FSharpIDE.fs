@@ -15,7 +15,6 @@ open Atom.FSharp
 type FSharpIDE() =
     let subscriptions = ResizeArray()
 
-
     member x.provide () =
         AutocompleteProvider.create ()
 
@@ -43,6 +42,7 @@ type FSharpIDE() =
         Interactive.activate ()
         if highlight then HighlightUse.activate ()
         AddFileHandler.activate ()
+        FormatHandler.activate ()
 
         let s = Globals.atom.config.onDidChange ("atom-fsharp.ShowQuickInfoPanel",
                     (fun n -> if n.newValue then ToolbarHandler.activate() else ToolbarHandler.deactivate()  ) |> unbox<Function>)

@@ -1,3 +1,43 @@
+#### 0.12.8 - 24.08.2015
+* Fix Highlighting Bug ([#113](https://github.com/fsprojects/FSharp.Atom/issues/113))
+
+#### 0.12.7 - 24.08.2015
+* Fix autocomplete helptext ([#115](https://github.com/fsprojects/FSharp.Atom/issues/115))
+
+#### 0.12.6 - 24.08.2015
+* Quick info panel using only one line.
+
+#### 0.12.5 - 23.08.2015
+* Fix clearing quick info panel
+
+#### 0.12.4 - 22.08.2015
+* Fix error panel bug
+
+#### 0.12.3 - 22.08.2015
+* Fix Highlighting Bug ([#121](https://github.com/fsprojects/FSharp.Atom/issues/121))
+
+#### 0.12.2 - 21.08.2015
+* Fix multiline errors display
+
+#### 0.12.1 - 18.08.2015
+* Force file parsing before autocomplete
+* Look for fsproj file only for F# files
+
+#### 0.12.0 - 15.08.2015
+* Add File formatting
+
+#### 0.11.4 - 14.08.2015
+* Update of language grammar definition
+
+#### 0.11.3 - 14.08.2015
+* Send to FSI bug fix
+
+#### 0.11.2 - 14.08.2015
+* Update of language grammar definition
+
+#### 0.10.1 - 12.08.2015
+* Add Mono path to plugin settings
+
 #### 0.10.0 - 10.08.2015
 * Add settings for turning on / off quick info panel and highlight use
 * Add return from declaration implementation

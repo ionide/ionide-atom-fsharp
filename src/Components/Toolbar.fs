@@ -34,6 +34,8 @@ module ToolbarHandler =
     /// Makes request for toolbar informations
     let private askForToolbar (editor : IEditor)  =
         if unbox<obj>(editor.buffer.file) <> null then
+            let tb = jq(".toolbar-inner")
+            tb.empty() |> ignore
             let pos = getCursor editor
             let path = editor.buffer.file.path
             LanguageService.toolbar path (int pos.row + 1) (int pos.column + 1)
@@ -42,17 +44,19 @@ module ToolbarHandler =
     // Because the type signature for classes is multiple lines and will not fit
     // within the toolbar we cut out the list of members and properties
     let format_data (tinfo:string) =
-        let ti  = tinfo.Trim().Replace('\r',' ').Replace('\n',' ')
-        let ti' =
-            if ti.StartsWith("Multiple") then
-                let idx = ti.IndexOf("type")
-                ti.Substring(idx)
-            else ti
-        if ti'.StartsWith("type") then
-            let idx = ti'.IndexOf('=')
-            ti'.Substring(0,idx-1)
-        else ti'
-        |> (+) "> "
+        //let ti  = tinfo.Trim().Replace('\r',' ').Replace('\n',' ')
+        //let ti' =
+        //    if ti.StartsWith("Multiple") then
+        //        let idx = ti.IndexOf("type")
+        //        ti.Substring(idx)
+        //    else ti
+        //if ti'.StartsWith("type") then
+        //    let idx = ti'.IndexOf('=')
+        //    ti'.Substring(0,idx-1)
+        //else ti'
+        //|> (+) "> "
+        "> " +  tinfo.Trim().Split('\n').[0]
+
 
 
     let private cursorHandler (o: DTO.TooltipResult) =

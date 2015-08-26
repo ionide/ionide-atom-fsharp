@@ -21,7 +21,6 @@ module AutocompleteProvider =
     let mutable emitter : IEmitter option = None
     let mutable lastRow = 0
 
-
     type GetSuggestionOptions = {
         editor          : AtomCore.IEditor
         bufferPosition  : TextBuffer.IPoint
@@ -29,13 +28,13 @@ module AutocompleteProvider =
         scopeDescriptor : string[] }
 
     type Provider = {
-        selector             : string
+        selector             : string;
         disableForSelector   : string
         inclusionPriority    : int
         excludeLowerPriority : bool
         getSuggestions       : GetSuggestionOptions -> Atom.Promise.Promise  }
 
-    type SuggestionList = { emitter             : IEmitter}
+    type SuggestionList = { emitter             : IEmitter }
     type Manager =        { suggestionList      : SuggestionList }
     type Module =         { autocompleteManager : Manager }
     type Package =        { mainModule          : Module }
@@ -55,23 +54,25 @@ module AutocompleteProvider =
             let col = int options.bufferPosition.column + 1
             let prefix = if options.prefix = "." || options.prefix = "=" then "" else options.prefix
             Atom.Promise.create(fun () ->
-                if isForced || lastResult.IsNone || options.prefix = "." || lastRow <> row then
-                    Events.once Events.Completion (fun result ->
-                        lastRow <- row
-                        lastResult <- Some result
-                        isForced <- false
-                        let r = result.Data
-                                |> Seq.where(fun t -> t.Name.Contains(prefix))
-                                |> Seq.map(fun t -> { text =  t.Name
-                                                      replacementPrefix = prefix
-                                                      rightLabel = t.Glyph
-                                                      ``type`` = t.GlyphChar
-                                                      description = " "
-                                                    } :> obj)
-                                |> Seq.toArray
-                        if r.Length > 0 then LanguageService.helptext (r.[0] :?> Suggestion).text
-                        r |> Atom.Promise.resolve)
-                    LanguageService.completion path row col
+                if isForced || lastResult.IsNone || prefix = "" || lastRow <> row  then
+                    Events.once Events.Errors (fun result ->
+                        Events.once Events.Completion (fun result ->
+                            lastRow <- row
+                            lastResult <- Some result
+                            isForced <- false
+                            let r = result.Data
+                                    |> Seq.where(fun t -> t.Name.Contains(prefix))
+                                    |> Seq.map(fun t -> { text =  t.Name
+                                                          replacementPrefix = prefix
+                                                          rightLabel = t.Glyph
+                                                          ``type`` = t.GlyphChar
+                                                          description = " "
+                                                        } :> obj)
+                                    |> Seq.toArray
+                            if r.Length > 0 then LanguageService.helptext (r.[0] :?> Suggestion).text
+                            r |> Atom.Promise.resolve)
+                        LanguageService.completion path row col)
+                    LanguageService.parseEditor options.editor
                 else
                     isForced <- false
                     let r = lastResult.Value.Data
@@ -96,9 +97,16 @@ module AutocompleteProvider =
                 let handler flag =
                     let selected = if flag then (jq "li.selected").prev().find(" span.word-container .word")
                                    else (jq "li.selected").next().find(" span.word-container .word")
-                    let text = selected.text()
+
+                    let text = if selected.length > 0. then
+                                    selected.text()
+                               else
+                                    if flag then
+                                        (jq ".suggestion-list-scroller .list-group li").last().find(" span.word-container .word").text()
+                                    else
+                                        (jq ".suggestion-list-scroller .list-group li").first().find(" span.word-container .word").text()
                     LanguageService.helptext text
-                    
+
                     () :> obj
                 e.on("did-select-next", (fun _ -> handler false) |> unbox<Function>) |> ignore
                 e.on("did-select-previous", (fun _ -> handler true) |> unbox<Function>) |> ignore
