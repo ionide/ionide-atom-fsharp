@@ -1,3 +1,6 @@
+#### 0.12.9 - 29.08.2015
+* Case insensitive Autocomplete
+
 #### 0.12.8 - 24.08.2015
 * Fix Highlighting Bug ([#113](https://github.com/fsprojects/FSharp.Atom/issues/113))
 
