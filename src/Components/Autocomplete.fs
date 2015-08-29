@@ -61,7 +61,7 @@ module AutocompleteProvider =
                             lastResult <- Some result
                             isForced <- false
                             let r = result.Data
-                                    |> Seq.where(fun t -> t.Name.Contains(prefix))
+                                    |> Seq.where(fun t -> t.Name.ToLower().Contains(prefix.ToLower()))
                                     |> Seq.map(fun t -> { text =  t.Name
                                                           replacementPrefix = prefix
                                                           rightLabel = t.Glyph
@@ -76,7 +76,7 @@ module AutocompleteProvider =
                 else
                     isForced <- false
                     let r = lastResult.Value.Data
-                            |> Seq.where(fun t -> t.Name.Contains(prefix))
+                            |> Seq.where(fun t ->  t.Name.ToLower().Contains(prefix.ToLower()))
                             |> Seq.map(fun t -> { text =  t.Name
                                                   replacementPrefix = prefix
                                                   rightLabel = t.Glyph
