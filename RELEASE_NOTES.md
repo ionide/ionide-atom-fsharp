@@ -1,3 +1,6 @@
+#### 0.12.10 - 31.08.2015
+* Fix syntax highlighting bugs
+
 #### 0.12.9 - 29.08.2015
 * Case insensitive Autocomplete
 
