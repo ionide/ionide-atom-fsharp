@@ -1,5 +1,8 @@
+#### 0.12.13 - 03.09.2015
+* Fix empty project start bug attempt 3
+
 #### 0.12.12 - 03.09.2015
-* Fix empty project start bug
+* Update to FSAC 0.23.1
 
 #### 0.12.11 - 03.09.2015
 * Fix empty project start bug
