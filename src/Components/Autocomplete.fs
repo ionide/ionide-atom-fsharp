@@ -44,7 +44,6 @@ module AutocompleteProvider =
         replacementPrefix : string
         rightLabel        : string
         ``type``          : string
-        description       : string
     }
 
     let getSuggestion (options:GetSuggestionOptions) =
@@ -66,7 +65,6 @@ module AutocompleteProvider =
                                                           replacementPrefix = prefix
                                                           rightLabel = t.Glyph
                                                           ``type`` = t.GlyphChar
-                                                          description = " "
                                                         } :> obj)
                                     |> Seq.toArray
                             if r.Length > 0 then LanguageService.helptext (r.[0] :?> Suggestion).text
@@ -81,7 +79,6 @@ module AutocompleteProvider =
                                                   replacementPrefix = prefix
                                                   rightLabel = t.Glyph
                                                   ``type`` = t.GlyphChar
-                                                  description = " "
                                                 } :> obj)
                             |> Seq.toArray
                     if r.Length > 0 then LanguageService.helptext (r.[0] :?> Suggestion).text
@@ -89,7 +86,21 @@ module AutocompleteProvider =
         else Atom.Promise.create(fun () -> Atom.Promise.resolve [||])
 
 
+    let private createHelptext () =
+        "<div class='type-tooltip tooltip'>
+            <div class='tooltip-inner'>TEST</div>
+        </div>" |> jq
+    let private helptext = createHelptext ()
+    let mutable subscription : Disposable option = None
+
+
+    let private initialize (editor : IEditor) =
+        if subscription.IsSome then subscription.Value.dispose ()
+        if isFSharpEditor editor then
+            subscription <- editor.onDidChangeCursorPosition ((fun _ -> helptext.fadeOut() |> ignore) |> unbox<Function> ) |> Some
+
     let create () =
+        jq(".panes").append helptext |> ignore
         Globals.atom.commands.add("atom-text-editor","fsharp:autocomplete", (fun _ ->
             if emitter.IsNone then
                 let package = Globals.atom.packages.getLoadedPackage("autocomplete-plus") |> unbox<Package>
@@ -113,9 +124,30 @@ module AutocompleteProvider =
                 emitter <- Some e
             dispatchAutocompleteCommand ()
             isForced <- true) |> unbox<Function>) |> ignore
+
         Events.on Events.Helptext ((fun (n : DTO.HelptextResult) ->
-            let h = jq "div.suggestion-description span"
-            h.text(n.Data.Text) |> ignore ) |> unbox<Function>) |> ignore
+            let li = (jq ".suggestion-list-scroller .list-group li.selected")
+            let o = li.offset()
+            let list = jq "autocomplete-suggestion-list"
+            if JS.isDefined o && li.length > 0. then
+                o.left <- o.left + list.width() + 10.
+                o.top <- o.top - li.height() - 10.
+                helptext.offset(o) |> ignore
+                helptext.show() |> ignore
+                let n' = jq' helptext.[0].firstElementChild
+                n'.empty() |> ignore
+                (n.Data.Text |> jq("<div/>").text)
+                |> fun n -> n.html()
+                |> fun n -> n.Replace("\\n", "</br>")
+                |> fun n -> n.Replace("\n" , "</br>")
+                |>  n'.append |> ignore
+
+                ) |> unbox<Function>) |> ignore
+
+
+
+        Globals.atom.workspace.getActiveTextEditor() |> initialize
+        Globals.atom.workspace.onDidChangeActivePaneItem((fun ed -> initialize ed) |> unbox<Function>  ) |> ignore
 
 
         { selector = ".source.fsharp"; disableForSelector = ".source.fsharp .string, .source.fsharp .comment"; inclusionPriority = 1; excludeLowerPriority = true; getSuggestions = getSuggestion}
