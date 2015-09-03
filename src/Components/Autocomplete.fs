@@ -116,6 +116,7 @@ module AutocompleteProvider =
         Events.on Events.Helptext ((fun (n : DTO.HelptextResult) ->
             let h = jq "div.suggestion-description span"
             h.text(n.Data.Text) |> ignore ) |> unbox<Function>) |> ignore
+        
 
 
         { selector = ".source.fsharp"; disableForSelector = ".source.fsharp .string, .source.fsharp .comment"; inclusionPriority = 1; excludeLowerPriority = true; getSuggestions = getSuggestion}

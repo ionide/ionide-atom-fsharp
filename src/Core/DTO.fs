@@ -55,7 +55,13 @@ module DTO =
         Text : string
     }
 
-    type CompilerLocationResult = {Kind : string; Data : string}
+    type CompilerLocation = {
+        Fcs : string
+        Fsi : string
+        MSBuild : string
+    }
+
+    type CompilerLocationResult = {Kind : string; Data : CompilerLocation}
     type HelptextResult = {Kind : string; Data : Helptext}
 
     type CompletionResult = {Kind : string; Data : Completion []}

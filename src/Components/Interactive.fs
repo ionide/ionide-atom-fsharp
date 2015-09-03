@@ -42,10 +42,10 @@ module Interactive =
     /// Opens the REPL pane and starts an Fsi Process if needed
     let private openFsi () =
         let edit = Globals.atom.workspace.getActiveTextEditor()
-        let g = Globals.atom.grammars.grammarForScopeName("source.fsharp")
+        //let g = Globals.atom.grammars.grammarForScopeName("source.fsharp")
         Globals.atom.workspace._open("F# Interactive", {split = "right"})._done((fun ed ->
             fsiEditor <- Some ed
-            ed.setGrammar g
+            //ed.setGrammar g
             let view = Globals.atom.views.getView ed
             setComponentEnabled(view, false)
             if fsipath <> "" then
@@ -58,7 +58,7 @@ module Interactive =
         if fsiProc.IsNone then openFsi()
 
         let editor = Globals.atom.workspace.getActiveTextEditor()
-        if isFSharpEditor editor then 
+        if isFSharpEditor editor then
             let dir = Globals.dirname(editor.getPath())
             let msg = msg'.Replace("\uFEFF", "") + ";;\n"
 
@@ -75,7 +75,7 @@ module Interactive =
     /// Finds FSI on the system
     let private handleLocation (n : DTO.CompilerLocationResult) =
         fsipath <-  if Process.isWin() then
-                        Globals.joinOverload2 (n.Data, "fsi.exe")
+                        n.Data.Fsi
                     else
                         "fsharpi"
         resetFsi ()
