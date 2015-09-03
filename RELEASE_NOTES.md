@@ -1,4 +1,7 @@
 #### 0.12.10 - 31.08.2015
+* Fix empty project start bug
+
+#### 0.12.10 - 31.08.2015
 * Fix syntax highlighting bugs
 
 #### 0.12.9 - 29.08.2015
