@@ -126,7 +126,7 @@ module FAKE =
         let p = Globals.atom.project.getPaths().[0]
         let proj (ex : NodeJS.ErrnoException) (arr : string array) =
             let ext = if Process.isWin() then "cmd" else "sh"
-            let projExist = arr |> Array.tryFind(fun a -> a.Split('.') |> fun n -> n.[n.Length - 1]  = ext)
+            let projExist = arr |> Array.tryFind(fun a -> a.Split('.') |> fun n -> if JS.isDefined n then n.[n.Length - 1]  = ext else false)
             match projExist with
             | Some a ->
                 let path = p + "/" + a
