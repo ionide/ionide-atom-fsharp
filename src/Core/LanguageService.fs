@@ -79,7 +79,7 @@ module LanguageService =
             )
 
     let ask (msg' : string) =
-        Globals.console.log msg'
+        Events.log "REQEUST" msg' 
         let msg = msg'.Replace("\uFEFF", "")
         service.Child |> Option.iter (fun c ->
             c.stdin.write( msg, encoding)
@@ -96,7 +96,7 @@ module LanguageService =
 
     let start () =
         let location = Globals.atom.packages.packageDirPaths.[0] + "/atom-fsharp/bin/fsautocomplete.exe"
-        let child = Process.fromPath "mono" |> Process.spawnSimple location 
+        let child = Process.fromPath "mono" |> Process.spawnSimple location
         child.stdin.setEncoding( encoding);
         service <- { service with State = State.On; PreviousState = service.State; Child = Some child }
         "" |> Events.emitEmpty Events.ServerStart

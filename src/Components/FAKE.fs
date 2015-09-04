@@ -146,7 +146,6 @@ module FAKE =
                     )
                 else
                     Globals.atom.commands.add("atom-workspace", "FAKE: Build", FAKENotFound |> unbox<Function>) |> ignore
-                Globals.console.log File
             | None -> Globals.atom.commands.add("atom-workspace", "FAKE: Build", FAKENotFound |> unbox<Function>) |> ignore
 
         if JS.isDefined p then Globals.readdir(p, System.Func<NodeJS.ErrnoException, string array, unit>(proj))

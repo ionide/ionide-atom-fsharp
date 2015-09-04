@@ -3,6 +3,12 @@
 [<ReflectedDefinition>]
 module DTO =
 
+
+    type OverloadSignature = {
+      Signature: string
+      Comment: string
+    }
+
     type Error = {
         /// 1-indexed first line of the error block
         StartLine : int

@@ -65,6 +65,7 @@
     <Compile Include="Components\Yeoman.fs" />
     <Compile Include="Components\AddFile.fs" />
     <Compile Include="Components\Format.fs" />
+    <Compile Include="Components\DeveloperMode.fs" />
     <Compile Include="FSharpIDE.fs" />
     <Compile Include="main.fs" />
     <None Include="atom-bindings.fsx" />

@@ -28,6 +28,7 @@ module Events =
         | Status
         | CompilerLocation
         | Helptext
+        | Log
 
     let private getName t =
         match t with
@@ -44,9 +45,12 @@ module Events =
         | Status -> "Fsharp_status"
         | CompilerLocation -> "Fsharp_compiler"
         | Helptext -> "Fsharp_helptext"
+        | Log -> "Fsharp_log"
 
-    let private log name o =
-        Globals.console.log (name, System.DateTime.Now, o)
+    let log name o =
+        let debug = Globals.atom.config.get("atom-fsharp.DeveloperMode") |> unbox<bool>
+        let d = Globals.JSON.stringify o
+        if debug then emitter.emit("Fsharp_log", (name, d))
 
     let mutable private last = ""
 
@@ -77,7 +81,7 @@ module Events =
 
     let emitEmpty t s =
         let name = getName t
-        log name s
+        log name ""
         emitter.emit(name, ())
 
     let emit t v =

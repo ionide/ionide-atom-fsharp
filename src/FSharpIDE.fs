@@ -31,7 +31,7 @@ type FSharpIDE() =
 
         let show = Globals.atom.config.get("atom-fsharp.ShowQuickInfoPanel") |> unbox<bool>
         let highlight = Globals.atom.config.get("atom-fsharp.ShowUseHighlights") |> unbox<bool>
-
+        let debug = Globals.atom.config.get("atom-fsharp.DeveloperMode") |> unbox<bool>
 
         LanguageService.start ()
         Parser.activate ()
@@ -43,14 +43,19 @@ type FSharpIDE() =
         if highlight then HighlightUse.activate ()
         AddFileHandler.activate ()
         FormatHandler.activate ()
+        if debug then DeveloperMode.activate ()
 
         let s = Globals.atom.config.onDidChange ("atom-fsharp.ShowQuickInfoPanel",
                     (fun n -> if n.newValue then ToolbarHandler.activate() else ToolbarHandler.deactivate()  ) |> unbox<Function>)
         let s2 = Globals.atom.config.onDidChange ("atom-fsharp.ShowUseHighlights",
                     (fun n -> if n.newValue then HighlightUse.activate() else HighlightUse.deactivate()  ) |> unbox<Function>)
+        let s3 = Globals.atom.config.onDidChange ("atom-fsharp.DeveloperMode",
+                    (fun n -> if n.newValue then DeveloperMode.activate() else DeveloperMode.deactivate()  ) |> unbox<Function>)
+
 
         subscriptions.Add s
         subscriptions.Add s2
+        subscriptions.Add s3
 
         ()
 
@@ -67,4 +72,5 @@ type FSharpIDE() =
         Interactive.deactivate ()
         HighlightUse.deactivate ()
         LanguageService.stop ()
+        DeveloperMode.activate ()
         ()

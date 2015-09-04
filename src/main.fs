@@ -88,6 +88,7 @@ let translateModules() =
         yield "config:  {
             ShowQuickInfoPanel: {type: 'boolean', 'default': true},
             ShowUseHighlights: {type: 'boolean', 'default': true},
+            DeveloperMode: {type: 'boolean', 'default': false},
             MonoPath: {type: 'string', 'default': '/usr/bin'},"
 
         yield  "FormatDocument: {type: 'object', properties: {
