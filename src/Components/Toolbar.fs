@@ -40,6 +40,7 @@ module ToolbarHandler =
             let path = editor.buffer.file.path
             LanguageService.toolbar path (int pos.row + 1) (int pos.column + 1)
         ()
+    
 
     // Because the type signature for classes is multiple lines and will not fit
     // within the toolbar we cut out the list of members and properties
@@ -62,8 +63,10 @@ module ToolbarHandler =
     let private cursorHandler (o: DTO.TooltipResult) =
         let tb = jq(".toolbar-inner")
         tb.empty() |> ignore
-        if o.Data <> "No tooltip information" then
-            tb.append(format_data o.Data) |> ignore
+        let data = (o.Data |> Array.fold (fun acc n -> (n |> Array.toList) @ acc ) []).Head.Signature
+
+        if data <> "No tooltip information" then
+            tb.append(format_data data) |> ignore
         ()
 
 

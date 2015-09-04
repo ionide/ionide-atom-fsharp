@@ -95,8 +95,10 @@ module TooltipHandler =
                     if err.IsNone then "" else
                     let err, emsg = err.Value, err.Value.Message
                     String.concat "" [(dashes s emsg);":: Error - ";err.Subcategory;" ::\n"; emsg ]
-                if o.Data <> "No tooltip information" then
-                    (o.Data |> jq("<div/>").text).append(errTip o.Data)
+                let data = (o.Data |> Array.fold (fun acc n -> (n |> Array.toList) @ acc ) []).Head.Signature
+
+                if data <> "No tooltip information" then
+                    (data |> jq("<div/>").text).append(errTip data)
                 else (errTip "" |> jq("<div/>").text)
                 |> fun n -> n.html()
                 |> fun n -> n.Replace("\\n", "</br>")

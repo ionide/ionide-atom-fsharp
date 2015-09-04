@@ -5,8 +5,8 @@ module DTO =
 
 
     type OverloadSignature = {
-      Signature: string
-      Comment: string
+        Signature: string
+        Comment: string
     }
 
     type Error = {
@@ -58,7 +58,7 @@ module DTO =
 
     type Helptext = {
         Name : string
-        Text : string
+        Overloads: OverloadSignature [] []
     }
 
     type CompilerLocation = {
@@ -71,7 +71,7 @@ module DTO =
     type HelptextResult = {Kind : string; Data : Helptext}
 
     type CompletionResult = {Kind : string; Data : Completion []}
-    type SymbolUseResult = {Kind : string; Data : SymbolUses }
-    type TooltipResult = {Kind : string; Data : string}
+    type SymbolUseResult = {Kind : string; Data : SymbolUses } 
+    type TooltipResult = {Kind : string; Data : OverloadSignature [][]}
     type ParseResult = {Kind : string; Data : Error []}
     type FindDeclarationResult = {Kind : string; Data: Declaration}

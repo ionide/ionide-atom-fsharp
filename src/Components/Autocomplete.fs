@@ -90,9 +90,38 @@ module AutocompleteProvider =
         "<div class='type-tooltip tooltip'>
             <div class='tooltip-inner'>TEST</div>
         </div>" |> jq
-    let private helptext = createHelptext ()
-    let mutable subscription : Disposable option = None
 
+    let private helptext = createHelptext ()
+    let mutable private helptextList : DTO.OverloadSignature list  = []
+    let mutable private currentHelptext = 0
+
+    let private helptextSetText (i : int) =
+        currentHelptext <- i
+        let el = jq' helptext.[0].firstElementChild
+        let text = helptextList.[i].Signature
+        el.empty() |> ignore
+        (text |> jq("<div/>").text)
+        |> fun n -> n.html()
+        |> fun n -> n.Replace("\\n", "</br>")
+        |> fun n -> n.Replace("\n" , "</br>")
+        |> fun n -> if helptextList.Length > 1 then
+                        (sprintf "<div class='tooltip-counter'>%d of %d</div>" (i + 1) helptextList.Length) + n
+                    else n
+        |> el.append |> ignore
+
+    let private previousHelptext _ =
+        if helptextList.Length > 1 then
+            if currentHelptext + 1 = 1 then
+                helptextSetText (helptextList.Length - 1)
+            else helptextSetText (currentHelptext - 1)
+
+    let private nextHelptext _ =
+        if helptextList.Length > 1 then
+            if currentHelptext + 1 = helptextList.Length then
+                helptextSetText 0
+            else helptextSetText (currentHelptext + 1)
+
+    let mutable private  subscription : Disposable option = None
 
     let private initialize (editor : IEditor) =
         if subscription.IsSome then subscription.Value.dispose ()
@@ -130,26 +159,24 @@ module AutocompleteProvider =
             let li = (jq ".suggestion-list-scroller .list-group li.selected")
             let o = li.offset()
             let list = jq "autocomplete-suggestion-list"
+
+
             if JS.isDefined o && li.length > 0. then
                 o.left <- o.left + list.width() + 10.
                 o.top <- o.top - li.height() - 10.
                 helptext.offset(o) |> ignore
+                helptextList <- n.Data.Overloads |> Array.fold (fun acc n -> (n |> Array.toList) @ acc ) []
+                helptextSetText 0
                 helptext.show() |> ignore
-                let n' = jq' helptext.[0].firstElementChild
-                n'.empty() |> ignore
-                (n.Data.Text |> jq("<div/>").text)
-                |> fun n -> n.html()
-                |> fun n -> n.Replace("\\n", "</br>")
-                |> fun n -> n.Replace("\n" , "</br>")
-                |>  n'.append |> ignore
-
+                ()
                 ) |> unbox<Function>) |> ignore
 
-
+        Globals.atom.commands.add("atom-text-editor","fsharp:helptext-next", nextHelptext |> unbox<Function>) |> ignore
+        Globals.atom.commands.add("atom-text-editor","fsharp:helptext-previous", previousHelptext |> unbox<Function>) |> ignore
 
         Globals.atom.workspace.getActiveTextEditor() |> initialize
         Globals.atom.workspace.onDidChangeActivePaneItem((fun ed -> initialize ed) |> unbox<Function>  ) |> ignore
 
-
+        
 
         { selector = ".source.fsharp"; disableForSelector = ".source.fsharp .string, .source.fsharp .comment"; inclusionPriority = 1; excludeLowerPriority = true; getSuggestions = getSuggestion}
