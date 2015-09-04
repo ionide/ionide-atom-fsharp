@@ -1,3 +1,7 @@
+#### 0.13.0 - 04.09.2015
+* New helptext display
+* Developer logging mode
+
 #### 0.12.13 - 03.09.2015
 * Fix empty project start bug attempt 3
 
