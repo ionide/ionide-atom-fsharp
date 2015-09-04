@@ -34,7 +34,7 @@ open Fake.ZipHelper
 #load "src/Components/Yeoman.fs"
 #load "src/Components/AddFile.fs"
 #load "src/Components/Format.fs"
-#load "src/Components/DevelopMode.fs"
+#load "src/Components/DeveloperMode.fs"
 #load "src/FSharpIDE.fs"
 #load "src/main.fs"
 #endif
