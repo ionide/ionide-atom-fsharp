@@ -38,7 +38,7 @@ module DTO =
     }
 
     type SymbolUse = {
-      Filename : string
+      FileName : string
       StartLine : int
       StartColumn : int
       EndLine : int
