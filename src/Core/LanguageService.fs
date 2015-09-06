@@ -79,7 +79,7 @@ module LanguageService =
             )
 
     let ask (msg' : string) =
-        Events.log "REQEUST" msg' 
+        Events.log "REQUEST" msg'
         let msg = msg'.Replace("\uFEFF", "")
         service.Child |> Option.iter (fun c ->
             c.stdin.write( msg, encoding)
@@ -87,6 +87,7 @@ module LanguageService =
 
     let send (msg' : string) =
         let msg = msg'.Replace("\uFEFF", "")
+        Events.log "REQUEST" msg' 
         do service.Child |> Option.iter (fun c -> c.stdin.write( msg, encoding) |> ignore)
 
     let rec read (stream : stream.Readable) s =

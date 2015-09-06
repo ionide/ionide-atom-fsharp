@@ -49,8 +49,8 @@ module Events =
 
     let log name o =
         let debug = Globals.atom.config.get("atom-fsharp.DeveloperMode") |> unbox<bool>
-        let d = Globals.JSON.stringify o
-        if debug then emitter.emit("Fsharp_log", (name, d))
+        //let d = Globals.JSON.stringify o
+        if debug then emitter.emit("Fsharp_log", (name, o))
 
     let mutable private last = ""
 
@@ -75,18 +75,18 @@ module Events =
         s |> tryParse<'T>
         |> Option.iter(fun o ->
             let name = getName t
-            log name o
+            //log name o
             emitter.emit(name, o)
         )
 
     let emitEmpty t s =
         let name = getName t
-        log name ""
+        //log name ""
         emitter.emit(name, ())
 
     let emit t v =
         let name = getName t
-        log name v
+        //log name v
         emitter.emit(name, v :> obj)
 
     let once t func =
