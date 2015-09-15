@@ -9,6 +9,7 @@ open FunScript.TypeScript.text_buffer
 open FunScript.TypeScript.path
 
 open Atom
+open Atom.FSharp
 
 [<ReflectedDefinition>]
 module Parser =
@@ -18,7 +19,7 @@ module Parser =
     let private parseProjectForEditor (editor: IEditor) =
         if JS.isDefined editor && JS.isPropertyDefined editor "buffer" && unbox<obj>(editor.buffer) <> null && JS.isPropertyDefined editor.buffer "file" && unbox<obj>(editor.buffer.file) <> null && isFSharpEditor editor then
             let rec findFsProj dir =
-                if Globals.lstatSync(dir).isDirectory() then 
+                if Globals.lstatSync(dir).isDirectory() then
                     let files = Globals.readdirSync dir
                     let projfile = files |> Array.tryFind(fun s -> s.EndsWith(".fsproj"))
                     match projfile with

@@ -1,0 +1,49 @@
+##atom-fsharp
+
+From version 0.8.0 plugin is using [atom-yeoman](https://atom.io/packages/atom-yeoman) plugin to provide way of creating new projects in editor. Installation of this plugin is required. Also installation of [yeoman](http://yeoman.io/) and [F# generator](https://www.npmjs.com/package/generator-fsharp)
+
+From version 0.7.0 plugin is using [linter](https://atom.io/packages/linter) plugin to handle error highlighting and error list display. Installation of this plugin is required.
+
+![atom-fsharp](https://raw.githubusercontent.com/fsprojects/FSharp.Atom/develop/gifs/ErrorPanel.png)
+
+## Features
+
+- Syntax highlighting
+- Auto completions
+- Error highlighting and error list in bottom panel (linter plugin required)
+- Tooltips
+- Commenting
+- Go to Declaration
+- Support for script files or F# projects (if plugin does not detect `.fsproj` file, just open it ).
+- F# Interactive (REPL) Panel
+- Highlighting usages
+- Quick Info panel  
+
+
+
+### Build
+
+* Clone this repository
+* Run `build.cmd` (for Windows) or `build.sh` (for Linux / Mac ) to build project
+* Copy `src/atom-fsharp` to Atom package folder OR (for easy development) create symbolic directory link beween `src/atom-fsharp` and Atom package folder. It can be done with following command:  
+    ``apm develop atom-fsharp <full path to src/atom-fsharp folder>``
+* Type ``atom -d`` in command line to run Atom in development mode. If you open any F# file errors panel in the bottom should appear.
+
+## Contributing and copyright
+
+The project is hosted on [GitHub](https://github.com/ionide/ionide-fsharp) where you can [report issues](https://github.com/ionide/ionide-fsharp/issues), fork
+the project and submit pull requests.
+
+The library is available under [MIT license](https://github.com/ionide/ionide-fsharp/blob/master/LICENSE.md), which allows modification and
+redistribution for both commercial and non-commercial purposes.
+
+### Maintainer(s)
+
+- [@Krzysztof-Cieslak](https://github.com/Krzysztof-Cieslak)
+
+
+## Code of Conduct
+
+This project adheres to No Code of Conduct. We are all adults. We accept everyone's contributions. Nothing else matters.
+
+For more information please visit the [No Code of Conduct](https://github.com/domgetter/NCoC) homepage.

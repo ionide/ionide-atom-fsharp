@@ -8,6 +8,7 @@ open FunScript.TypeScript.AtomCore
 open FunScript.TypeScript.text_buffer
 
 open Atom
+open Atom.FSharp
 
 [<ReflectedDefinition>]
 module LanguageService =
@@ -81,13 +82,13 @@ module LanguageService =
     let ask (msg' : string) =
         Events.log "REQUEST" msg'
         let msg = msg'.Replace("\uFEFF", "")
-        service.Child |> Option.iter (fun c ->
+        service.Child |> Option.iter (fun c -> 
             c.stdin.write( msg, encoding)
             )
 
     let send (msg' : string) =
         let msg = msg'.Replace("\uFEFF", "")
-        Events.log "REQUEST" msg' 
+        Events.log "REQUEST" msg'
         do service.Child |> Option.iter (fun c -> c.stdin.write( msg, encoding) |> ignore)
 
     let rec read (stream : stream.Readable) s =

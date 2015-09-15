@@ -8,6 +8,7 @@ open FunScript.TypeScript.AtomCore
 open FunScript.TypeScript.text_buffer
 
 open Atom
+open Atom.FSharp
 
 [<ReflectedDefinition>]
 module ErrorLinterProvider =
@@ -18,7 +19,7 @@ module ErrorLinterProvider =
         lint          : IEditor -> Atom.Promise.Promise  }
 
     type LintResult = {
-        ``type`` : string   
+        ``type`` : string
         text     : string
         filePath : string
         range    : float[][]

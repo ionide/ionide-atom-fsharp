@@ -19,13 +19,7 @@ From version 0.7.0 plugin is using [linter](https://atom.io/packages/linter) plu
 - Highlighting usages
 - Quick Info panel  
 
-## Contributing and copyright
 
-The project is hosted on [GitHub](https://github.com/fsprojects/FSharp.Atom) where you can [report issues](https://github.com/fsprojects/FSharp.Atom/issues), fork
-the project and submit pull requests on the [develop branch](https://github.com/fsprojects/FSharp.Atom/tree/develop).
-
-The library is available under [Apache 2 license](https://github.com/fsprojects/FSharp.Atom/blob/master/LICENSE.md), which allows modification and
-redistribution for both commercial and non-commercial purposes.
 
 ### Build
 
@@ -35,6 +29,21 @@ redistribution for both commercial and non-commercial purposes.
     ``apm develop atom-fsharp <full path to src/atom-fsharp folder>``
 * Type ``atom -d`` in command line to run Atom in development mode. If you open any F# file errors panel in the bottom should appear.
 
+## Contributing and copyright
+
+The project is hosted on [GitHub](https://github.com/ionide/ionide-fsharp) where you can [report issues](https://github.com/ionide/ionide-fsharp/issues), fork
+the project and submit pull requests.
+
+The library is available under [MIT license](https://github.com/ionide/ionide-fsharp/blob/master/LICENSE.md), which allows modification and
+redistribution for both commercial and non-commercial purposes.
+
 ### Maintainer(s)
 
 - [@Krzysztof-Cieslak](https://github.com/Krzysztof-Cieslak)
+
+
+## Code of Conduct
+
+This project adheres to No Code of Conduct. We are all adults. We accept everyone's contributions. Nothing else matters.
+
+For more information please visit the [No Code of Conduct](https://github.com/domgetter/NCoC) homepage.

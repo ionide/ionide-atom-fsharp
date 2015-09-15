@@ -9,6 +9,7 @@ open FunScript.TypeScript.AtomCore
 open FunScript.TypeScript.text_buffer
 
 open Atom
+open Atom.FSharp
 
 type position = {row : float; column : float}
 

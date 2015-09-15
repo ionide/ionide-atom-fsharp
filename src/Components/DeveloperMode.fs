@@ -9,6 +9,7 @@ open FunScript.TypeScript.AtomCore
 open FunScript.TypeScript.text_buffer
 
 open Atom
+open Atom.FSharp
 
 [<ReflectedDefinition>]
 module DeveloperMode =
@@ -20,7 +21,7 @@ module DeveloperMode =
     let activate () =
         let s = Events.on Events.Log (unbox<Function> (fun (name,data) ->
             let timeString = System.DateTime.Now.ToLongTimeString().Replace("\\",".").Replace("/", ".")
-            let t = (sprintf "[%s] %s: \n" timeString name) + data + "\n" 
+            let t = (sprintf "[%s] %s: \n" timeString name) + data + "\n"
             editor |> Option.iter (fun e -> e.getBuffer().append t |> ignore)
             log <- log + t))
         subscriptions.Add s

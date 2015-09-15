@@ -8,6 +8,7 @@ open FunScript.TypeScript.AtomCore
 open FunScript.TypeScript.text_buffer
 
 open Atom
+open Atom.FSharp
 
 
 [<ReflectedDefinition>]
@@ -177,6 +178,6 @@ module AutocompleteProvider =
         Globals.atom.workspace.getActiveTextEditor() |> initialize
         Globals.atom.workspace.onDidChangeActivePaneItem((fun ed -> initialize ed) |> unbox<Function>  ) |> ignore
 
-        
+
 
         { selector = ".source.fsharp"; disableForSelector = ".source.fsharp .string, .source.fsharp .comment"; inclusionPriority = 1; excludeLowerPriority = true; getSuggestions = getSuggestion}

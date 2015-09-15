@@ -24,26 +24,20 @@ type FSharpIDE() =
     member x.getSuggestion(options : AutocompleteProvider.GetSuggestionOptions) =
         AutocompleteProvider.getSuggestion options
 
-    member x.consumeYeomanEnvironment (gen : YeomanHandler.generator) =
-        YeomanHandler.activate gen
-
     member x.activate(state:obj) =
 
         let show = Globals.atom.config.get("atom-fsharp.ShowQuickInfoPanel") |> unbox<bool>
         let highlight = Globals.atom.config.get("atom-fsharp.ShowUseHighlights") |> unbox<bool>
         let debug = Globals.atom.config.get("atom-fsharp.DeveloperMode") |> unbox<bool>
 
+        if debug then DeveloperMode.activate ()
         LanguageService.start ()
         Parser.activate ()
         TooltipHandler.activate ()
         if show then ToolbarHandler.activate()
         FindDeclaration.activate ()
-        FAKE.activate ()
-        Interactive.activate ()
         if highlight then HighlightUse.activate ()
-        AddFileHandler.activate ()
         FormatHandler.activate ()
-        if debug then DeveloperMode.activate ()
 
         let s = Globals.atom.config.onDidChange ("atom-fsharp.ShowQuickInfoPanel",
                     (fun n -> if n.newValue then ToolbarHandler.activate() else ToolbarHandler.deactivate()  ) |> unbox<Function>)
@@ -68,8 +62,6 @@ type FSharpIDE() =
         TooltipHandler.deactivate ()
         if show then ToolbarHandler.deactivate()
         FindDeclaration.deactivate ()
-        FAKE.deactivate ()
-        Interactive.deactivate ()
         HighlightUse.deactivate ()
         LanguageService.stop ()
         DeveloperMode.activate ()
