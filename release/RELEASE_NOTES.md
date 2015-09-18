@@ -1,4 +1,4 @@
-### 1.0.1 - 18.09.2015
+### 1.0.2 - 18.09.2015
 * 1st major release
 * Moving bits to separate plugins
 
