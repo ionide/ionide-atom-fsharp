@@ -82,7 +82,7 @@ module LanguageService =
     let ask (msg' : string) =
         Events.log "REQUEST" msg'
         let msg = msg'.Replace("\uFEFF", "")
-        service.Child |> Option.iter (fun c -> 
+        service.Child |> Option.iter (fun c ->
             c.stdin.write( msg, encoding)
             )
 
@@ -97,7 +97,7 @@ module LanguageService =
         | res -> res.ToString() + s |> read stream
 
     let start () =
-        let location = Globals.atom.packages.packageDirPaths.[0] + "/atom-fsharp/bin/fsautocomplete.exe"
+        let location = Globals.atom.packages.packageDirPaths.[0] + "/ionide-fsharp/bin/fsautocomplete.exe"
         let child = Process.fromPath "mono" |> Process.spawnSimple location
         child.stdin.setEncoding( encoding);
         service <- { service with State = State.On; PreviousState = service.State; Child = Some child }

@@ -16,7 +16,7 @@ open Atom.FSharp
 module FormatHandler =
 
     let format () =
-        let location = Globals.atom.packages.packageDirPaths.[0] + "/atom-fsharp/bin-fantomas/fantomas.exe"
+        let location = Globals.atom.packages.packageDirPaths.[0] + "/ionide-fsharp/bin-fantomas/fantomas.exe"
         let editor = Globals.atom.workspace.getActiveTextEditor()
         if isFSharpEditor editor then
             let p = editor.buffer.file.path
