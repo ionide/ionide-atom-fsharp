@@ -1,3 +1,7 @@
+### 1.0.0 - 18.09.2015
+* 1st major release
+* Moving bits to separate plugins
+
 #### 0.13.0 - 04.09.2015
 * New helptext display
 * Developer logging mode
