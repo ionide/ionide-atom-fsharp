@@ -1,7 +1,7 @@
 {
   "name": "ionide-fsharp",
   "main": "./lib/fsharp",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Core plugin for F# development",
   "repository": "https://github.com/fsprojects/atom-fsharp",
   "license": "Appache 2.0",
