@@ -128,7 +128,6 @@ Target "PushToMaster" (fun _ ->
     StageAll tempReleaseDir
     Git.Commit.Commit tempReleaseDir releaseMsg
     Branches.push tempReleaseDir
-    DeleteDir tempReleaseDir
 )
 
 Target "Release" (fun _ ->
@@ -139,6 +138,7 @@ Target "Release" (fun _ ->
             info.WorkingDirectory <- tempReleaseDir
             info.Arguments <- args) System.TimeSpan.MaxValue
     if result <> 0 then failwithf "Error during running apm with %s" args
+    DeleteDir tempReleaseDir
 )
 
 // --------------------------------------------------------------------------------------
