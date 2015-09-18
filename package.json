@@ -1,5 +1,5 @@
 {
-  "name": "atom-fsharp",
+  "name": "ionide-fsharp",
   "main": "./lib/fsharp",
   "version": "1.0.2",
   "description": "Core plugin for F# development",
