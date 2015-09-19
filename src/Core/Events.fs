@@ -48,7 +48,7 @@ module Events =
         | Log -> "Fsharp_log"
 
     let log name o =
-        let debug = Globals.atom.config.get("atom-fsharp.DeveloperMode") |> unbox<bool>
+        let debug = Globals.atom.config.get("ionide-fsharp.DeveloperMode") |> unbox<bool>
         //let d = Globals.JSON.stringify o
         if debug then emitter.emit("Fsharp_log", (name, o))
 

@@ -26,9 +26,9 @@ type FSharpIDE() =
 
     member x.activate(state:obj) =
 
-        let show = Globals.atom.config.get("atom-fsharp.ShowQuickInfoPanel") |> unbox<bool>
-        let highlight = Globals.atom.config.get("atom-fsharp.ShowUseHighlights") |> unbox<bool>
-        let debug = Globals.atom.config.get("atom-fsharp.DeveloperMode") |> unbox<bool>
+        let show = Globals.atom.config.get("ionide-fsharp.ShowQuickInfoPanel") |> unbox<bool>
+        let highlight = Globals.atom.config.get("ionide-fsharp.ShowUseHighlights") |> unbox<bool>
+        let debug = Globals.atom.config.get("ionide-fsharp.DeveloperMode") |> unbox<bool>
 
         if debug then DeveloperMode.activate ()
         LanguageService.start ()
@@ -39,11 +39,11 @@ type FSharpIDE() =
         if highlight then HighlightUse.activate ()
         FormatHandler.activate ()
 
-        let s = Globals.atom.config.onDidChange ("atom-fsharp.ShowQuickInfoPanel",
+        let s = Globals.atom.config.onDidChange ("ionide-fsharp.ShowQuickInfoPanel",
                     (fun n -> if n.newValue then ToolbarHandler.activate() else ToolbarHandler.deactivate()  ) |> unbox<Function>)
-        let s2 = Globals.atom.config.onDidChange ("atom-fsharp.ShowUseHighlights",
+        let s2 = Globals.atom.config.onDidChange ("ionide-fsharp.ShowUseHighlights",
                     (fun n -> if n.newValue then HighlightUse.activate() else HighlightUse.deactivate()  ) |> unbox<Function>)
-        let s3 = Globals.atom.config.onDidChange ("atom-fsharp.DeveloperMode",
+        let s3 = Globals.atom.config.onDidChange ("ionide-fsharp.DeveloperMode",
                     (fun n -> if n.newValue then DeveloperMode.activate() else DeveloperMode.deactivate()  ) |> unbox<Function>)
 
 
@@ -56,7 +56,7 @@ type FSharpIDE() =
     member x.deactivate() =
         subscriptions |> Seq.iter(fun n -> n.dispose())
         subscriptions.Clear()
-        let show = Globals.atom.config.get("atom-fsharp.ShowQuickInfoPanel") |> unbox<bool>
+        let show = Globals.atom.config.get("ionide-fsharp.ShowQuickInfoPanel") |> unbox<bool>
 
         Parser.deactivate ()
         TooltipHandler.deactivate ()
