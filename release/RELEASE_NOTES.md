@@ -1,5 +1,8 @@
+### 1.1.0 - 20.09.2015
+* Completion list sorting by edit distance. 
+
 ### 1.0.7 - 18.09.2015
-* Fix configuration 
+* Fix configuration
 
 ### 1.0.6 - 18.09.2015
 * Update paths after name change
