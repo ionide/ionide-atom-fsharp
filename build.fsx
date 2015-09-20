@@ -5,6 +5,7 @@
 #I "packages/FAKE/tools"
 #r "packages/FAKE/tools/FakeLib.dll"
 open System
+open System.Diagnostics
 open System.IO
 open Fake
 open Fake.Git
@@ -31,6 +32,7 @@ open Fake.ZipHelper
 #load "src/main.fs"
 #endif
 
+
 // Git configuration (used for publishing documentation in gh-pages branch)
 // The profile where the project is posted
 let gitOwner = "ionide"
@@ -54,11 +56,30 @@ let release = List.head releaseNotesData
 let msg =  release.Notes |> List.fold (fun r s -> r + s + "\n") ""
 let releaseMsg = (sprintf "Release %s\n" release.NugetVersion) + msg
 
-#if MONO
-let apmTool = "apm"
-#else
-let apmTool = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) </> "atom" </> "bin" </> "apm.cmd"
-#endif
+
+let run cmd args dir =
+    if execProcess( fun info ->
+        info.FileName <- cmd
+        if not( String.IsNullOrWhiteSpace dir) then
+            info.WorkingDirectory <- dir
+        info.Arguments <- args
+    ) System.TimeSpan.MaxValue = false then
+        traceError <| sprintf "Error while running '%s' with args: %s" cmd args
+
+let apmTool =
+    #if MONO
+        "apm"
+    #else
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) </> "atom" </> "bin" </> "apm.cmd"
+    #endif
+
+let atomTool =
+    #if MONO
+        "atom"
+    #else
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) </> "atom" </> "bin" </> "atom.cmd"
+    #endif
+
 
 // --------------------------------------------------------------------------------------
 // Build the Generator project and run it
@@ -88,16 +109,20 @@ Target "RunScript" (fun () ->
 )
 #endif
 
+// Installs npm dependencies defined in "release\package.json" to "release\node_modules"
 Target "InstallDependencies" (fun _ ->
-    let args = "install"
+    run apmTool "install" "release"
+)
 
-    let srcDir = "release"
-    let result =
-        ExecProcess (fun info ->
-            info.FileName <- apmTool
-            info.WorkingDirectory <- srcDir
-            info.Arguments <- args) System.TimeSpan.MaxValue
-    if result <> 0 then failwithf "Error during running apm with %s" args
+// Creates symbolic link between "release" folder and `Users\XXX\.atom\packages" for the Ionide-FSharp plugin
+Target "ApmLink"(fun _ ->
+    run apmTool "link" "releases"
+)
+
+Target "Atom"(fun _ ->
+    let dir = __SOURCE_DIRECTORY__
+    killProcess "atom"
+    run atomTool dir dir
 )
 
 Target "TagDevelopBranch" (fun _ ->
@@ -132,12 +157,7 @@ Target "PushToMaster" (fun _ ->
 
 Target "Release" (fun _ ->
     let args = sprintf "publish %s" release.NugetVersion
-    let result =
-        ExecProcess (fun info ->
-            info.FileName <- apmTool
-            info.WorkingDirectory <- tempReleaseDir
-            info.Arguments <- args) System.TimeSpan.MaxValue
-    if result <> 0 then failwithf "Error during running apm with %s" args
+    run apmTool args tempReleaseDir
     DeleteDir tempReleaseDir
 )
 
@@ -163,5 +183,9 @@ Target "Default" DoNothing
   ==> "TagDevelopBranch"
   ==> "PushToMaster"
   ==> "Release"
+
+
+"InstallDependencies"
+==> "Atom"
 
 RunTargetOrDefault "Default"
