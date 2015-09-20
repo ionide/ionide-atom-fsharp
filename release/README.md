@@ -1,7 +1,7 @@
 #ionide-fsharp
 
 
-It's part of [Ionide](ionide.io) plugin suite.
+It's part of [Ionide](http://ionide.io) plugin suite.
 F# IDE-like possibilites in Atom editor
 
 Plugin is using [linter](https://atom.io/packages/linter) plugin to handle error highlighting and error list display. Installation of this plugin is required.
