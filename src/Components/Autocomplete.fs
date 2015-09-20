@@ -47,6 +47,38 @@ module AutocompleteProvider =
         ``type``          : string
     }
 
+    /// Find the minimun of three three terms that support comparison
+    let inline min3 one two three = 
+        if   one < two && one < three then one
+        elif two < three then two
+        else three
+
+
+    /// The Edit Distance between two strings S and T is 
+    /// the minimum number of single character insertions, deletions, 
+    /// and substitutions needed to transform S to T.
+    // Wagner Fischer Algorithm
+    let editDistance (s: string) (t: string) =
+        let m, n = s.Length, t.Length
+        let index i j = j * m + i
+        let d = Array.create ((m+1)*(n+1)) -1
+        let rec dist m n =
+            match m,n with
+            | i, 0 -> i
+            | 0, j -> j
+            | i, j when d.[index i j] <> -1 -> d.[index i j]
+            | i, j ->
+                let dval =
+                    if s.[i-1] = t.[j-1] then dist (i-1) (j-1)
+                    else
+                        min3
+                            (dist (i-1) (j)   + 1) // a deletion
+                            (dist (i)   (j-1) + 1) // an insertion
+                            (dist (i-1) (j-1) + 1) // a substitution
+                d.[index i j] <- dval; dval
+        dist m n
+
+
     let getSuggestion (options:GetSuggestionOptions) =
         if unbox<obj>(options.editor.buffer.file) <> null then
             let path = options.editor.buffer.file.path
@@ -62,7 +94,8 @@ module AutocompleteProvider =
                             isForced <- false
                             let r = result.Data
                                     |> Seq.where(fun t -> t.Name.ToLower().Contains(prefix.ToLower()))
-                                    |> Seq.map(fun t -> { text =  t.Name
+                                    |> Seq.sortBy(fun t -> editDistance prefix t.Name)
+                                    |> Seq.map(fun t -> { text = t.Name
                                                           replacementPrefix = prefix
                                                           rightLabel = t.Glyph
                                                           ``type`` = t.GlyphChar
@@ -76,7 +109,8 @@ module AutocompleteProvider =
                     isForced <- false
                     let r = lastResult.Value.Data
                             |> Seq.where(fun t ->  t.Name.ToLower().Contains(prefix.ToLower()))
-                            |> Seq.map(fun t -> { text =  t.Name
+                            |> Seq.sortBy(fun t -> editDistance prefix t.Name)
+                            |> Seq.map(fun t -> { text = t.Name
                                                   replacementPrefix = prefix
                                                   rightLabel = t.Glyph
                                                   ``type`` = t.GlyphChar
