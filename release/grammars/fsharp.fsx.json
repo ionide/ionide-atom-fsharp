@@ -1,5 +1,5 @@
 {
-    "name": "F# Script File",
+    "name": "F# .fsx",
     "scopeName": "source.fsharp.fsx",
     "fileTypes": [
         "fsx"

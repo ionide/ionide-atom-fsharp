@@ -1,5 +1,5 @@
 {
-    "name": "F# Signature File",
+    "name": "F# .fsi",
     "scopeName": "source.fsharp.fsi",
     "fileTypes": [
         "fsi"
