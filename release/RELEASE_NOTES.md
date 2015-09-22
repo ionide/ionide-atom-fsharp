@@ -1,3 +1,7 @@
+### 1.2.0 - 22.09.2015
+* Grammar changes
+* Update developer mode
+
 ### 1.1.1 - 20.09.2015
 * Completion list sorting by edit distance.
 
