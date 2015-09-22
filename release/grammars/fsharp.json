@@ -1,10 +1,8 @@
 {
-    "name": "F#",
+    "name": "F# Source File",
     "scopeName": "source.fsharp",
     "fileTypes": [
-        "fs",
-        "fsx",
-        "fsi"
+        "fs"
     ],
     "foldingStartMarker": "",
     "foldingStopMarker": "",
