@@ -118,7 +118,7 @@ module TooltipHandler =
 
 
     let private remove () =
-        if JS.isDefined ed && JS.isPropertyDefined ed "getGrammar" && ed.getGrammar().name = "F#" then
+        if JS.isDefined ed && JS.isPropertyDefined ed "getGrammar" && isFSharpEditor ed then
             ed |> Globals.atom.views.getView
             |> getElementsByClass ".scroll-view"
             |> Option.map  (fun n -> n.[0] |> unbox<Element> |> jq')

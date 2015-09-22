@@ -119,10 +119,13 @@ Target "ApmLink"(fun _ ->
     run apmTool "link" "releases"
 )
 
-Target "Atom"(fun _ ->
-    let dir = __SOURCE_DIRECTORY__
+// This should not be the long term way to test out our packages
+// TODO switch this target to install to dev and launch atom in dev mode
+Target "TryPackage"( fun _ ->
     killProcess "atom"
-    run atomTool dir dir
+    run apmTool "uninstall ionide-fsharp" ""
+    run apmTool "link" "release"    
+    run atomTool __SOURCE_DIRECTORY__ ""
 )
 
 Target "TagDevelopBranch" (fun _ ->
@@ -169,23 +172,23 @@ Target "Default" DoNothing
 
 #if MONO
 "Clean"
-  ==> "BuildGenerator"
-  ==> "RunGenerator"
-  ==> "InstallDependencies"
+    ==> "BuildGenerator"
+    ==> "RunGenerator"
+    ==> "InstallDependencies"
 #else
 "Clean"
-  ==> "RunScript"
-  ==> "InstallDependencies"
+    ==> "RunScript"
+    ==> "InstallDependencies"
 #endif
 
 "InstallDependencies"
-  ==> "Default"
-  ==> "TagDevelopBranch"
-  ==> "PushToMaster"
-  ==> "Release"
+    ==> "Default"
+    ==> "TagDevelopBranch"
+    ==> "PushToMaster"
+    ==> "Release"
 
 
 "InstallDependencies"
-==> "Atom"
+    ==> "TryPackage"
 
 RunTargetOrDefault "Default"
