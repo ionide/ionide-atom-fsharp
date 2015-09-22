@@ -19,9 +19,12 @@ module DeveloperMode =
     let private subscriptions = ResizeArray()
 
     let activate () =
+        let p = Globals.atom.project.getPaths().[0]
         let s = Events.on Events.Log (unbox<Function> (fun (name,data) ->
             let timeString = System.DateTime.Now.ToLongTimeString().Replace("\\",".").Replace("/", ".")
             let t = (sprintf "[%s] %s: \n" timeString name) + data + "\n"
+            Globals.appendFile (p + "/.ionide.debug", t)
+
             editor |> Option.iter (fun e -> e.getBuffer().append t |> ignore)
             log <- log + t))
         subscriptions.Add s
