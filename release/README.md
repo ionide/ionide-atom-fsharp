@@ -2,7 +2,7 @@
 
 
 It's part of [Ionide](http://ionide.io) plugin suite.
-F# IDE-like possibilites in Atom editor
+F# IDE-like possibilities in Atom editor
 
 Plugin is using [linter](https://atom.io/packages/linter) plugin to handle error highlighting and error list display. Installation of this plugin is required.
 Required plugin is installed automatically if `ionide-installer` is used. Otherwise You need to install required plugin on Your own/.

@@ -48,14 +48,14 @@ module AutocompleteProvider =
     }
 
     /// Find the minimun of three three terms that support comparison
-    let inline min3 one two three = 
+    let inline min3 one two three =
         if   one < two && one < three then one
         elif two < three then two
         else three
 
 
-    /// The Edit Distance between two strings S and T is 
-    /// the minimum number of single character insertions, deletions, 
+    /// The Edit Distance between two strings S and T is
+    /// the minimum number of single character insertions, deletions,
     /// and substitutions needed to transform S to T.
     // Wagner Fischer Algorithm
     let editDistance (s: string) (t: string) =
@@ -165,6 +165,7 @@ module AutocompleteProvider =
 
     let create () =
         jq(".panes").append helptext |> ignore
+        helptext.fadeOut () |> ignore
         Globals.atom.commands.add("atom-text-editor","fsharp:autocomplete", (fun _ ->
             let package = Globals.atom.packages.getLoadedPackage("autocomplete-plus") |> unbox<Package>
             let e = package.mainModule.autocompleteManager.suggestionList.emitter
