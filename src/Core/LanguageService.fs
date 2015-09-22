@@ -38,6 +38,7 @@ module LanguageService =
     let private parseResponse (data : obj) =
         if data <> null then
             let response = data.ToString().Split('\n')
+            Events.log "RESPONSE" <| data.ToString()
             response |> Seq.iter(fun s ->
                 if s.Contains "\"Kind\":\"error\"" then
                     s |> Events.emitEmpty Events.ServerError
