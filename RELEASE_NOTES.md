@@ -1,3 +1,6 @@
+### 1.2.1 - 23.09.2015
+* Fix after grammar changes
+
 ### 1.2.0 - 22.09.2015
 * Grammar changes
 * Update developer mode

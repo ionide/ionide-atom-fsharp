@@ -124,7 +124,7 @@ Target "ApmLink"(fun _ ->
 Target "TryPackage"( fun _ ->
     killProcess "atom"
     run apmTool "uninstall ionide-fsharp" ""
-    run apmTool "link" "release"    
+    run apmTool "link" "release"
     run atomTool __SOURCE_DIRECTORY__ ""
 )
 
