@@ -38,6 +38,7 @@ open Fake.ZipHelper
 let gitOwner = "ionide"
 let gitHome = "https://github.com/" + gitOwner
 
+
 // The name of the project on GitHub
 let gitName = "ionide-fsharp"
 
