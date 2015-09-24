@@ -44,4 +44,4 @@ module ErrorLinterProvider =
         )
 
     let create () =
-        { grammarScopes = [| "source.fsharp"|]; scope = "file"; lint = lint; lintOnFly = true}
+        { grammarScopes = [| "source.fsharp"; "source.fsharp.fsi"; "source.fsharp.fsx"|]; scope = "file"; lint = lint; lintOnFly = true}
