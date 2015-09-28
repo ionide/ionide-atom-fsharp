@@ -71,6 +71,7 @@ module Events =
                 last <- last + s
                 None
 
+
     let parseAndEmit<'T> t s =
         s |> tryParse<'T>
         |> Option.iter(fun o ->

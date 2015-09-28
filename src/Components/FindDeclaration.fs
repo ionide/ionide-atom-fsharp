@@ -46,3 +46,5 @@ module FindDeclaration =
 
     let deactivate () =
         ()
+
+    let s = " la\ "  
