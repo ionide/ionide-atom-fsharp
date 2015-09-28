@@ -28,7 +28,7 @@ module ToolbarHandler =
         |> jq
 
     let private getCursor (editor:IEditor) =
-        let bufferPt = editor.getCursorBufferPosition()
+        let bufferPt = editor.getCursorBufferPosition() 
         { row = bufferPt.row; column = bufferPt.column }
 
     /// Makes request for toolbar informations
@@ -40,7 +40,7 @@ module ToolbarHandler =
             let path = editor.buffer.file.path
             LanguageService.toolbar path (int pos.row + 1) (int pos.column + 1)
         ()
-    
+
 
     // Because the type signature for classes is multiple lines and will not fit
     // within the toolbar we cut out the list of members and properties

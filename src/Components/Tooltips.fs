@@ -34,7 +34,6 @@ module TooltipHandler =
         { row = bufferPt.row; column = bufferPt.column }
 
 
-
     let mutable private lastMousePosition  = {row = 0.; column = 0.}
     //let mutable private lastCursorPosition = {row = 0.; column = 0.}
     let mutable private errorArr    = [||] : DTO.Error []

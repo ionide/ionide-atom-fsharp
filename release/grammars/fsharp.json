@@ -47,7 +47,10 @@
             "include": "#records"
         },
         {
-            "include": "#ces"
+            "include": "#cexprs"
+        },
+        {
+            "include": "#text"
         }
     ],
     "repository": {
@@ -376,10 +379,10 @@
                 }
             ]
         },
-        "ces": {
+        "cexprs": {
             "patterns": [
                 {
-                    "name": "ce.fsharp",
+                    "name": "cexpr.fsharp",
                     "match": "\\b([a-zA-Z]*\\s+\\{)",
                     "captures": {
                         "1": {
@@ -399,6 +402,14 @@
                             "name": "string.quoted.single.fsharp"
                         }
                     }
+                }
+            ]
+        },
+        "text": {
+            "patterns": [
+                {
+                    "name": "text.fsharp",
+                    "match": "\\\\"
                 }
             ]
         }
