@@ -1,5 +1,5 @@
 [<ReflectedDefinition>]
-module Atom.FSharp.AutocompleteProvider
+module Atom.FSharp.GlyphProvider
 
 open FunScript
 open FunScript.TypeScript
@@ -11,58 +11,52 @@ open FunScript.TypeScript.text_buffer
 open Atom
 open Atom.FSharp
 open Atom.FSharp.DTO
+open Atom.FSharp.Extensions
 open Atom.FSharp.GlyphMaps
 open Atom.FSharp.CompletionHelpers
 
+
+
 let mutable isForced = false
 let mutable lastResult : DTO.CompletionResult option = None
-let mutable emitter : IEmitter option  = None
+let mutable emitter : IEmitter option = None
 let mutable lastRow = 0
 
 
 let getSuggestion (options:GetSuggestionOptions) =
     if unbox<obj>(options.editor.buffer.file) <> null then
-        Globals.console.log("autocomplete")
         let path = options.editor.buffer.file.path
         let row = int options.bufferPosition.row + 1
         let col = int options.bufferPosition.column + 1
-        // row' & col' are for finding the position of `\` before a prefix that the autocomplete doesn't find by default
+        // row' & col' are for finding the position of `` before a prefix that the autocomplete doesn't find by default
         let row' = if row-1 > 0 then row-1 else row
         // shift back to the character before the prefix to check if it is a `\` for a glyph completion
         let col' = if col-2-options.prefix.Length > 0 then col-2-options.prefix.Length else col
         let prefix = if options.prefix = "." || options.prefix = "=" then "" else options.prefix
         Atom.Promise.create(fun () ->
-            if isForced || lastResult.IsNone || prefix = "" || lastRow <> row  then
-                Events.once Events.Errors (fun result ->
-                    Events.once Events.Completion (fun result ->
-                        Globals.console.log("prefix - "+ prefix)
-                        lastRow    <- row
-                        isForced   <- false
-                        let r =
-                            // Autocomplete format for Unicode Glyphs \d
-                            // shift back to the character before the prefix to check if it is a `\` for a glyph completion
-                            if options.editor.buffer.lines.[row'].[col'] = '\\' then
+            if options.editor.buffer.lines.[row'].[col'] = '\\' then
+                if isForced || lastResult.IsNone  || lastRow <> row then
+                    Events.once Events.Errors (fun result ->
+                        Events.once Events.Completion (fun result ->
+                            lastRow    <- row
+                            isForced   <- false
+                            let r =
                                 lastResult <- Some{ Kind = ""
                                                     Data = unicode_map  }
                                 glyph_completion prefix unicode_map
-                            else
-                                lastResult <- Some result
-                                fsharp_completion prefix result.Data
-                        if r.Length > 0 then LanguageService.helptext (r.[0] :?> Suggestion).text
-                        r |> Atom.Promise.resolve
+                            if r.Length > 0 then LanguageService.helptext (r.[0] :?> Suggestion).text
+                            r |> Atom.Promise.resolve
+                        )
+                        LanguageService.completion path row col
                     )
-                    LanguageService.completion path row col
-                )
-                LanguageService.parseEditor options.editor
-            else
-                isForced <- false
-                let r =
-                    if options.editor.buffer.lines.[row'].[col'] = '\\' then
-                        glyph_completion prefix lastResult.Value.Data
-                    else
-                        fsharp_completion prefix lastResult.Value.Data
-                if r.Length > 0 then LanguageService.helptext (r.[0] :?> Suggestion).text
-                r |> Atom.Promise.resolve)
+                    LanguageService.parseEditor options.editor
+                else
+                    // Pare down the completion list \u further based on the adjusted prefix
+                    isForced <- false
+                    let r = glyph_completion prefix  lastResult.Value.Data
+                    if r.Length > 0 then LanguageService.helptext (r.[0] :?> Suggestion).text
+                    r |> Atom.Promise.resolve
+        )
     else Atom.Promise.create(fun () -> Atom.Promise.resolve [||])
 
 
@@ -76,9 +70,9 @@ let private helptextSetText (i : int) =
     let text = helptextList.[i].Signature
     el.empty() |> ignore
     (text |> jq("<div/>").text)
-    |> JQuery.html
-    |> String.Replace "\\n"  "</br>"
-    |> String.Replace "\n" "</br>"
+    |> fun n -> n.html()
+    |> fun n -> n.Replace("\\n", "</br>")
+    |> fun n -> n.Replace("\n" , "</br>")
     |> fun n -> if helptextList.Length > 1 then
                     (sprintf "<div class='tooltip-counter'>%d of %d</div>" (i + 1) helptextList.Length) + n
                 else n
@@ -106,7 +100,7 @@ let private initialize (editor : IEditor) =
 let create () =
     jq(".panes").append helptext |> ignore
     helptext.fadeOut () |> ignore
-    Globals.atom.commands.add("atom-text-editor","fsharp:autocomplete", (fun _ ->
+    Globals.atom.commands.add("atom-text-editor","glyph:autocomplete", (fun _ ->
         let package = Globals.atom.packages.getLoadedPackage("autocomplete-plus") |> unbox<Package>
         let e = package.mainModule.autocompleteManager.suggestionList.emitter
         if emitter.IsNone then
@@ -147,16 +141,15 @@ let create () =
             ()
             ) |> unbox<Function>) |> ignore
 
-    Globals.atom.commands.add("atom-text-editor","fsharp:helptext-next", nextHelptext |> unbox<Function>) |> ignore
-    Globals.atom.commands.add("atom-text-editor","fsharp:helptext-previous", previousHelptext |> unbox<Function>) |> ignore
+    Globals.atom.commands.add("atom-text-editor","glyph:helptext-next", nextHelptext |> unbox<Function>) |> ignore
+    Globals.atom.commands.add("atom-text-editor","glyph:helptext-previous", previousHelptext |> unbox<Function>) |> ignore
 
     Globals.atom.workspace.getActiveTextEditor() |> initialize
     Globals.atom.workspace.onDidChangeActivePaneItem((fun ed -> initialize ed) |> unbox<Function>  ) |> ignore
-    // Provider for Unicode  Glyph Autocompletion Service
-    {   selector = ".source.fsharp"
-        //disableForSelector = ".source.fsharp .string, .source.fsharp .comment"
+    // Provider for Unicode Glyph Autocompletion Service
+    {   selector = " .source"
         disableForSelector = " "
-        inclusionPriority = 4
+        inclusionPriority = 2
         excludeLowerPriority = false
         getSuggestions = getSuggestion
     }

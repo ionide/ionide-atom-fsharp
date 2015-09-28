@@ -12,17 +12,31 @@ open FunScript.TypeScript.path
 open Atom
 open Atom.FSharp
 
+[<AutoOpen>]
+module FSharpCommands =
+
+    let openSettings() =
+        // sometimes this will crash if settings-view hasn't been opened already
+        Globals.atom.workspace._open ("atom://config/packages/ionide-fsharp")
+
+
 type FSharpIDE() =
     let subscriptions = ResizeArray()
 
-    member x.provide () =
-        AutocompleteProvider.create ()
+    member __.provide () =
+        [|
+            AutocompleteProvider.create();
+        //    GlyphProvider.create()
+        |]
 
-    member x.provideErrors () =
+    member __.provideErrors () =
         ErrorLinterProvider.create ()
 
-    member x.getSuggestion(options : AutocompleteProvider.GetSuggestionOptions) =
-        AutocompleteProvider.getSuggestion options
+    member __.getSuggestion(options : CompletionHelpers.GetSuggestionOptions) =
+        [|
+            AutocompleteProvider.getSuggestion options;
+        //    GlyphProvider.getSuggestion options
+        |]
 
     member x.activate(state:obj) =
 
@@ -39,6 +53,7 @@ type FSharpIDE() =
         if highlight then HighlightUse.activate ()
         FormatHandler.activate ()
 
+        // Subscriptions to monitor whether F# IDE functionality should be activated
         let s = Globals.atom.config.onDidChange ("ionide-fsharp.ShowQuickInfoPanel",
                     (fun n -> if n.newValue then ToolbarHandler.activate() else ToolbarHandler.deactivate()  ) |> unbox<Function>)
         let s2 = Globals.atom.config.onDidChange ("ionide-fsharp.ShowUseHighlights",
@@ -46,10 +61,12 @@ type FSharpIDE() =
         let s3 = Globals.atom.config.onDidChange ("ionide-fsharp.DeveloperMode",
                     (fun n -> if n.newValue then DeveloperMode.activate() else DeveloperMode.deactivate()  ) |> unbox<Function>)
 
-
         subscriptions.Add s
         subscriptions.Add s2
         subscriptions.Add s3
+
+        // Commands that will be accessible through the Atom command palette
+        Globals.atom.commands.add("atom-workspace", "Ionide-FSharp:Settings",openSettings |> unbox<Function>) |> ignore
 
         ()
 

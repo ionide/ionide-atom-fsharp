@@ -48,7 +48,11 @@
     <Compile Include="Core\Events.fs" />
     <Compile Include="Core\DTO.fs" />
     <Compile Include="Core\LanguageService.fs" />
+    <Compile Include="Components\Extensions.fs" />
     <Compile Include="Components\Parser.fs" />
+    <Compile Include="Components\UnicodeGlyphs.fs" />
+    <Compile Include="Components\CompletionHelpers.fs" />
+    <Compile Include="Components\GlyphProvider.fs" />
     <Compile Include="Components\Autocomplete.fs" />
     <Compile Include="Components\Tooltips.fs" />
     <Compile Include="Components\Toolbar.fs" />
