@@ -1,3 +1,6 @@
+### 1.3.0 - 29.09.2015
+* Support for glyphs
+
 ### 1.2.2 - 24.09.2015
 * Fix after grammar changes
 
