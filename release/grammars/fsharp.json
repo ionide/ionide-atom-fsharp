@@ -289,6 +289,31 @@
         "strings": {
             "patterns": [
               {
+                  "contentName": "string.quoted.literalprintf.fsharp",
+                  "begin": "(sprintf|printf[n]|failwithf)\\s+((?=[^\\\\])(@\"))",
+                  "end": "(\")",
+                  "beginCaptures": {
+                      "2": {
+                          "name": "punctuation.definition.string.begin.fsharp"
+                      }
+                  },
+                  "endCaptures": {
+                      "1": {
+                          "name": "punctuation.definition.string.end.fsharp"
+                      }
+                  },
+                  "patterns": [
+                      {
+                          "name": "constant.character.string.escape.fsharp",
+                          "match": "\"(\")"
+                      },
+                      {
+                          "name": "constant.character.string.escape.format.fsharp",
+                          "match": "%[0\\-\\+# ]{0,3}(\\*|[0-9]{0,2})(\\.[0-9]{1,2})?([bcsdiuxXoeEfFgGMOAt]|\\+A)"
+                      }
+                  ]
+              },
+              {
                   "name": "string.quoted.literal.fsharp",
                   "begin": "(?=[^\\\\])(@\")",
                   "end": "(\")",
@@ -310,6 +335,27 @@
                   ]
               },
               {
+                  "contentName": "string.quoted.tripleprintf.fsharp",
+                  "begin": "(sprintf|printf[n]|failwithf)\\s+((?=[^\\\\])(\"\"\"))",
+                  "end": "(\"\"\")",
+                  "beginCaptures": {
+                      "2": {
+                          "name": "punctuation.definition.string.begin.fsharp"
+                      }
+                  },
+                  "endCaptures": {
+                      "1": {
+                          "name": "punctuation.definition.string.end.fsharp"
+                      }
+                  },
+                  "patterns": [
+                      {
+                          "name": "constant.character.string.escape.format.fsharp",
+                          "match": "%[0\\-\\+# ]{0,3}(\\*|[0-9]{0,2})(\\.[0-9]{1,2})?([bcsdiuxXoeEfFgGMOAt]|\\+A)"
+                      }
+                  ]
+              },
+              {
                   "name": "string.quoted.triple.fsharp",
                   "begin": "(?=[^\\\\])(\"\"\")",
                   "end": "(\"\"\")",
@@ -323,6 +369,39 @@
                           "name": "punctuation.definition.string.end.fsharp"
                       }
                   }
+              },
+              {
+                  "contentName": "string.quoted.doubleprintf.fsharp",
+                  "begin": "(sprintf|printf[n]|failwithf)\\s+((?=[^\\\\])(\"))",
+                  "end": "(\")",
+                  "beginCaptures": {
+                      "2": {
+                          "name": "punctuation.definition.string.begin.fsharp"
+                      }
+                  },
+                  "endCaptures": {
+                      "1": {
+                          "name": "punctuation.definition.string.end.fsharp"
+                      }
+                  },
+                  "patterns": [
+                      {
+                          "name": "punctuation.separator.string.ignore-eol.fsharp",
+                          "match": "\\\\$[ \\t]*"
+                      },
+                      {
+                          "name": "constant.character.string.escape.format.fsharp",
+                          "match": "%[0\\-\\+# ]{0,3}(\\*|[0-9]{0,2})(\\.[0-9]{1,2})?([bcsdiuxXoeEfFgGMOAt]|\\+A)"
+                      },
+                      {
+                          "name": "constant.character.string.escape.fsharp",
+                          "match": "\\\\([\\\\''ntbr]|u[a-fA-F0-9]{4}|u[a-fA-F0-9]{8})"
+                      },
+                      {
+                          "name": "invalid.illeagal.character.string.fsharp",
+                          "match": "\\\\(?![\\\\''ntbr]|u[a-fA-F0-9]{4}|u[a-fA-F0-9]{8})."
+                      }
+                  ]
               },
 
                 {
