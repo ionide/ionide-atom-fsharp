@@ -47,7 +47,10 @@
             "include": "#records"
         },
         {
-            "include": "#ces"
+            "include": "#cexprs"
+        },
+        {
+            "include": "#text"
         }
     ],
     "repository": {
@@ -285,6 +288,43 @@
         },
         "strings": {
             "patterns": [
+              {
+                  "name": "string.quoted.literal.fsharp",
+                  "begin": "(?=[^\\\\])(@\")",
+                  "end": "(\")",
+                  "beginCaptures": {
+                      "1": {
+                          "name": "punctuation.definition.string.begin.fsharp"
+                      }
+                  },
+                  "endCaptures": {
+                      "1": {
+                          "name": "punctuation.definition.string.end.fsharp"
+                      }
+                  },
+                  "patterns": [
+                      {
+                          "name": "constant.character.string.escape.fsharp",
+                          "match": "\"(\")"
+                      }
+                  ]
+              },
+              {
+                  "name": "string.quoted.triple.fsharp",
+                  "begin": "(?=[^\\\\])(\"\"\")",
+                  "end": "(\"\"\")",
+                  "beginCaptures": {
+                      "1": {
+                          "name": "punctuation.definition.string.begin.fsharp"
+                      }
+                  },
+                  "endCaptures": {
+                      "1": {
+                          "name": "punctuation.definition.string.end.fsharp"
+                      }
+                  }
+              },
+
                 {
                     "name": "string.quoted.double.fsharp",
                     "begin": "(?=[^\\\\])(\")",
@@ -332,7 +372,7 @@
             "patterns": [
                 {
                     "name": "variable.other.binding.fsharp",
-                    "match":"(``)(.*)(``)",
+                    "match": "(``)(.*)(``)",
                     "captures": {
                         "1": {
                             "name": "string.quoted.single.fsharp"
@@ -376,10 +416,10 @@
                 }
             ]
         },
-        "ces": {
+        "cexprs": {
             "patterns": [
                 {
-                    "name": "ce.fsharp",
+                    "name": "cexpr.fsharp",
                     "match": "\\b([a-zA-Z]*\\s+\\{)",
                     "captures": {
                         "1": {
@@ -399,6 +439,14 @@
                             "name": "string.quoted.single.fsharp"
                         }
                     }
+                }
+            ]
+        },
+        "text": {
+            "patterns": [
+                {
+                    "name": "text.fsharp",
+                    "match": "\\\\"
                 }
             ]
         }
