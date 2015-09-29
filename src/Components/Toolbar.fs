@@ -28,7 +28,7 @@ module ToolbarHandler =
         |> jq
 
     let private getCursor (editor:IEditor) =
-        let bufferPt = editor.getCursorBufferPosition() 
+        let bufferPt = editor.getCursorBufferPosition()
         { row = bufferPt.row; column = bufferPt.column }
 
     /// Makes request for toolbar informations
@@ -63,8 +63,11 @@ module ToolbarHandler =
     let private cursorHandler (o: DTO.TooltipResult) =
         let tb = jq(".toolbar-inner")
         tb.empty() |> ignore
-        let data = (o.Data |> Array.fold (fun acc n -> (n |> Array.toList) @ acc ) []).Head.Signature
-
+        let data =
+            if o.Data.Length > 0 then
+                (o.Data |> Array.fold (fun acc n -> (n |> Array.toList) @ acc ) []).Head.Signature
+            else
+                "No tooltip information"
         if data <> "No tooltip information" then
             tb.append(format_data data) |> ignore
         ()

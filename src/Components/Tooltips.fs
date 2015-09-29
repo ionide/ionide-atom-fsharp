@@ -95,22 +95,23 @@ module TooltipHandler =
                     if err.IsNone then "" else
                     let err, emsg = err.Value, err.Value.Message
                     String.concat "" [(dashes s emsg);":: Error - ";err.Subcategory;" ::\n"; emsg ]
-                let data = (o.Data |> Array.fold (fun acc n -> (n |> Array.toList) @ acc ) []).Head.Signature
+                let data =
+                    if o.Data.Length > 0 then
+                        (o.Data |> Array.fold (fun acc n -> (n |> Array.toList) @ acc ) []).Head.Signature
+                    else
+                        "No tooltip information"
 
                 if data <> "No tooltip information" then
                     (data |> jq("<div/>").text).append(errTip data)
-                else (errTip "" |> jq("<div/>").text)
-                |> fun n -> n.html()
-                |> fun n -> n.Replace("\\n", "</br>")
-                |> fun n -> n.Replace("\n" , "</br>")
-                |>  n'.append |> ignore
-                let j = jq(".panes")
-                let x = e.pageX - j.offset().left
-                let y = e.pageY - j.offset().top
-                tooltip.css("left" , x) |> ignore
-                tooltip.css("top"  , y - 20.) |> ignore
-                tooltip.fadeTo(300., 60.) |> ignore
-        )
+                    |> fun n -> n.html().Replace("\\n", "</br>").Replace("\n" , "</br>")
+                    |>  n'.append |> ignore
+                    let j = jq(".panes")
+                    let x = e.pageX - j.offset().left
+                    let y = e.pageY - j.offset().top
+                    tooltip.css("left" , x) |> ignore
+                    tooltip.css("top"  , y - 20.) |> ignore
+                    tooltip.fadeTo(300., 60.) |> ignore
+            )
 
 
     let private errorHandler (o : DTO.ParseResult) = errorArr <- o.Data
