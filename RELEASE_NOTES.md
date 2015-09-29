@@ -1,3 +1,6 @@
+### 1.3.1 - 29.09.2015
+* Fix empty tooltip error
+
 ### 1.3.0 - 29.09.2015
 * Support for glyphs
 
