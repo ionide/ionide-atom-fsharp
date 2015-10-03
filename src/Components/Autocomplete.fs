@@ -27,9 +27,9 @@ let getSuggestion (options:GetSuggestionOptions) =
         let row = int options.bufferPosition.row + 1
         let col = int options.bufferPosition.column + 1
         // row' & col' are for finding the position of `\` before a prefix that the autocomplete doesn't find by default
-        let row' = if row-1 > 0 then row-1 else row
+        let row' = if row-1 >= 0 then row-1 else row
         // shift back to the character before the prefix to check if it is a `\` for a glyph completion
-        let col' = if col-2-options.prefix.Length > 0 then col-2-options.prefix.Length else col
+        let col' = if col-2-options.prefix.Length >= 0 then col-2-options.prefix.Length else col
         let prefix = if options.prefix = "." || options.prefix = "=" then "" else options.prefix
         Atom.Promise.create(fun () ->
             if isForced || lastResult.IsNone || prefix = "" || lastRow <> row  then
