@@ -91,7 +91,7 @@ let atomTool =
 // --------------------------------------------------------------------------------------
 
 Target "Clean" (fun _ ->
-    CopyFiles "release" ["Readme.md"; "LICENSE"; "RELEASE_NOTES.md"]
+    CopyFiles "release" ["README.md"; "LICENSE"; "RELEASE_NOTES.md"]
     CleanDir tempReleaseDir
 )
 
