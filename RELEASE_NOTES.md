@@ -1,4 +1,5 @@
-### 1.3.2 - 08.10.2015
+### 1.3.3 - 08.10.2015
+* Fix empty helptext list bug
 * Small bug fixes
 
 ### 1.3.1 - 29.09.2015
