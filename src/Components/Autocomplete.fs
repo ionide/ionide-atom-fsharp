@@ -19,7 +19,6 @@ let mutable lastResult : DTO.CompletionResult option = None
 let mutable emitter : IEmitter option  = None
 let mutable lastRow = 0
 
-
 let getSuggestion (options:GetSuggestionOptions) =
     if unbox<obj>(options.editor.buffer.file) <> null then
         Globals.console.log("autocomplete")
@@ -85,12 +84,14 @@ let private helptextSetText (i : int) =
     |> el.append |> ignore
 
 let private previousHelptext _ =
+    //helptext.hide() |> ignore
     if helptextList.Length > 1 then
         if currentHelptext + 1 = 1 then
             helptextSetText (helptextList.Length - 1)
         else helptextSetText (currentHelptext - 1)
 
 let private nextHelptext _ =
+    //helptext.hide() |> ignore
     if helptextList.Length > 1 then
         if currentHelptext + 1 = helptextList.Length then
             helptextSetText 0
@@ -142,9 +143,10 @@ let create () =
             o.top <- o.top - li.height() - 10.
             helptext.offset(o) |> ignore
             helptextList <- n.Data.Overloads |> Array.fold (fun acc n -> (n |> Array.toList) @ acc ) []
-            helptextSetText 0
-            helptext.show() |> ignore
-            ()
+            if helptextList.Length > 0 then
+                helptextSetText 0
+                helptext.show() |> ignore
+                ()
             ) |> unbox<Function>) |> ignore
 
     Globals.atom.commands.add("atom-text-editor","fsharp:helptext-next", nextHelptext |> unbox<Function>) |> ignore
