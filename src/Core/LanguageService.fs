@@ -1,5 +1,6 @@
 ﻿namespace Atom.FSharp
 
+open System
 open FunScript
 open FunScript.TypeScript
 open FunScript.TypeScript.fs
@@ -9,124 +10,84 @@ open FunScript.TypeScript.text_buffer
 
 open Atom
 open Atom.FSharp
+open DTO
 
 [<ReflectedDefinition>]
 module LanguageService =
-    let private encoding = "utf-8"
-
-    type private State =
-        | On
-        | Off
-        | Error
-
-    type private T = { State : State; PreviousState : State; Child : ChildProcess option }
-
-    let mutable private service = { State = State.Off; PreviousState = State.Off; Child = None }
-
-    let isOn () = service.State = State.On
-    let isOff () = service.State = State.Off
-    let isNotOff () = service.State <> State.Off
-    let isError () = service.State = State.Error
-    let isNotError () = service.State <> State.Error
-    let isOffOrError () = isError () || isOff ()
-
-    let mutable private last = Events.ServerError
-
+    let url s = sprintf @"http://localhost:8083/%s" s
     // flag to send tooltip response to the proper event stream
     let mutable private toolbarFlag = false
 
-    let private parseResponse (data : obj) =
-        if data <> null then
-            let response = data.ToString().Split('\n')
-            Events.log "RESPONSE" <| data.ToString()
-            response |> Seq.iter(fun s ->
-                if s.Contains "\"Kind\":\"error\"" then
-                    s |> Events.emitEmpty Events.ServerError
-                    last <- Events.ServerError
-                elif s.Contains "\"Kind\":\"project\"" then
-                    s |> Events.emitEmpty Events.Project
-                    last <- Events.Project
-                elif s.Contains "\"Kind\":\"errors\"" then
-                    s |> Events.parseAndEmit<DTO.ParseResult> Events.Errors
-                    last <- Events.Errors
-                elif s.Contains "\"Kind\":\"completion\"" then
-                    s |> Events.parseAndEmit<DTO.CompletionResult> Events.Completion
-                    last <- Events.Completion
-                elif s.Contains "\"Kind\":\"symboluse\"" then
-                    s |> Events.parseAndEmit<DTO.SymbolUseResult> Events.SymbolUse
-                    last <- Events.SymbolUse
-                elif s.Contains "\"Kind\":\"helptext\"" then
-                    s |> Events.parseAndEmit<DTO.HelptextResult> Events.Helptext
-                    last <- Events.Helptext
-                elif s.Contains "\"Kind\":\"tooltip\"" then
-                    if toolbarFlag then
-                        s |> Events.parseAndEmit<DTO.TooltipResult> Events.Toolbars
-                        last <- Events.Toolbars
-                    else
-                        s |> Events.parseAndEmit<DTO.TooltipResult> Events.Tooltips
-                        last <- Events.Tooltips
-                elif s.Contains "\"Kind\":\"finddecl\"" then
-                    s |> Events.parseAndEmit<DTO.TooltipResult> Events.FindDecl
-                    last <- Events.FindDecl
-                elif s.Contains "\"Kind\":\"compilerlocation\"" then
-                    s |> Events.parseAndEmit<DTO.CompilerLocationResult> Events.CompilerLocation
-                    last <- Events.CompilerLocation
-                elif s.Contains "\"Kind\":\"info\"" then
-                    ()
-                elif s <> "" then
-                    match last with
-                    | Events.Errors -> s |> Events.parseAndEmit<DTO.ParseResult> Events.Errors
-                    | Events.Completion -> s |> Events.parseAndEmit<DTO.CompletionResult> Events.Completion
-                    | _ -> ()
-            )
+    let mutable private service : ChildProcess option =  None
 
-    let ask (msg' : string) =
-        Events.log "REQUEST" msg'
-        let msg = msg'.Replace("\uFEFF", "")
-        service.Child |> Option.iter (fun c ->
-            c.stdin.write( msg, encoding)
-            )
+    let request<'T> (url : string) (data: 'T)  = async {
+        let r = System.Net.WebRequest.Create url
+        let req: FunScript.Core.Web.WebRequest = unbox r
+        req.Headers.Add("Accept", "application/json")
+        req.Headers.Add("Content-Type", "application/json")
+        req.Method <- "POST"
 
-    let send (msg' : string) =
-        let msg = msg'.Replace("\uFEFF", "")
-        Events.log "REQUEST" msg'
-        do service.Child |> Option.iter (fun c -> c.stdin.write( msg, encoding) |> ignore)
+        let str = Globals.JSON.stringify data
+        let data = System.Text.Encoding.UTF8.GetBytes str
+        let stream = req.GetRequestStream()
+        stream.Write (data, 0, data.Length )
+        let! res = req.AsyncGetResponse ()
+        let stream =  res.GetResponseStream()
+        let data = System.Text.Encoding.UTF8.GetString stream.Contents
+        let d = Globals.JSON.parse data
+        let res = unbox<string[]>(d)
+        return res
+    }
 
-    let rec read (stream : stream.Readable) s =
-        match stream.read () with
-        | null -> s
-        | res -> res.ToString() + s |> read stream
+    let private parseResponse (response : string[]) =
+        response |> Seq.iter(fun s ->
+            Events.log "RESPONSE" s
+            if s.Contains "\"Kind\":\"error\"" then
+                s |> Events.emitEmpty Events.ServerError
+            elif s.Contains "\"Kind\":\"project\"" then
+                s |> Events.emitEmpty Events.Project
+            elif s.Contains "\"Kind\":\"errors\"" then
+                s |> Events.parseAndEmit<DTO.ParseResult> Events.Errors
+            elif s.Contains "\"Kind\":\"completion\"" then
+                s |> Events.parseAndEmit<DTO.CompletionResult> Events.Completion
+            elif s.Contains "\"Kind\":\"symboluse\"" then
+                s |> Events.parseAndEmit<DTO.SymbolUseResult> Events.SymbolUse
+            elif s.Contains "\"Kind\":\"helptext\"" then
+                s |> Events.parseAndEmit<DTO.HelptextResult> Events.Helptext
+            elif s.Contains "\"Kind\":\"tooltip\"" then
+                if toolbarFlag then
+                    s |> Events.parseAndEmit<DTO.TooltipResult> Events.Toolbars
+                else
+                    s |> Events.parseAndEmit<DTO.TooltipResult> Events.Tooltips
+            elif s.Contains "\"Kind\":\"finddecl\"" then
+                s |> Events.parseAndEmit<DTO.TooltipResult> Events.FindDecl
+            elif s.Contains "\"Kind\":\"compilerlocation\"" then
+                s |> Events.parseAndEmit<DTO.CompilerLocationResult> Events.CompilerLocation
+            else
+                ()
+        )
 
-    let start () =
-        let location = Globals.atom.packages.packageDirPaths.[0] + "/ionide-fsharp/bin/fsautocomplete.exe"
-        let child = Process.fromPath "mono" |> Process.spawnSimple location
-        child.stdin.setEncoding( encoding);
-        service <- { service with State = State.On; PreviousState = service.State; Child = Some child }
-        "" |> Events.emitEmpty Events.ServerStart
-        send "outputmode json\n"
-        send "compilerlocation\n"
-        child.stdout.on ("readable", unbox<Function> (child.stdout.read >> parseResponse )) |> ignore
-        child.stderr.on("data", unbox<Function>( fun n -> Globals.console.error (n.ToString()))) |> ignore
-        ()
-
-    let stop () =
-        service.Child |> Option.iter (fun n -> n.kill "SIGKILL")
-        service <- { service with State = State.Off; PreviousState = service.State; Child = None }
-        "" |> Events.emitEmpty Events.ServerStop
-
-        ()
+    let send req =
+        async {
+            let! r = req
+            r |> parseResponse
+        } |> Async.StartImmediate
 
     let project s =
-        let str = sprintf "project \"%s\"\n" s
-        ask str
+        {ProjectRequest.FileName = s}
+        |> request (url "project")
+        |> send
 
-    let parse path text =
-        let str = "parse \"" + path + "\"\n" + text + "\n<<EOF>>\n"
-        ask str
+    let parse path (text : string) =
+        let lines = text.Replace("\uFEFF", "").Split('\n')
+        {ParseRequest.FileName = path; ParseRequest.Lines = lines; ParseRequest.IsAsync = true }
+        |> request (url "parse")
+        |> send
 
     let helptext s =
-        let str = sprintf "helptext %s\n" s
-        ask str
+        {HelptextRequest.Symbol = s}
+        |> request (url "helptext")
+        |> send
 
     let parseEditor (editor : IEditor) =
         if isFSharpEditor editor && unbox<obj>(editor.buffer.file) <> null then
@@ -135,24 +96,48 @@ module LanguageService =
             parse path text
 
     let completion fn line col =
-        let str = sprintf "completion \"%s\" %d %d filter\n" fn line col
-        ask str
+        {PositionRequest.Line = line; FileName = fn; Column = col; Filter = ""}
+        |> request (url "completion")
+        |> send
 
     let symbolUse fn line col =
-        let str = sprintf "symboluse \"%s\" %d %d\n" fn line col
-        ask str
+        {PositionRequest.Line = line; FileName = fn; Column = col; Filter = ""}
+        |> request (url "symboluse")
+        |> send
 
     let tooltip fn line col =
         toolbarFlag <- false
-        let str = sprintf "tooltip \"%s\" %d %d\n" fn line col
-        ask str
+        {PositionRequest.Line = line; FileName = fn; Column = col; Filter = ""}
+        |> request (url "tooltip")
+        |> send
 
     let toolbar fn line col =
         toolbarFlag <- true
-        let str = sprintf "tooltip \"%s\" %d %d\n" fn line col
-        ask str
+        {PositionRequest.Line = line; FileName = fn; Column = col; Filter = ""}
+        |> request (url "tooltip")
+        |> send
 
 
     let findDeclaration fn line col =
-        let str = sprintf "finddecl \"%s\" %d %d\n" fn line col
-        ask str
+        {PositionRequest.Line = line; FileName = fn; Column = col; Filter = ""}
+        |> request (url "finddeclaration")
+        |> send
+
+    let compilerLocation () =
+        () |> request (url "compilerlocation") |> send
+
+    let start () =
+        let location = Globals.atom.packages.packageDirPaths.[0] + "/ionide-fsharp/bin/fsautocomplete.suave.exe"
+        let child = Process.fromPath "mono" |> Process.spawnSimple location
+        service <- Some child
+        "" |> Events.emitEmpty Events.ServerStart
+        compilerLocation ()
+        child.stderr.on("data", unbox<Function>( fun n -> Globals.console.error (n.ToString()))) |> ignore
+        ()
+
+    let stop () =
+        service |> Option.iter (fun n -> n.kill "SIGKILL")
+        service <- None
+        "" |> Events.emitEmpty Events.ServerStop
+        
+        ()
