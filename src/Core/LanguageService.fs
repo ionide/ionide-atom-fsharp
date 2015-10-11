@@ -10,11 +10,11 @@ open FunScript.TypeScript.text_buffer
 
 open Atom
 open Atom.FSharp
-open DTO
+open DTO  
 
 [<ReflectedDefinition>]
 module LanguageService =
-    let url s = sprintf @"http://localhost:8083/%s" s
+    let url s = sprintf @"http://localhost:8088/%s" s
     // flag to send tooltip response to the proper event stream
     let mutable private toolbarFlag = false
 
@@ -139,5 +139,5 @@ module LanguageService =
         service |> Option.iter (fun n -> n.kill "SIGKILL")
         service <- None
         "" |> Events.emitEmpty Events.ServerStop
-        
+
         ()
