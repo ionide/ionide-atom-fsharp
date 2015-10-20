@@ -158,7 +158,7 @@ let create () =
     {   selector = ".source.fsharp"
         //disableForSelector = ".source.fsharp .string, .source.fsharp .comment"
         disableForSelector = " "
-        inclusionPriority = 4
-        excludeLowerPriority = false
+        inclusionPriority = 1
+        excludeLowerPriority = true
         getSuggestions = getSuggestion
     }

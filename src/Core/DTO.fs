@@ -2,7 +2,11 @@
 
 [<ReflectedDefinition>]
 module DTO =
-
+    type ParseRequest = { FileName : string; IsAsync : bool; Lines : string[]}
+    type ProjectRequest = { FileName : string}
+    type DeclarationsRequest = {FileName : string}
+    type HelptextRequest = {Symbol : string}
+    type PositionRequest = {FileName : string; Line : int; Column : int; Filter : string}
 
     type OverloadSignature = {
         Signature: string
@@ -33,6 +37,7 @@ module DTO =
 
     type Completion = {
         Name : string
+        ReplacementText: string 
         Glyph : string
         GlyphChar: string
     }
@@ -67,11 +72,11 @@ module DTO =
         MSBuild : string
     }
 
-    type CompilerLocationResult = {Kind : string; Data : CompilerLocation}
-    type HelptextResult = {Kind : string; Data : Helptext}
-
-    type CompletionResult = {Kind : string; Data : Completion []}
-    type SymbolUseResult = {Kind : string; Data : SymbolUses } 
-    type TooltipResult = {Kind : string; Data : OverloadSignature [][]}
-    type ParseResult = {Kind : string; Data : Error []}
-    type FindDeclarationResult = {Kind : string; Data: Declaration}
+    type Result<'T> = {Kind : string; Data : 'T}
+    type CompilerLocationResult = Result<CompilerLocation>
+    type HelptextResult = Result<Helptext>
+    type CompletionResult = Result<Completion[]>
+    type SymbolUseResult = Result<SymbolUses>
+    type TooltipResult = Result<OverloadSignature[][]>
+    type ParseResult = Result<Error[]>
+    type FindDeclarationResult = Result<Declaration>

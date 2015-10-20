@@ -127,7 +127,7 @@ let fsharp_completion (prefix:string) (data:Completion []) =
     |> Array.sortBy( fun t -> editDistance prefix t.Name)
     |> Array.map( fun t ->
         { Suggestion.Default with
-            text = t.Name
+            text = t.ReplacementText
             displayText = t.Name
             replacementPrefix = prefix
             rightLabel = t.Glyph

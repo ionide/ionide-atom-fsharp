@@ -2612,6 +2612,7 @@ module GlyphMaps =
             //
             |> Array.map ( fun (name, unicode) ->
                 {   Name     = name
+                    ReplacementText = name
                     Glyph    = unicode
                     GlyphChar= "variable" }
                 )
