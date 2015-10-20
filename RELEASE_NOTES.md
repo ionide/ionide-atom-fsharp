@@ -1,3 +1,7 @@
+### 1.4.0 - 20.10.2015
+* Update to FSAC.Suave
+* Add backticks in completion
+
 ### 1.3.3 - 08.10.2015
 * Fix empty helptext list bug
 * Small bug fixes
