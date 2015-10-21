@@ -20,7 +20,7 @@ let atomModules =
 // TODO: This only "requires" CompositeDisposable!
 // (So if you're using other things from atom, they need to be added)
 
-open System.Reflection 
+open System.Reflection
 open Microsoft.FSharp.Quotations
 open FunScript.Compiler
 

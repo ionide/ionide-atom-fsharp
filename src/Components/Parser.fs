@@ -13,7 +13,7 @@ open Atom.FSharp
 
 [<ReflectedDefinition>]
 module Parser =
-    let private subscriptions = ResizeArray() 
+    let private subscriptions = ResizeArray()
     let mutable private h : Disposable option = None
 
     let private parseProjectForEditor (editor: IEditor) =
