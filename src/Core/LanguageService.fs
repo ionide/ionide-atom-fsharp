@@ -10,7 +10,7 @@ open FunScript.TypeScript.text_buffer
 
 open Atom
 open Atom.FSharp
-open DTO  
+open DTO
 
 [<ReflectedDefinition>]
 module LanguageService =
