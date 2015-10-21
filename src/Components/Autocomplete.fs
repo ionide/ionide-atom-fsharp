@@ -4,7 +4,7 @@ module Atom.FSharp.AutocompleteProvider
 open FunScript
 open FunScript.TypeScript
 open FunScript.TypeScript.fs
-open FunScript.TypeScript.child_process
+open FunScript.TypeScript.child_process 
 open FunScript.TypeScript.AtomCore
 open FunScript.TypeScript.text_buffer
 

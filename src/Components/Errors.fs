@@ -43,5 +43,26 @@ module ErrorLinterProvider =
             LanguageService.parseEditor editor
         )
 
+    let lintWarning (editor: IEditor) =
+        Atom.Promise.create(fun () ->
+            Events.once Events.Lint (fun (n: DTO.LintResult) ->
+                let map (item : DTO.Lint) =
+                    let range = [|[|float (item.Range.StartLine - 1); float (item.Range.StartColumn - 1)|];
+                                  [|float (item.Range.EndLine - 1);  float (item.Range.EndColumn - 1)|]|]
+                    { ``type`` = "Trace"
+                      text = item.Info.Replace("\n", "")
+                      filePath = editor.buffer.file.path
+                      range = range
+                    } :> obj
+                n.Data
+                |> Array.map map
+                |> Atom.Promise.resolve
+            )
+            LanguageService.lint editor
+        )
+
     let create () =
-        { grammarScopes = [| "source.fsharp"; "source.fsharp.fsi"; "source.fsharp.fsx"; "source.fsharp.fsl"|]; scope = "file"; lint = lint; lintOnFly = true}
+        [|
+          { grammarScopes = [| "source.fsharp"; "source.fsharp.fsi"; "source.fsharp.fsx"; "source.fsharp.fsl"|]; scope = "file"; lint = lint; lintOnFly = true}
+          { grammarScopes = [| "source.fsharp"; "source.fsharp.fsi"; "source.fsharp.fsx"; "source.fsharp.fsl"|]; scope = "file"; lint = lintWarning; lintOnFly = true}
+        |]

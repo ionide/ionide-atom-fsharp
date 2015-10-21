@@ -63,6 +63,8 @@ module LanguageService =
                 s |> Events.parseAndEmit<DTO.TooltipResult> Events.FindDecl
             elif s.Contains "\"Kind\":\"compilerlocation\"" then
                 s |> Events.parseAndEmit<DTO.CompilerLocationResult> Events.CompilerLocation
+            elif s.Contains "\"Kind\":\"lint\"" then
+                s |> Events.parseAndEmit<DTO.LintResult> Events.Lint
             else
                 ()
         )
@@ -125,6 +127,12 @@ module LanguageService =
 
     let compilerLocation () =
         () |> request (url "compilerlocation") |> send
+
+    let lint editor =
+        if isFSharpEditor editor && unbox<obj>(editor.buffer.file) <> null then
+            {LintRequest.FileName = editor.buffer.file.path }
+            |> request (url "lint")
+            |> send
 
     let start () =
         let location = Globals.atom.packages.packageDirPaths.[0] + "/ionide-fsharp/bin/fsautocomplete.suave.exe"

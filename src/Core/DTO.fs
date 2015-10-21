@@ -7,6 +7,7 @@ module DTO =
     type DeclarationsRequest = {FileName : string}
     type HelptextRequest = {Symbol : string}
     type PositionRequest = {FileName : string; Line : int; Column : int; Filter : string}
+    type LintRequest = {FileName : string}
 
     type OverloadSignature = {
         Signature: string
@@ -37,7 +38,7 @@ module DTO =
 
     type Completion = {
         Name : string
-        ReplacementText: string 
+        ReplacementText: string
         Glyph : string
         GlyphChar: string
     }
@@ -72,6 +73,19 @@ module DTO =
         MSBuild : string
     }
 
+    type Range = {
+        StartColumn: int
+        StartLine: int
+        EndColumn: int
+        EndLine: int
+    }
+
+    type Lint = {
+        Info : string
+        Input : string
+        Range : Range
+    }
+
     type Result<'T> = {Kind : string; Data : 'T}
     type CompilerLocationResult = Result<CompilerLocation>
     type HelptextResult = Result<Helptext>
@@ -80,3 +94,4 @@ module DTO =
     type TooltipResult = Result<OverloadSignature[][]>
     type ParseResult = Result<Error[]>
     type FindDeclarationResult = Result<Declaration>
+    type LintResult = Result<Lint[]>
