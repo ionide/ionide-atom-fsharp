@@ -4,7 +4,7 @@ module Atom.FSharp.AutocompleteProvider
 open FunScript
 open FunScript.TypeScript
 open FunScript.TypeScript.fs
-open FunScript.TypeScript.child_process 
+open FunScript.TypeScript.child_process
 open FunScript.TypeScript.AtomCore
 open FunScript.TypeScript.text_buffer
 
@@ -31,7 +31,9 @@ let getSuggestion (options:GetSuggestionOptions) =
         let col' = if col-2-options.prefix.Length >= 0 then col-2-options.prefix.Length else col
         let prefix = if options.prefix = "." || options.prefix = "=" then "" else options.prefix
         Atom.Promise.create(fun () ->
-            if isForced || lastResult.IsNone || prefix = "" || lastRow <> row  then
+            if Globals.isNaN(prefix |> unbox<float>) |> not then
+                () 
+            else if isForced || lastResult.IsNone || prefix = ""  || lastRow <> row  then
                 Events.once Events.Errors (fun result ->
                     Events.once Events.Completion (fun result ->
                         Globals.console.log("prefix - "+ prefix)
