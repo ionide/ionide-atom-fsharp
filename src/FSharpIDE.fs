@@ -17,7 +17,7 @@ module FSharpCommands =
 
     let openSettings() =
         // sometimes this will crash if settings-view hasn't been opened already
-        Globals.atom.workspace._open ("atom://config/packages/ionide-fsharp")
+        Globals.atom.workspace._open ("atom://config/packages/ionide-fsharp", ())
 
 
 type FSharpIDE() =
