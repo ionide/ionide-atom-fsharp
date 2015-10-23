@@ -1,3 +1,6 @@
+### 1.4.1 - 23.10.2015
+* Fix autocomplete on numbers
+
 ### 1.4.0 - 20.10.2015
 * Update to FSAC.Suave
 * Add backticks in completion
