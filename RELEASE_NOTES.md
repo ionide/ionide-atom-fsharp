@@ -1,3 +1,7 @@
+### 1.4.2 - 25.10.2015
+* Update FSAC version
+* Fix paths 
+
 ### 1.4.1 - 23.10.2015
 * Fix autocomplete on numbers
 
