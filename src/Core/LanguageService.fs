@@ -135,7 +135,7 @@ module LanguageService =
             |> send
 
     let start () =
-        let location = Globals.atom.packages.packageDirPaths.[0] + "/ionide-fsharp/bin/fsautocomplete.suave.exe"
+        let location = Globals.atom.packages.packageDirPaths.[0] + "/ionide-fsharp/bin/FsAutoComplete.Suave.exe"
         let child = Process.fromPath "mono" |> Process.spawnSimple location
         service <- Some child
         "" |> Events.emitEmpty Events.ServerStart
