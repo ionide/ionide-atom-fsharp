@@ -1,5 +1,4 @@
-#Ionide-FSharp [![Join the chat at https://gitter.im/ionide/ionide-project](https://img.shields.io/badge/gitter-join%20chat%20%E2%86%92-brightgreen.svg?style=flat-square)](https://gitter.im/ionide/ionide-project?utm_source=share-link&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
+#Ionide-FSharp 
 
 It's part of [Ionide](http://ionide.io) plugin suite.
 F# IDE-like possibilities in Atom editor
@@ -18,6 +17,9 @@ Required plugin is installed automatically if `ionide-installer` is used. Otherw
 - Support for script files or F# projects (if plugin does not detect `.fsproj` file, just open it ).
 - Highlighting usages
 - Quick Info panel  
+
+[![Join the chat at https://gitter.im/ionide/ionide-project](https://img.shields.io/badge/gitter-join%20chat%20%E2%86%92-brightgreen.svg?style=flat-square)](https://gitter.im/ionide/ionide-project?utm_source=share-link&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) --  [Need Help? You can find us on Gitter](https://gitter.im/ionide/ionide-project)   
+
 
 ## Build
 
