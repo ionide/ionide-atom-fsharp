@@ -1,6 +1,9 @@
+### 1.4.3 - 26.10.2015
+* Wait for project parse before file parse on start
+
 ### 1.4.2 - 25.10.2015
 * Update FSAC version
-* Fix paths 
+* Fix paths
 
 ### 1.4.1 - 23.10.2015
 * Fix autocomplete on numbers
