@@ -31,18 +31,27 @@ module Parser =
 
             let p = editor.buffer.file.path
             if JS.isDefined p then
-                p |> Globals.dirname
-                  |> findFsProj
-                  |> Option.iter LanguageService.project
-            else Events.emit Events.Status "Waiting for F# file"
+                let res = p |> Globals.dirname
+                            |> findFsProj
+                match res with
+                | Some r -> LanguageService.project r
+                            true
+                | None -> false
+            else
+                Events.emit Events.Status "Waiting for F# file"
+                false
+        else
+            false
 
     let activate () =
         let editor = Globals.atom.workspace.getActiveTextEditor()
-        editor |> parseProjectForEditor
-        LanguageService.parseEditor editor
+        if parseProjectForEditor editor then
+            Events.once Events.Project (fun _ -> LanguageService.parseEditor editor)
+        else
+            LanguageService.parseEditor editor
 
         Globals.atom.workspace.onDidChangeActivePaneItem ((fun ed ->
-            ed |> parseProjectForEditor
+            ed |> parseProjectForEditor |> ignore
             h |> Option.iter(fun h' -> h'.dispose ())
 
         ) |> unbox<Function>
