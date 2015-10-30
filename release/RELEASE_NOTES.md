@@ -1,3 +1,7 @@
+### 1.4.4 - 30.10.2015
+* Fix 1.1 Atom compatibility bugs
+* Fix F# editor checking
+
 ### 1.4.3 - 26.10.2015
 * Wait for project parse before file parse on start
 
