@@ -1,3 +1,6 @@
+### 1.4.5 - 02.11.2015
+* Update Readme
+
 ### 1.4.4 - 30.10.2015
 * Fix 1.1 Atom compatibility bugs
 * Fix F# editor checking
