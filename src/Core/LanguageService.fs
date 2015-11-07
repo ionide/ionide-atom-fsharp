@@ -14,7 +14,16 @@ open DTO
 
 [<ReflectedDefinition>]
 module LanguageService =
-    let url s = sprintf @"http://localhost:8088/%s" s
+
+    let genPort () =
+        let r = Globals.Math.random ()
+        let r' = r * (8999. - 8100.) + 8100.
+        r'.ToString().Substring(0,4)
+
+    let port = genPort ()
+
+
+    let url s = sprintf @"http://localhost:%s/%s" port s
     // flag to send tooltip response to the proper event stream
     let mutable private toolbarFlag = false
 
@@ -136,7 +145,7 @@ module LanguageService =
 
     let start () =
         let location = Globals.atom.packages.packageDirPaths.[0] + "/ionide-fsharp/bin/FsAutoComplete.Suave.exe"
-        let child = Process.fromPath "mono" |> Process.spawnSimple location
+        let child = Process.spawn location (Process.fromPath "mono") port
         service <- Some child
         "" |> Events.emitEmpty Events.ServerStart
         compilerLocation ()
