@@ -1,3 +1,6 @@
+### 1.4.7 - 07.11.2015
+* Random port generation
+
 ### 1.4.6 - 07.11.2015
 * Update FSAC version
 
