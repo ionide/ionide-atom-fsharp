@@ -1,3 +1,6 @@
+### 1.4.8 - 11.11.2015
+* Normalize path to FSAC
+
 ### 1.4.7 - 07.11.2015
 * Random port generation
 
