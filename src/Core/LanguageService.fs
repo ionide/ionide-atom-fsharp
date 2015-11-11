@@ -144,13 +144,26 @@ module LanguageService =
             |> send
 
     let start () =
-        let location = Globals.atom.packages.packageDirPaths.[0] + "/ionide-fsharp/bin/FsAutoComplete.Suave.exe"
-        let child = Process.spawn location (Process.fromPath "mono") port
-        service <- Some child
-        "" |> Events.emitEmpty Events.ServerStart
-        compilerLocation ()
-        child.stderr.on("data", unbox<Function>( fun n -> Globals.console.error (n.ToString()))) |> ignore
-        ()
+        try
+            let pth = if Process.isWin () then
+                        @"\ionide-fsharp\bin\FsAutoComplete.Suave.exe"
+                      else
+                        @"/ionide-fsharp/bin/FsAutoComplete.Suave.exe"
+            let location = Globals.atom.packages.packageDirPaths.[0] + pth
+            let child = Process.spawn location (Process.fromPath "mono") port
+            service <- Some child
+            "" |> Events.emitEmpty Events.ServerStart
+            compilerLocation ()
+            child.stderr.on("data", unbox<Function>( fun n -> Globals.console.error (n.ToString()))) |> ignore
+            ()
+        with
+        | exc ->
+            Globals.console.error exc
+            service <- None
+            let opt = createEmpty<INotificationsOptions> ()
+            opt.detail <- "Language services could not be spawned"
+            opt.dismissable <- true
+            Globals.atom.notifications.addError("Critical error", opt) |> ignore
 
     let stop () =
         service |> Option.iter (fun n -> n.kill "SIGKILL")
