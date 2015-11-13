@@ -1,3 +1,6 @@
+### 1.4.9 - 13.11.2015
+* Update FSharp.Core version
+
 ### 1.4.8 - 11.11.2015
 * Normalize path to FSAC
 
