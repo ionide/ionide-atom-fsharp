@@ -1,3 +1,6 @@
+### 1.4.11 - 26.11.2015
+* Fix grammar
+
 ### 1.4.9 - 13.11.2015
 * Update FSharp.Core version
 
