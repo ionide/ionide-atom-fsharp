@@ -1,3 +1,7 @@
+### 1.4.12 - 04.12.2015
+* Ensure that dictionary exists
+* Check if starting project is dictionary
+
 ### 1.4.11 - 26.11.2015
 * Fix grammar
 
