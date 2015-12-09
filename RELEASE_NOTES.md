@@ -1,3 +1,6 @@
+### 1.5.0 - 09.12.2015
+* Update FSAC version
+
 ### 1.4.12 - 04.12.2015
 * Ensure that dictionary exists
 * Check if starting project is dictionary
@@ -137,7 +140,7 @@
 
 #### 0.9.0 - 04.08.2015
 * Add autocomplete help text support
-* Detecting changes in fsproj files  
+* Detecting changes in fsproj files
 
 #### 0.8.4 - 27.07.2015
 * Fix performance issues
@@ -208,7 +211,7 @@
 * Change FSI path for non-Windows OS
 
 #### 0.5.2 - 11.06.2015
-* Fix getGrammar for FSI  
+* Fix getGrammar for FSI
 
 #### 0.5.1 - 11.06.2015
 * Add Reset F# Interactive
