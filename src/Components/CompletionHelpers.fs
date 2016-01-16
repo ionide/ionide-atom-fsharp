@@ -70,32 +70,21 @@ type Suggestion =
 
 
 /// Find the minimun of three three terms that support comparison
-let inline min3 one two three =
-    if   one < two && one < three then one
-    elif two < three then two
-    else three
+let inline min3(a, b, c) = min a (min b c)
 
+let inline distanceCalc (m, u) (n, v) =
+    let d1 = Array.init n id
+    let d0 = Array.create n 0
+    for i=1 to m-1 do
+        d0.[0] <- i
+        let ui = u i
+        for j=1 to n-1 do
+            d0.[j] <- 1 + min3(d1.[j], d0.[j-1], d1.[j-1] + if ui = v j then -1 else 0)
+        Array.blit d0 0 d1 0 n
+    d0.[n-1]
 
-let editDistance (s: string) (t: string) : int =
-    let m, n = s.Length, t.Length
-    let index i j = j * m + i
-    let d = Array.create ((m+1)*(n+1)) -1
-    let rec dist m n =
-        match m,n with
-        | i, 0 -> i
-        | 0, j -> j
-        | i, j when d.[index i j] <> -1 -> d.[index i j]
-        | i, j ->
-            let dval =
-                if s.[i-1] = t.[j-1] then dist (i-1) (j-1)
-                else
-                    min3
-                        (dist (i-1) (j)   + 1) // a deletion
-                        (dist (i)   (j-1) + 1) // an insertion
-                        (dist (i-1) (j-1) + 1) // a substitution
-            d.[index i j] <- dval; dval
-    dist m n
-
+let editDistance (s: string) (t: string) =
+    distanceCalc (s.Length, fun i -> s.[i]) (t.Length, fun i -> t.[i])
 
 //====================================
 //  Autocomplete Tooltip Generators
@@ -107,7 +96,7 @@ let editDistance (s: string) (t: string) : int =
 //  the edit distance from the prefix
 /// Returns the results in a tooltip that shows the keyword and rendered Unicode Glyph
 let glyph_completion (prefix:string) (data:Completion []) =
-    data |> Array.filter( fun t -> t.Name.ToLower().Contains(prefix.ToLower()))
+    data |> Array.filter( fun t -> String.Contains prefix  t.Name)
     |> Array.sortBy( fun t -> editDistance prefix t.Name)
     |> Array.map( fun t ->
         { Suggestion.Default with
@@ -123,7 +112,7 @@ let glyph_completion (prefix:string) (data:Completion []) =
 /// of the completion and reorders the results based on the edit distance from the prefix
 /// Returns the results in a tooltip format appropriate for F# language constructs
 let fsharp_completion (prefix:string) (data:Completion []) =
-    data |> Array.filter( fun t -> t.Name.ToLower().Contains(prefix.ToLower()))
+    data |> Array.filter(fun t -> String.Contains prefix  t.Name)
     |> Array.sortBy( fun t -> editDistance prefix t.Name)
     |> Array.map( fun t ->
         { Suggestion.Default with
