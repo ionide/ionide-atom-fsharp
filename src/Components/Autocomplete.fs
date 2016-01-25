@@ -155,12 +155,13 @@ let create () =
         if JS.isDefined o && li.length > 0. then
             o.left <- o.left + list.width() + 10.
             o.top <- o.top - li.height() - 10.
-            helptext.offset(o) |> ignore
             helptextList <- n.Data.Overloads |> Array.fold (fun acc n -> (n |> Array.toList) @ acc ) []
             if helptextList.Length > 0 then
                 helptextSetText 0
+                // Set the position *after* showing the element. If it was hidden 
+                // before, then the `show` call resets the position we set (#194)
                 helptext.show() |> ignore
-                ()
+                helptext.offset(o) |> ignore
             ) |> unbox<Function>) |> ignore
 
     Globals.atom.commands.add("atom-text-editor","fsharp:helptext-next", nextHelptext |> unbox<Function>) |> ignore
