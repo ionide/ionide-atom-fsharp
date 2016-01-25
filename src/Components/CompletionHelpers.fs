@@ -96,7 +96,8 @@ let editDistance (s: string) (t: string) =
 //  the edit distance from the prefix
 /// Returns the results in a tooltip that shows the keyword and rendered Unicode Glyph
 let glyph_completion (prefix:string) (data:Completion []) =
-    data |> Array.filter( fun t -> String.Contains prefix  t.Name)
+    let upperPrefix = prefix.ToUpper()
+    data |> Array.filter(fun t -> t.Name.ToUpper().Contains(upperPrefix))
     |> Array.sortBy( fun t -> editDistance prefix t.Name)
     |> Array.map( fun t ->
         { Suggestion.Default with
@@ -112,7 +113,8 @@ let glyph_completion (prefix:string) (data:Completion []) =
 /// of the completion and reorders the results based on the edit distance from the prefix
 /// Returns the results in a tooltip format appropriate for F# language constructs
 let fsharp_completion (prefix:string) (data:Completion []) =
-    data |> Array.filter(fun t -> String.Contains prefix  t.Name)
+    let upperPrefix = prefix.ToUpper()
+    data |> Array.filter(fun t -> t.Name.ToUpper().Contains(upperPrefix))
     |> Array.sortBy( fun t -> editDistance prefix t.Name)
     |> Array.map( fun t ->
         { Suggestion.Default with
@@ -183,7 +185,6 @@ let helptextSettextSetup
                     (sprintf "<div class='tooltip-counter'>%d of %d</div>" (i + 1) helptextList.Length) + n
                 else n
     |> el.append |> ignore
-
 
 /// setup function designed to generate the `previousHelptext` function
 /// via partial application.  helptext, currentHelptext, and helptextlist are

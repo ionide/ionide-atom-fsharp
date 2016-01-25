@@ -10,9 +10,6 @@ type JQuery with
         jq.html()
 
 type String with
-    static member Contains (target:string) (text:string) = 
-        text.IndexOf(target, StringComparison.OrdinalIgnoreCase) >= 0
-
     static member Replace (oldsub:string) (newsub:string) (str:string) =
         str.Replace(oldsub, newsub)
 
