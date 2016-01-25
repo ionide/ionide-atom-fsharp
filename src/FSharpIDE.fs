@@ -24,19 +24,13 @@ type FSharpIDE() =
     let subscriptions = ResizeArray()
 
     member __.provide () =
-        [|
-            AutocompleteProvider.create();
-        //    GlyphProvider.create()
-        |]
+        [| AutocompleteProvider.create() |]
 
     member __.provideErrors () =
         ErrorLinterProvider.create ()
 
     member __.getSuggestion(options : CompletionHelpers.GetSuggestionOptions) =
-        [|
-            AutocompleteProvider.getSuggestion options;
-        //    GlyphProvider.getSuggestion options
-        |]
+        [| AutocompleteProvider.getSuggestion options|]
 
     member x.activate(state:obj) =
 

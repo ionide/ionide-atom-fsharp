@@ -67,6 +67,19 @@ let getSuggestion (options:GetSuggestionOptions) =
     else Atom.Promise.create(fun () -> Atom.Promise.resolve [||])
 
 
+
+//=========================
+//  Help Text Management
+//=========================
+
+// help text is the tooltips that pop up to the side of the autocomplete window
+
+let createHelptext () =
+    "<div class='type-tooltip tooltip'>
+        <div class='tooltip-inner'>TEST</div>
+    </div>" |> jq
+
+
 let private helptext = createHelptext ()
 let mutable private helptextList : DTO.OverloadSignature list  = []
 let mutable private currentHelptext = 0
@@ -76,13 +89,12 @@ let private helptextSetText (i : int) =
     let el = jq' helptext.[0].firstElementChild
     let text = helptextList.[i].Signature
     el.empty() |> ignore
-    (text |> jq("<div/>").text)
-    |> JQuery.html
-    |> String.Replace "\\n"  "</br>"
-    |> String.Replace "\n" "</br>"
-    |> fun n -> if helptextList.Length > 1 then
-                    (sprintf "<div class='tooltip-counter'>%d of %d</div>" (i + 1) helptextList.Length) + n
-                else n
+
+    if helptextList.Length > 1 then
+      sprintf "<div class='tooltip-counter'>%d of %d</div>" (i + 1) helptextList.Length
+      |> el.append |> ignore
+
+    jq("<div/>").text(text).html().Replace("\\n", "<br />").Replace("\n", "<br />")
     |> el.append |> ignore
 
 let private previousHelptext _ =
