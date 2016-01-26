@@ -31,8 +31,9 @@ let getSuggestion (options:GetSuggestionOptions) =
         let col' = if col-2-options.prefix.Length >= 0 then col-2-options.prefix.Length else col
         let prefix = if options.prefix = "." || options.prefix = "=" then "" else options.prefix
         Atom.Promise.create(fun () ->
-            if Globals.isNaN(prefix |> unbox<float>) |> not then
-                () 
+            if prefix <> "" && not (Globals.isNaN(unbox prefix)) then 
+              // Prefix is a number and we do not want to provide autocomplete on floats, e.g. `132.`
+              () 
             else if isForced || lastResult.IsNone || prefix = ""  || lastRow <> row  then
                 Events.once Events.Errors (fun result ->
                     Events.once Events.Completion (fun result ->
@@ -67,6 +68,19 @@ let getSuggestion (options:GetSuggestionOptions) =
     else Atom.Promise.create(fun () -> Atom.Promise.resolve [||])
 
 
+
+//=========================
+//  Help Text Management
+//=========================
+
+// help text is the tooltips that pop up to the side of the autocomplete window
+
+let createHelptext () =
+    "<div class='type-tooltip tooltip'>
+        <div class='tooltip-inner'>TEST</div>
+    </div>" |> jq
+
+
 let private helptext = createHelptext ()
 let mutable private helptextList : DTO.OverloadSignature list  = []
 let mutable private currentHelptext = 0
@@ -76,13 +90,12 @@ let private helptextSetText (i : int) =
     let el = jq' helptext.[0].firstElementChild
     let text = helptextList.[i].Signature
     el.empty() |> ignore
-    (text |> jq("<div/>").text)
-    |> JQuery.html
-    |> String.Replace "\\n"  "</br>"
-    |> String.Replace "\n" "</br>"
-    |> fun n -> if helptextList.Length > 1 then
-                    (sprintf "<div class='tooltip-counter'>%d of %d</div>" (i + 1) helptextList.Length) + n
-                else n
+
+    if helptextList.Length > 1 then
+      sprintf "<div class='tooltip-counter'>%d of %d</div>" (i + 1) helptextList.Length
+      |> el.append |> ignore
+
+    jq("<div/>").text(text).html().Replace("\\n", "<br />").Replace("\n", "<br />")
     |> el.append |> ignore
 
 let private previousHelptext _ =
@@ -143,12 +156,13 @@ let create () =
         if JS.isDefined o && li.length > 0. then
             o.left <- o.left + list.width() + 10.
             o.top <- o.top - li.height() - 10.
-            helptext.offset(o) |> ignore
             helptextList <- n.Data.Overloads |> Array.fold (fun acc n -> (n |> Array.toList) @ acc ) []
             if helptextList.Length > 0 then
                 helptextSetText 0
+                // Set the position *after* showing the element. If it was hidden 
+                // before, then the `show` call resets the position we set (#194)
                 helptext.show() |> ignore
-                ()
+                helptext.offset(o) |> ignore
             ) |> unbox<Function>) |> ignore
 
     Globals.atom.commands.add("atom-text-editor","fsharp:helptext-next", nextHelptext |> unbox<Function>) |> ignore
