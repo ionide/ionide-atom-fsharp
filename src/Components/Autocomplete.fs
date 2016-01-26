@@ -14,14 +14,29 @@ open Atom.FSharp.DTO
 open Atom.FSharp.GlyphMaps
 open Atom.FSharp.CompletionHelpers
 
+type Microsoft.FSharp.Control.Async with
+  static member AwaitObservable (obs:System.IObservable<'T>) = 
+    Async.FromContinuations(fun (cont, econt, ccont) ->
+        let disp : ref<option<System.IDisposable>> = ref None
+        disp := obs |> Observable.subscribe (fun v ->
+          disp.Value.Value.Dispose()
+          cont(v) ) |> Some) 
+
+  static member StartAsPromise(computation:Async<'T[]>) = 
+    Atom.Promise.create(fun () ->
+      async { let! res = computation
+              Atom.Promise.resolve(unbox res) } |> Async.StartImmediate)
+
 let mutable isForced = false
 let mutable lastResult : DTO.CompletionResult option = None
 let mutable emitter : IEmitter option  = None
 let mutable lastRow = 0
 
-let getSuggestion (options:GetSuggestionOptions) =
+let getSuggestion (options:GetSuggestionOptions) = Async.StartAsPromise <| async {
     if unbox<obj>(options.editor.buffer.file) <> null then
+        
         Globals.console.log("autocomplete")
+        
         let path = options.editor.buffer.file.path
         let row = int options.bufferPosition.row + 1
         let col = int options.bufferPosition.column + 1
@@ -30,98 +45,95 @@ let getSuggestion (options:GetSuggestionOptions) =
         // shift back to the character before the prefix to check if it is a `\` for a glyph completion
         let col' = if col-2-options.prefix.Length >= 0 then col-2-options.prefix.Length else col
         let prefix = if options.prefix = "." || options.prefix = "=" then "" else options.prefix
-        Atom.Promise.create(fun () ->
-            if prefix <> "" && not (Globals.isNaN(unbox prefix)) then 
-              // Prefix is a number and we do not want to provide autocomplete on floats, e.g. `132.`
-              () 
-            else if isForced || lastResult.IsNone || prefix = ""  || lastRow <> row  then
-                Events.once Events.Errors (fun result ->
-                    Events.once Events.Completion (fun result ->
-                        Globals.console.log("prefix - "+ prefix)
-                        lastRow    <- row
-                        isForced   <- false
-                        let r =
-                            // Autocomplete format for Unicode Glyphs \d
-                            // shift back to the character before the prefix to check if it is a `\` for a glyph completion
-                            if options.editor.buffer.lines.[row'].[col'] = '\\' then
-                                lastResult <- Some{ Kind = ""
-                                                    Data = unicode_map  }
-                                glyph_completion prefix unicode_map
-                            else
-                                lastResult <- Some result
-                                fsharp_completion prefix result.Data
-                        if r.Length > 0 then LanguageService.helptext (r.[0] :?> Suggestion).text
-                        r |> Atom.Promise.resolve
-                    )
-                    LanguageService.completion path row col
-                )
-                LanguageService.parseEditor options.editor
-            else
-                isForced <- false
-                let r =
-                    if options.editor.buffer.lines.[row'].[col'] = '\\' then
-                        glyph_completion prefix lastResult.Value.Data
-                    else
-                        fsharp_completion prefix lastResult.Value.Data
-                if r.Length > 0 then LanguageService.helptext (r.[0] :?> Suggestion).text
-                r |> Atom.Promise.resolve)
-    else Atom.Promise.create(fun () -> Atom.Promise.resolve [||])
+
+
+        if prefix <> "" && not (Globals.isNaN(unbox prefix)) then 
+            // Prefix is a number and we do not want to provide autocomplete on floats, e.g. `132.`
+            return [| |]
+        else if isForced || lastResult.IsNone || prefix = ""  || lastRow <> row  then
+            let! _ = Events.guardedAwaitEvent Events.Errors (fun _ -> LanguageService.parseEditor options.editor)
+            let! result = Events.guardedAwaitEvent Events.Completion (fun _ -> LanguageService.completion path row col)
+            Globals.console.log("prefix - "+ prefix)
+            lastRow    <- row
+            isForced   <- false
+            let r =
+                // Autocomplete format for Unicode Glyphs \d
+                // shift back to the character before the prefix to check if it is a `\` for a glyph completion
+                if options.editor.buffer.lines.[row'].[col'] = '\\' then
+                    lastResult <- Some{ Kind = ""
+                                        Data = unicode_map  }
+                    glyph_completion prefix unicode_map
+                else
+                    lastResult <- Some result
+                    fsharp_completion prefix result.Data
+            if r.Length > 0 then LanguageService.helptext (r.[0] :?> Suggestion).text
+            return r
+        else
+            isForced <- false
+            let r =
+                if options.editor.buffer.lines.[row'].[col'] = '\\' then
+                    glyph_completion prefix lastResult.Value.Data
+                else
+                    fsharp_completion prefix lastResult.Value.Data
+            if r.Length > 0 then LanguageService.helptext (r.[0] :?> Suggestion).text
+            return r 
+    else 
+      return [| |] } 
 
 
 
-//=========================
-//  Help Text Management
-//=========================
+// --------------------------------------------------------------------------------------
+// Help Text (the tooltips that pop up to the side of the autocomplete window)
+// --------------------------------------------------------------------------------------
 
-// help text is the tooltips that pop up to the side of the autocomplete window
+type HelptextEvent = 
+  | Next of int
+  | Hide
 
-let createHelptext () =
-    "<div class='type-tooltip tooltip'>
-        <div class='tooltip-inner'>TEST</div>
-    </div>" |> jq
+let helptextEvent = new Event<HelptextEvent>()
 
+/// Creates a tool tip and start an async loop to switch between the given overloads.
+/// When `helptextEvent` happens with `Hide`, the workflow stops & tool tip disappears
+let createHelptextToolTip (overloads:DTO.OverloadSignature[]) (position:JQueryCoordinates) = 
 
-let private helptext = createHelptext ()
-let mutable private helptextList : DTO.OverloadSignature list  = []
-let mutable private currentHelptext = 0
+  // Create tool tip for showing help text & add it to the right place
+  let helptext = 
+    jq("<div class='type-tooltip tooltip'>
+          <div class='tooltip-inner'>TEST</div>
+        </div>").appendTo(jq(".panes")).offset(position)
 
-let private helptextSetText (i : int) =
-    currentHelptext <- i
-    let el = jq' helptext.[0].firstElementChild
-    let text = helptextList.[i].Signature
-    el.empty() |> ignore
+  // Update the UI & wait for `Move` event (to change overload) or `Hide` to remove tooltip
+  let rec loop i = async {
+    let toolTipInner = jq' helptext.[0].firstElementChild
+    toolTipInner.empty() |> ignore
 
-    if helptextList.Length > 1 then
-      sprintf "<div class='tooltip-counter'>%d of %d</div>" (i + 1) helptextList.Length
-      |> el.append |> ignore
+    let text = overloads.[i].Signature
+    if overloads.Length > 1 then
+      sprintf "<div class='tooltip-counter'>%d of %d</div>" (i + 1) overloads.Length
+      |> toolTipInner.append |> ignore
 
     jq("<div/>").text(text).html().Replace("\\n", "<br />").Replace("\n", "<br />")
-    |> el.append |> ignore
+    |> toolTipInner.append |> ignore
 
-let private previousHelptext _ =
-    //helptext.hide() |> ignore
-    if helptextList.Length > 1 then
-        if currentHelptext + 1 = 1 then
-            helptextSetText (helptextList.Length - 1)
-        else helptextSetText (currentHelptext - 1)
+    let! evt = Async.AwaitObservable helptextEvent.Publish
+    match evt with
+    | Next by -> return! loop ((i + by + overloads.Length) % overloads.Length)
+    | Hide -> helptext.fadeOut().remove() |> ignore }
 
-let private nextHelptext _ =
-    //helptext.hide() |> ignore
-    if helptextList.Length > 1 then
-        if currentHelptext + 1 = helptextList.Length then
-            helptextSetText 0
-        else helptextSetText (currentHelptext + 1)
+  // Start by displaying the first overload
+  loop 0
+
+// --------------------------------------------------------------------------------------
 
 let mutable private  subscription : Disposable option = None
 
 let private initialize (editor : IEditor) =
     if subscription.IsSome then subscription.Value.dispose ()
     if isFSharpEditor editor then
-        subscription <- editor.onDidChangeCursorPosition ((fun _ -> helptext.fadeOut() |> ignore) |> unbox<Function> ) |> Some
+        subscription <- editor.onDidChangeCursorPosition ((fun _ -> helptextEvent.Trigger Hide ) |> unbox<Function> ) |> Some
+
 
 let create () =
-    jq(".panes").append helptext |> ignore
-    helptext.fadeOut () |> ignore
     Globals.atom.commands.add("atom-text-editor","fsharp:autocomplete", (fun _ ->
         let package = Globals.atom.packages.getLoadedPackage("autocomplete-plus") |> unbox<Package>
         let e = package.mainModule.autocompleteManager.suggestionList.emitter
@@ -142,7 +154,7 @@ let create () =
                 () :> obj
             e.on("did-select-next", (fun _ -> handler false) |> unbox<Function>) |> ignore
             e.on("did-select-previous", (fun _ -> handler true) |> unbox<Function>) |> ignore
-            e.on("did-cancel",(fun _ -> helptext.fadeOut() |> ignore) |> unbox<Function>) |> ignore
+            e.on("did-cancel",(fun _ -> helptextEvent.Trigger Hide ) |> unbox<Function>) |> ignore
             emitter <- Some e
         dispatchAutocompleteCommand ()
         isForced <- true) |> unbox<Function>) |> ignore
@@ -152,21 +164,18 @@ let create () =
         let o = li.offset()
         let list = jq "autocomplete-suggestion-list"
 
+        helptextEvent.Trigger Hide
 
         if JS.isDefined o && li.length > 0. then
             o.left <- o.left + list.width() + 10.
             o.top <- o.top - li.height() - 10.
-            helptextList <- n.Data.Overloads |> Array.fold (fun acc n -> (n |> Array.toList) @ acc ) []
-            if helptextList.Length > 0 then
-                helptextSetText 0
-                // Set the position *after* showing the element. If it was hidden 
-                // before, then the `show` call resets the position we set (#194)
-                helptext.show() |> ignore
-                helptext.offset(o) |> ignore
+            let helptextList = n.Data.Overloads |> Array.concat
+            if not (Array.isEmpty helptextList) then
+                createHelptextToolTip helptextList o |> Async.StartImmediate                
             ) |> unbox<Function>) |> ignore
 
-    Globals.atom.commands.add("atom-text-editor","fsharp:helptext-next", nextHelptext |> unbox<Function>) |> ignore
-    Globals.atom.commands.add("atom-text-editor","fsharp:helptext-previous", previousHelptext |> unbox<Function>) |> ignore
+    Globals.atom.commands.add("atom-text-editor","fsharp:helptext-next", (fun _ -> helptextEvent.Trigger (Next +1)) |> unbox<Function>) |> ignore
+    Globals.atom.commands.add("atom-text-editor","fsharp:helptext-previous", (fun _ -> helptextEvent.Trigger (Next -1)) |> unbox<Function>) |> ignore
 
     Globals.atom.workspace.getActiveTextEditor() |> initialize
     Globals.atom.workspace.onDidChangeActivePaneItem((fun ed -> initialize ed) |> unbox<Function>  ) |> ignore
