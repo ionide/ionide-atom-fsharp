@@ -106,7 +106,7 @@ let glyph_completion (prefix:string) (data:Completion []) =
             replacementPrefix = "\\"+prefix
             rightLabel = t.Glyph
             ``type``   = t.GlyphChar
-        } :> obj
+        }
     )
 
 /// Filters a colection of possible completions based on whether prefix is a substring
@@ -123,6 +123,6 @@ let fsharp_completion (prefix:string) (data:Completion []) =
             replacementPrefix = prefix
             rightLabel = t.Glyph
             ``type`` = t.GlyphChar
-        } :> obj
+        }
     )
 

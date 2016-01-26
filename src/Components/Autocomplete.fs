@@ -13,73 +13,79 @@ open Atom.FSharp
 open Atom.FSharp.DTO
 open Atom.FSharp.GlyphMaps
 open Atom.FSharp.CompletionHelpers
+open Atom.FSharp.Control
 
-type Microsoft.FSharp.Control.Async with
-  static member AwaitObservable (obs:System.IObservable<'T>) = 
-    Async.FromContinuations(fun (cont, econt, ccont) ->
-        let disp : ref<option<System.IDisposable>> = ref None
-        disp := obs |> Observable.subscribe (fun v ->
-          disp.Value.Value.Dispose()
-          cont(v) ) |> Some) 
-
-  static member StartAsPromise(computation:Async<'T[]>) = 
-    Atom.Promise.create(fun () ->
-      async { let! res = computation
-              Atom.Promise.resolve(unbox res) } |> Async.StartImmediate)
-
-let mutable isForced = false
-let mutable lastResult : DTO.CompletionResult option = None
-let mutable emitter : IEmitter option  = None
-let mutable lastRow = 0
-
-let getSuggestion (options:GetSuggestionOptions) = Async.StartAsPromise <| async {
-    if unbox<obj>(options.editor.buffer.file) <> null then
-        
-        Globals.console.log("autocomplete")
-        
-        let path = options.editor.buffer.file.path
-        let row = int options.bufferPosition.row + 1
-        let col = int options.bufferPosition.column + 1
-        // row' & col' are for finding the position of `\` before a prefix that the autocomplete doesn't find by default
-        let row' = if row-1 >= 0 then row-1 else row
-        // shift back to the character before the prefix to check if it is a `\` for a glyph completion
-        let col' = if col-2-options.prefix.Length >= 0 then col-2-options.prefix.Length else col
-        let prefix = if options.prefix = "." || options.prefix = "=" then "" else options.prefix
+// --------------------------------------------------------------------------------------
+// Autocomplete agent that takes care of state
+// --------------------------------------------------------------------------------------
 
 
-        if prefix <> "" && not (Globals.isNaN(unbox prefix)) then 
-            // Prefix is a number and we do not want to provide autocomplete on floats, e.g. `132.`
-            return [| |]
-        else if isForced || lastResult.IsNone || prefix = ""  || lastRow <> row  then
-            let! _ = Events.guardedAwaitEvent Events.Errors (fun _ -> LanguageService.parseEditor options.editor)
-            let! result = Events.guardedAwaitEvent Events.Completion (fun _ -> LanguageService.completion path row col)
-            Globals.console.log("prefix - "+ prefix)
-            lastRow    <- row
-            isForced   <- false
+/// A request to provide autocompletion list from the editor
+type SuggestionRequest = 
+    { Row:int; Column:int; Line:string; Prefix:string; Path:string; Editor:IEditor }
+
+/// Autocomplete agent handles two events - `UpdateCompletion` is a request to throw
+/// away current state & update ASAP and `GetSuggestion` is request for completion data
+type AutocompleteEvent = 
+    | GetSuggestion of SuggestionRequest * ReplyChannel<Suggestion[]>
+    | UpdateCompletion 
+
+let autocompleteAgent = MailboxProcessor.Start(fun inbox ->
+
+  /// Call the F# langauge service to get autocompletion list
+  let updateLastResult request = async {
+      // If character before prefix is \, we provide Unicode glyph completion
+      let backslashColumn = request.Column - request.Prefix.Length - 1
+      if backslashColumn >= 0 && request.Line.[backslashColumn] = '\\' then
+          return unicode_map 
+      else
+          let! _ = Events.guardedAwaitEvent Events.Errors (fun _ -> 
+              LanguageService.parseEditor request.Editor)
+          let! result = Events.guardedAwaitEvent Events.Completion (fun _ -> 
+              LanguageService.completion request.Path (request.Row + 1) (request.Column + 1))
+          return result.Data }
+
+  /// Check if last data data is good for a given request.
+  /// If no, refresh data from the F# language service
+  let ensureUpToDate lastRow lastResult request = async {
+      if request.Prefix = "" || request.Row <> lastRow then 
+          let! lastResult = updateLastResult request
+          return request.Row, lastResult
+      else return lastRow, lastResult }
+
+
+  /// The state machine. In `updating` state, we're waiting for
+  /// a request so that we can update autocomplete information ASAP.
+  let rec updating () = async {
+      let! msg = inbox.Receive()
+      match msg with
+      | UpdateCompletion -> return! updating ()
+      | GetSuggestion(request, _) ->
+            // Update last result and resent the completion request
+            let! results = updateLastResult request
+            inbox.Post(msg)
+            return! usingLastResult request.Row results }
+
+  /// In `usingLastResult` state, we have results from previous completion
+  /// and we keep using it until we get `UpdateCompletion` 
+  and usingLastResult lastRow (lastResult:Completion[]) : Async<unit> = async {
+      let! evt = inbox.Receive()
+      match evt with
+      | UpdateCompletion -> return! updating ()
+      | GetSuggestion(request, reply) ->
+            // Check that last result is good (if not, get a new one)
+            let! lastRow, lastResult = ensureUpToDate lastRow lastResult request
             let r =
-                // Autocomplete format for Unicode Glyphs \d
-                // shift back to the character before the prefix to check if it is a `\` for a glyph completion
-                if options.editor.buffer.lines.[row'].[col'] = '\\' then
-                    lastResult <- Some{ Kind = ""
-                                        Data = unicode_map  }
-                    glyph_completion prefix unicode_map
+                if (request.Column > 0 && request.Line.[request.Column - 1] = '\\') then
+                    glyph_completion request.Prefix lastResult
                 else
-                    lastResult <- Some result
-                    fsharp_completion prefix result.Data
-            if r.Length > 0 then LanguageService.helptext (r.[0] :?> Suggestion).text
-            return r
-        else
-            isForced <- false
-            let r =
-                if options.editor.buffer.lines.[row'].[col'] = '\\' then
-                    glyph_completion prefix lastResult.Value.Data
-                else
-                    fsharp_completion prefix lastResult.Value.Data
-            if r.Length > 0 then LanguageService.helptext (r.[0] :?> Suggestion).text
-            return r 
-    else 
-      return [| |] } 
+                    fsharp_completion request.Prefix lastResult
+            if r.Length > 0 then LanguageService.helptext r.[0].text
+            reply.Reply(r)
+            return! usingLastResult lastRow lastResult }
 
+  // Initially, we have no data, so update ASAP.
+  updating() )
 
 
 // --------------------------------------------------------------------------------------
@@ -87,8 +93,8 @@ let getSuggestion (options:GetSuggestionOptions) = Async.StartAsPromise <| async
 // --------------------------------------------------------------------------------------
 
 type HelptextEvent = 
-  | Next of int
-  | Hide
+    | Next of int
+    | Hide
 
 let helptextEvent = new Event<HelptextEvent>()
 
@@ -96,34 +102,62 @@ let helptextEvent = new Event<HelptextEvent>()
 /// When `helptextEvent` happens with `Hide`, the workflow stops & tool tip disappears
 let createHelptextToolTip (overloads:DTO.OverloadSignature[]) (position:JQueryCoordinates) = 
 
-  // Create tool tip for showing help text & add it to the right place
-  let helptext = 
-    jq("<div class='type-tooltip tooltip'>
-          <div class='tooltip-inner'>TEST</div>
-        </div>").appendTo(jq(".panes")).offset(position)
+    // Create tool tip for showing help text & add it to the right place
+    let helptext = 
+        jq("<div class='type-tooltip tooltip'>
+              <div class='tooltip-inner'>TEST</div>
+            </div>").appendTo(jq(".panes")).offset(position)
 
-  // Update the UI & wait for `Move` event (to change overload) or `Hide` to remove tooltip
-  let rec loop i = async {
-    let toolTipInner = jq' helptext.[0].firstElementChild
-    toolTipInner.empty() |> ignore
+    // Update the UI & wait for `Move` event (to change overload) or `Hide` to remove tooltip
+    let rec loop i = async {
+        let toolTipInner = jq' helptext.[0].firstElementChild
+        toolTipInner.empty() |> ignore
 
-    let text = overloads.[i].Signature
-    if overloads.Length > 1 then
-      sprintf "<div class='tooltip-counter'>%d of %d</div>" (i + 1) overloads.Length
-      |> toolTipInner.append |> ignore
+        let text = overloads.[i].Signature
+        if overloads.Length > 1 then
+          sprintf "<div class='tooltip-counter'>%d of %d</div>" (i + 1) overloads.Length
+          |> toolTipInner.append |> ignore
 
-    jq("<div/>").text(text).html().Replace("\\n", "<br />").Replace("\n", "<br />")
-    |> toolTipInner.append |> ignore
+        jq("<div/>").text(text).html().Replace("\\n", "<br />").Replace("\n", "<br />")
+        |> toolTipInner.append |> ignore
 
-    let! evt = Async.AwaitObservable helptextEvent.Publish
-    match evt with
-    | Next by -> return! loop ((i + by + overloads.Length) % overloads.Length)
-    | Hide -> helptext.fadeOut().remove() |> ignore }
+        let! evt = Async.AwaitObservable helptextEvent.Publish
+        match evt with
+        | Next by -> return! loop ((i + by + overloads.Length) % overloads.Length)
+        | Hide -> helptext.fadeOut().remove() |> ignore }
 
-  // Start by displaying the first overload
-  loop 0
+    // Start by displaying the first overload
+    loop 0
+
 
 // --------------------------------------------------------------------------------------
+// Editor integration
+// --------------------------------------------------------------------------------------
+
+
+/// State-less getSuggestion function that is called by Atom
+let getSuggestion (options:GetSuggestionOptions) = Async.StartAsPromise <| async {
+    if unbox<obj>(options.editor.buffer.file) = null then
+        return [| |] 
+    else
+        // Get information for the autocomplete request
+        let path = options.editor.buffer.file.path
+        let row = int options.bufferPosition.row 
+        let col = int options.bufferPosition.column 
+        let line = options.editor.buffer.lines.[row]
+        let prefix = match options.prefix with "." | "=" -> "" | _ -> options.prefix
+
+        // Prefix is a number and we do not want to provide autocomplete on floats, e.g. `132.`
+        if prefix <> "" && not (Globals.isNaN(unbox prefix)) then 
+            return [| |]
+        else
+            let request = 
+              { Row = row; Column = col; Prefix = prefix; Line = line ;
+                Path = path; Editor = options.editor }
+            return! autocompleteAgent.PostAndAsyncReply(fun reply -> 
+                GetSuggestion(request, reply) ) }
+
+
 
 let mutable private  subscription : Disposable option = None
 
@@ -157,7 +191,8 @@ let create () =
             e.on("did-cancel",(fun _ -> helptextEvent.Trigger Hide ) |> unbox<Function>) |> ignore
             emitter <- Some e
         dispatchAutocompleteCommand ()
-        isForced <- true) |> unbox<Function>) |> ignore
+        autocompleteAgent.Post(AutocompleteEvent.UpdateCompletion)
+    ) |> unbox<Function>) |> ignore
 
     Events.on Events.Helptext ((fun (n : DTO.HelptextResult) ->
         let li = (jq ".suggestion-list-scroller .list-group li.selected")
