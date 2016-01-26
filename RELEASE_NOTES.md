@@ -1,3 +1,9 @@
+### 1.6.0 - 26.01.2016
+* Fix process spawning errors
+* Fix autocomplete on "."
+* Fix filtering completion
+* Fix tooltips positioning
+
 ### 1.5.0 - 09.12.2015
 * Update FSAC version
 
