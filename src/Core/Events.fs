@@ -101,3 +101,8 @@ module Events =
     let on t func =
         let name = getName t
         emitter.on(name, func)
+
+    let guardedAwaitEvent t f = 
+      Async.FromContinuations(fun (cont, _, _) -> 
+        once t cont
+        f () )

@@ -16,6 +16,7 @@ open Fake.ZipHelper
 #if MONO
 #else
 #load "src/atom-bindings.fsx"
+#load "src/Core/Control.fs"
 #load "src/Core/Events.fs"
 #load "src/Core/DTO.fs"
 #load "src/Core/LanguageService.fs"
