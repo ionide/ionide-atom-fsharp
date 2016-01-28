@@ -57,3 +57,5 @@ temp
 .fake
 .vs
 *.js
+*.bak
+*.npmignore
