@@ -27,7 +27,7 @@ module ErrorLinterProvider =
 
     let lint (editor : IEditor) =
         Atom.Promise.create(fun () ->
-            Events.once Events.Errors (fun (n : DTO.ParseResult) ->
+            Events.once Events.Errors (fun n ->
                 let map (item : DTO.Error) =
                     let range = [|[|float (item.StartLine - 1); float (item.StartColumn - 1)|];
                                   [|float (item.EndLine - 1);  float (item.EndColumn - 1)|]|]
@@ -45,7 +45,7 @@ module ErrorLinterProvider =
 
     let lintWarning (editor: IEditor) =
         Atom.Promise.create(fun () ->
-            Events.once Events.Lint (fun (n: DTO.LintResult) ->
+            Events.once Events.Lint (fun n ->
                 let map (item : DTO.Lint) =
                     let range = [|[|float (item.Range.StartLine - 1); float (item.Range.StartColumn - 1)|];
                                   [|float (item.Range.EndLine - 1);  float (item.Range.EndColumn - 1)|]|]

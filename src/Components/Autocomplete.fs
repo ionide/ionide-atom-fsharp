@@ -37,12 +37,15 @@ let autocompleteAgent = MailboxProcessor.Start(fun inbox ->
       // If character before prefix is \, we provide Unicode glyph completion
       let backslashColumn = request.Column - request.Prefix.Length - 1
       if backslashColumn >= 0 && request.Line.[backslashColumn] = '\\' then
+          Events.log "AutoComplete" "updateLastResult - using unicode map"
           return unicode_map 
       else
+          Events.log "Autocomplete" "updateLastResult - calling language service"
           let! _ = Events.guardedAwaitEvent Events.Errors (fun _ -> 
               LanguageService.parseEditor request.Editor)
           let! result = Events.guardedAwaitEvent Events.Completion (fun _ -> 
               LanguageService.completion request.Path (request.Row + 1) (request.Column + 1))
+          Events.logf "Autocomplete" "updateLastResult: %O" [| result.Data |]
           return result.Data }
 
   /// Check if last data data is good for a given request.
@@ -57,6 +60,7 @@ let autocompleteAgent = MailboxProcessor.Start(fun inbox ->
   /// The state machine. In `updating` state, we're waiting for
   /// a request so that we can update autocomplete information ASAP.
   let rec updating () = async {
+      Events.log "Autocomplete" "updating..."
       let! msg = inbox.Receive()
       match msg with
       | UpdateCompletion -> return! updating ()
@@ -69,12 +73,14 @@ let autocompleteAgent = MailboxProcessor.Start(fun inbox ->
   /// In `usingLastResult` state, we have results from previous completion
   /// and we keep using it until we get `UpdateCompletion` 
   and usingLastResult lastRow (lastResult:Completion[]) : Async<unit> = async {
+      Events.logf "Autocomplete" "Using last result: %O" [| lastResult |]
       let! evt = inbox.Receive()
       match evt with
       | UpdateCompletion -> return! updating ()
       | GetSuggestion(request, reply) ->
             // Check that last result is good (if not, get a new one)
             let! lastRow, lastResult = ensureUpToDate lastRow lastResult request
+            Events.logf "Autocomplete" "Handling request: %O" [| request |]
             let r =
                 if (request.Column > 0 && request.Line.[request.Column - 1] = '\\') then
                     glyph_completion request.Prefix lastResult
@@ -157,63 +163,77 @@ let getSuggestion (options:GetSuggestionOptions) = Async.StartAsPromise <| async
             return! autocompleteAgent.PostAndAsyncReply(fun reply -> 
                 GetSuggestion(request, reply) ) }
 
+/// Triggered when a current editor is changed 
+let editorChanged = Event<IEditor>()
 
+/// Register a handler that hides the 'helptext' whenever cursor position in the current F# editor changes
+let rec registerHelptextHandler disposePrevious = async {
+    let! editor = Async.AwaitObservable editorChanged.Publish
+    disposePrevious ()
+    let dispose = 
+        if not (isFSharpEditor editor) then ignore
+        else editor.onDidChangeCursorPosition((fun _ -> 
+            helptextEvent.Trigger Hide ) |> unbox<Function>).dispose
+    return! registerHelptextHandler dispose }
 
-let mutable private  subscription : Disposable option = None
+/// Register a handler for events triggered by scrolling through autocomplete-plus completion list
+let registerCompletionScrollHandlers () =
+    let package = Globals.atom.packages.getLoadedPackage("autocomplete-plus") |> unbox<Package>
+    let handler flag =
+        let selected = 
+            if flag then (jq "li.selected").prev().find("span.word-container .word")
+            else (jq "li.selected").next().find("span.word-container .word")
+        let text =  
+            if selected.length > 0. then selected.text()
+            elif flag then
+                (jq ".suggestion-list-scroller .list-group li").last().find(" span.word-container .word").text()
+            else
+                (jq ".suggestion-list-scroller .list-group li").first().find(" span.word-container .word").text()
+        LanguageService.helptext text
 
-let private initialize (editor : IEditor) =
-    if subscription.IsSome then subscription.Value.dispose ()
-    if isFSharpEditor editor then
-        subscription <- editor.onDidChangeCursorPosition ((fun _ -> helptextEvent.Trigger Hide ) |> unbox<Function> ) |> Some
+    let e = package.mainModule.autocompleteManager.suggestionList.emitter
+    e.add("did-select-next", fun _ -> handler false)
+    e.add("did-select-previous", fun _ -> handler true)
+    e.add("did-cancel", fun _ -> helptextEvent.Trigger Hide)
+    
 
-
+/// Initialize the autocomplete package
 let create () =
-    Globals.atom.commands.add("atom-text-editor","fsharp:autocomplete", (fun _ ->
-        let package = Globals.atom.packages.getLoadedPackage("autocomplete-plus") |> unbox<Package>
-        let e = package.mainModule.autocompleteManager.suggestionList.emitter
-        if emitter.IsNone then
-            let handler flag =
-                let selected = if flag then (jq "li.selected").prev().find(" span.word-container .word")
-                               else (jq "li.selected").next().find(" span.word-container .word")
-
-                let text = if selected.length > 0. then
-                                selected.text()
-                           else
-                                if flag then
-                                    (jq ".suggestion-list-scroller .list-group li").last().find(" span.word-container .word").text()
-                                else
-                                    (jq ".suggestion-list-scroller .list-group li").first().find(" span.word-container .word").text()
-                LanguageService.helptext text
-
-                () :> obj
-            e.on("did-select-next", (fun _ -> handler false) |> unbox<Function>) |> ignore
-            e.on("did-select-previous", (fun _ -> handler true) |> unbox<Function>) |> ignore
-            e.on("did-cancel",(fun _ -> helptextEvent.Trigger Hide ) |> unbox<Function>) |> ignore
-            emitter <- Some e
+    // Handler for Ctrl+Space command
+    Globals.atom.commands.add("atom-text-editor","fsharp:autocomplete", fun _ ->
         dispatchAutocompleteCommand ()
-        autocompleteAgent.Post(AutocompleteEvent.UpdateCompletion)
-    ) |> unbox<Function>) |> ignore
+        autocompleteAgent.Post(AutocompleteEvent.UpdateCompletion) )
 
-    Events.on Events.Helptext ((fun (n : DTO.HelptextResult) ->
+    // Handler for showing tool tip on the side of completion lists
+    Events.add Events.Helptext (fun n ->
+        // Hide the old one
+        helptextEvent.Trigger Hide
+        // Display the new one
         let li = (jq ".suggestion-list-scroller .list-group li.selected")
         let o = li.offset()
         let list = jq "autocomplete-suggestion-list"
-
-        helptextEvent.Trigger Hide
-
         if JS.isDefined o && li.length > 0. then
             o.left <- o.left + list.width() + 10.
             o.top <- o.top - li.height() - 10.
             let helptextList = n.Data.Overloads |> Array.concat
             if not (Array.isEmpty helptextList) then
-                createHelptextToolTip helptextList o |> Async.StartImmediate                
-            ) |> unbox<Function>) |> ignore
+                createHelptextToolTip helptextList o |> Async.StartImmediate )
+    
+    // Update tool tip when another item in the completion list is chosen
+    registerCompletionScrollHandlers ()
 
-    Globals.atom.commands.add("atom-text-editor","fsharp:helptext-next", (fun _ -> helptextEvent.Trigger (Next +1)) |> unbox<Function>) |> ignore
-    Globals.atom.commands.add("atom-text-editor","fsharp:helptext-previous", (fun _ -> helptextEvent.Trigger (Next -1)) |> unbox<Function>) |> ignore
+    // Go to the next/previous overload in the help tool tip
+    Globals.atom.commands.add("atom-text-editor","fsharp:helptext-next", fun _ -> 
+        helptextEvent.Trigger (Next +1))
+    Globals.atom.commands.add("atom-text-editor","fsharp:helptext-previous", fun _ -> 
+        helptextEvent.Trigger (Next -1))
 
-    Globals.atom.workspace.getActiveTextEditor() |> initialize
-    Globals.atom.workspace.onDidChangeActivePaneItem((fun ed -> initialize ed) |> unbox<Function>  ) |> ignore
+    // Hide tool tip on the side of completion list when cursor position changes
+    registerHelptextHandler ignore |> Async.StartImmediate
+    Globals.atom.workspace.getActiveTextEditor() |> editorChanged.Trigger
+    Globals.atom.workspace.onDidChangeActivePaneItem((fun ed ->   
+        editorChanged.Trigger ed) |> unbox<Function>  ) |> ignore
+
     // Provider for Unicode  Glyph Autocompletion Service
     {   selector = ".source.fsharp"
         //disableForSelector = ".source.fsharp .string, .source.fsharp .comment"

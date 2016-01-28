@@ -63,7 +63,7 @@ module HighlightUse =
     let activate () =
         Globals.atom.workspace.getActiveTextEditor() |> initialize
         Globals.atom.workspace.onDidChangeActivePaneItem((fun ed -> initialize ed) |> unbox<Function>  ) |> ignore
-        let tb = unbox<Function> showHighlight |> Events.on Events.SymbolUse
+        let tb = showHighlight |> Events.subscribe Events.SymbolUse
         subscriptions.Add tb
 
     let deactivate () =

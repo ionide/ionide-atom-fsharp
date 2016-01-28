@@ -14,93 +14,61 @@ module Events =
 
     let private emitter = Emitter.create()
 
-    type EventType =
-        | ServerStart
-        | ServerStop
-        | ServerError
-        | Project
-        | Errors
-        | Completion
-        | SymbolUse
-        | Tooltips
-        | Toolbars
-        | FindDecl
-        | Status
-        | CompilerLocation
-        | Helptext
-        | Log
-        | Lint
+    type Event<'T> = 
+      { Name : string }
+      static member Create<'R>(name) : Event<'R> = { Name = name }
 
-    let private getName t =
-        match t with
-        | ServerStart -> "Fsharp_start"
-        | ServerStop -> "Fsharp_stop"
-        | ServerError -> "Fsharp_error"
-        | Errors -> "Fsharp_errors"
-        | Completion -> "Fsharp_completion"
-        | SymbolUse -> "Fsharp_symboluse"
-        | Tooltips -> "FSharp_tooltips"
-        | Toolbars -> "FSharp_toolbars"
-        | FindDecl -> "FSharp_finddecl"
-        | Project -> "Fsharp_project"
-        | Status -> "Fsharp_status"
-        | CompilerLocation -> "Fsharp_compiler"
-        | Helptext -> "Fsharp_helptext"
-        | Log -> "Fsharp_log"
-        | Lint -> "Fsharp_lint"
+    let ServerStart = Event.Create<unit>("Fsharp_start")
+    let ServerStop = Event.Create<unit>("Fsharp_stop")
+    let ServerError = Event.Create<unit>("Fsharp_error")
+    let Project = Event.Create<unit>("Fsharp_project")
+    let Errors = Event.Create<DTO.ParseResult>("Fsharp_errors")
+    let Completion = Event.Create<DTO.CompletionResult>("Fsharp_completion")
+    let SymbolUse = Event.Create<DTO.SymbolUseResult>("Fsharp_symboluse")
+    let Tooltips = Event.Create<DTO.TooltipResult>("FSharp_tooltips")
+    let Toolbars = Event.Create<DTO.TooltipResult>("FSharp_toolbars")
+    let FindDecl = Event.Create<DTO.FindDeclarationResult>("FSharp_finddecl")
+    let Status = Event.Create<string>("Fsharp_status")
+    let CompilerLocation = Event.Create<DTO.CompilerLocationResult>("Fsharp_compiler")
+    let Helptext = Event.Create<DTO.HelptextResult>("Fsharp_helptext")
+    let Log = Event.Create<string * string * obj[]>("Fsharp_log")
+    let Lint = Event.Create<DTO.LintResult>("Fsharp_lint")
 
-    let log name o = 
+    let getName { Name = name } = name
+
+    let log category msg = 
         let debug = Globals.atom.config.get("ionide-fsharp.DeveloperMode") |> unbox<bool>
-        //let d = Globals.JSON.stringify o
-        if debug then emitter.emit("Fsharp_log", (name, o))
+        if debug then emitter.emit("Fsharp_log", (category, msg, [||]))
 
-    let mutable private last = ""
+    let logf category format (o:obj[]) = 
+        let debug = Globals.atom.config.get("ionide-fsharp.DeveloperMode") |> unbox<bool>
+        if debug then emitter.emit("Fsharp_log", (category, format, o))
 
-    let private tryParse<'T> s =
-        try
-            let res = unbox<'T>(Globals.JSON.parse s) |> Some
-            last <- ""
-            res
-        with
-        | ex ->
-            try
-                let s' = last + s
-                let res = unbox<'T>(Globals.JSON.parse s') |> Some
-                last <- ""
-                res
-            with
-            | ex ->
-                last <- last + s
-                None
-
-
-    let parseAndEmit<'T> t s =
-        s |> tryParse<'T>
-        |> Option.iter(fun o ->
-            let name = getName t
-            //log name o
-            emitter.emit(name, o)
-        )
-
-    let emitEmpty t s =
+    let emitEmpty (t:Event<unit>) =
         let name = getName t
-        //log name ""
         emitter.emit(name, ())
 
-    let emit t v =
+    let emit (t:Event<'T>) (v:'T) =
         let name = getName t
-        //log name v
         emitter.emit(name, v :> obj)
 
-    let once t func =
+    let emitUnsafe (t:Event<'T>) (v:obj) =
+        let name = getName t
+        emitter.emit(name, v)
+
+    let once (t:Event<'T>) (func:'T -> unit) =
         let name = getName t
         let s : Disposable option ref = ref None
         s := (emitter.on(name, unbox<Function>(fun o -> !s |> Option.iter(fun s' -> s'.dispose())
                                                         func o) ) |> Some)
 
-    let on t func =
+    let add (t:Event<'T>) (func:'T -> unit) =
         let name = getName t
-        emitter.on(name, func)
+        emitter.on(name, unbox<Function> func) |> ignore
+
+    let subscribe (t:Event<'T>) (func:'T -> unit) =
+        let name = getName t
+        emitter.on(name, unbox<Function> func)
 
     let guardedAwaitEvent t f = 
       Async.FromContinuations(fun (cont, _, _) -> 

@@ -17,15 +17,17 @@ module FindDeclaration =
     let mutable lastPosition : TextBuffer.IPoint option = None
 
     let private openDec (data : DTO.FindDeclarationResult) =
-        Globals.atom.workspace._open(data.Data.File, {OpenOptions.initialColumn = (data.Data.Column - 1); OpenOptions.initialLine = (data.Data.Line - 1) })
+        let oopts = 
+          { OpenOptions.initialColumn = (data.Data.Column - 1)
+            OpenOptions.initialLine = (data.Data.Line - 1) }
+        Globals.atom.workspace._open(data.Data.File, oopts) |> ignore
 
     let private goBack () =
-        lastFile |> Option.iter (fun lf ->
-        lastPosition |> Option.iter (fun lp ->
-            Globals.atom.workspace._open(lf, {OpenOptions.initialColumn = int lp.column; OpenOptions.initialLine = int lp.row })
-            |> ignore
-                 )
-            )
+        match lastFile, lastPosition with
+        | Some lf, Some lp ->
+            let oopts = { OpenOptions.initialColumn = int lp.column; OpenOptions.initialLine = int lp.row }
+            Globals.atom.workspace._open(lf, oopts) |> ignore
+        | _ -> ()
 
     let private handle e =
         let editor = Globals.atom.workspace.getActiveTextEditor()

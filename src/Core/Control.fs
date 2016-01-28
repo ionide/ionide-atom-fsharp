@@ -1,15 +1,32 @@
 [<ReflectedDefinition>]
 module Atom.FSharp.Control
 
+open FunScript.TypeScript
+open FunScript.TypeScript.AtomCore
+
 // --------------------------------------------------------------------------------------
 // JavaScript-friendly implementation of some of the useful FSharp.Control types
 // --------------------------------------------------------------------------------------
 
+type FunScript.TypeScript.AtomCore.IEmitter with
+    /// Add a handler for the specified event forever
+    member x.add(name:string, func:unit -> unit) =
+        x.on(name, unbox<Function> func) |> ignore
+    /// Add a handler for the specified event and return disposable subscription
+    member x.subscribe(name:string, func:unit -> unit) =
+        x.on(name, unbox<Function> func) 
+
+type FunScript.TypeScript.AtomCore.CommandRegistry with 
+    /// Add a handler for the specified command forever
+    member x.add(name:string, command:string, func:unit -> unit) =
+        x.add(name, command, unbox<Function> func) |> ignore
+
+/// A simple implementation of `IObserver` that calls the specified functions
 type Observer<'T>(next, error, completed) = 
-  interface System.IObserver<'T> with
-    member x.OnCompleted() = completed()
-    member x.OnError(e) = error e
-    member x.OnNext(v) = next v
+    interface System.IObserver<'T> with
+        member x.OnCompleted() = completed()
+        member x.OnError(e) = error e
+        member x.OnNext(v) = next v
 
 type Microsoft.FSharp.Control.Async with
   /// Returns an asynchronous workflow that waits for the first 

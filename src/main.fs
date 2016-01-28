@@ -71,6 +71,7 @@ let translateModules fileName =
         yield "window.$ = require('jquery');"
         yield "var atomSpaceView = require('atom-space-pen-views');"
         yield "var fs = require('fs');"
+        yield "var util = require('util');"
         yield "var path = require('path');"
         yield "var Emitter = require('event-kit').Emitter;"
         yield ""
