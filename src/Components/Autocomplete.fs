@@ -140,12 +140,16 @@ let createHelptextToolTip (overloads:DTO.OverloadSignature[]) (position:JQueryCo
 // Editor integration
 // --------------------------------------------------------------------------------------
 
+/// Triggered when we want to try register 
+let checkAutoCompleteManager = Event<unit>()
 
 /// State-less getSuggestion function that is called by Atom
 let getSuggestion (options:GetSuggestionOptions) = Async.StartAsPromise <| async {
     if unbox<obj>(options.editor.buffer.file) = null then
         return [| |] 
     else
+        // Check to make sure autocompletemanager events are handled
+        checkAutoCompleteManager.Trigger ()
         // Get information for the autocomplete request
         let path = options.editor.buffer.file.path
         let row = int options.bufferPosition.row 
@@ -176,9 +180,16 @@ let rec registerHelptextHandler disposePrevious = async {
             helptextEvent.Trigger Hide ) |> unbox<Function>).dispose
     return! registerHelptextHandler dispose }
 
+/// Triggered when the `autocompleteManager` from `autocomplete-plus` is available
+let autoCompleteManagerAvailable = 
+    checkAutoCompleteManager.Publish |> Observable.choose (fun () ->
+        try let package = Globals.atom.packages.getLoadedPackage("autocomplete-plus") |> unbox<Package>
+            Some(package.mainModule.autocompleteManager.suggestionList.emitter)
+        with _ -> None)
+
 /// Register a handler for events triggered by scrolling through autocomplete-plus completion list
-let registerCompletionScrollHandlers () =
-    let package = Globals.atom.packages.getLoadedPackage("autocomplete-plus") |> unbox<Package>
+let registerCompletionScrollHandlers () = async {
+    let! emitter = autoCompleteManagerAvailable |> Async.AwaitObservable
     let handler flag =
         let selected = 
             if flag then (jq "li.selected").prev().find("span.word-container .word")
@@ -190,11 +201,9 @@ let registerCompletionScrollHandlers () =
             else
                 (jq ".suggestion-list-scroller .list-group li").first().find(" span.word-container .word").text()
         LanguageService.helptext text
-
-    let e = package.mainModule.autocompleteManager.suggestionList.emitter
-    e.add("did-select-next", fun _ -> handler false)
-    e.add("did-select-previous", fun _ -> handler true)
-    e.add("did-cancel", fun _ -> helptextEvent.Trigger Hide)
+    emitter.add("did-select-next", fun _ -> handler false)
+    emitter.add("did-select-previous", fun _ -> handler true)
+    emitter.add("did-cancel", fun _ -> helptextEvent.Trigger Hide) }
     
 
 /// Initialize the autocomplete package
@@ -206,7 +215,7 @@ let create () =
 
     // Handler for showing tool tip on the side of completion lists
     Events.add Events.Helptext (fun n ->
-        // Hide the old one
+        // Hide the old one (in case there was one)
         helptextEvent.Trigger Hide
         // Display the new one
         let li = (jq ".suggestion-list-scroller .list-group li.selected")
@@ -220,7 +229,8 @@ let create () =
                 createHelptextToolTip helptextList o |> Async.StartImmediate )
     
     // Update tool tip when another item in the completion list is chosen
-    registerCompletionScrollHandlers ()
+    registerCompletionScrollHandlers () |> Async.StartImmediate
+    checkAutoCompleteManager.Trigger ()
 
     // Go to the next/previous overload in the help tool tip
     Globals.atom.commands.add("atom-text-editor","fsharp:helptext-next", fun _ -> 
