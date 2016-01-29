@@ -46,8 +46,8 @@
   <Import Project="$(FSharpTargetsPath)" Condition="Exists('$(FSharpTargetsPath)')" />
   <ItemGroup>
     <Compile Include="Core\Control.fs" />
-    <Compile Include="Core\Events.fs" />
     <Compile Include="Core\DTO.fs" />
+    <Compile Include="Core\Events.fs" />
     <Compile Include="Core\LanguageService.fs" />
     <Compile Include="Components\Parser.fs" />
     <Compile Include="Components\UnicodeGlyphs.fs" />

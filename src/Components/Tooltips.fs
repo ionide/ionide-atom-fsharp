@@ -139,9 +139,9 @@ module TooltipHandler =
     let activate () =
         Globals.atom.workspace.getActiveTextEditor() |> initialize
         Globals.atom.workspace.onDidChangeActivePaneItem((fun ed -> initialize ed ) |> unbox<Function>) |> ignore
-        let tt = unbox<Function> mouseHandler |> Events.on Events.Tooltips
+        let tt = mouseHandler |> Events.subscribe Events.Tooltips
         subscriptions.Add tt
-        let err = unbox<Function> errorHandler |> Events.on Events.Errors
+        let err = errorHandler |> Events.subscribe Events.Errors
         subscriptions.Add err
         ()
 

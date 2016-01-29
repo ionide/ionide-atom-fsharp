@@ -105,7 +105,7 @@ module ToolbarHandler =
         let tp = Globals.atom.workspace.onDidChangeActivePaneItem((fun ed -> handleEditorChange b ed) |> unbox<Function>  )
         subscriptions.Add tp
 
-        let tb = unbox<Function> cursorHandler |> Events.on Events.Toolbars
+        let tb = cursorHandler |> Events.subscribe Events.Toolbars
         subscriptions.Add tb
 
         ()

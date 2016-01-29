@@ -7,9 +7,9 @@ open FunScript.TypeScript.fs
 open FunScript.TypeScript.child_process
 open FunScript.TypeScript.AtomCore
 open FunScript.TypeScript.text_buffer
-
 open Atom
 open Atom.FSharp
+open Atom.FSharp.Control
 open DTO
 
 [<ReflectedDefinition>]
@@ -30,6 +30,7 @@ module LanguageService =
     let mutable private service : ChildProcess option =  None
 
     let request<'T> (url : string) (data: 'T)  = async {
+        Events.logf "Service" "Sending request: %O" [| data |]
         let r = System.Net.WebRequest.Create url
         let req: FunScript.Core.Web.WebRequest = unbox r
         req.Headers.Add("Accept", "application/json")
@@ -48,41 +49,41 @@ module LanguageService =
         return res
     }
 
+    let tryParse<'T> s =
+        try unbox<'T>(Globals.JSON.parse s) |> Some
+        with ex -> None
+
+    type Request = { Kind : string }
+
     let private parseResponse (response : string[]) =
-        response |> Seq.iter(fun s ->
-            Events.log "RESPONSE" s
-            if s.Contains "\"Kind\":\"error\"" then
-                s |> Events.emitEmpty Events.ServerError
-            elif s.Contains "\"Kind\":\"project\"" then
-                s |> Events.emitEmpty Events.Project
-            elif s.Contains "\"Kind\":\"errors\"" then
-                s |> Events.parseAndEmit<DTO.ParseResult> Events.Errors
-            elif s.Contains "\"Kind\":\"completion\"" then
-                s |> Events.parseAndEmit<DTO.CompletionResult> Events.Completion
-            elif s.Contains "\"Kind\":\"symboluse\"" then
-                s |> Events.parseAndEmit<DTO.SymbolUseResult> Events.SymbolUse
-            elif s.Contains "\"Kind\":\"helptext\"" then
-                s |> Events.parseAndEmit<DTO.HelptextResult> Events.Helptext
-            elif s.Contains "\"Kind\":\"tooltip\"" then
-                if toolbarFlag then
-                    s |> Events.parseAndEmit<DTO.TooltipResult> Events.Toolbars
-                else
-                    s |> Events.parseAndEmit<DTO.TooltipResult> Events.Tooltips
-            elif s.Contains "\"Kind\":\"finddecl\"" then
-                s |> Events.parseAndEmit<DTO.TooltipResult> Events.FindDecl
-            elif s.Contains "\"Kind\":\"compilerlocation\"" then
-                s |> Events.parseAndEmit<DTO.CompilerLocationResult> Events.CompilerLocation
-            elif s.Contains "\"Kind\":\"lint\"" then
-                s |> Events.parseAndEmit<DTO.LintResult> Events.Lint
-            else
-                ()
-        )
+        response |> Seq.iter (fun s ->
+          match tryParse s with
+          | None -> Events.logf "Service" "Invalid response from FSAC: %s" [| s |]
+          | Some event ->
+          let o = box event
+          Events.logf "Service" "Got '%s': %O" [| box event.Kind; o |]
+          match event.Kind with
+          | "error" -> Events.emitEmpty Events.ServerError
+          | "project" -> Events.emitEmpty Events.Project
+          | "errors" -> Events.emitUnsafe Events.Errors o
+          | "completion" -> Events.emitUnsafe Events.Completion o
+          | "symboluse" -> Events.emitUnsafe Events.SymbolUse o
+          | "helptext" -> Events.emitUnsafe Events.Helptext o
+          | "tooltip" when toolbarFlag -> Events.emitUnsafe Events.Toolbars o
+          | "tooltip" -> Events.emitUnsafe Events.Tooltips o
+          | "finddecl" -> Events.emitUnsafe Events.FindDecl o
+          | "compilerlocation" -> Events.emitUnsafe Events.CompilerLocation o
+          | "lint" -> Events.emitUnsafe Events.Lint o
+          | s -> Events.logf "Service" "Received unexpected event '%s': %O" [| box s; o |])
 
     let send req =
         async {
-            let! r = req
-            r |> parseResponse
-        } |> Async.StartImmediate
+            try
+                let! r = req
+                r |> parseResponse
+            with e ->
+                Events.logf "ERROR" "Parsing response failed: %O" [| e |] }
+        |> Async.StartImmediate
 
     let project s =
         {ProjectRequest.FileName = s}
@@ -152,7 +153,7 @@ module LanguageService =
             let location = Globals.atom.packages.packageDirPaths.[0] + pth
             let child = Process.spawn location (Process.fromPath "mono") port
             service <- Some child
-            "" |> Events.emitEmpty Events.ServerStart
+            Events.emitEmpty Events.ServerStart
             compilerLocation ()
             child.stderr.on("data", unbox<Function>( fun n -> Globals.console.error (n.ToString()))) |> ignore
             ()
@@ -168,6 +169,4 @@ module LanguageService =
     let stop () =
         service |> Option.iter (fun n -> n.kill "SIGKILL")
         service <- None
-        "" |> Events.emitEmpty Events.ServerStop
-
-        ()
+        Events.emitEmpty Events.ServerStop
