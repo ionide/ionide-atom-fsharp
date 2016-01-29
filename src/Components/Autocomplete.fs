@@ -140,7 +140,7 @@ let createHelptextToolTip (overloads:DTO.OverloadSignature[]) (position:JQueryCo
 // Editor integration
 // --------------------------------------------------------------------------------------
 
-/// Triggered when we want to try register 
+/// Triggered to ensure that event handlers for autocomplete-plus are registered
 let checkAutoCompleteManager = Event<unit>()
 
 /// State-less getSuggestion function that is called by Atom
