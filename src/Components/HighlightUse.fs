@@ -10,11 +10,12 @@ open FunScript.TypeScript.text_buffer
 open Atom
 open Atom.FSharp
 
+open DTO
+
 [<ReflectedDefinition>]
 module HighlightUse =
     let mutable private ed  = createEmpty<IEditor>()
     let mutable private marked = Array.empty<IDisplayBufferMarker>
-    let private subscriptions = ResizeArray()
     let mutable cursorSubscription : Disposable option = None
 
     let private clearHighlight () =
@@ -44,7 +45,12 @@ module HighlightUse =
         if unbox<obj>(editor.buffer.file) <> null then
             let pos = getCursor editor
             let path = editor.buffer.file.path
-            LanguageService.symbolUse path (int pos.row + 1) (int pos.column + 1)
+            async {
+                let! result = LanguageService.symbolUse path (int pos.row + 1) (int pos.column + 1)
+                return result |> Option.iter showHighlight
+            } |> Async.StartImmediate
+
+
         ()
 
     let private remove () =
@@ -63,10 +69,6 @@ module HighlightUse =
     let activate () =
         Globals.atom.workspace.getActiveTextEditor() |> initialize
         Globals.atom.workspace.onDidChangeActivePaneItem((fun ed -> initialize ed) |> unbox<Function>  ) |> ignore
-        let tb = showHighlight |> Events.subscribe Events.SymbolUse
-        subscriptions.Add tb
 
     let deactivate () =
-        subscriptions |> Seq.iter(fun n -> n.dispose())
-        subscriptions.Clear()
         cursorSubscription |> Option.iter (fun cs -> cs.dispose())

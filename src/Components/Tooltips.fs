@@ -19,8 +19,6 @@ module TooltipHandler =
     let mutable private ed = createEmpty<IEditor>()
     let mutable private event : JQueryMouseEventObject option = None
     let mutable private bar = createEmpty<IPanel>()
-    let private subscriptions = ResizeArray()
-    let mutable cursorSubscription : Disposable option = None
 
     let private createTooltip () =
         "<div class='type-tooltip tooltip'>
@@ -46,27 +44,6 @@ module TooltipHandler =
         timer |> Option.iter (Globals.clearTimeout)
         timer <- None
 
-    let private reg editor time element =
-        jq(".panes").append tooltip |> ignore
-        element |> jq'
-        |> fun n -> n.mousemove( fun e ->
-            let pos = getPosition e editor
-            if pos  =
-                lastMousePosition then () :> obj else
-                clearTimer()
-                lastMousePosition <- pos
-                timer <- Some ( Globals.setTimeout(( fun _ ->
-                    if unbox<obj>(editor.buffer.file) <> null then
-                        let path = editor.buffer.file.path
-                        event <- Some e
-                        LanguageService.tooltip path (int pos.row + 1) (int pos.column + 1)), time))
-                () :> obj) |> ignore
-                    n.mouseleave(fun _ -> clearTimer () :> obj) |> ignore
-                    n.scroll(fun _ -> clearTimer() :> obj) |> ignore
-
-
-
-
 
     /// Check if the position of the cursor over the textbuffer is within
     /// the bounds of the error block
@@ -79,7 +56,6 @@ module TooltipHandler =
     /// Draw a line of dashes the same length as the longer string
     let dashes (s1:string) (s2:string) =
         String.concat "" ["\n"; String.replicate (max s1.Length s2.Length) "-";"\n"]
-
 
 
     let private mouseHandler (o : DTO.TooltipResult) =
@@ -113,9 +89,26 @@ module TooltipHandler =
                     tooltip.fadeTo(300., 60.) |> ignore
             )
 
-
-    let private errorHandler (o : DTO.ParseResult) = errorArr <- o.Data
-
+    let private reg editor time element =
+        jq(".panes").append tooltip |> ignore
+        element |> jq'
+        |> fun n -> n.mousemove( fun e ->
+            let pos = getPosition e editor
+            if pos  =
+                lastMousePosition then () :> obj else
+                clearTimer()
+                lastMousePosition <- pos
+                timer <- Some ( Globals.setTimeout(( fun _ ->
+                    if unbox<obj>(editor.buffer.file) <> null then
+                        let path = editor.buffer.file.path
+                        event <- Some e
+                        async {
+                            let! res = LanguageService.tooltip path (int pos.row + 1) (int pos.column + 1)
+                            res |> Option.iter mouseHandler
+                        } |> Async.StartImmediate), time))
+                () :> obj) |> ignore
+                    n.mouseleave(fun _ -> clearTimer () :> obj) |> ignore
+                    n.scroll(fun _ -> clearTimer() :> obj) |> ignore
 
     let private remove () =
         if JS.isDefined ed && JS.isPropertyDefined ed "getGrammar" && isFSharpEditor ed then
@@ -139,13 +132,7 @@ module TooltipHandler =
     let activate () =
         Globals.atom.workspace.getActiveTextEditor() |> initialize
         Globals.atom.workspace.onDidChangeActivePaneItem((fun ed -> initialize ed ) |> unbox<Function>) |> ignore
-        let tt = mouseHandler |> Events.subscribe Events.Tooltips
-        subscriptions.Add tt
-        let err = errorHandler |> Events.subscribe Events.Errors
-        subscriptions.Add err
         ()
 
     let deactivate () =
-        subscriptions |> Seq.iter(fun n -> n.dispose())
-        subscriptions.Clear()
         ()

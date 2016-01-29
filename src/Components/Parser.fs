@@ -34,22 +34,21 @@ module Parser =
                 let res = p |> Globals.dirname
                             |> findFsProj
                 match res with
-                | Some r -> LanguageService.project r
-                            true
+                | Some r ->
+                    async {
+                        let! _ = LanguageService.project r
+                        return ()
+                    } |> Async.StartImmediate
+                    true
                 | None -> false
             else
-                Events.emit Events.Status "Waiting for F# file"
                 false
         else
             false
 
     let activate () =
         let editor = Globals.atom.workspace.getActiveTextEditor()
-        if parseProjectForEditor editor then
-            Events.once Events.Project (fun _ -> LanguageService.parseEditor editor)
-        else
-            LanguageService.parseEditor editor
-
+        parseProjectForEditor editor |> ignore
         Globals.atom.workspace.onDidChangeActivePaneItem ((fun ed ->
             ed |> parseProjectForEditor |> ignore
             h |> Option.iter(fun h' -> h'.dispose ())
@@ -61,7 +60,6 @@ module Parser =
 
 
     let deactivate () =
-        Events.emit Events.Status "Off"
         subscriptions |> Seq.iter(fun n -> n.dispose())
         subscriptions.Clear ()
         ()
