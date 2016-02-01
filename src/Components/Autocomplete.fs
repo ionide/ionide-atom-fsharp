@@ -144,27 +144,23 @@ let createHelptextToolTip () =
         let! evt = Async.AwaitObservable helptextEvent.Publish
         match evt with
         | Show text ->
-            return! async {
-                helptext.fadeOut() |> ignore
-                let! result = LanguageService.helptext text
-                return!
-                    match result with
-                    | Some n ->
-                        let li = (jq ".suggestion-list-scroller .list-group li.selected")
-                        let o = li.offset()
-                        let list = jq "autocomplete-suggestion-list"
-                        if JS.isDefined o && li.length > 0. then
-                            o.left <- o.left + list.width() + 10.
-                            o.top <- o.top - li.height() - 10.
-                            let helptextList = n.Data.Overloads |> Array.concat
-                            if not (Array.isEmpty helptextList) then
-                                loop helptextList o 0
-                            else
-                                loop [||] o 0
-                         else loop [||] o 0
-
-                    | None -> loop [||] (createEmpty<JQueryCoordinates>()) 0
-            }
+            helptext.fadeOut() |> ignore
+            let! result = LanguageService.helptext text
+            match result with
+            | Some n ->
+                let li = (jq ".suggestion-list-scroller .list-group li.selected")
+                let o = li.offset()
+                let list = jq "autocomplete-suggestion-list"
+                if JS.isDefined o && li.length > 0. then
+                    o.left <- o.left + list.width() + 10.
+                    o.top <- o.top - li.height() - 10.
+                    let helptextList = n.Data.Overloads |> Array.concat
+                    if not (Array.isEmpty helptextList) then
+                        return! loop helptextList o 0
+                    else
+                        return! loop [||] o 0
+                else return! loop [||] o 0
+            | None -> return! loop [||] (createEmpty<JQueryCoordinates>()) 0
         | Next by -> return! loop overloads position ((i + by + overloads.Length) % overloads.Length)
         | Hide -> helptext.fadeOut().remove() |> ignore }
 
