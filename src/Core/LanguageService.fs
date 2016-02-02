@@ -63,8 +63,10 @@ module LanguageService =
             let o = box event
             Logger.logf "Service" "Got '%s': %O" [| box event.Kind; o |]
             match event.Kind with
-            | "error" | "project" | "errors" | "completion" | "symboluse" | "helptext"
+            | "project" | "errors" | "completion" | "symboluse" | "helptext"
             | "tooltip" | "finddecl" | "compilerlocation" | "lint" -> Some event
+            | "error" -> Logger.logf "Service" "Received error event '%s': %O" [| box s; o |]; None
+            | "info" -> Logger.logf "Service" "Received info event '%s': %O" [| box s; o |]; None
             | s -> Logger.logf "Service" "Received unexpected event '%s': %O" [| box s; o |]; None)
 
 
