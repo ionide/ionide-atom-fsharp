@@ -1,3 +1,7 @@
+### 1.6.2 - 01.02.2016
+* Internal refactoring
+* Fix panel closing bug
+
 ### 1.6.1 - 26.01.2016
 * Update FSAC version
 
