@@ -28,20 +28,20 @@ module DeveloperMode =
 
     let activate () =
         let p = Globals.atom.project.getPaths().[0]
-        let s = Events.subscribe Events.Log (fun (category, message, data) ->
-            
+        let s = Logger.subscribe (fun (category : string, message, data : obj[]) ->
+
             if logToConsole then
                 let msg = "[" + (category.ToUpper()) + "] " + message
                 if data.Length = 0 then Globals.console.log(msg)
                 else Util.log (Array.append [| box msg |] data)
 
             let timeString = System.DateTime.Now.ToLongTimeString().Replace("\\",".").Replace("/", ".")
-            
+
             let msg = "[" + timeString + "] " + (category.ToUpper()) + "\n  " + (message.Replace("%O", "%s"))
             let logLine = (Util.format (Array.append [| box msg |] data)) + "\n"
             Globals.appendFile (p + "/.ionide.debug", logLine)
-            
-            editor |> Option.iter (fun e -> 
+
+            editor |> Option.iter (fun e ->
               e.scrollToBufferPosition([| e.getLastBufferRow(); 0.0 |], null) |> ignore
               e.getBuffer().append logLine |> ignore)
             log <- log + logLine)

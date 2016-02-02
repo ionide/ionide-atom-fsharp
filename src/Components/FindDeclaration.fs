@@ -17,7 +17,7 @@ module FindDeclaration =
     let mutable lastPosition : TextBuffer.IPoint option = None
 
     let private openDec (data : DTO.FindDeclarationResult) =
-        let oopts = 
+        let oopts =
           { OpenOptions.initialColumn = (data.Data.Column - 1)
             OpenOptions.initialLine = (data.Data.Line - 1) }
         Globals.atom.workspace._open(data.Data.File, oopts) |> ignore
@@ -35,9 +35,10 @@ module FindDeclaration =
         let position = editor.getCursorBufferPosition()
         lastFile <- Some name
         lastPosition <- Some position
-
-        LanguageService.findDeclaration name (int position.row + 1) (int position.column + 1)
-        Events.once Events.FindDecl openDec
+        async {
+            let! result = LanguageService.findDeclaration name (int position.row + 1) (int position.column + 1)
+            return result |> Option.iter openDec
+        } |> Async.StartImmediate
 
     let activate () =
         Globals.setTimeout((fun _ -> Globals.atom.commands.add("atom-text-editor", "symbols-view:go-to-declaration", handle |> unbox<Function> ) |> ignore), 500.)
@@ -48,5 +49,3 @@ module FindDeclaration =
 
     let deactivate () =
         ()
-
-    let s = " la\ "  

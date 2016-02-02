@@ -31,15 +31,7 @@ module ToolbarHandler =
         let bufferPt = editor.getCursorBufferPosition()
         { row = bufferPt.row; column = bufferPt.column }
 
-    /// Makes request for toolbar informations
-    let private askForToolbar (editor : IEditor)  =
-        if unbox<obj>(editor.buffer.file) <> null then
-            let tb = jq(".toolbar-inner")
-            tb.empty() |> ignore
-            let pos = getCursor editor
-            let path = editor.buffer.file.path
-            LanguageService.toolbar path (int pos.row + 1) (int pos.column + 1)
-        ()
+
 
 
     // Because the type signature for classes is multiple lines and will not fit
@@ -70,6 +62,20 @@ module ToolbarHandler =
                 "No tooltip information"
         if data <> "No tooltip information" then
             tb.append(format_data data) |> ignore
+        ()
+
+    /// Makes request for toolbar informations
+    let private askForToolbar (editor : IEditor)  =
+        if unbox<obj>(editor.buffer.file) <> null then
+            let tb = jq(".toolbar-inner")
+            tb.empty() |> ignore
+            let pos = getCursor editor
+            let path = editor.buffer.file.path
+            async {
+                let! res = LanguageService.toolbar path (int pos.row + 1) (int pos.column + 1)
+                return res |> Option.iter cursorHandler
+            } |> Async.StartImmediate
+
         ()
 
 
@@ -104,9 +110,6 @@ module ToolbarHandler =
 
         let tp = Globals.atom.workspace.onDidChangeActivePaneItem((fun ed -> handleEditorChange b ed) |> unbox<Function>  )
         subscriptions.Add tp
-
-        let tb = cursorHandler |> Events.subscribe Events.Toolbars
-        subscriptions.Add tb
 
         ()
 

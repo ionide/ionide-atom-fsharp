@@ -9,6 +9,7 @@ open FunScript.TypeScript.text_buffer
 
 open Atom
 open Atom.FSharp
+open Atom.FSharp.Control
 
 [<ReflectedDefinition>]
 module ErrorLinterProvider =
@@ -26,8 +27,12 @@ module ErrorLinterProvider =
     }
 
     let lint (editor : IEditor) =
-        Atom.Promise.create(fun () ->
-            Events.once Events.Errors (fun n ->
+        async {
+            let! result = LanguageService.parseEditor editor
+            return
+                match result with
+                | None -> [||]
+                | Some n ->
                 let map (item : DTO.Error) =
                     let range = [|[|float (item.StartLine - 1); float (item.StartColumn - 1)|];
                                   [|float (item.EndLine - 1);  float (item.EndColumn - 1)|]|]
@@ -38,14 +43,16 @@ module ErrorLinterProvider =
                     } :> obj
                 n.Data
                 |> Array.map map
-                |> Atom.Promise.resolve
-            )
-            LanguageService.parseEditor editor
-        )
+        } |> Async.StartAsPromise
+
 
     let lintWarning (editor: IEditor) =
-        Atom.Promise.create(fun () ->
-            Events.once Events.Lint (fun n ->
+        async {
+            let! result = LanguageService.lint editor
+            return
+                match result with
+                | None -> [||]
+                | Some n ->
                 let map (item : DTO.Lint) =
                     let range = [|[|float (item.Range.StartLine - 1); float (item.Range.StartColumn - 1)|];
                                   [|float (item.Range.EndLine - 1);  float (item.Range.EndColumn - 1)|]|]
@@ -56,10 +63,7 @@ module ErrorLinterProvider =
                     } :> obj
                 n.Data
                 |> Array.map map
-                |> Atom.Promise.resolve
-            )
-            LanguageService.lint editor
-        )
+        } |> Async.StartAsPromise
 
     let create () =
         [|

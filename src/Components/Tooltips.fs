@@ -19,8 +19,6 @@ module TooltipHandler =
     let mutable private ed = createEmpty<IEditor>()
     let mutable private event : JQueryMouseEventObject option = None
     let mutable private bar = createEmpty<IPanel>()
-    let private subscriptions = ResizeArray()
-    let mutable cursorSubscription : Disposable option = None
 
     let private createTooltip () =
         "<div class='type-tooltip tooltip'>
@@ -46,27 +44,6 @@ module TooltipHandler =
         timer |> Option.iter (Globals.clearTimeout)
         timer <- None
 
-    let private reg editor time element =
-        jq(".panes").append tooltip |> ignore
-        element |> jq'
-        |> fun n -> n.mousemove( fun e ->
-            let pos = getPosition e editor
-            if pos  =
-                lastMousePosition then () :> obj else
-                clearTimer()
-                lastMousePosition <- pos
-                timer <- Some ( Globals.setTimeout(( fun _ ->
-                    if unbox<obj>(editor.buffer.file) <> null then
-                        let path = editor.buffer.file.path
-                        event <- Some e
-                        LanguageService.tooltip path (int pos.row + 1) (int pos.column + 1)), time))
-                () :> obj) |> ignore
-                    n.mouseleave(fun _ -> clearTimer () :> obj) |> ignore
-                    n.scroll(fun _ -> clearTimer() :> obj) |> ignore
-
-
-
-
 
     /// Check if the position of the cursor over the textbuffer is within
     /// the bounds of the error block
@@ -81,41 +58,56 @@ module TooltipHandler =
         String.concat "" ["\n"; String.replicate (max s1.Length s2.Length) "-";"\n"]
 
 
-
     let private mouseHandler (o : DTO.TooltipResult) =
         event |> Option.iter(fun e ->
-        tooltip.[0].firstElementChild
-        |> fun n ->
-            if (jq "body /deep/ span.fsharp:hover").length > 0. then
-                let bufpos = bufferPositionFromMouseEvent e ed
-                let err = errorArr |> Array.tryFind (matchError bufpos)  // Check if the position in the buffer has any errors associated with it
-                let n' = jq'(n)
-                n'.empty() |> ignore
-                let errTip s =
-                    if err.IsNone then "" else
-                    let err, emsg = err.Value, err.Value.Message
-                    String.concat "" [(dashes s emsg);":: Error - ";err.Subcategory;" ::\n"; emsg ]
-                let data =
-                    if o.Data.Length > 0 then
-                        (o.Data |> Array.fold (fun acc n -> (n |> Array.toList) @ acc ) []).Head.Signature
-                    else
-                        "No tooltip information"
+        let n = tooltip.[0].firstElementChild
+        if (jq "body /deep/ span.fsharp:hover").length > 0. then
+            let bufpos = bufferPositionFromMouseEvent e ed
+            let err = errorArr |> Array.tryFind (matchError bufpos)  // Check if the position in the buffer has any errors associated with it
+            let n' = jq'(n)
+            n'.empty() |> ignore
+            let errTip s =
+                if err.IsNone then "" else
+                let err, emsg = err.Value, err.Value.Message
+                String.concat "" [(dashes s emsg);":: Error - ";err.Subcategory;" ::\n"; emsg ]
+            let data =
+                if o.Data.Length > 0 then
+                    (o.Data |> Array.fold (fun acc n -> (n |> Array.toList) @ acc ) []).Head.Signature
+                else
+                    "No tooltip information"
 
-                if data <> "No tooltip information" then
-                    (data |> jq("<div/>").text).append(errTip data)
-                    |> fun n -> n.html().Replace("\\n", "</br>").Replace("\n" , "</br>")
-                    |>  n'.append |> ignore
-                    let j = jq(".panes")
-                    let x = e.pageX - j.offset().left
-                    let y = e.pageY - j.offset().top
-                    tooltip.css("left" , x) |> ignore
-                    tooltip.css("top"  , y - 20.) |> ignore
-                    tooltip.fadeTo(300., 60.) |> ignore
+            if data <> "No tooltip information" then
+                (data |> jq("<div/>").text).append(errTip data)
+                |> fun n -> n.html().Replace("\\n", "</br>").Replace("\n" , "</br>")
+                |>  n'.append |> ignore
+                let j = jq(".panes")
+                let x = e.pageX - j.offset().left
+                let y = e.pageY - j.offset().top
+                tooltip.css("left" , x) |> ignore
+                tooltip.css("top"  , y - 20.) |> ignore
+                tooltip.fadeTo(300., 60.) |> ignore
             )
 
-
-    let private errorHandler (o : DTO.ParseResult) = errorArr <- o.Data
-
+    let private reg editor time element =
+        jq(".panes").append tooltip |> ignore
+        element |> jq'
+        |> fun n -> n.mousemove( fun e ->
+            let pos = getPosition e editor
+            if pos  =
+                lastMousePosition then () :> obj else
+                clearTimer()
+                lastMousePosition <- pos
+                timer <- Some ( Globals.setTimeout(( fun _ ->
+                    if unbox<obj>(editor.buffer.file) <> null then
+                        let path = editor.buffer.file.path
+                        event <- Some e
+                        async {
+                            let! res = LanguageService.tooltip path (int pos.row + 1) (int pos.column + 1)
+                            res |> Option.iter mouseHandler
+                        } |> Async.StartImmediate), time))
+                () :> obj) |> ignore
+                    n.mouseleave(fun _ -> clearTimer () :> obj) |> ignore
+                    n.scroll(fun _ -> clearTimer() :> obj) |> ignore
 
     let private remove () =
         if JS.isDefined ed && JS.isPropertyDefined ed "getGrammar" && isFSharpEditor ed then
@@ -139,13 +131,7 @@ module TooltipHandler =
     let activate () =
         Globals.atom.workspace.getActiveTextEditor() |> initialize
         Globals.atom.workspace.onDidChangeActivePaneItem((fun ed -> initialize ed ) |> unbox<Function>) |> ignore
-        let tt = mouseHandler |> Events.subscribe Events.Tooltips
-        subscriptions.Add tt
-        let err = errorHandler |> Events.subscribe Events.Errors
-        subscriptions.Add err
         ()
 
     let deactivate () =
-        subscriptions |> Seq.iter(fun n -> n.dispose())
-        subscriptions.Clear()
         ()
