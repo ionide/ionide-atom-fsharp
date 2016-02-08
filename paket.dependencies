@@ -1,7 +1,7 @@
 source https://nuget.org/api/v2
 
 git git@github.com:ionide/ionide-helpers.git master build:"build.cmd"
-
+git git@github.com:ionide/ionide-fsgrammar.git
 nuget FAKE
 nuget FunScript
 

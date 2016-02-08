@@ -8,3 +8,6 @@ GIT
   specs:
      (24bef8e776e13e53f9b8d014efe60c77ebe1b3bb)
       build: build.cmd
+  remote: git@github.com:ionide/ionide-fsgrammar.git
+  specs:
+     (7672ca5d35651c899fa9c095db5e94d45cb9f0ba)
