@@ -1,5 +1,13 @@
 NUGET
-  remote: https://nuget.org/api/v2
+  remote: https://www.nuget.org/api/v2
   specs:
     FAKE (4.0.0)
     FunScript (1.1.94)
+GIT
+  remote: git@github.com:ionide/ionide-helpers.git
+  specs:
+     (24bef8e776e13e53f9b8d014efe60c77ebe1b3bb)
+      build: build.cmd
+  remote: git@github.com:ionide/ionide-fsgrammar.git
+  specs:
+     (7672ca5d35651c899fa9c095db5e94d45cb9f0ba)
