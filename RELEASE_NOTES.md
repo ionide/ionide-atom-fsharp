@@ -1,3 +1,6 @@
+### 1.7.0 - 07.02.2016
+* Add FSharpLint integration
+
 ### 1.6.2 - 01.02.2016
 * Internal refactoring
 * Fix panel closing bug
