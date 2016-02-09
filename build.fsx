@@ -94,6 +94,21 @@ Target "Clean" (fun _ ->
     CleanDir tempReleaseDir
 )
 
+let fsgrammarDir = "paket-files/github.com/ionide/ionide-fsgrammar"
+let fsgrammarRelease = "release/grammars"
+
+Target "CopyGrammar" (fun _ ->
+    ensureDirectory fsgrammarRelease
+    CleanDir fsgrammarRelease
+    CopyFiles fsgrammarRelease [
+        fsgrammarDir </> "fsharp.fsi.json"
+        fsgrammarDir </> "fsharp.fsl.json"
+        fsgrammarDir </> "fsharp.fsx.json"
+        fsgrammarDir </> "fsharp.json"
+    ]
+)
+
+
 Target "BuildGenerator" (fun () ->
     [ __SOURCE_DIRECTORY__ @@ "src" @@ "Ionide.FSharp.fsproj" ]
     |> MSBuildDebug "" "Rebuild"
@@ -182,6 +197,7 @@ Target "Default" DoNothing
 #else
 "Clean"
     ==> "RunScript"
+    ==> "CopyGrammar"
     ==> "InstallDependencies"
 #endif
 
