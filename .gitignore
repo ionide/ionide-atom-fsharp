@@ -1,6 +1,6 @@
 # Binaries for Atom Package
 release/bin-fantomas
-
+release/bin
 
 # Logs
 logs

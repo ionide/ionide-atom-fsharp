@@ -15,24 +15,24 @@ open Fake.ZipHelper
 
 #if MONO
 #else
-#load "src/atom-bindings.fsx"
-#load "src/Core/Control.fs"
-#load "src/Core/DTO.fs"
-#load "src/Core/Events.fs"
-#load "src/Core/LanguageService.fs"
-#load "src/Components/Parser.fs"
-#load "src/Components/CompletionHelpers.fs"
-#load "src/Components/UnicodeGlyphs.fs"
-#load "src/Components/Autocomplete.fs"
-#load "src/Components/Tooltips.fs"
-#load "src/Components/HighlightUse.fs"
-#load "src/Components/Toolbar.fs"
-#load "src/Components/Errors.fs"
-#load "src/Components/FindDeclaration.fs"
-#load "src/Components/Format.fs"
-#load "src/Components/DeveloperMode.fs"
-#load "src/FSharpIDE.fs"
-#load "src/main.fs"
+#load   "src/atom-bindings.fsx"
+        "src/Core/Control.fs"
+        "src/Core/DTO.fs"
+        "src/Core/Events.fs"
+        "src/Core/LanguageService.fs"
+        "src/Components/Parser.fs"
+        "src/Components/CompletionHelpers.fs"
+        "src/Components/UnicodeGlyphs.fs"
+        "src/Components/Autocomplete.fs"
+        "src/Components/Tooltips.fs"
+        "src/Components/HighlightUse.fs"
+        "src/Components/Toolbar.fs"
+        "src/Components/Errors.fs"
+        "src/Components/FindDeclaration.fs"
+        "src/Components/Format.fs"
+        "src/Components/DeveloperMode.fs"
+        "src/FSharpIDE.fs"
+        "src/main.fs"
 #endif
 
 
@@ -70,18 +70,13 @@ let run cmd args dir =
     ) System.TimeSpan.MaxValue = false then
         traceError <| sprintf "Error while running '%s' with args: %s" cmd args
 
-let apmTool =
-    #if MONO
-        "apm"
-    #else
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) </> "atom" </> "bin" </> "apm.cmd"
-    #endif
+let atomPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) </> "atom" </> "bin" 
 
-let atomTool =
+let apmTool, atomTool =
     #if MONO
-        "atom"
+        "apm", atom 
     #else
-        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) </> "atom" </> "bin" </> "atom.cmd"
+        atomPath </> "apm.cmd" , atomPath </> "atom.cmd"
     #endif
 
 
@@ -109,6 +104,7 @@ Target "CopyGrammar" (fun _ ->
     ]
 )
 
+
 let fantomasBin     = "release/bin-fantomas" 
 let fantomasPkgDir  = "packages/Fantomas/lib"
 let FCSPkgDir       = "packages/FSharp.Compiler.Service/lib/net45"
@@ -122,8 +118,19 @@ Target "CopyFantomas" (fun _ ->
         fantomasPkgDir  </> "FSharp.Core.dll"       
         FCSPkgDir       </> "FSharp.Compiler.Service.dll"
     ]
-
 )
+
+let releaseBin  = "release/bin"
+let fsacBin     = "paket-files/github.com/ionide/FsAutoComplete/bin/release"
+
+Target "CopyFSAC" (fun _ ->
+    ensureDirectory releaseBin
+    CleanDir releaseBin
+
+    !! (fsacBin + "/*")
+    |> CopyFiles  releaseBin 
+)
+
 
 Target "BuildGenerator" (fun () ->
     [ __SOURCE_DIRECTORY__ @@ "src" @@ "Ionide.FSharp.fsproj" ]
@@ -215,6 +222,7 @@ Target "Default" DoNothing
     ==> "RunScript"
     ==> "CopyGrammar"
     ==> "CopyFantomas"
+    ==> "CopyFSAC"
     ==> "InstallDependencies"
 #endif
 

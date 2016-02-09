@@ -14,3 +14,7 @@ GIT
   remote: git@github.com:ionide/ionide-fsgrammar.git
   specs:
      (7672ca5d35651c899fa9c095db5e94d45cb9f0ba)
+  remote: git@github.com:ionide/FsAutoComplete.git
+  specs:
+     (43364293eb5da2eb8599aa2d70324324b3b1adbb)
+      build: build.cmd LocalRelease
