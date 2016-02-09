@@ -94,6 +94,7 @@ Target "Clean" (fun _ ->
     CleanDir tempReleaseDir
 )
 
+
 let fsgrammarDir = "paket-files/github.com/ionide/ionide-fsgrammar"
 let fsgrammarRelease = "release/grammars"
 
@@ -108,6 +109,21 @@ Target "CopyGrammar" (fun _ ->
     ]
 )
 
+let fantomasBin     = "release/bin-fantomas" 
+let fantomasPkgDir  = "packages/Fantomas/lib"
+let FCSPkgDir       = "packages/FSharp.Compiler.Service/lib/net45"
+
+Target "CopyFantomas" (fun _ ->
+    ensureDirectory fantomasBin
+    CleanDir fantomasBin
+    CopyFiles fantomasBin [
+        fantomasPkgDir  </> "Fantomas.exe"        
+        fantomasPkgDir  </> "FantomasLib.dll"       
+        fantomasPkgDir  </> "FSharp.Core.dll"       
+        FCSPkgDir       </> "FSharp.Compiler.Service.dll"
+    ]
+
+)
 
 Target "BuildGenerator" (fun () ->
     [ __SOURCE_DIRECTORY__ @@ "src" @@ "Ionide.FSharp.fsproj" ]
@@ -198,6 +214,7 @@ Target "Default" DoNothing
 "Clean"
     ==> "RunScript"
     ==> "CopyGrammar"
+    ==> "CopyFantomas"
     ==> "InstallDependencies"
 #endif
 
