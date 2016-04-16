@@ -9,7 +9,7 @@ NUGET
 GIT
   remote: https://github.com/ionide/ionide-helpers.git
   specs:
-     (c710f3905e640f04eb26d1d016842b3e76ff457e)
+     (9b047eed73f8a841bb6385cdd5d6d3a4fdc2510d)
       build: build.cmd
   remote: https://github.com/ionide/ionide-fsgrammar.git
   specs:
