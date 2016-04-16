@@ -1,5 +1,5 @@
 {
-    "name": "F# .fsl",
+    "name": "fsharp.fsl",
     "scopeName": "source.fsharp.fsl",
     "fileTypes": [
         "fsl"
