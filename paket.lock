@@ -16,5 +16,5 @@ GIT
      (8061b5296321522633b16d7df66af8cf5fcd3784)
   remote: https://github.com/ionide/FsAutoComplete.git
   specs:
-     (52099f8c4bc38f63a4dcb711ec8172c6fc363179)
+     (971ab95fd8ac6e85fd994b5498c621ca19353f46)
       build: build.cmd LocalRelease
