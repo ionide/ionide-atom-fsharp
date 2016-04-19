@@ -29,7 +29,7 @@ type AutocompleteEvent =
     | GetSuggestion of SuggestionRequest * ReplyChannel<Suggestion[]>
     | UpdateCompletion
 
-/// Helptext agent handles three events - `Show` is a request to show helptext for currentlu
+/// Helptext agent handles three events - `Show` is a request to show helptext for currently
 /// selected suggestion, `Next` is request to change overload showed in tooltip,
 /// and `Hide` hides current tooltip
 type HelptextEvent =
@@ -42,9 +42,6 @@ let helptextEvent = new Event<HelptextEvent>()
 // --------------------------------------------------------------------------------------
 // Autocomplete agent that takes care of state
 // --------------------------------------------------------------------------------------
-
-
-
 
 let autocompleteAgent = MailboxProcessor.Start(fun inbox ->
 
@@ -117,18 +114,19 @@ let autocompleteAgent = MailboxProcessor.Start(fun inbox ->
 // --------------------------------------------------------------------------------------
 
 /// Creates a tool tip and start an async loop to switch between the given overloads.
-/// When `helptextEvent` happens with `Hide`, the workflow stops & tool tip disappears
-let createHelptextToolTip () =
+/// When `helptextEvent` happens with `Hide` or `Show` (indicating that we are showing
+/// another tool tip), the workflow stops & tool tip disappears.
+let createHelptextToolTip (overloads:DTO.OverloadSignature[]) (position:JQueryCoordinates) =
 
     // Create tool tip for showing help text & add it to the right place
     let helptext =
         jq("<div class='type-tooltip tooltip'>
               <div class='tooltip-inner'>TEST</div>
-            </div>").appendTo(jq(".panes"))
-    helptext.fadeOut() |> ignore
+            </div>").appendTo(jq(".panes")).offset(position)
+
 
     // Update the UI & wait for `Move` event (to change overload) or `Hide` to remove tooltip
-    let rec loop (overloads:DTO.OverloadSignature[]) (position:JQueryCoordinates) i = async {
+    let rec loop i = async {
 
         let toolTipInner = jq' helptext.[0].firstElementChild
         toolTipInner.empty() |> ignore
@@ -143,30 +141,49 @@ let createHelptextToolTip () =
 
         let! evt = Async.AwaitObservable helptextEvent.Publish
         match evt with
-        | Show text ->
-            helptext.fadeOut() |> ignore
-            let! result = LanguageService.helptext text
-            match result with
-            | Some n ->
-                let li = (jq ".suggestion-list-scroller .list-group li.selected")
-                let o = li.offset()
-                let list = jq "autocomplete-suggestion-list"
-                if JS.isDefined o && li.length > 0. then
-                    o.left <- o.left + list.width() + 10.
-                    o.top <- o.top - li.height() - 10.
-                    let helptextList = n.Data.Overloads |> Array.concat
-                    if not (Array.isEmpty helptextList) then
-                        return! loop helptextList o 0
-                    else
-                        return! loop [||] o 0
-                else return! loop [||] o 0
-            | None -> return! loop [||] (createEmpty<JQueryCoordinates>()) 0
-        | Next by -> return! loop overloads position ((i + by + overloads.Length) % overloads.Length)
-        | Hide -> helptext.fadeOut().remove() |> ignore }
+        | Next by -> return! loop ((i + by + overloads.Length) % overloads.Length)
+        | Show _ | Hide -> helptext.fadeOut().remove() |> ignore }
 
     // Start by displaying the first overload
-    loop [||] (createEmpty<JQueryCoordinates>()) 0
+    loop 0
 
+
+/// When `helptextEvent` happens with `Show`, this calls `createHelptextToolTip` to create 
+/// tool tip user interface and start a handler for a new tool tip
+let handleShowHelptextRequests () = async {
+    while true do
+      // Wait for the next tool tip request & get data from FsAutoComplete
+      let! text = 
+        helptextEvent.Publish 
+        |> Observable.choose (function Show s -> Some s | _ -> None)
+        |> Async.AwaitObservable
+      let! tip = LanguageService.helptext text
+      
+      // Calculate coordinates for the tool tip & start it
+      match tip with
+      | None -> ()
+      | Some n ->
+          // The suggestion list might not be visible yet, so we wait up to 500ms 
+          // before we give up (as we do not know location for the tool tip) (fix #199)
+          let rec getSuggestionListOffset n = async {
+              let li = (jq ".suggestion-list-scroller .list-group li.selected")
+              let o = li.offset()
+              if JS.isDefined o && li.length > 0. then return Some(o, li)
+              elif n = 0 then return None
+              else 
+                  do! Async.Sleep 50
+                  return! getSuggestionListOffset (n - 1) }
+
+          let! offs = getSuggestionListOffset 10
+          match offs with 
+          | None -> () 
+          | Some (o, li) ->
+              let list = jq "autocomplete-suggestion-list"
+              o.left <- o.left + list.width() + 10.
+              o.top <- o.top - li.height() - 10.
+              let helptextList = n.Data.Overloads |> Array.concat
+              if not (Array.isEmpty helptextList) then
+                  createHelptextToolTip helptextList o |> Async.StartImmediate }
 
 // --------------------------------------------------------------------------------------
 // Editor integration
@@ -248,6 +265,9 @@ let create () =
     // Update tool tip when another item in the completion list is chosen
     registerCompletionScrollHandlers () |> Async.StartImmediate
     checkAutoCompleteManager.Trigger ()
+
+    // Start handler for showing tool tip on the side of completion lists
+    handleShowHelptextRequests () |> Async.StartImmediate
 
     // Go to the next/previous overload in the help tool tip
     Globals.atom.commands.add("atom-text-editor","fsharp:helptext-next", fun _ ->
