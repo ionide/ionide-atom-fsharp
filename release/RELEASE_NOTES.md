@@ -1,3 +1,6 @@
+### 1.8.1 - 19.04.2016
+Fix tooltips in autocomplete
+
 ### 1.8.0 - 16.04.2016
 * Add .Net Core integration
 
