@@ -160,16 +160,30 @@ let handleShowHelptextRequests () = async {
       let! tip = LanguageService.helptext text
       
       // Calculate coordinates for the tool tip & start it
-      tip |> Option.iter (fun n ->
-          let li = (jq ".suggestion-list-scroller .list-group li.selected")
-          let o = li.offset()
-          let list = jq "autocomplete-suggestion-list"
-          if JS.isDefined o && li.length > 0. then
+      match tip with
+      | None -> ()
+      | Some n ->
+          // The suggestion list might not be visible yet, so we wait up to 500ms 
+          // before we give up (as we do not know location for the tool tip) (fix #199)
+          let rec getSuggestionListOffset n = async {
+              let li = (jq ".suggestion-list-scroller .list-group li.selected")
+              let o = li.offset()
+              if JS.isDefined o && li.length > 0. then return Some(o, li)
+              elif n = 0 then return None
+              else 
+                  do! Async.Sleep 50
+                  return! getSuggestionListOffset (n - 1) }
+
+          let! offs = getSuggestionListOffset 10
+          match offs with 
+          | None -> () 
+          | Some (o, li) ->
+              let list = jq "autocomplete-suggestion-list"
               o.left <- o.left + list.width() + 10.
               o.top <- o.top - li.height() - 10.
               let helptextList = n.Data.Overloads |> Array.concat
               if not (Array.isEmpty helptextList) then
-                  createHelptextToolTip helptextList o |> Async.StartImmediate) }
+                  createHelptextToolTip helptextList o |> Async.StartImmediate }
 
 // --------------------------------------------------------------------------------------
 // Editor integration
