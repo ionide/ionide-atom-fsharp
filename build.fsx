@@ -18,7 +18,7 @@ open Fake.ZipHelper
 #load   "src/atom-bindings.fsx"
         "src/Core/Control.fs"
         "src/Core/DTO.fs"
-        "src/Core/Events.fs"
+        "src/Core/Logging.fs"
         "src/Core/LanguageService.fs"
         "src/Components/Parser.fs"
         "src/Components/CompletionHelpers.fs"
@@ -30,7 +30,6 @@ open Fake.ZipHelper
         "src/Components/Errors.fs"
         "src/Components/FindDeclaration.fs"
         "src/Components/Format.fs"
-        "src/Components/DeveloperMode.fs"
         "src/FSharpIDE.fs"
         "src/main.fs"
 #endif

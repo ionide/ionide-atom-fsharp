@@ -8,6 +8,11 @@ open FunScript.TypeScript.AtomCore
 // JavaScript-friendly implementation of some of the useful FSharp.Control types
 // --------------------------------------------------------------------------------------
 
+type FunScript.TypeScript.AtomCore.IConfig with
+    /// Add a handler for the specified event and return disposable subscription
+    member x.onDidChange(keyPath:string, callback:'T -> unit) =
+        x.onDidChange(keyPath, unbox<Function> callback) 
+
 type FunScript.TypeScript.AtomCore.IEmitter with
     /// Add a handler for the specified event forever
     member x.add(name:string, func:unit -> unit) =
@@ -20,6 +25,9 @@ type FunScript.TypeScript.AtomCore.CommandRegistry with
     /// Add a handler for the specified command forever
     member x.add(name:string, command:string, func:unit -> unit) =
         x.add(name, command, unbox<Function> func) |> ignore
+    /// Add a handler for the specified event and return disposable subscription
+    member x.subscribe(name:string, command:string, func:unit -> unit) =
+        x.add(name, command, unbox<Function> func) 
 
 /// A simple implementation of `IObserver` that calls the specified functions
 type Observer<'T>(next, error, completed) = 

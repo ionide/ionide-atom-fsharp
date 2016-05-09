@@ -47,7 +47,7 @@
   <ItemGroup>
     <Compile Include="Core\Control.fs" />
     <Compile Include="Core\DTO.fs" />
-    <Compile Include="Core\Events.fs" />
+    <Compile Include="Core\Logging.fs" />
     <Compile Include="Core\LanguageService.fs" />
     <Compile Include="Components\Parser.fs" />
     <Compile Include="Components\UnicodeGlyphs.fs" />
@@ -59,7 +59,6 @@
     <Compile Include="Components\FindDeclaration.fs" />
     <Compile Include="Components\HighlightUse.fs" />
     <Compile Include="Components\Format.fs" />
-    <Compile Include="Components\DeveloperMode.fs" />
     <Compile Include="FSharpIDE.fs" />
     <Compile Include="main.fs" />
     <None Include="atom-bindings.fsx" />
