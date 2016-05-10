@@ -11,6 +11,7 @@ open FunScript.TypeScript.path
 
 open Atom
 open Atom.FSharp
+open Atom.FSharp.Control
 
 [<AutoOpen>]
 module FSharpCommands =
@@ -38,7 +39,7 @@ type FSharpIDE() =
         let highlight = Globals.atom.config.get("ionide-fsharp.ShowUseHighlights") |> unbox<bool>
         let debug = Globals.atom.config.get("ionide-fsharp.DeveloperMode") |> unbox<bool>
 
-        if debug then DeveloperMode.activate ()
+        if debug then Logger.activate ("F# IDE")
         LanguageService.start ()
         Parser.activate ()
         TooltipHandler.activate ()
@@ -48,21 +49,20 @@ type FSharpIDE() =
         FormatHandler.activate ()
 
         // Subscriptions to monitor whether F# IDE functionality should be activated
-        let s = Globals.atom.config.onDidChange ("ionide-fsharp.ShowQuickInfoPanel",
-                    (fun n -> if n.newValue then ToolbarHandler.activate() else ToolbarHandler.deactivate()  ) |> unbox<Function>)
-        let s2 = Globals.atom.config.onDidChange ("ionide-fsharp.ShowUseHighlights",
-                    (fun n -> if n.newValue then HighlightUse.activate() else HighlightUse.deactivate()  ) |> unbox<Function>)
-        let s3 = Globals.atom.config.onDidChange ("ionide-fsharp.DeveloperMode",
-                    (fun n -> if n.newValue then DeveloperMode.activate() else DeveloperMode.deactivate()  ) |> unbox<Function>)
+        Globals.atom.config.onDidChange("ionide-fsharp.ShowQuickInfoPanel", fun n -> 
+          if n.newValue then ToolbarHandler.activate() 
+          else ToolbarHandler.deactivate() ) |> subscriptions.Add
 
-        subscriptions.Add s
-        subscriptions.Add s2
-        subscriptions.Add s3
+        Globals.atom.config.onDidChange("ionide-fsharp.ShowUseHighlights", fun n -> 
+          if n.newValue then HighlightUse.activate() 
+          else HighlightUse.deactivate() ) |> subscriptions.Add
+
+        Globals.atom.config.onDidChange("ionide-fsharp.DeveloperMode", fun n -> 
+          if n.newValue then Logger.activate("F# IDE") 
+          else Logger.deactivate()  ) |> subscriptions.Add
 
         // Commands that will be accessible through the Atom command palette
         Globals.atom.commands.add("atom-workspace", "Ionide-FSharp:Settings",openSettings |> unbox<Function>) |> ignore
-
-        ()
 
     member x.deactivate() =
         subscriptions |> Seq.iter(fun n -> n.dispose())
@@ -75,5 +75,4 @@ type FSharpIDE() =
         FindDeclaration.deactivate ()
         HighlightUse.deactivate ()
         LanguageService.stop ()
-        DeveloperMode.activate ()
-        ()
+        Logger.deactivate ()
