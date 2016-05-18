@@ -3,7 +3,7 @@ if test "$OS" = "Windows_NT"
 then
   # use .Net
 
-  .paket/paket.bootstrapper.exe 3.0.0-alpha040
+  .paket/paket.bootstrapper.exe prerelease
   exit_code=$?
   if [ $exit_code -ne 0 ]; then
   	exit $exit_code
@@ -18,7 +18,7 @@ then
   packages/FAKE/tools/FAKE.exe $@ --nocache --fsiargs build.fsx 
 else
   # use mono
-  mono .paket/paket.bootstrapper.exe
+  mono .paket/paket.bootstrapper.exe prerelease
   exit_code=$?
   if [ $exit_code -ne 0 ]; then
   	exit $exit_code
