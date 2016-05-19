@@ -34,7 +34,9 @@ module FormatHandler =
                 if Globals.atom.config.get("ionide-fsharp.FormatDocument.IndentOnTryWith") |> unbox<bool> then yield "--indentOnTryWith"
                 if Globals.atom.config.get("ionide-fsharp.FormatDocument.NoSpaceAroundDelimiter") |> unbox<bool> then yield "--noSpaceAroundDelimiter"
                 if Globals.atom.config.get("ionide-fsharp.FormatDocument.ReorderOpenDeclaration") |> unbox<bool> then yield "--reorderOpenDeclaration"
-                if Globals.atom.config.get("ionide-fsharp.FormatDocument.StrictMode") |> unbox<bool> then yield "--strictMode" ]  |> List.toArray
+                if Globals.atom.config.get("ionide-fsharp.FormatDocument.StrictMode") |> unbox<bool> then yield "--strictMode"
+                yield "--out"
+                yield p     ] |> List.toArray
 
             let child = Process.exec location "mono" arguments
             child.stdout.on("data", unbox<Function>( fun n -> Globals.console.error (n.ToString()))) |> ignore
