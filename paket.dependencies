@@ -5,7 +5,7 @@ git https://github.com/ionide/ionide-fsgrammar.git
 git https://github.com/ionide/FsAutoComplete.git dotnetcore build:"build.cmd LocalRelease"
 
 nuget FAKE
-nuget fantomas
+nuget FantomasCLI
 nuget FunScript
 
 # github borisyankov/DefinitelyTyped  text-buffer/text-buffer.d.ts

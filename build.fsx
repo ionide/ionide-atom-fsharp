@@ -105,8 +105,7 @@ Target "CopyGrammar" (fun _ ->
 
 
 let fantomasBin     = "release/bin-fantomas" 
-let fantomasPkgDir  = "packages/Fantomas/lib"
-let FCSPkgDir       = "packages/FSharp.Compiler.Service/lib/net45"
+let fantomasPkgDir  = "packages/FantomasCLI/lib"
 
 Target "CopyFantomas" (fun _ ->
     ensureDirectory fantomasBin
@@ -115,7 +114,7 @@ Target "CopyFantomas" (fun _ ->
         fantomasPkgDir  </> "Fantomas.exe"        
         fantomasPkgDir  </> "FantomasLib.dll"       
         fantomasPkgDir  </> "FSharp.Core.dll"       
-        FCSPkgDir       </> "FSharp.Compiler.Service.dll"
+        fantomasPkgDir  </> "FSharp.Compiler.Service.dll"
     ]
 )
 

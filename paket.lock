@@ -1,20 +1,14 @@
 NUGET
   remote: https://www.nuget.org/api/v2
-  specs:
-    FAKE (4.27.0)
-    Fantomas (2.2.0)
-      FSharp.Compiler.Service (>= 2.0.0.8)
-    FSharp.Compiler.Service (3.0.0)
+    FAKE (4.27)
+    FantomasCLI (2.2)
     FunScript (1.1.94)
 GIT
   remote: https://github.com/ionide/ionide-helpers.git
-  specs:
      (9b047eed73f8a841bb6385cdd5d6d3a4fdc2510d)
       build: build.cmd
   remote: https://github.com/ionide/ionide-fsgrammar.git
-  specs:
      (8061b5296321522633b16d7df66af8cf5fcd3784)
   remote: https://github.com/ionide/FsAutoComplete.git
-  specs:
      (e291884b2b52da09f24924a899e8ac84be42c9bc)
       build: build.cmd LocalRelease
