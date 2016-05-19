@@ -103,8 +103,8 @@ module LanguageService =
         else
             async { return None}
 
-    let completion fn line col =
-        {PositionRequest.Line = line; FileName = fn; Column = col; Filter = ""}
+    let completion fn content line col =
+        {CompletionRequest.Line = line; FileName = fn; SourceLine =content; Column = col; Filter = ""}
         |> request (url "completion")
         |> send<Completion[]> 1
 

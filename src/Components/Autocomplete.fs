@@ -54,8 +54,8 @@ let autocompleteAgent = MailboxProcessor.Start(fun inbox ->
           return unicode_map
       else
           Logger.log "Autocomplete" "updateLastResult - calling language service"
-          let! _ = LanguageService.parseEditor request.Editor
-          let! result = LanguageService.completion request.Path (request.Row + 1) (request.Column + 1)
+          //let! _ = LanguageService.parseEditor request.Editor
+          let! result = LanguageService.completion request.Path request.Line (request.Row + 1) (request.Column + 1)
           return
             match result with
             | Some r ->

@@ -8,6 +8,7 @@ module DTO =
     type HelptextRequest = {Symbol : string}
     type PositionRequest = {FileName : string; Line : int; Column : int; Filter : string}
     type LintRequest = {FileName : string}
+    type CompletionRequest = {FileName : string; SourceLine : string; Line : int; Column : int; Filter : string}
 
     type OverloadSignature = {
         Signature: string
