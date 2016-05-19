@@ -1,5 +1,11 @@
+### 1.9.0 -19.05.2016
+* Update FSAC
+* Make autocomplete faster
+* Small gramar fixes
+* Fix bug with resolving source files in project file
+
 ### 1.8.1 - 19.04.2016
-Fix tooltips in autocomplete
+* Fix tooltips in autocomplete
 
 ### 1.8.0 - 16.04.2016
 * Add .Net Core integration

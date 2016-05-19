@@ -316,7 +316,7 @@
               {
                   "name": "string.quoted.literal.fsharp",
                   "begin": "(?=[^\\\\])(@\")",
-                  "end": "(\")",
+                  "end": "(\")(?!\")",
                   "beginCaptures": {
                       "1": {
                           "name": "punctuation.definition.string.begin.fsharp"
