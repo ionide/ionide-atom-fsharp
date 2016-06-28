@@ -179,7 +179,7 @@
             "patterns": [
                 {
                     "name": "keyword.other.fsharp",
-                    "match": "\\b(function|yield!|yield|class|match|delegate|of|new|in|as|if|then|else|elif|for|begin|end|inherit|do|let\\!|return\\!|return|interface|with|member|try|finally|and|when|use|use\\!)\\b"
+                    "match": "\\b(function|yield!|yield|class|match|delegate|of|new|in|as|if|then|else|elif|for|begin|end|inherit|do|let\\!|return\\!|return|interface|with|abstract|member|try|finally|and|when|use|use\\!)\\b"
                 },
                 {
                     "name": "meta.preprocessor.fsharp",
