@@ -70,21 +70,34 @@ type Suggestion =
 
 
 /// Find the minimun of three three terms that support comparison
-let inline min3(a, b, c) = min a (min b c)
+let min3 a b c = min a (min b c)
 
-let inline distanceCalc (m, u) (n, v) =
-    let d1 = Array.init n id
-    let d0 = Array.create n 0
-    for i=1 to m-1 do
-        d0.[0] <- i
-        let ui = u i
-        for j=1 to n-1 do
-            d0.[j] <- 1 + min3(d1.[j], d0.[j-1], d1.[j-1] + if ui = v j then -1 else 0)
-        Array.blit d0 0 d1 0 n
-    d0.[n-1]
-
-let editDistance (s: string) (t: string) =
-    distanceCalc (s.Length, fun i -> s.[i]) (t.Length, fun i -> t.[i])
+let editDistance (a:string) (b:string) =
+    let a,b = if a.Length > b.Length then a,b else b,a
+    let m = b.Length + 1
+    let mutable lastLine = Array.init m id
+    let mutable lastLastLine = Array.zeroCreate m
+    let mutable actLine = Array.zeroCreate m
+    for i in 1..a.Length do
+        actLine.[0] <- i
+        for j in 1..b.Length do
+            let cost = if a.[i-1] = b.[j-1] then 0 else 1
+            let deletion = lastLine.[j] + 1
+            let insertion = actLine.[j-1] + 1
+            let substitution = lastLine.[j-1] + cost
+            actLine.[j] <- 
+                let x = min3 deletion insertion substitution
+                if i > 1 && j > 1 && a.[i-1] = b.[j-2] && a.[i-2] = b.[j-1] then
+                    let transposition = lastLastLine.[j-2] + cost  
+                    min x transposition
+                else
+                    x
+        // swap lines
+        let temp = lastLastLine
+        lastLastLine <- lastLine
+        lastLine <- actLine
+        actLine <- temp
+    lastLine.[b.Length]
 
 //====================================
 //  Autocomplete Tooltip Generators
