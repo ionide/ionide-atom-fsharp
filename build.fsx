@@ -69,11 +69,11 @@ let run cmd args dir =
     ) System.TimeSpan.MaxValue = false then
         traceError <| sprintf "Error while running '%s' with args: %s" cmd args
 
-let atomPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) </> "atom" </> "bin" 
+let atomPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) </> "atom" </> "bin"
 
 let apmTool, atomTool =
     #if MONO
-        "apm", atom 
+        "apm", atom
     #else
         atomPath </> "apm.cmd" , atomPath </> "atom.cmd"
     #endif
@@ -89,7 +89,7 @@ Target "Clean" (fun _ ->
 )
 
 
-let fsgrammarDir = "paket-files/github.com/ionide/ionide-fsgrammar"
+let fsgrammarDir = "paket-files/github.com/ionide/ionide-fsgrammar/grammar"
 let fsgrammarRelease = "release/grammars"
 
 Target "CopyGrammar" (fun _ ->
@@ -104,16 +104,16 @@ Target "CopyGrammar" (fun _ ->
 )
 
 
-let fantomasBin     = "release/bin-fantomas" 
+let fantomasBin     = "release/bin-fantomas"
 let fantomasPkgDir  = "packages/FantomasCLI/lib"
 
 Target "CopyFantomas" (fun _ ->
     ensureDirectory fantomasBin
     CleanDir fantomasBin
     CopyFiles fantomasBin [
-        fantomasPkgDir  </> "Fantomas.exe"        
-        fantomasPkgDir  </> "FantomasLib.dll"       
-        fantomasPkgDir  </> "FSharp.Core.dll"       
+        fantomasPkgDir  </> "Fantomas.exe"
+        fantomasPkgDir  </> "FantomasLib.dll"
+        fantomasPkgDir  </> "FSharp.Core.dll"
         fantomasPkgDir  </> "FSharp.Compiler.Service.dll"
     ]
 )
@@ -126,7 +126,7 @@ Target "CopyFSAC" (fun _ ->
     CleanDir releaseBin
 
     !! (fsacBin + "/*")
-    |> CopyFiles  releaseBin 
+    |> CopyFiles  releaseBin
 )
 
 
@@ -220,7 +220,7 @@ Target "Default" DoNothing
     ==> "RunScript"
     ==> "CopyGrammar"
     ==> "CopyFantomas"
-    ==> "CopyFSAC"
+    // ==> "CopyFSAC"
     ==> "InstallDependencies"
 #endif
 
