@@ -7,7 +7,6 @@ module DTO =
     type DeclarationsRequest = {FileName : string}
     type HelptextRequest = {Symbol : string}
     type PositionRequest = {FileName : string; Line : int; Column : int; Filter : string}
-    type LintRequest = {FileName : string}
     type CompletionRequest = {FileName : string; SourceLine : string; Line : int; Column : int; Filter : string}
 
     type OverloadSignature = {
@@ -30,6 +29,11 @@ module DTO =
         /// Type of the Error
         Subcategory : string
         }
+
+    type ErrorResp = {
+        File : string
+        Errors : Error []
+    }
 
     type Declaration = {
         File : string
@@ -93,6 +97,6 @@ module DTO =
     type CompletionResult = Result<Completion[]>
     type SymbolUseResult = Result<SymbolUses>
     type TooltipResult = Result<OverloadSignature[][]>
-    type ParseResult = Result<Error[]>
+    type ParseResult = Result<ErrorResp>
     type FindDeclarationResult = Result<Declaration>
     type LintResult = Result<Lint[]>

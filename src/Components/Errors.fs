@@ -42,7 +42,7 @@ module ErrorLinterProvider =
           text = item.Info.Replace("\n", "")
           filePath = editor.buffer.file.path
           range = range
-        } :> obj 
+        } :> obj
 
     let lint (editor : IEditor) =
         async {
@@ -52,10 +52,10 @@ module ErrorLinterProvider =
             return
                 match result, result' with
                 | Some n, Some n' ->
-                    let r = n.Data |> Array.map (mapError editor)
+                    let r = n.Data.Errors |> Array.map (mapError editor)
                     let r' = if linter then n'.Data |> Array.map (mapLint editor) else [||]
                     Array.concat [r; r']
-                | Some n, None -> n.Data |> Array.map (mapError editor)
+                | Some n, None -> n.Data.Errors |> Array.map (mapError editor)
                 | None, Some n -> if linter then n.Data |> Array.map (mapLint editor) else [||]
                 | None, None -> [||]
         } |> Async.StartAsPromise

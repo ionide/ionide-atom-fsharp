@@ -88,7 +88,7 @@ module LanguageService =
         let lines = text.Replace("\uFEFF", "").Split('\n')
         {ParseRequest.FileName = path; ParseRequest.Lines = lines; ParseRequest.IsAsync = true }
         |> request (url "parse")
-        |> send<Error[]> 0
+        |> send<ErrorResp> 0
 
     let helptext s =
         {HelptextRequest.Symbol = s}
@@ -136,7 +136,7 @@ module LanguageService =
 
     let lint editor =
         if isFSharpEditor editor && unbox<obj>(editor.buffer.file) <> null then
-            {LintRequest.FileName = editor.buffer.file.path }
+            {ProjectRequest.FileName = editor.buffer.file.path }
             |> request (url "lint")
             |> send<Lint[]> 0
          else async {return None}
