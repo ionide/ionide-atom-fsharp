@@ -1,3 +1,7 @@
+### 1.9.2 - 05.02.2017
+* Update FSAC
+* Fix deprecated warnings
+
 ### 1.9.1 - 25.05.2016
 * Update FSAC
 
