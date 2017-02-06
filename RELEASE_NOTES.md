@@ -1,3 +1,6 @@
+### 1.9.3 - 06.02.2017
+* Fix tooltips, probably breaking something else
+
 ### 1.9.2 - 05.02.2017
 * Update FSAC
 * Fix deprecated warnings
