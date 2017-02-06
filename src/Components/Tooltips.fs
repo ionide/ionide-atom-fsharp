@@ -61,32 +61,32 @@ module TooltipHandler =
     let private mouseHandler (o : DTO.TooltipResult) =
         event |> Option.iter(fun e ->
         let n = tooltip.[0].firstElementChild
-        if (jq "body /deep/ span.fsharp:hover").length > 0. then
-            let bufpos = bufferPositionFromMouseEvent e ed
-            let err = errorArr |> Array.tryFind (matchError bufpos)  // Check if the position in the buffer has any errors associated with it
-            let n' = jq'(n)
-            n'.empty() |> ignore
-            let errTip s =
-                if err.IsNone then "" else
-                let err, emsg = err.Value, err.Value.Message
-                String.concat "" [(dashes s emsg);":: Error - ";err.Subcategory;" ::\n"; emsg ]
-            let data =
-                if o.Data.Length > 0 then
-                    (o.Data |> Array.fold (fun acc n -> (n |> Array.toList) @ acc ) []).Head.Signature
-                else
-                    "No tooltip information"
+        // if (jq "body /deep/ span.fsharp:hover").length > 0. then
+        let bufpos = bufferPositionFromMouseEvent e ed
+        let err = errorArr |> Array.tryFind (matchError bufpos)  // Check if the position in the buffer has any errors associated with it
+        let n' = jq'(n)
+        n'.empty() |> ignore
+        let errTip s =
+            if err.IsNone then "" else
+            let err, emsg = err.Value, err.Value.Message
+            String.concat "" [(dashes s emsg);":: Error - ";err.Subcategory;" ::\n"; emsg ]
+        let data =
+            if o.Data.Length > 0 then
+                (o.Data |> Array.fold (fun acc n -> (n |> Array.toList) @ acc ) []).Head.Signature
+            else
+                "No tooltip information"
 
-            if data <> "No tooltip information" then
-                (data |> jq("<div/>").text).append(errTip data)
-                |> fun n -> n.html().Replace("\\n", "</br>").Replace("\n" , "</br>")
-                |>  n'.append |> ignore
-                let j = jq(".panes")
-                let x = e.pageX - j.offset().left
-                let y = e.pageY - j.offset().top
-                tooltip.css("left" , x) |> ignore
-                tooltip.css("top"  , y - 20.) |> ignore
-                tooltip.fadeTo(300., 60.) |> ignore
-            )
+        if data <> "No tooltip information" then
+            (data |> jq("<div/>").text).append(errTip data)
+            |> fun n -> n.html().Replace("\\n", "</br>").Replace("\n" , "</br>")
+            |>  n'.append |> ignore
+            let j = jq(".panes")
+            let x = e.pageX - j.offset().left
+            let y = e.pageY - j.offset().top
+            tooltip.css("left" , x) |> ignore
+            tooltip.css("top"  , y - 20.) |> ignore
+            tooltip.fadeTo(300., 60.) |> ignore
+        )
 
     let private reg editor time element =
         jq(".panes").append tooltip |> ignore
