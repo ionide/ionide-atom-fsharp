@@ -73,7 +73,7 @@ let atomPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicat
 
 let apmTool, atomTool =
     #if MONO
-        "apm", atom
+        "apm", "atom"
     #else
         atomPath </> "apm.cmd" , atomPath </> "atom.cmd"
     #endif
