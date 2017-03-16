@@ -1,8 +1,10 @@
 source https://nuget.org/api/v2
 
-git https://github.com/ionide/ionide-helpers.git master build:"build.cmd"
+git https://github.com/ionide/ionide-helpers.git master build:"build.cmd", OS:windows
+git https://github.com/ionide/ionide-helpers.git master build:"build.sh", OS:mono
 git https://github.com/ionide/ionide-fsgrammar.git
-git https://github.com/ionide/FsAutoComplete.git master build:"build.cmd LocalRelease"
+git https://github.com/ionide/FsAutoComplete.git master build:"build.cmd LocalRelease", OS:windows
+git https://github.com/ionide/FsAutoComplete.git master build:"build.sh LocalRelease", OS:mono
 
 nuget FAKE
 nuget FantomasCLI
