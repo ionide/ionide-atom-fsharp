@@ -14,6 +14,7 @@ open Atom.FSharp.Control
 [<ReflectedDefinition>]
 module ErrorLinterProvider =
     type Provider = {
+        name          : string
         grammarScopes : string[]
         scope         : string
         lintOnFly     : bool
@@ -62,5 +63,10 @@ module ErrorLinterProvider =
 
     let create () =
         [|
-          { grammarScopes = [| "source.fsharp"; "source.fsharp.fsi"; "source.fsharp.fsx"; "source.fsharp.fsl"|]; scope = "file"; lint = lint; lintOnFly = true}
+          { name = "ionide";
+            grammarScopes = [| "source.fsharp"; "source.fsharp.fsi"; "source.fsharp.fsx"; "source.fsharp.fsl"|];
+            scope = "file";
+            lint = lint;
+            lintOnFly = true
+          }
         |]
